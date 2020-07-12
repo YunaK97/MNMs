@@ -19,7 +19,6 @@ import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
     public final static int SIGNIN=221;
-    String tmpId="nh822",tmpPw="qwer01";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Button login,signin;
@@ -83,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                     else{//로그인에 실패한 경우
                         Toast.makeText(getApplicationContext(),"로그인에 실패하였습니다.", Toast.LENGTH_SHORT).show();
-                        return;
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -121,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
             Member newMember=(Member) data.getSerializableExtra("newMember");
 
             if(result){
-                Toast.makeText(getApplicationContext(),"로그인하시면 되옴"+newMember.getMemID(),Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(),"로그인하시면 되옴",Toast.LENGTH_LONG).show();
             }
         }
     }
