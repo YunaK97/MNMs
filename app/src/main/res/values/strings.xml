@@ -2,9 +2,10 @@
     <string name="app_name">Welcome!</string>
     <string name="app_login">로그인</string>
     <string name="app_signin">회원가입</string>
-    <string name="app_mainwindow">메인메뉴</string>
+    <string name="app_mainmenu">메인메뉴</string>
     <string name="app_talk">단체 톡방</string>
-    <string name="app_memmon">회비관리</string>
+    <string name="app_membership">회비관리</string>
+    <string name="app_new_membership">회비톡방생성</string>
 
     <string name="text_signin">회원가입</string>
 

@@ -88,13 +88,18 @@ public class MainMenuActivity extends AppCompatActivity {
                         .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(getApplicationContext(),select[addType[0]],Toast.LENGTH_SHORT).show();
+                                if(addType[0]==0){
+                                    Intent intent = new Intent(getApplicationContext(),NewMembershipActivity.class);
+                                    startActivity(intent);
+                                }else if(addType[0]==1){
+
+                                }
                             }
                         })
                         .setNeutralButton("취소", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(getApplicationContext(),select[addType[0]],Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(),"취소",Toast.LENGTH_SHORT).show();
                             }
                         });
                 dialog.create();
