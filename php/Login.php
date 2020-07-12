@@ -1,4 +1,5 @@
 <?php
+	include $_SERVER['DOCUMENT_ROOT'].'/Member.php';
     $con = mysqli_connect("localhost", "jennyk97", "a2743275!", "jennyk97");
     mysqli_query($con,'SET NAMES utf8');
 
@@ -11,17 +12,17 @@
 
 
     mysqli_stmt_store_result($statement);
-    mysqli_stmt_bind_result($statement, $memID, $memPW, $memName, $userEmail);
+    mysqli_stmt_bind_result($statement, $memID, $memPW, $memName, $memEmail);
 
     $response = array();
-    $response["success"] = false;
- 
+	$member=new Member;
+	
     while(mysqli_stmt_fetch($statement)) {
-        $response["success"] = true;
-        $response["memID"] = $memID;
-        $response["memPW"] = $memPW;
-        $response["memName"] = $memName;
-        $response["memEmail"] = $memEmail;        
+		$member->setMemName(memName);
+		$member->setMemID(memID);
+		$member->setMemPW(memPW);
+		$member->setMemEmail(memEmail);
+		$response["member"]=member;
     }
 
     echo json_encode($response);
