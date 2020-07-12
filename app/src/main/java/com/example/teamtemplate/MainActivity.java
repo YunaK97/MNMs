@@ -71,9 +71,11 @@ public class MainActivity extends AppCompatActivity {
                     if(success){ //로그인에 성공한 경우
                         String userID=jsonObject.getString("memID");
                         String userPass=jsonObject.getString("memPW");
+                        //Member loginMem= (Member) jsonObject.get("member");
 
                         Toast.makeText(getApplicationContext(),"로그인 성공하였습니다.", Toast.LENGTH_SHORT).show();
                         Intent intent=new Intent(MainActivity.this,MainMenuActivity.class);
+                        //intent.putExtra("loginMem",loginMem);
                         intent.putExtra("memID",userID);
                         intent.putExtra("memPW",userPass);
                         //멤버 나머지 속성 받기
@@ -91,23 +93,6 @@ public class MainActivity extends AppCompatActivity {
         RequestLogin requestLogin =new RequestLogin(memID,memPW,responseListener);
         RequestQueue queue= Volley.newRequestQueue(MainActivity.this);
         queue.add(requestLogin);
-//
-//        if(member!=null) {
-//            if (member.getMemID().equals(tmpId) && member.getMemPW().equals(tmpPw)) {
-//                Toast.makeText(getApplicationContext(), member.getMemID() + " 님 환영합니다!", Toast.LENGTH_LONG).show();
-//
-//                member.setMemSsn("970822-10041004");
-//                member.setMemEmail("nh822@naver.com");
-//                member.setMemAccountNum("250502-04-371024");
-//                member.setMemBalance(987000);
-//                member.setMemName("김나현");
-//                Intent intent = new Intent(MainActivity.this, MainMenuActivity.class);
-//                intent.putExtra("loginMember", member);
-//                startActivity(intent);
-//            }else{
-//                Toast.makeText(getApplicationContext(),"ID or PW 확인!",Toast.LENGTH_LONG).show();
-//            }
-//        }
     }
 
     @Override

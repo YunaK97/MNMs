@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,9 +30,8 @@ public class SignInActivity extends AppCompatActivity {
 //아이디 중복확인
 //민증확인
 //회원가입 완료
-    String name,id,pw,email,accName,ssn,accBalance2;
-    Integer accBalance;
     boolean idValid=false,ssnValid=false,emailValid=false;
+    Member signInMember = new Member();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +44,7 @@ public class SignInActivity extends AppCompatActivity {
                 String memID=((TextView)findViewById(R.id.textID)).getText().toString();
                 Toast.makeText(getApplicationContext(),memID+" 사용가능!",Toast.LENGTH_LONG).show();
                 idValid=true;
+                signInMember.setMemID(memID);
                 //id만 서버로 보내서 중복확인
 //                Response.Listener<String> responseListener=new Response.Listener<String>() {
 //                    @Override
@@ -88,7 +89,7 @@ public class SignInActivity extends AppCompatActivity {
                     emailValid=false;
                 }else {
                     Toast.makeText(getApplicationContext(), "이메일 확인!", Toast.LENGTH_LONG).show();
-                    email=email2;
+                    signInMember.setMemEmail(email2);
                     emailValid = true;
                 }
             }
@@ -99,9 +100,10 @@ public class SignInActivity extends AppCompatActivity {
         identify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ssn="970822-10041004";
+                String tmpssn="970822-10041004";
                 Toast.makeText(getApplicationContext(),"민증확인!(미구현)",Toast.LENGTH_LONG).show();
                 ssnValid=true;
+                signInMember.setMemSsn(tmpssn);
             }
         });
 
@@ -110,99 +112,81 @@ public class SignInActivity extends AppCompatActivity {
         signComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(getUserInfo()){
+
+                //accBalance=Integer.parseInt(accBalance2);
 
                 //아이디 중복확인 여부
                 //주민번호 확인 여부
                 //이메일 유효성 확인 여부
-                //정보들 null인지 체크
-                //TextUtils.isEmpty(text.getText()
-                    accBalance=Integer.parseInt(accBalance2);
-                    final Member member = new Member();
-                    member.setMemName(name);
-                    member.setMemPW(pw);
-                    member.setMemID(id);
-                    member.setMemEmail(email);
-                    member.setMemSsn(ssn);
+                if(!emailValid&&!idValid&&!ssnValid){
+                    Toast.makeText(getApplicationContext(), "잘못된 입력입니다(이메일,주민번호,아이디 확인!)", Toast.LENGTH_LONG).show();
+                }else{
+                    if(getUserInfo()){
+                        Response.Listener<String> responseListener = new Response.Listener<String>() {
+                            @Override
+                            public void onResponse(String response) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject( response );
+                                    boolean success = jsonObject.getBoolean( "success" );
+                                    Gson gson=new Gson();
+                                    Member newMember= (Member) gson.fromJson(response,Member.class);
 
-                    //member 서버에 전송 작업하기!
-                    //
-                    //로그인에서 객체로 전달 되는지 보고 객체로 전달하기
-                    //
-                    //
-                    //
-                    Response.Listener<String> responseListener = new Response.Listener<String>() {
-                        @Override
-                        public void onResponse(String response) {
-                            try {
-                                JSONObject jsonObject = new JSONObject( response );
-                                boolean success = jsonObject.getBoolean( "success" );
+                                    //회원가입 성공시
+                                    if(success) {
+                                        //멤버 가져오기
+                                        Toast.makeText( getApplicationContext(), "성공"+newMember.getMemName(), Toast.LENGTH_SHORT ).show();
 
-                                //회원가입 성공시
-                                if(success) {
-                                    //멤버 가져오기
-                                    Toast.makeText( getApplicationContext(), "성공", Toast.LENGTH_SHORT ).show();
-                                    successSignIn(member);
+                                        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                                        intent.putExtra("result", true);
+                                        //intent.putExtra("newMember",newMember);
 
-                                    //회원가입 실패시
-                                } else {
-                                    Toast.makeText( getApplicationContext(), "실패", Toast.LENGTH_SHORT ).show();
-                                    return;
+
+                                        setResult(Activity.RESULT_OK, intent);
+
+                                        finish();
+
+                                        //회원가입 실패시
+                                    } else {
+                                        Toast.makeText( getApplicationContext(), "실패", Toast.LENGTH_SHORT ).show();
+                                    }
+
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
                                 }
-
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
 
                         }
                     };
 
                     //서버로 Volley를 이용해서 요청
-                    RequestRegister requestRegister=new RequestRegister(member.getMemID(),member.getMemPW(),member.getMemName(),member.getMemEmail(),responseListener);
+                    RequestRegister requestRegister=new RequestRegister(signInMember.getMemID(),signInMember.getMemPW(),signInMember.getMemName(),signInMember.getMemEmail(),responseListener);
                     //RegisterRequest registerRequest = new RegisterRequest(member, responseListener);
                     RequestQueue queue = Volley.newRequestQueue( SignInActivity.this );
                     queue.add( requestRegister );
 
-                }else{
-                    Toast.makeText(getApplicationContext(),"빈칸 ㄴㄴ해",Toast.LENGTH_LONG).show();
+                    }else{
+                        Toast.makeText(getApplicationContext(),"빈칸 ㄴㄴ해",Toast.LENGTH_LONG).show();
+                    }
                 }
             }
         });
     }
 
-    protected void successSignIn(Member member){
-        if (emailValid && ssnValid && idValid) {
-            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-            intent.putExtra("result", true);
-            intent.putExtra("newMember",member);
-
-            setResult(Activity.RESULT_OK, intent);
-
-            finish();
-        } else {
-            Toast.makeText(getApplicationContext(), "잘못된 입력입니다(이메일,주민번호,아이디 확인!)", Toast.LENGTH_LONG).show();
-        }
-
-    }
-
     protected boolean getUserInfo(){
+        //정보들 null인지 체크
         //
         //
         // 전체 빈칸으로 회원가입 클릭 시 오류발생
         //
         //
-        name=((TextView)findViewById(R.id.textName)).getText().toString();
+        String name=((TextView)findViewById(R.id.textName)).getText().toString();
         //if(!TextUtils.isEmpty(name)) return false;
-        id=((TextView)findViewById(R.id.textID)).getText().toString();
-        //if(!TextUtils.isEmpty(id)) return false;
-        pw=((TextView)findViewById(R.id.textPW)).getText().toString();
+        signInMember.setMemName(name);
+        String pw=((TextView)findViewById(R.id.textPW)).getText().toString();
         //if(!TextUtils.isEmpty(pw)) return false;
-        email=((TextView)findViewById(R.id.textEmail)).getText().toString();
-        //if(!TextUtils.isEmpty(email)) return false;
-
-        accName=((TextView)findViewById(R.id.textAccname)).getText().toString();
+        signInMember.setMemPW(pw);
+        String accName=((TextView)findViewById(R.id.textAccname)).getText().toString();
         //if(!TextUtils.isEmpty(accName)) return false;
-        accBalance2=((TextView)findViewById(R.id.textAccount)).getText().toString();
+        String accBalance2=((TextView)findViewById(R.id.textAccount)).getText().toString();
         //if(!TextUtils.isEmpty(accBalance2)) return false;
         return true;
     }

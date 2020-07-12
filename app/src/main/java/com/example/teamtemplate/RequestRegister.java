@@ -15,6 +15,7 @@ public class RequestRegister extends StringRequest {
     public RequestRegister(String memID, String memPW, String memName, String memEmail,Response.Listener<String> listener){
         super(Method.POST,URL,listener,null);
         map=new HashMap<>();
+        //map.put("member",member);
         map.put("memID", memID);
         map.put("memPW", memPW);
         map.put("memName", memName);
