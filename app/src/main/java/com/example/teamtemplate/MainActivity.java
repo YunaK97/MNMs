@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,17 +68,20 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 try {
                     JSONObject jsonObject=new JSONObject(response);
-                    boolean success=jsonObject.getBoolean("success");
-                    if(success){ //로그인에 성공한 경우
-                        String userID=jsonObject.getString("memID");
-                        String userPass=jsonObject.getString("memPW");
+                    Gson gson=new Gson();
+                    Member loginMem= (Member) gson.fromJson(response,Member.class);
+
+                    if(loginMem != null){ //로그인에 성공한 경우
+                        //String userID=jsonObject.getString("memID");
+                        //String userPass=jsonObject.getString("memPW");
                         //Member loginMem= (Member) jsonObject.get("member");
 
-                        Toast.makeText(getApplicationContext(),"로그인 성공하였습니다.", Toast.LENGTH_SHORT).show();
+
+                        Toast.makeText(getApplicationContext(),"로그인 성공하였습니다."+loginMem.getMemName(), Toast.LENGTH_SHORT).show();
                         Intent intent=new Intent(MainActivity.this,MainMenuActivity.class);
-                        //intent.putExtra("loginMem",loginMem);
-                        intent.putExtra("memID",userID);
-                        intent.putExtra("memPW",userPass);
+                        intent.putExtra("loginMem",loginMem);
+                        //intent.putExtra("memID",userID);
+                        //intent.putExtra("memPW",userPass);
                         //멤버 나머지 속성 받기
 
                         startActivity(intent);

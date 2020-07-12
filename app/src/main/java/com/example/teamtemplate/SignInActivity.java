@@ -128,13 +128,12 @@ public class SignInActivity extends AppCompatActivity {
                                 try {
                                     JSONObject jsonObject = new JSONObject( response );
                                     boolean success = jsonObject.getBoolean( "success" );
-                                    Gson gson=new Gson();
-                                    Member newMember= (Member) gson.fromJson(response,Member.class);
+
 
                                     //회원가입 성공시
                                     if(success) {
                                         //멤버 가져오기
-                                        Toast.makeText( getApplicationContext(), "성공"+newMember.getMemName(), Toast.LENGTH_SHORT ).show();
+                                        Toast.makeText( getApplicationContext(), "성공", Toast.LENGTH_SHORT ).show();
 
                                         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                                         intent.putExtra("result", true);
