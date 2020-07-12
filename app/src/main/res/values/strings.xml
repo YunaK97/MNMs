@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Welcome!</string>
+    <string name="app_login">로그인</string>
+    <string name="app_signin">회원가입</string>
+    <string name="app_mainwindow">메인메뉴</string>
+    <string name="app_talk">단체 톡방</string>
+    <string name="app_memmon">회비관리</string>
+
+    <string name="text_signin">회원가입</string>
+
+    <string name="btn_overlap">ID중복확인</string>
+    <string name="btn_identify">민증확인</string>
+    <string name="btn_signin">회원가입</string>
+    <string name="btn_login">로그인</string>
+    <string name="btn_email">email확인</string>
+
+    <string name="hint_name">이름을 입력하세요</string>
+    <string name="hint_id">ID를 입력하세요</string>
+    <string name="hint_pw">PW를 입력하세요</string>
+    <string name="hint_email">EMAIL을 입력하세요</string>
+    <string name="hint_accnum">계좌번호를 입력하세요</string>
+    <string name="hint_acc">잔고를 입력하세요</string>
+    <string name="title_activity_sign_in">SignInActivity</string>
+
+</resources>
