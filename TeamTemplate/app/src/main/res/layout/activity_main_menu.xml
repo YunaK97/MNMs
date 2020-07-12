@@ -1,0 +1,569 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/sideblack"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/textName"
+            android:layout_gravity="top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="이름 : ex) 김나현"
+            android:textColor="#000000"
+            android:textSize="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            />
+        <TextView
+            android:id="@+id/accName"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="계좌번호 : ex)123-12-4567"
+            android:textColor="#000000"
+            android:textSize="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            />
+        <TextView
+            android:id="@+id/textBalance"
+            android:layout_gravity="bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="잔액 : 1000000 (원)"
+            android:textSize="20dp"
+            android:textColor="#000000"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/containerList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ScrollView
+            android:id="@+id/talkList"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#000000"
+                android:padding="2dp"
+                android:stretchColumns="*">
+                <TableRow>
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="톡방1"
+                        android:textColor="#000000"
+                        android:textSize="30dp" />
+                </TableRow>
+                <TableRow>
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="톡방2"
+                        android:textColor="#000000"
+                        android:textSize="30dp" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="톡방3"
+                        android:textColor="#000000"
+                        android:textSize="30dp" />
+                </TableRow>
+                <TableRow>
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="톡방4"
+                        android:textColor="#000000"
+                        android:textSize="30dp" />
+                </TableRow>
+            </TableLayout>
+        </ScrollView>
+
+        <ScrollView
+            android:id="@+id/sendList"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="#000000">
+
+            <TableLayout
+                android:id="@+id/useList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#000000"
+                android:padding="2dp"
+                android:stretchColumns="*">
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#000000">
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="날짜"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="보낸곳"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="금액"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="2019/11/15"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="정산1"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="10000"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="2019/11/30"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="김윤아"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="15000"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="2019/12/01"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="회비1"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="30000"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="2019/12/03"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="정산2"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="12000"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="2019/12/13"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="정산3"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="20000"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="2019/12/20"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="박인혜"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="10000"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="2019/12/29"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="정산2"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="17000"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="2020/01/01"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="회비1"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="30000"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="2019/01/17"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="정산1"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="10000"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="2019/12/30"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="톡방1"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="10000"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="2019/12/30"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="톡방1"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="10000"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="2019/12/30"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="톡방1"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="10000"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="2019/12/30"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="톡방1"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="10000"
+                        android:textColor="#000000"
+                        android:textSize="20dp" />
+                </TableRow>
+            </TableLayout>
+        </ScrollView>
+
+        <ScrollView
+            android:id="@+id/shortList"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#000000"
+                android:padding="2dp"
+                android:stretchColumns="*">
+
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#000000" />
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="번개 만남 톡방1"
+                        android:textColor="#000000"
+                        android:textSize="30dp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="번개 만남 톡방2"
+                        android:textColor="#000000"
+                        android:textSize="30dp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="번개 만남 톡방3"
+                        android:textColor="#000000"
+                        android:textSize="30dp" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView
+                        android:layout_margin="1dp"
+                        android:background="#ffffff"
+                        android:text="번개 만남 톡방4"
+                        android:textColor="#000000"
+                        android:textSize="30dp" />
+                </TableRow>
+            </TableLayout>
+        </ScrollView>
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom|center"
+        >
+        <Button
+            android:id="@+id/btn_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="송금 내역"
+            android:layout_marginRight="5dp"
+            />
+        <Button
+            android:id="@+id/btn_membership"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="회비톡방"
+            />
+        <Button
+            android:id="@+id/btn_short"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:text="깜짝만남"
+            />
+        <Button
+            android:id="@+id/btn_addList"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+"
+            android:layout_marginLeft="5dp"
+            android:textSize="20dp"
+            />
+    </LinearLayout>
+</LinearLayout>
