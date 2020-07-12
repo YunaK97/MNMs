@@ -34,13 +34,12 @@ public class MainMenuActivity extends AppCompatActivity {
         shortList=findViewById(R.id.shortList);
 
         Intent intent=getIntent();
-        //loginMember= (Member) getIntent().getSerializableExtra("loginMember");
-        loginMember = new Member();
-        loginMember.setMemID(intent.getStringExtra("memID"));
-        loginMember.setMemPW(intent.getStringExtra("memPW"));
+        loginMember= (Member) getIntent().getSerializableExtra("loginMember");
 
-        //textName.setText("아이디 : "+loginMember.getMemID());
-        //textBalance.setText("비밀번호 : "+loginMember.getMemPW());
+        textName=findViewById(R.id.textName);
+        textName.setText("이름 : "+loginMember.getMemName());
+        accName=findViewById(R.id.accName);
+        accName.setText("아이디 : "+loginMember.getMemID());
 
         Button btn_send = findViewById(R.id.btn_send);
         btn_send.setOnClickListener(new View.OnClickListener() {

@@ -71,17 +71,15 @@ public class MainActivity extends AppCompatActivity {
                     Gson gson=new Gson();
                     Member loginMem= (Member) gson.fromJson(response,Member.class);
 
-                    if(loginMem != null){ //로그인에 성공한 경우
+                    if(loginMem.getMemID() != null){ //로그인에 성공한 경우
                         //String userID=jsonObject.getString("memID");
                         //String userPass=jsonObject.getString("memPW");
                         //Member loginMem= (Member) jsonObject.get("member");
 
 
-                        Toast.makeText(getApplicationContext(),"로그인 성공하였습니다."+loginMem.getMemName(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(),"로그인 성공하였습니다." + loginMem.getMemID(), Toast.LENGTH_SHORT).show();
                         Intent intent=new Intent(MainActivity.this,MainMenuActivity.class);
-                        intent.putExtra("loginMem",loginMem);
-                        //intent.putExtra("memID",userID);
-                        //intent.putExtra("memPW",userPass);
+                        intent.putExtra("loginMember",loginMem);
                         //멤버 나머지 속성 받기
 
                         startActivity(intent);
