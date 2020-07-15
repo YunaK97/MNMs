@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 public class NewDailyActivity extends AppCompatActivity {
     MemberAdapter memberAdapter;
@@ -45,5 +46,9 @@ public class NewDailyActivity extends AppCompatActivity {
                 showToast("아이템 선택됨 : "+ item.getMemName());
             }
         });
+    }
+
+    public void showToast(String data){
+        Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
 }

@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                         //Member loginMem= (Member) jsonObject.get("member");
 
 
-                        Toast.makeText(getApplicationContext(),"로그인 성공하였습니다." + loginMem.getMemID(), Toast.LENGTH_SHORT).show();
+                        showToast("로그인 성공하였습니다. "+loginMem.getMemName()+"님");
                         Intent intent=new Intent(MainActivity.this,MainMenuActivity.class);
                         intent.putExtra("loginMember",loginMem);
                         //멤버 나머지 속성 받기
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                     else{//로그인에 실패한 경우
-                        Toast.makeText(getApplicationContext(),"로그인에 실패하였습니다.", Toast.LENGTH_SHORT).show();
+                        showToast("로그인에 실패했습니다.");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -105,9 +105,15 @@ public class MainActivity extends AppCompatActivity {
             boolean result=data.getBooleanExtra("result",false);
             Member newMember=(Member) data.getSerializableExtra("newMember");
 
-            if(result){
-                Toast.makeText(getApplicationContext(),"로그인하시면 되옴",Toast.LENGTH_LONG).show();
+            if(result) {
+                showToast("회원가입 성공! -> 로그인합시다");
+            }else{
+                showToast("쏴리,,회원가입 실패ㅠ");
             }
         }
+    }
+
+    public void showToast(String data){
+        Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
 }

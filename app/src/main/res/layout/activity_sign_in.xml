@@ -98,13 +98,13 @@
                 android:textSize="20dp"
                 android:textColor="@color/colorBlack"
                 />
-            <TextView
-                android:layout_width="wrap_content"
+
+            <Spinner
+                android:id="@+id/email_type"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
-                android:text="gmail.com"
-                android:textSize="20dp"
-                android:textColor="@color/colorBlack"
-                />
+                android:dropDownWidth="250dp"
+                android:layout_weight="1" />
 
             <Button
                 android:id="@+id/emailCheck"
@@ -133,17 +133,30 @@
         android:layout_marginTop="15dp"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/textAccname"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/sideblack"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:hint="@string/hint_accnum"
-            android:inputType="text"
-            android:textSize="25dp" />
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/textAccname"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/sideblack"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:hint="@string/hint_accnum"
+                android:inputType="text"
+                android:textSize="25dp" />
+            <ScrollView
+                android:id="@+id/account_bank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                />
+        </LinearLayout>
+
 
         <EditText
             android:id="@+id/textAccount"
