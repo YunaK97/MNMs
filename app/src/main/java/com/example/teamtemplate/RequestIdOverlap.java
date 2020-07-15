@@ -9,7 +9,8 @@ import java.util.Map;
 
 public class RequestIdOverlap extends StringRequest {
     //서버 URL 설정(PHP 파일 연동)
-    final static private String URL="http://jennyk97.dothome.co.kr/Register.php";
+    //php 구현 필요
+    final static private String URL="http://jennyk97.dothome.co.kr/IdOverlap.php";
     private Map<String,String> map;
 
     public RequestIdOverlap(String memID, Response.Listener<String> listener){

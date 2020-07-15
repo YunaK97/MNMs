@@ -1,13 +1,8 @@
 package com.example.teamtemplate;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -15,8 +10,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainMenuActivity extends AppCompatActivity {
     private Member loginMember;
@@ -37,9 +32,11 @@ public class MainMenuActivity extends AppCompatActivity {
         loginMember= (Member) intent.getSerializableExtra("loginMember");
 
         textName=findViewById(R.id.textName);
-        textName.setText("이름 : "+loginMember.getMemName());
+        String text="이름 : "+loginMember.getMemName();
+        textName.setText(text);
         accName=findViewById(R.id.accName);
-        accName.setText("아이디 : "+loginMember.getMemID());
+        text="아이디 : "+loginMember.getMemID();
+        accName.setText(text);
 
         Button btn_send = findViewById(R.id.btn_send);
         btn_send.setOnClickListener(new View.OnClickListener() {

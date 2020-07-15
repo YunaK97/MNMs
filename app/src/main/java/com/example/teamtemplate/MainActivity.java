@@ -25,8 +25,8 @@ public class MainActivity extends AppCompatActivity {
         Button login,signin;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        login=(Button)findViewById(R.id.login);
-        signin=(Button)findViewById(R.id.signin);
+        login= findViewById(R.id.login);
+        signin= findViewById(R.id.signin);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override

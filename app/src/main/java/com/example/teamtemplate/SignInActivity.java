@@ -3,7 +3,7 @@ package com.example.teamtemplate;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -18,6 +18,7 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -34,7 +35,7 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        email_type=(Spinner) findViewById(R.id.email_type);
+        email_type= findViewById(R.id.email_type);
         final ArrayAdapter emailTypeAdapter=ArrayAdapter.createFromResource(this,R.array.email_type,R.layout.support_simple_spinner_dropdown_item);
         emailTypeAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         email_type.setAdapter(emailTypeAdapter);
@@ -42,17 +43,18 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String emailID=((TextView)findViewById(R.id.textEmail)).getText().toString();
-                String email=emailID+"@"+email_type.getSelectedItem().toString();
-                signInMember.setMemEmail(email);
+                if(!TextUtils.isEmpty(emailID)) {
+                    String email = emailID + "@" + email_type.getSelectedItem().toString();
+                    signInMember.setMemEmail(email);
+                }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
 
-        bank_type=(Spinner) findViewById(R.id.bank_type);
+        bank_type= findViewById(R.id.bank_type);
         final ArrayAdapter bankTypeAdapter=ArrayAdapter.createFromResource(this,R.array.bank_type,R.layout.support_simple_spinner_dropdown_item);
         bankTypeAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         bank_type.setAdapter(bankTypeAdapter);
@@ -82,14 +84,18 @@ public class SignInActivity extends AppCompatActivity {
         });
 
         //중복확인
-        Button overlap=(Button)findViewById(R.id.overlap);
+        Button overlap= findViewById(R.id.overlap);
         overlap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String memID=((TextView)findViewById(R.id.textID)).getText().toString();
-                Toast.makeText(getApplicationContext(),memID+" 사용가능!",Toast.LENGTH_LONG).show();
-                idValid=true;
-                signInMember.setMemID(memID);
+                if(!TextUtils.isEmpty(memID)) {
+                    showToast(memID+"사용가능!");
+                    idValid = true;
+                    signInMember.setMemID(memID);
+                }else{
+                    showToast("사용 불가능한 아이디입니다.");
+                }
                 //id만 서버로 보내서 중복확인
 //                Response.Listener<String> responseListener=new Response.Listener<String>() {
 //                    @Override
@@ -98,11 +104,9 @@ public class SignInActivity extends AppCompatActivity {
 //                            JSONObject jsonObject=new JSONObject(response);
 //                            boolean success=jsonObject.getBoolean("success");
 //                            if(success){ //로그인에 성공한 경우
-//                                String userID=jsonObject.getString("userID");
-//
 //                                Toast.makeText(getApplicationContext(),"사용가능한 아이디입니다.", Toast.LENGTH_SHORT).show();
+//                                signInMember.setMemID(memID);
 //                                idValid=true;
-//
 //                            }
 //                            else{//로그인에 실패한 경우
 //                                Toast.makeText(getApplicationContext(),"사용 불가능한 아이디입니다.", Toast.LENGTH_SHORT).show();
@@ -120,29 +124,29 @@ public class SignInActivity extends AppCompatActivity {
         });
 
         //이메일 확인
-        Button emailCheck=(Button)findViewById(R.id.emailCheck);
+        Button emailCheck= findViewById(R.id.emailCheck);
         emailCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "이메일 확인!"+signInMember.getMemEmail(), Toast.LENGTH_LONG).show();
+                showToast("이메일 확인!"+signInMember.getMemEmail());
                 emailValid=true;
             }
         });
 
         //민증확인
-        Button identify=(Button)findViewById(R.id.identify);
+        Button identify= findViewById(R.id.identify);
         identify.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String tmpssn="970822-10041004";
-                Toast.makeText(getApplicationContext(),"민증확인!(미구현)",Toast.LENGTH_LONG).show();
+                showToast("민증확인! (미구현ㅠ)");
                 ssnValid=true;
                 signInMember.setMemSsn(tmpssn);
             }
         });
 
         //회원가입 버튼!
-        Button signComplete=(Button)findViewById(R.id.signComplete);
+        Button signComplete= findViewById(R.id.signComplete);
         signComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -152,12 +156,10 @@ public class SignInActivity extends AppCompatActivity {
                 //이메일 유효성 확인 여부
 
                 //계좌정보 가져오기
-                getAccountInfo();
-
-                if(!emailValid&&!idValid&&!ssnValid){
-                    Toast.makeText(getApplicationContext(), "잘못된 입력입니다(이메일,주민번호,아이디 확인!)", Toast.LENGTH_LONG).show();
+                if(!getUserInfo() || !getAccountInfo()){
+                    showToast("빈칸 ㄴㄴ해");
                 }else{
-                    if(getUserInfo()){
+                    if(emailValid&&idValid&&ssnValid){
                         Response.Listener<String> responseListener = new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -177,22 +179,20 @@ public class SignInActivity extends AppCompatActivity {
                                         intent.putExtra("result", true);
                                         //intent.putExtra("newMember",newMember);
 
-
                                         setResult(Activity.RESULT_OK, intent);
 
                                         finish();
-
-                                        //회원가입 실패시
                                     } else {
+                                        //회원가입 실패
                                         showToast("실패");
                                     }
 
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
-
                         }
                     };
+
                     //서버로 Volley를 이용해서 요청
                     RequestRegister requestRegister=new RequestRegister(
                             signInMember.getMemID(),signInMember.getMemPW(),
@@ -204,7 +204,7 @@ public class SignInActivity extends AppCompatActivity {
                     RequestQueue queue = Volley.newRequestQueue( SignInActivity.this );
                     queue.add( requestRegister );
                     }else{
-                        showToast("빈칸 ㄴㄴ해");
+                        showToast("잘못된 입력!(이메일,주민번호,아이디 확인~)");
                     }
                 }
             }
@@ -212,30 +212,29 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     protected boolean getUserInfo(){
-        //정보들 null인지 체크
-        //
-        //
-        // 전체 빈칸으로 회원가입 클릭 시 오류발생
-        //
-        //
         String name=((TextView)findViewById(R.id.textName)).getText().toString();
-        //if(!TextUtils.isEmpty(name)) return false;
-        signInMember.setMemName(name);
+        if(TextUtils.isEmpty(name)) return false;
+        else signInMember.setMemName(name);
         String pw=((TextView)findViewById(R.id.textPW)).getText().toString();
-        //if(!TextUtils.isEmpty(pw)) return false;
+        if(TextUtils.isEmpty(pw)) return false;
         signInMember.setMemPW(pw);
         return true;
     }
 
-    protected void getAccountInfo(){
+    protected boolean getAccountInfo(){
         String accountNum=((TextView)findViewById(R.id.textAccountNum)).getText().toString();
-        //if(!TextUtils.isEmpty(accName)) return false;
-        memberAccount.setAccountNum(accountNum);
+        if(TextUtils.isEmpty(accountNum)) return false;
+        else memberAccount.setAccountNum(accountNum);
+
         String accountBalance=((TextView)findViewById(R.id.textAccountBalance)).getText().toString();
-        memberAccount.setAccountBalance(accountBalance);
-        //if(!TextUtils.isEmpty(accBalance2)) return false;
-        String accountPw=findViewById(R.id.textAccountPW).toString();
-        memberAccount.setAccountPassword(accountPw);
+        if(TextUtils.isEmpty(accountBalance)) return false;
+        else memberAccount.setAccountBalance(accountBalance);
+
+        String accountPw=((TextView)findViewById(R.id.textAccountPW)).getText().toString();
+        if(TextUtils.isEmpty(accountPw)) return false;
+        else memberAccount.setAccountPassword(accountPw);
+
+        return true;
     }
 
     public void showToast(String data){
