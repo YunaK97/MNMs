@@ -163,7 +163,7 @@ public class SignInActivity extends AppCompatActivity {
                             public void onResponse(String response) {
                                 try {
                                     if(response.isEmpty()){
-                                        Toast.makeText(getApplicationContext(),"error!",Toast.LENGTH_LONG).show();
+                                        showToast("error!");
                                     }
                                     JSONObject jsonObject = new JSONObject( response );
 
@@ -171,7 +171,7 @@ public class SignInActivity extends AppCompatActivity {
                                     //회원가입 성공시
                                     if(success) {
                                         //멤버 가져오기
-                                        Toast.makeText( getApplicationContext(), "성공", Toast.LENGTH_SHORT ).show();
+                                        showToast("성공");
 
                                         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                                         intent.putExtra("result", true);
@@ -184,7 +184,7 @@ public class SignInActivity extends AppCompatActivity {
 
                                         //회원가입 실패시
                                     } else {
-                                        Toast.makeText( getApplicationContext(), "실패", Toast.LENGTH_SHORT ).show();
+                                        showToast("실패");
                                     }
 
                                 } catch (JSONException e) {
@@ -199,7 +199,7 @@ public class SignInActivity extends AppCompatActivity {
                     RequestQueue queue = Volley.newRequestQueue( SignInActivity.this );
                     queue.add( requestRegister );
                     }else{
-                        Toast.makeText(getApplicationContext(),"빈칸 ㄴㄴ해",Toast.LENGTH_LONG).show();
+                        showToast("빈칸 ㄴㄴ해");
                     }
                 }
             }
@@ -231,6 +231,10 @@ public class SignInActivity extends AppCompatActivity {
         //if(!TextUtils.isEmpty(accBalance2)) return false;
         String accountPw=findViewById(R.id.textAccountPW).toString();
         memberAccount.setPassword(accountPw);
+    }
+
+    public void showToast(String data){
+        Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
 
 }
