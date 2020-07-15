@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class RequestRegister extends StringRequest {
     //서버 URL 설정(PHP 파일 연동)
-    final static private String URL="http://jennyk97.dothome.co.kr/Register.php";
+    final static private String URL="http://jennyk97.dothome.co.kr/Register2.php";
     private Map<String,String> map;
 
     public RequestRegister(String memID, String memPW, String memName, String memEmail,Response.Listener<String> listener){
@@ -20,6 +20,7 @@ public class RequestRegister extends StringRequest {
         map.put("memPW", memPW);
         map.put("memName", memName);
         map.put("memEmail",memEmail);
+        System.out.println(memEmail);
     }
 
     @Override

@@ -90,7 +90,7 @@
                 android:ems="10"
                 android:hint="@string/hint_email"
                 android:inputType="text"
-                android:textSize="25dp" />
+                android:textSize="20dp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -139,7 +139,7 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/textAccname"
+                android:id="@+id/textAccountNum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
@@ -148,27 +148,40 @@
                 android:layout_marginRight="10dp"
                 android:hint="@string/hint_accnum"
                 android:inputType="text"
+                android:layout_weight="1"
                 android:textSize="25dp" />
-            <ScrollView
-                android:id="@+id/account_bank"
-                android:layout_width="wrap_content"
+            <Spinner
+                android:id="@+id/bank_type"
+                android:layout_width="250dp"
                 android:layout_height="wrap_content"
-
-                />
+                android:dropDownWidth="150dp"
+                android:layout_weight="1" />
         </LinearLayout>
 
-
-        <EditText
-            android:id="@+id/textAccount"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/sideblack"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:hint="@string/hint_acc"
-            android:inputType="text"
-            android:textSize="25dp" />
+            android:orientation="horizontal">
+            <EditText
+                android:id="@+id/textAccountPW"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="@string/hint_bankpw"
+                android:inputType="numberPassword"
+                />
+            <EditText
+                android:id="@+id/textAccountBalance"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/sideblack"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:hint="@string/hint_acc"
+                android:inputType="text"
+                android:textSize="25dp" />
+        </LinearLayout>
+
     </LinearLayout>
 
     <Button

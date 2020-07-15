@@ -10,6 +10,7 @@ public class Member implements Serializable {
     private String memPW;
     private String memEmail;
     private String memSsn; //주민번호
+    private String accountNum;
     //친구 그룹
 
     public String getMemName() {
@@ -41,5 +42,13 @@ public class Member implements Serializable {
     }
     public void setMemSsn(String memSsn) {
         this.memSsn = memSsn;
+    }
+
+    public String getAccountNum() {
+        return accountNum;
+    }
+
+    public void setAccountNum(String accountNum) {
+        this.accountNum = accountNum;
     }
 }

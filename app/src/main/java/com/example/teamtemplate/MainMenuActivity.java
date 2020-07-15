@@ -34,7 +34,7 @@ public class MainMenuActivity extends AppCompatActivity {
         shortList=findViewById(R.id.shortList);
 
         Intent intent=getIntent();
-        loginMember= (Member) getIntent().getSerializableExtra("loginMember");
+        loginMember= (Member) intent.getSerializableExtra("loginMember");
 
         textName=findViewById(R.id.textName);
         textName.setText("이름 : "+loginMember.getMemName());

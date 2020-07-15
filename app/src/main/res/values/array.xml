@@ -1,8 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="email_type">
+        <item>이메일</item>
         <item>naver.com</item>
         <item>gmail.com</item>
         <item>daum.net</item>
+    </string-array>
+    <string-array name="bank_type">
+        <item>은행선택</item>
+        <item>국민</item>
+        <item>우리</item>
+        <item>신한</item>
+        <item>하나</item>
+        <item>카카오뱅크</item>
+        <item>농협</item>
+        <item>IBK</item>
     </string-array>
 </resources>
