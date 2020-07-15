@@ -1,6 +1,8 @@
 package com.example.teamtemplate;
 
-public class ACCOUNT {
+import java.io.Serializable;
+
+public class Account implements Serializable {
     private String accountNum;
     private String accountBank;
     private String Balance;
