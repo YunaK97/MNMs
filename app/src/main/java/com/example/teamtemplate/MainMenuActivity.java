@@ -75,10 +75,10 @@ public class MainMenuActivity extends AppCompatActivity {
         btn_addList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String[] select=new String[] {"회비모임","꿀잼모임"};
+                final String[] select=new String[] {"회비모임","꿀잼모임","친구추가"};
 
                 AlertDialog.Builder dialog=new AlertDialog.Builder(MainMenuActivity.this);
-                dialog.setTitle("어떤 모임을 생성하나요?")
+                dialog.setTitle("추가!")
                         .setSingleChoiceItems(select, 0, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -92,6 +92,10 @@ public class MainMenuActivity extends AppCompatActivity {
                                     Intent intent = new Intent(getApplicationContext(),NewMembershipActivity.class);
                                     startActivity(intent);
                                 }else if(addType[0]==1){
+                                    Intent intent = new Intent(getApplicationContext(),NewDailyActivity.class);
+                                    startActivity(intent);
+                                }else if(addType[0]==2){
+                                    //아이디 검색 -> 친구추가
 
                                 }
                             }

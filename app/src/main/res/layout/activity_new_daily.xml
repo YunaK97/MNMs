@@ -29,28 +29,6 @@
             android:text="ex) 아우디" />
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="158dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.5"
-            android:text="회비(단위:만원)"
-            android:textSize="20dp" />
-
-        <EditText
-            android:id="@+id/talk_money"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:textSize="20dp"
-            android:inputType="text"
-            android:text="ex) 3" />
-    </LinearLayout>
-
     <TextView
         android:layout_marginTop="20dp"
         android:layout_width="match_parent"
@@ -65,7 +43,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="회비톡방 생성!"
+        android:text="데일리톡방 생성!"
         android:layout_gravity="bottom|center"
         />
 

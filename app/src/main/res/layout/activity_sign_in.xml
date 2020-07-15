@@ -28,6 +28,7 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/sideblack"
             android:ems="10"
+            android:inputType="text"
             android:hint="@string/hint_name"
             android:textSize="25dp" />
 
@@ -46,6 +47,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/sideblack"
                 android:ems="10"
+                android:inputType="text"
                 android:hint="@string/hint_id"
                 android:textSize="25dp" />
 
@@ -87,7 +89,22 @@
                 android:background="@drawable/sideblack"
                 android:ems="10"
                 android:hint="@string/hint_email"
+                android:inputType="text"
                 android:textSize="25dp" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="\@"
+                android:textSize="20dp"
+                android:textColor="@color/colorBlack"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="gmail.com"
+                android:textSize="20dp"
+                android:textColor="@color/colorBlack"
+                />
 
             <Button
                 android:id="@+id/emailCheck"
@@ -125,6 +142,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:hint="@string/hint_accnum"
+            android:inputType="text"
             android:textSize="25dp" />
 
         <EditText
@@ -136,6 +154,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:hint="@string/hint_acc"
+            android:inputType="text"
             android:textSize="25dp" />
     </LinearLayout>
 

@@ -23,6 +23,7 @@ public class NewMembershipActivity extends AppCompatActivity {
 
         memberAdapter=new MemberAdapter();
 
+        //친구 가져와서 출력
         Member member=new Member();
         member.setMemName("김씨");
         member.setMemID("kim");

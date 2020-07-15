@@ -10,12 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".NewMembershipActivity"
-            android:label="@string/app_new_membership"/>
-
-        <activity android:name=".MainMenuActivity"
-            android:label="@string/app_mainmenu"
-            />
+        <activity android:name=".NewDailyActivity"
+            android:label="@string/app_new_daily"
+            ></activity>
+        <activity
+            android:name=".NewMembershipActivity"
+            android:label="@string/app_new_membership" />
+        <activity
+            android:name=".MainMenuActivity"
+            android:label="@string/app_mainmenu" />
         <activity
             android:name=".SignInActivity"
             android:label="@string/app_signin" />
@@ -27,9 +30,9 @@
             </intent-filter>
         </activity>
     </application>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>

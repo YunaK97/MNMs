@@ -79,19 +79,23 @@ public class SignInActivity extends AppCompatActivity {
         emailCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String email2=((TextView)findViewById(R.id.textEmail)).getText().toString();
-                String regex = "^[_a-zA-Z0-9-\\.]+@[\\.a-zA-Z0-9-]+\\.[a-zA-Z]+$";
-                Pattern p = Pattern.compile(regex);
-                Matcher m = p.matcher(email2);
+//                String email2=((TextView)findViewById(R.id.textEmail)).getText().toString();
+//                String regex = "^[_a-zA-Z0-9-\\.]+@[\\.a-zA-Z0-9-]+\\.[a-zA-Z]+$";
+//                Pattern p = Pattern.compile(regex);
+//                Matcher m = p.matcher(email2);
 
-                if ( !m.matches()){
-                    Toast.makeText(SignInActivity.this, "Email형식으로 입력하세요", Toast.LENGTH_SHORT).show();
-                    emailValid=false;
-                }else {
-                    Toast.makeText(getApplicationContext(), "이메일 확인!", Toast.LENGTH_LONG).show();
-                    signInMember.setMemEmail(email2);
-                    emailValid = true;
-                }
+//                if ( !m.matches()){
+//                    Toast.makeText(SignInActivity.this, "Email형식으로 입력하세요", Toast.LENGTH_SHORT).show();
+//                    emailValid=false;
+//                }else {
+//                    Toast.makeText(getApplicationContext(), "이메일 확인!", Toast.LENGTH_LONG).show();
+//                    signInMember.setMemEmail(email2);
+//                    emailValid = true;
+//                }
+                String email=((TextView)findViewById(R.id.textEmail)).getText().toString();
+                signInMember.setMemEmail(email);
+                Toast.makeText(getApplicationContext(), "이메일 확인!", Toast.LENGTH_LONG).show();
+                emailValid=true;
             }
         });
 
