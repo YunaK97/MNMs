@@ -1,0 +1,20 @@
+package com.example.teamtemplate;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.Intent;
+import android.os.Bundle;
+
+public class MembershipActivity extends AppCompatActivity {
+    Member loginMember;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_membership);
+
+        Intent intent = getIntent();
+        loginMember = (Member) intent.getSerializableExtra("loginMember");
+
+    }
+}

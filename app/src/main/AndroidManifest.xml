@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.teamtemplate">
 
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,9 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".NewDailyActivity"
-            android:label="@string/app_new_daily"
-            ></activity>
+        <activity android:name=".MembershipActivity"></activity>
+        <activity
+            android:name=".NewDailyActivity"
+            android:label="@string/app_new_daily" />
         <activity
             android:name=".NewMembershipActivity"
             android:label="@string/app_new_membership" />
@@ -30,9 +35,5 @@
             </intent-filter>
         </activity>
     </application>
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
 </manifest>
