@@ -12,7 +12,7 @@ public class RequestRegister extends StringRequest {
     final static private String URL="http://jennyk97.dothome.co.kr/Register2.php";
     private Map<String,String> map;
 
-    public RequestRegister(String memID, String memPW, String memName, String memEmail,Response.Listener<String> listener){
+    public RequestRegister(String memID, String memPW, String memName, String memEmail,String accountBank,String accountNum, String accountBalance,String accountPassword,Response.Listener<String> listener){
         super(Method.POST,URL,listener,null);
         map=new HashMap<>();
         //map.put("member",member);
@@ -20,7 +20,11 @@ public class RequestRegister extends StringRequest {
         map.put("memPW", memPW);
         map.put("memName", memName);
         map.put("memEmail",memEmail);
-        System.out.println(memEmail);
+
+        map.put("accountBank",accountBank);
+        map.put("accountBalance",accountBalance);
+        map.put("accountNum",accountNum);
+        map.put("accountPassword",accountPassword);
     }
 
     @Override

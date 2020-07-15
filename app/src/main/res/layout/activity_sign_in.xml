@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/text_signin"
+        android:textColor="@color/colorBlack"
         android:textSize="30dp" />
 
     <LinearLayout
@@ -57,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/btn_overlap"
-                android:textSize="18dp" />
+                android:textSize="15dp" />
         </LinearLayout>
 
         <EditText
@@ -84,25 +85,27 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="15dp"
                 android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/sideblack"
                 android:ems="10"
                 android:hint="@string/hint_email"
                 android:inputType="text"
-                android:textSize="20dp" />
+                android:textSize="25dp" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="\@"
-                android:textSize="20dp"
+                android:textSize="25dp"
                 android:textColor="@color/colorBlack"
                 />
 
             <Spinner
+                android:background="@drawable/border"
                 android:id="@+id/email_type"
+                android:layout_marginLeft="5dp"
                 android:layout_width="250dp"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:dropDownWidth="250dp"
                 android:layout_weight="1" />
 
@@ -112,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/btn_email"
-                android:textSize="18dp" />
+                android:textSize="15dp" />
         </LinearLayout>
 
     </LinearLayout>
@@ -124,7 +127,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="5dp"
         android:text="@string/btn_identify"
-        android:textSize="18dp" />
+        android:textSize="15dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -151,34 +154,41 @@
                 android:layout_weight="1"
                 android:textSize="25dp" />
             <Spinner
+                android:background="@drawable/border"
                 android:id="@+id/bank_type"
                 android:layout_width="250dp"
-                android:layout_height="wrap_content"
+                android:layout_height="25dp"
                 android:dropDownWidth="150dp"
+                android:layout_marginRight="10dp"
                 android:layout_weight="1" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <EditText
+                android:layout_marginLeft="10dp"
                 android:id="@+id/textAccountPW"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/hint_bankpw"
                 android:inputType="numberPassword"
+                android:textSize="25dp"
+                android:background="@drawable/border"
+                android:layout_weight="1"
                 />
             <EditText
+                android:layout_weight="1"
                 android:id="@+id/textAccountBalance"
-                android:layout_width="150dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:background="@drawable/sideblack"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:hint="@string/hint_acc"
-                android:inputType="text"
+                android:inputType="number"
                 android:textSize="25dp" />
         </LinearLayout>
 
@@ -192,6 +202,6 @@
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
         android:text="@string/btn_signin"
-        android:textSize="18dp" />
+        android:textSize="15dp" />
 
 </LinearLayout>

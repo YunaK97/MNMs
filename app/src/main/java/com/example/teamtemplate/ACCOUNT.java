@@ -5,8 +5,8 @@ import java.io.Serializable;
 public class Account implements Serializable {
     private String accountNum;
     private String accountBank;
-    private String Balance;
-    private String Password;
+    private String accountBalance;
+    private String accountPassword;
 
     public String getAccountNum() {
         return accountNum;
@@ -24,20 +24,20 @@ public class Account implements Serializable {
         this.accountBank = accountBank;
     }
 
-    public String getBalance() {
-        return Balance;
+    public String getAccountBalance() {
+        return accountBalance;
     }
 
-    public void setBalance(String balance) {
-        Balance = balance;
+    public void setAccountBalance(String accountBalance) {
+        this.accountBalance = accountBalance;
     }
 
-    public String getPassword() {
-        return Password;
+    public String getAccountPassword() {
+        return accountPassword;
     }
 
-    public void setPassword(String password) {
-        Password = password;
+    public void setAccountPassword(String accountPassword) {
+        this.accountPassword = accountPassword;
     }
 }
 

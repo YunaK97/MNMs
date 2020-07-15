@@ -194,7 +194,12 @@ public class SignInActivity extends AppCompatActivity {
                         }
                     };
                     //서버로 Volley를 이용해서 요청
-                    RequestRegister requestRegister=new RequestRegister(signInMember.getMemID(),signInMember.getMemPW(),signInMember.getMemName(),signInMember.getMemEmail(),responseListener);
+                    RequestRegister requestRegister=new RequestRegister(
+                            signInMember.getMemID(),signInMember.getMemPW(),
+                            signInMember.getMemName(),signInMember.getMemEmail(),
+                            memberAccount.getAccountBank(),memberAccount.getAccountNum(),
+                            memberAccount.getAccountBalance(),memberAccount.getAccountPassword(),
+                            responseListener);
                     //RegisterRequest registerRequest = new RegisterRequest(member, responseListener);
                     RequestQueue queue = Volley.newRequestQueue( SignInActivity.this );
                     queue.add( requestRegister );
@@ -227,10 +232,10 @@ public class SignInActivity extends AppCompatActivity {
         //if(!TextUtils.isEmpty(accName)) return false;
         memberAccount.setAccountNum(accountNum);
         String accountBalance=((TextView)findViewById(R.id.textAccountBalance)).getText().toString();
-        memberAccount.setBalance(accountBalance);
+        memberAccount.setAccountBalance(accountBalance);
         //if(!TextUtils.isEmpty(accBalance2)) return false;
         String accountPw=findViewById(R.id.textAccountPW).toString();
-        memberAccount.setPassword(accountPw);
+        memberAccount.setAccountPassword(accountPw);
     }
 
     public void showToast(String data){
