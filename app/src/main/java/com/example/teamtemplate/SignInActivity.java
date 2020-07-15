@@ -94,14 +94,14 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
 
-        email_type=findViewById(R.id.email_type);
+        email_type=(Spinner) findViewById(R.id.email_type);
         final ArrayAdapter emailTypeAdapter=ArrayAdapter.createFromResource(this,R.array.email_type,R.layout.support_simple_spinner_dropdown_item);
         emailTypeAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         email_type.setAdapter(emailTypeAdapter);
         email_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(),email_type.getSelectedItemPosition(position),Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(),email_type.getSelectedItemPosition(position),Toast.LENGTH_LONG).show();
             }
 
             @Override
