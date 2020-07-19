@@ -10,8 +10,8 @@
     $accountBank=$_POST["accountBank"];
     $accountBalance=$_POST["accountBalance"];
     $accountPassword=$_POST["accountPassword"];
-    $statement1 = mysqli_prepare($con, "INSERT INTO 'MEMBER'('memID','memPW','memName','memEmail','accountNum') VALUES (?,?,?,?,?)");
-    $statement2 = mysqli_prepare($con, "INSERT INTO 'ACCOUNT'('accountNum','accountBank','accountBalance','accountPassword') VALUES (?,?,?,?)");
+    $statement1 = mysqli_prepare($con, "INSERT INTO MEMBER VALUES (?,?,?,?,?)");
+    $statement2 = mysqli_prepare($con, "INSERT INTO ACCOUNT VALUES (?,?,?,?)");
     mysqli_stmt_bind_param($statement2, "ssis", $accountNum, $accountBank, $accountBalance, $accountPassword);
     mysqli_stmt_execute($statement2);
 

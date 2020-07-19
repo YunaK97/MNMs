@@ -15,8 +15,8 @@
     $response = array();
     $response["success"] = false;
     $accountNum2=$accountNum;
-    $statement2 = mysqli_prepare($con, "SELECT accountBalance FROM ACCOUNT WHERE accountNum=?");
-    mysqli_stmt_bind_param($statement2,"s", $accountNum2);
+    $statement2 = mysqli_prepare($con, "SELECT accountBalance FROM MEMBER,ACCOUNT WHERE MEMBER.memID=? AND MEMBER.accountNum=ACCOUNT.accountNum");
+    mysqli_stmt_bind_param($statement2,"s", $memID);
     mysqli_stmt_execute($statement2);
 
     mysqli_stmt_store_result($statement2);

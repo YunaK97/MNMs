@@ -9,13 +9,12 @@
     mysqli_stmt_execute($statement);
 
     $result=mysqli_stmt_get_result($statement);
-     
+    
    $response=array();
-    $response["success"]=true;
-    if(mysqli_num_row($response)){
-          $response["success"]= false;
+    if(mysqli_num_rows($result)>0){
+         $response["success"]= false;
     }else{
-          $response["success"]=true ;
+          $response["success"]=true;
     }
     echo json_encode($response);
 
