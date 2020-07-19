@@ -12,21 +12,18 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class MainMenuActivity extends AppCompatActivity {
     private Member loginMember;
-    FrameLayout containerList;
-    ScrollView sendList,membershipList,shortList;
+    GroupAdapter groupAdapter;
     TextView textName,accName,textBalance;
     final int[] addType={0};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-        containerList = findViewById(R.id.containerList);
-        sendList=findViewById(R.id.sendList);
-        membershipList=findViewById(R.id.talkList);
-        shortList=findViewById(R.id.shortList);
 
         Intent intent=getIntent();
         loginMember= (Member) intent.getSerializableExtra("loginMember");
@@ -42,9 +39,6 @@ public class MainMenuActivity extends AppCompatActivity {
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendList.setVisibility(View.VISIBLE);
-                membershipList.setVisibility(View.GONE);
-                shortList.setVisibility(View.GONE);
             }
         });
 
@@ -52,9 +46,8 @@ public class MainMenuActivity extends AppCompatActivity {
         btn_membership.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendList.setVisibility(View.GONE);
-                membershipList.setVisibility(View.VISIBLE);
-                shortList.setVisibility(View.GONE);
+                showToast("회비톡방 클릭");
+                //membershipView();
             }
         });
 
@@ -62,9 +55,34 @@ public class MainMenuActivity extends AppCompatActivity {
         btn_short.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendList.setVisibility(View.GONE);
-                membershipList.setVisibility(View.GONE);
-                shortList.setVisibility(View.VISIBLE);
+                RecyclerView group_short_list = findViewById(R.id.group_membership_list);
+                LinearLayoutManager layoutManager = new LinearLayoutManager(MainMenuActivity.this, LinearLayoutManager.VERTICAL, false);
+                //GridLayoutManager layoutManager=new GridLayoutManager(this,2);
+
+                group_short_list.setLayoutManager(layoutManager);
+
+                groupAdapter = new GroupAdapter();
+
+                //그룹 가져와서 출력
+                Group group1=new Group();
+                group1.setGroupName("번개1");
+                Group group2=new Group();
+                group1.setGroupName("번개2");
+                Group group3=new Group();
+                group1.setGroupName("번개3");
+                groupAdapter.addItem(group1);
+                groupAdapter.addItem(group2);
+                groupAdapter.addItem(group3);
+
+                group_short_list.setAdapter(groupAdapter);
+                groupAdapter.setOnItemClickListener(new OnGroupItemClickListener() {
+                    @Override
+                    public void onItemClick(GroupAdapter.ViewHolder holder, View view, int position) {
+                        Group item = groupAdapter.getItem(position);
+                        showToast("아이템 선택됨 : " + item.getGroupName());
+                    }
+                });
+
             }
         });
 
@@ -93,7 +111,6 @@ public class MainMenuActivity extends AppCompatActivity {
                                     startActivity(intent);
                                 }else if(addType[0]==2){
                                     //아이디 검색 -> 친구추가
-
                                 }
                             }
                         })
@@ -107,5 +124,37 @@ public class MainMenuActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+    }
+
+    public void membershipView(){
+        RecyclerView group_membership_list = findViewById(R.id.group_membership_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(MainMenuActivity.this, LinearLayoutManager.VERTICAL, false);
+
+        group_membership_list.setLayoutManager(layoutManager);
+
+        groupAdapter = new GroupAdapter();
+
+        //그룹 가져와서 출력
+        Group group1=new Group();
+        group1.setGroupName("계모임");
+        Group group2=new Group();
+        group1.setGroupName("아우디");
+        Group group3=new Group();
+        group1.setGroupName("동아리");
+        groupAdapter.addItem(group1);
+        groupAdapter.addItem(group2);
+        groupAdapter.addItem(group3);
+
+        group_membership_list.setAdapter(groupAdapter);
+        groupAdapter.setOnItemClickListener(new OnGroupItemClickListener() {
+            @Override
+            public void onItemClick(GroupAdapter.ViewHolder holder, View view, int position) {
+                Group item = groupAdapter.getItem(position);
+                showToast("아이템 선택됨 : " + item.getGroupName());
+            }
+        });
+    }
+    public void showToast(String data){
+        Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
 }
