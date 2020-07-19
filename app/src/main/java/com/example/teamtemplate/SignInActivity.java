@@ -168,13 +168,11 @@ public class SignInActivity extends AppCompatActivity {
                                     boolean success = jsonObject.getBoolean( "success" );
                                     //회원가입 성공시
                                     if(success) {
-                                        //멤버 가져오기
                                         showToast("성공");
 
                                         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                                         intent.putExtra("result", true);
-                                        //intent.putExtra("newMember",newMember);
-
+                                        intent.putExtra("back",0);
                                         setResult(Activity.RESULT_OK, intent);
 
                                         finish();
@@ -210,7 +208,8 @@ public class SignInActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-        //intent.putExtra("newMember",newMember);
+        intent.putExtra("back",321);
+        setResult(Activity.RESULT_OK, intent);
         finish();
         //super.onBackPressed();
     }

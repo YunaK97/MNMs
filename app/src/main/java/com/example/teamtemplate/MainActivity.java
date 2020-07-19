@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -114,17 +115,33 @@ public class MainActivity extends AppCompatActivity {
 
         if(requestCode == SIGNIN){
             boolean result=data.getBooleanExtra("result",false);
-            Member newMember=(Member) data.getSerializableExtra("newMember");
-
-            if(result) {
-                showToast("회원가입 성공! -> 로그인합시다");
-            }else{
-                showToast("쏴리,,회원가입 실패ㅠ");
+            int back=data.getIntExtra("back",0);
+            if(back==0){
+                if(result) {
+                    showToast("회원가입 성공! -> 로그인합시다");
+                }else{
+                    showToast("쏴리,,회원가입 실패ㅠ");
+                }
             }
         }
     }
 
     public void showToast(String data){
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
+    }
+
+    private long backKeyPressedTime=0;
+
+    @Override
+    public void onBackPressed(){
+        if(System.currentTimeMillis()>backKeyPressedTime+2500){
+            backKeyPressedTime=System.currentTimeMillis();
+            showToast("뒤로가기 버튼을 한 번 더 누르시면 종료됩니다.");
+            return;
+        }
+        if (System.currentTimeMillis()<=backKeyPressedTime+2500){
+            finish();
+            showToast("이용해주셔서 감사합니다.");
+        }
     }
 }
