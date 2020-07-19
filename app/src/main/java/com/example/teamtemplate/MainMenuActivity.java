@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class MainMenuActivity extends AppCompatActivity {
     private Member loginMember;
+    private Account loginMemberAccount;
     GroupAdapter groupAdapter;
     TextView textName,accName,textBalance;
     final int[] addType={0};
@@ -27,18 +28,23 @@ public class MainMenuActivity extends AppCompatActivity {
 
         Intent intent=getIntent();
         loginMember= (Member) intent.getSerializableExtra("loginMember");
+        loginMemberAccount=(Account)intent.getSerializableExtra("loginMemberAccount");
 
         textName=findViewById(R.id.textName);
         String text="이름 : "+loginMember.getMemName();
         textName.setText(text);
         accName=findViewById(R.id.accName);
-        text="아이디 : "+loginMember.getMemID();
+        text="계좌번호 : "+loginMemberAccount.getAccountNum();
         accName.setText(text);
+        textBalance=findViewById(R.id.textBalance);
+        text="잔액 : "+loginMemberAccount.getAccountBalance();
+        textBalance.setText(text);
 
         Button btn_send = findViewById(R.id.btn_send);
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                sendListView();
             }
         });
 
@@ -46,7 +52,7 @@ public class MainMenuActivity extends AppCompatActivity {
         btn_membership.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showToast("회비톡방 클릭");
+                showToast("회비 입력");
                 //membershipView();
             }
         });
@@ -55,34 +61,7 @@ public class MainMenuActivity extends AppCompatActivity {
         btn_short.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RecyclerView group_short_list = findViewById(R.id.group_membership_list);
-                LinearLayoutManager layoutManager = new LinearLayoutManager(MainMenuActivity.this, LinearLayoutManager.VERTICAL, false);
-                //GridLayoutManager layoutManager=new GridLayoutManager(this,2);
-
-                group_short_list.setLayoutManager(layoutManager);
-
-                groupAdapter = new GroupAdapter();
-
-                //그룹 가져와서 출력
-                Group group1=new Group();
-                group1.setGroupName("번개1");
-                Group group2=new Group();
-                group1.setGroupName("번개2");
-                Group group3=new Group();
-                group1.setGroupName("번개3");
-                groupAdapter.addItem(group1);
-                groupAdapter.addItem(group2);
-                groupAdapter.addItem(group3);
-
-                group_short_list.setAdapter(groupAdapter);
-                groupAdapter.setOnItemClickListener(new OnGroupItemClickListener() {
-                    @Override
-                    public void onItemClick(GroupAdapter.ViewHolder holder, View view, int position) {
-                        Group item = groupAdapter.getItem(position);
-                        showToast("아이템 선택됨 : " + item.getGroupName());
-                    }
-                });
-
+                shortListView();
             }
         });
 
@@ -126,6 +105,9 @@ public class MainMenuActivity extends AppCompatActivity {
         });
     }
 
+    public void sendListView(){
+        showToast("송금 내역 클릭");
+    }
     public void membershipView(){
         RecyclerView group_membership_list = findViewById(R.id.group_membership_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(MainMenuActivity.this, LinearLayoutManager.VERTICAL, false);
@@ -146,6 +128,9 @@ public class MainMenuActivity extends AppCompatActivity {
         groupAdapter.addItem(group3);
 
         group_membership_list.setAdapter(groupAdapter);
+
+        showToast(group1.getGroupName());
+
         groupAdapter.setOnItemClickListener(new OnGroupItemClickListener() {
             @Override
             public void onItemClick(GroupAdapter.ViewHolder holder, View view, int position) {
@@ -153,6 +138,10 @@ public class MainMenuActivity extends AppCompatActivity {
                 showToast("아이템 선택됨 : " + item.getGroupName());
             }
         });
+    }
+
+    public void shortListView(){
+        showToast("번개 만남 클릭");
     }
     public void showToast(String data){
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
