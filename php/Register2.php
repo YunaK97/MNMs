@@ -8,7 +8,7 @@
     $memEmail = $_POST["memEmail"];
 
     $statement = mysqli_prepare($con, "INSERT INTO MEMBER2 VALUES (?,?,?,?)");
-    mysqli_stmt_bind_param($statement, "sssi", $memID, $memPW, $memName, $memEmail);
+    mysqli_stmt_bind_param($statement, "ssss", $memID, $memPW, $memName, $memEmail);
     mysqli_stmt_execute($statement);
 
     $response = array();

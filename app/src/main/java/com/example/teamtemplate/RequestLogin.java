@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class RequestLogin extends StringRequest {
     //서버 URL 설정(PHP 파일 연동)
-    final static private String URL="http://jennyk97.dothome.co.kr/Login.php";
+    final static private String URL="http://jennyk97.dothome.co.kr/Login2.php";
     private Map<String,String> map;
 
     public RequestLogin(String memID, String memPW, Response.Listener<String> listener){

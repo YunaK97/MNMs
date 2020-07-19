@@ -11,7 +11,7 @@
 
 
     mysqli_stmt_store_result($statement);
-    mysqli_stmt_bind_result($statement, $memID, $memPW, $memName, $userEmail);
+    mysqli_stmt_bind_result($statement, $memID, $memPW, $memName, $memEmail);
 
     $response = array();
     $response["success"] = false;
@@ -23,15 +23,7 @@
         $response["memName"] = $memName;
         $response["memEmail"] = $memEmail;        
     }
-if (mysqli_connect_errno($conn)) {
 
-echo "데이터베이스 연결 실패: " . mysqli_connect_error();
-
-} else {
-
-echo "데이터베이스 연결 성공";
-
-}
 
     echo json_encode($response);
 

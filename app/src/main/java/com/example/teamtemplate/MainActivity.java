@@ -68,14 +68,25 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 try {
                     JSONObject jsonObject=new JSONObject(response);
-                    Gson gson=new Gson();
-                    Member loginMem= (Member) gson.fromJson(response,Member.class);
+                    //Gson gson=new Gson();
+                    //Member loginMem= (Member) gson.fromJson(response,Member.class);
 
-                    if(loginMem.getMemID() != null){ //로그인에 성공한 경우
+                    //if(loginMem.getMemID() != null){ //로그인에 성공한 경우
                         //String userID=jsonObject.getString("memID");
                         //String userPass=jsonObject.getString("memPW");
                         //Member loginMem= (Member) jsonObject.get("member");
+                    Boolean success=jsonObject.getBoolean("success");
+                    if(success){
+                        String id=jsonObject.getString("memID");
+                        String pw=jsonObject.getString("memPW");
+                        String name=jsonObject.getString("memName");
+                        String email=jsonObject.getString("memEmail");
 
+                        Member loginMem=new Member();
+                        loginMem.setMemEmail(email);
+                        loginMem.setMemID(id);
+                        loginMem.setMemName(name);
+                        loginMem.setMemPW(pw);
 
                         showToast("로그인 성공하였습니다. "+loginMem.getMemName()+"님");
                         Intent intent=new Intent(MainActivity.this,MainMenuActivity.class);

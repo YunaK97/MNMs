@@ -128,8 +128,12 @@ public class SignInActivity extends AppCompatActivity {
         emailCheck.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showToast("이메일 확인!"+signInMember.getMemEmail());
-                emailValid=true;
+                if(signInMember.getMemEmail()!=null){
+                    showToast("이메일 확인!"+signInMember.getMemEmail());
+                    emailValid=true;
+                }else{
+                    showToast("빈칸 놉!");
+                }
             }
         });
 
