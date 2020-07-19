@@ -18,9 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 public class MainMenuActivity extends AppCompatActivity {
     private Member loginMember;
     private Account loginMemberAccount;
+    RecyclerView group_membership_list;
     GroupAdapter groupAdapter;
     TextView textName,accName,textBalance;
     final int[] addType={0};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,8 +54,8 @@ public class MainMenuActivity extends AppCompatActivity {
         btn_membership.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showToast("회비 입력");
-                //membershipView();
+                //showToast("회비 입력");
+                membershipView();
             }
         });
 
@@ -103,39 +105,46 @@ public class MainMenuActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
-    }
 
-    public void sendListView(){
-        showToast("송금 내역 클릭");
-    }
-    public void membershipView(){
-        RecyclerView group_membership_list = findViewById(R.id.group_membership_list);
+        group_membership_list = findViewById(R.id.group_membership_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(MainMenuActivity.this, LinearLayoutManager.VERTICAL, false);
 
         group_membership_list.setLayoutManager(layoutManager);
 
         groupAdapter = new GroupAdapter();
+    }
+
+    public void sendListView(){
+        showToast("송금 내역 클릭");
+    }
+
+    public void membershipView(){
 
         //그룹 가져와서 출력
-        Group group1=new Group();
-        group1.setGroupName("계모임");
+        RecyclerView groupMembershiplList=findViewById(R.id.group_membership_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        //GridLayoutManager layoutManager=new GridLayoutManager(this,2);
+
+        groupMembershiplList.setLayoutManager(layoutManager);
+
+        groupAdapter=new GroupAdapter();
+
+        //친구 가져와서 출력
+        Group group=new Group();
+        group.setGroupName("김씨");
+
         Group group2=new Group();
-        group1.setGroupName("아우디");
-        Group group3=new Group();
-        group1.setGroupName("동아리");
-        groupAdapter.addItem(group1);
+        group2.setGroupName("이씨");
+        groupAdapter.addItem(group);
         groupAdapter.addItem(group2);
-        groupAdapter.addItem(group3);
 
-        group_membership_list.setAdapter(groupAdapter);
-
-        showToast(group1.getGroupName());
+        groupMembershiplList.setAdapter(groupAdapter);
 
         groupAdapter.setOnItemClickListener(new OnGroupItemClickListener() {
             @Override
             public void onItemClick(GroupAdapter.ViewHolder holder, View view, int position) {
-                Group item = groupAdapter.getItem(position);
-                showToast("아이템 선택됨 : " + item.getGroupName());
+                Group item=groupAdapter.getItem(position);
+                showToast("아이템 선택됨 : "+ item.getGroupName());
             }
         });
     }

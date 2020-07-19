@@ -67,7 +67,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
         //inflater 참조방법
         LayoutInflater inflater=LayoutInflater.from(parent.getContext());
-        View itemView=inflater.inflate(R.layout.layout_friend,parent,false);
+        View itemView=inflater.inflate(R.layout.layout_group,parent,false);
 
         return new ViewHolder(itemView,listener);
     }
