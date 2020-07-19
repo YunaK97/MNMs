@@ -104,12 +104,12 @@ public class SignInActivity extends AppCompatActivity {
 //                            JSONObject jsonObject=new JSONObject(response);
 //                            boolean success=jsonObject.getBoolean("success");
 //                            if(success){ //로그인에 성공한 경우
-//                                Toast.makeText(getApplicationContext(),"사용가능한 아이디입니다.", Toast.LENGTH_SHORT).show();
+//                                showToast("사용가능한 아이디입니다.");
 //                                signInMember.setMemID(memID);
 //                                idValid=true;
 //                            }
 //                            else{//로그인에 실패한 경우
-//                                Toast.makeText(getApplicationContext(),"사용 불가능한 아이디입니다.", Toast.LENGTH_SHORT).show();
+//                                showToast("사용 불가능한 아이디입니다.");
 //                                idValid=false;
 //                            }
 //                        } catch (JSONException e) {
