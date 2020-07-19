@@ -82,44 +82,36 @@ public class SignInActivity extends AppCompatActivity {
 
             }
         });
-
         //중복확인
         Button overlap= findViewById(R.id.overlap);
         overlap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String memID=((TextView)findViewById(R.id.textID)).getText().toString();
-                if(!TextUtils.isEmpty(memID)) {
-                    showToast(memID+"사용가능!");
-                    idValid = true;
-                    signInMember.setMemID(memID);
-                }else{
-                    showToast("사용 불가능한 아이디입니다.");
-                }
+                final String memID=((TextView)findViewById(R.id.textID)).getText().toString();
                 //id만 서버로 보내서 중복확인
-//                Response.Listener<String> responseListener=new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        try {
-//                            JSONObject jsonObject=new JSONObject(response);
-//                            boolean success=jsonObject.getBoolean("success");
-//                            if(success){ //로그인에 성공한 경우
-//                                showToast("사용가능한 아이디입니다.");
-//                                signInMember.setMemID(memID);
-//                                idValid=true;
-//                            }
-//                            else{//로그인에 실패한 경우
-//                                showToast("사용 불가능한 아이디입니다.");
-//                                idValid=false;
-//                            }
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                };
-//                RequestIdOverlap requestIdOverlap =new RequestIdOverlap(memID,responseListener);
-//                RequestQueue queue= Volley.newRequestQueue(SignInActivity.this);
-//                queue.add(requestIdOverlap);
+                Response.Listener<String> responseListener=new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject=new JSONObject(response);
+                            boolean success=jsonObject.getBoolean("success");
+                            if(success){
+                                showToast("사용가능한 아이디입니다.");
+                                signInMember.setMemID(memID);
+                                idValid=true;
+                            }
+                            else{
+                                showToast("사용 불가능한 아이디입니다.");
+                                idValid=false;
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                };
+                RequestIdOverlap requestIdOverlap =new RequestIdOverlap(memID,responseListener);
+                RequestQueue queue= Volley.newRequestQueue(SignInActivity.this);
+                queue.add(requestIdOverlap);
             }
         });
 
@@ -215,6 +207,13 @@ public class SignInActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+        //intent.putExtra("newMember",newMember);
+        finish();
+        //super.onBackPressed();
+    }
     protected boolean getUserInfo(){
         String name=((TextView)findViewById(R.id.textName)).getText().toString();
         if(TextUtils.isEmpty(name)) return false;
