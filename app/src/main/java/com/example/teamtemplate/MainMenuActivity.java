@@ -131,10 +131,10 @@ public class MainMenuActivity extends AppCompatActivity {
 
         //친구 가져와서 출력
         Group group=new Group();
-        group.setGroupName("김씨");
+        group.setGroupName("아우디");
 
         Group group2=new Group();
-        group2.setGroupName("이씨");
+        group2.setGroupName("계모임");
         groupAdapter.addItem(group);
         groupAdapter.addItem(group2);
 
@@ -150,7 +150,34 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     public void shortListView(){
-        showToast("번개 만남 클릭");
+
+        //그룹 가져와서 출력
+        RecyclerView groupMembershiplList=findViewById(R.id.group_membership_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        //GridLayoutManager layoutManager=new GridLayoutManager(this,2);
+
+        groupMembershiplList.setLayoutManager(layoutManager);
+
+        groupAdapter=new GroupAdapter();
+
+        //친구 가져와서 출력
+        Group group=new Group();
+        group.setGroupName("번개만남1");
+
+        Group group2=new Group();
+        group2.setGroupName("번개만남2");
+        groupAdapter.addItem(group);
+        groupAdapter.addItem(group2);
+
+        groupMembershiplList.setAdapter(groupAdapter);
+
+        groupAdapter.setOnItemClickListener(new OnGroupItemClickListener() {
+            @Override
+            public void onItemClick(GroupAdapter.ViewHolder holder, View view, int position) {
+                Group item=groupAdapter.getItem(position);
+                showToast("아이템 선택됨 : "+ item.getGroupName());
+            }
+        });
     }
     public void showToast(String data){
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
