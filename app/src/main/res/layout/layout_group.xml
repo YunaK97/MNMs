@@ -4,6 +4,7 @@
     android:layout_height="wrap_content">
 
     <TextView
+        android:background="@drawable/border"
         android:id="@+id/group_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

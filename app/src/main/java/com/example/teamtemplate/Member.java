@@ -11,6 +11,7 @@ public class Member implements Serializable {
     private String memEmail;
     private String memSsn; //주민번호
     private String accountNum;
+
     //친구 그룹
 
     public String getMemName() {
