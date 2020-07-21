@@ -12,39 +12,41 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class MainMenuActivity extends AppCompatActivity {
     private Member loginMember;
-    FrameLayout containerList;
-    ScrollView sendList,membershipList,shortList;
+    private Account loginMemberAccount;
+    RecyclerView group_membership_list;
+    GroupAdapter groupAdapter;
     TextView textName,accName,textBalance;
     final int[] addType={0};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-        containerList = findViewById(R.id.containerList);
-        sendList=findViewById(R.id.sendList);
-        membershipList=findViewById(R.id.talkList);
-        shortList=findViewById(R.id.shortList);
 
         Intent intent=getIntent();
         loginMember= (Member) intent.getSerializableExtra("loginMember");
+        loginMemberAccount=(Account)intent.getSerializableExtra("loginMemberAccount");
 
         textName=findViewById(R.id.textName);
         String text="이름 : "+loginMember.getMemName();
         textName.setText(text);
         accName=findViewById(R.id.accName);
-        text="아이디 : "+loginMember.getMemID();
+        text="계좌번호 : "+loginMemberAccount.getAccountNum();
         accName.setText(text);
+        textBalance=findViewById(R.id.textBalance);
+        text="잔액 : "+loginMemberAccount.getAccountBalance();
+        textBalance.setText(text);
 
         Button btn_send = findViewById(R.id.btn_send);
         btn_send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendList.setVisibility(View.VISIBLE);
-                membershipList.setVisibility(View.GONE);
-                shortList.setVisibility(View.GONE);
+                sendListView();
             }
         });
 
@@ -52,9 +54,8 @@ public class MainMenuActivity extends AppCompatActivity {
         btn_membership.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendList.setVisibility(View.GONE);
-                membershipList.setVisibility(View.VISIBLE);
-                shortList.setVisibility(View.GONE);
+                //showToast("회비 입력");
+                membershipView();
             }
         });
 
@@ -62,9 +63,7 @@ public class MainMenuActivity extends AppCompatActivity {
         btn_short.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendList.setVisibility(View.GONE);
-                membershipList.setVisibility(View.GONE);
-                shortList.setVisibility(View.VISIBLE);
+                shortListView();
             }
         });
 
@@ -93,7 +92,6 @@ public class MainMenuActivity extends AppCompatActivity {
                                     startActivity(intent);
                                 }else if(addType[0]==2){
                                     //아이디 검색 -> 친구추가
-
                                 }
                             }
                         })
@@ -107,5 +105,81 @@ public class MainMenuActivity extends AppCompatActivity {
                 dialog.show();
             }
         });
+
+        group_membership_list = findViewById(R.id.group_membership_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(MainMenuActivity.this, LinearLayoutManager.VERTICAL, false);
+
+        group_membership_list.setLayoutManager(layoutManager);
+
+        groupAdapter = new GroupAdapter();
+    }
+
+    public void sendListView(){
+        showToast("송금 내역 클릭");
+    }
+
+    public void membershipView(){
+
+        //그룹 가져와서 출력
+        RecyclerView groupMembershiplList=findViewById(R.id.group_membership_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        //GridLayoutManager layoutManager=new GridLayoutManager(this,2);
+
+        groupMembershiplList.setLayoutManager(layoutManager);
+
+        groupAdapter=new GroupAdapter();
+
+        //친구 가져와서 출력
+        Group group=new Group();
+        group.setGroupName("아우디");
+
+        Group group2=new Group();
+        group2.setGroupName("계모임");
+        groupAdapter.addItem(group);
+        groupAdapter.addItem(group2);
+
+        groupMembershiplList.setAdapter(groupAdapter);
+
+        groupAdapter.setOnItemClickListener(new OnGroupItemClickListener() {
+            @Override
+            public void onItemClick(GroupAdapter.ViewHolder holder, View view, int position) {
+                Group item=groupAdapter.getItem(position);
+                showToast("아이템 선택됨 : "+ item.getGroupName());
+            }
+        });
+    }
+
+    public void shortListView(){
+
+        //그룹 가져와서 출력
+        RecyclerView groupMembershiplList=findViewById(R.id.group_membership_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        //GridLayoutManager layoutManager=new GridLayoutManager(this,2);
+
+        groupMembershiplList.setLayoutManager(layoutManager);
+
+        groupAdapter=new GroupAdapter();
+
+        //친구 가져와서 출력
+        Group group=new Group();
+        group.setGroupName("번개만남1");
+
+        Group group2=new Group();
+        group2.setGroupName("번개만남2");
+        groupAdapter.addItem(group);
+        groupAdapter.addItem(group2);
+
+        groupMembershiplList.setAdapter(groupAdapter);
+
+        groupAdapter.setOnItemClickListener(new OnGroupItemClickListener() {
+            @Override
+            public void onItemClick(GroupAdapter.ViewHolder holder, View view, int position) {
+                Group item=groupAdapter.getItem(position);
+                showToast("아이템 선택됨 : "+ item.getGroupName());
+            }
+        });
+    }
+    public void showToast(String data){
+        Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
 }
