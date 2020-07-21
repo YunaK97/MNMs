@@ -1,13 +1,18 @@
 package com.example.teamtemplate;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,16 +25,21 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 public class SignInActivity extends AppCompatActivity {
 //아이디 중복확인
-//민증확인
+//민증확인(카메라)
 //회원가입 완료
     boolean idValid=false,ssnValid=false,emailValid=false;
     Member signInMember = new Member();
     Account memberAccount = new Account();
     Spinner email_type,bank_type;
+    final String TAG = getClass().getSimpleName();
+    Button cameraBtn;
+    final static int TAKE_PICTURE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,16 +140,32 @@ public class SignInActivity extends AppCompatActivity {
         });
 
         //민증확인
-        Button identify= findViewById(R.id.identify);
-        identify.setOnClickListener(new View.OnClickListener() {
+        cameraBtn= findViewById(R.id.identify);
+        cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                switch(v.getId()){
+                    case R.id.identify:
+                        // 카메라 앱을 여는 소스
+                        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(cameraIntent, TAKE_PICTURE);
+                        break;
+                }
                 String tmpssn="970822-10041004";
-                showToast("민증확인! (미구현ㅠ)");
+                showToast("민증확인! (구현중)");
                 ssnValid=true;
                 signInMember.setMemSsn(tmpssn);
             }
         });
+        // 6.0 마쉬멜로우 이상일 경우에는 권한 체크 후 권한 요청
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED ) {
+                Log.d(TAG, "권한 설정 완료");
+            } else {
+                Log.d(TAG, "권한 설정 요청");
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            }
+        }
 
         //회원가입 버튼!
         Button signComplete= findViewById(R.id.signComplete);
@@ -203,6 +229,15 @@ public class SignInActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+ //권한 요청
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        Log.d(TAG, "onRequestPermissionsResult");
+        if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED ) {
+            Log.d(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
+        }
     }
 
     @Override
