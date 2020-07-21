@@ -14,7 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MembershipActivity"></activity>
+        <activity android:name=".MembershipActivity">
+        </activity>
         <activity
             android:name=".NewDailyActivity"
             android:label="@string/app_new_daily" />
