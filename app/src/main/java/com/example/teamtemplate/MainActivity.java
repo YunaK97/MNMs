@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -15,13 +14,12 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
-    public final static int SIGNIN=221,BACK=321;
+    private final static int SIGNIN=221,BACK=321;
     String TAG_SUCCESS="success";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,13 +41,8 @@ public class MainActivity extends AppCompatActivity {
                     member.setMemID(id);
                     member.setMemPW(pw);
 
-                    //임시!
                     loginProcess(member);
 
-                    //로그인 정보 가져오기
-                    //없으면 false
-                    //있으면 true, 멤버정보 가져옴
-                    //  메인화면으로 전환
                 }
             }
         });
@@ -112,9 +105,9 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-        RequestLogin requestLogin =new RequestLogin(memID,memPW,responseListener);
+        RequestWork requestWork =new RequestWork(memID,memPW,responseListener);
         RequestQueue queue= Volley.newRequestQueue(MainActivity.this);
-        queue.add(requestLogin);
+        queue.add(requestWork);
     }
 
     @Override

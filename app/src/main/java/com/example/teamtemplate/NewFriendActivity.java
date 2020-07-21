@@ -72,7 +72,7 @@ public class NewFriendActivity extends AppCompatActivity {
 //                        }
 //                    }
 //                };
-//                RequestNewFriendAdd requestNewFriendAdd=new RequestNewFriendAdd(selectedMember.getMemID(),responseListener);
+//                RequestNewFriend requestNewFriendAdd=new RequestNewFriend("add",selectedMember.getMemID(),responseListener);
 //                RequestQueue queue=Volley.newRequestQueue(NewFriendActivity.this);
 //                queue.add(requestNewFriendAdd);
             }

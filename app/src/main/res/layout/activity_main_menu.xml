@@ -60,7 +60,7 @@
         android:layout_weight="1"
         >
         <Button
-            android:id="@+id/btn_send"
+            android:id="@+id/btn_transaction"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="송금 내역"
@@ -75,12 +75,12 @@
             android:text="회비톡방"
             />
         <Button
-            android:id="@+id/btn_short"
+            android:id="@+id/btn_daily"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:text="깜짝만남"
+            android:text="Daily만남"
             />
         <Button
             android:id="@+id/btn_addList"

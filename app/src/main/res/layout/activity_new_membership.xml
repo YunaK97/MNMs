@@ -20,7 +20,7 @@
             android:text="톡방이름" />
 
         <EditText
-            android:id="@+id/talk_name"
+            android:id="@+id/membership_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -42,7 +42,7 @@
             android:textSize="20dp" />
 
         <EditText
-            android:id="@+id/talk_money"
+            android:id="@+id/membership_money"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

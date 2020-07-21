@@ -5,20 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,12 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 public class MainMenuActivity extends AppCompatActivity {
     private Member loginMember;
     private Account loginMemberAccount;
-    RecyclerView group_membership_list;
-    GroupAdapter groupAdapter;
-    TextView textName,accName,textBalance;
-    final int[] addType={0};
+    private RecyclerView groupMembershiplList;
+    private GroupAdapter groupAdapter;
+    private TextView textName,accName,textBalance;
+    final private int[] addType={0};
 
-    String TAG_MEMBERSHIP="membership",TAG_DAILY="daily";
+    private String TAG_MEMBERSHIP="membership",TAG_DAILY="daily",TAG_SUCCESS="success";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,11 +42,11 @@ public class MainMenuActivity extends AppCompatActivity {
         text="잔액 : "+loginMemberAccount.getAccountBalance();
         textBalance.setText(text);
 
-        Button btn_send = findViewById(R.id.btn_send);
-        btn_send.setOnClickListener(new View.OnClickListener() {
+        Button btn_transaction = findViewById(R.id.btn_transaction);
+        btn_transaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                sendListView();
+                transactionListView();
             }
         });
 
@@ -70,8 +58,8 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         });
 
-        Button btn_short=findViewById(R.id.btn_short);
-        btn_short.setOnClickListener(new View.OnClickListener() {
+        Button btn_daily=findViewById(R.id.btn_daily);
+        btn_daily.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 GroupView(TAG_DAILY);
@@ -97,13 +85,16 @@ public class MainMenuActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 if(addType[0]==0){
                                     Intent intent = new Intent(getApplicationContext(),NewMembershipActivity.class);
+                                    intent.putExtra("loginMember",loginMember);
                                     startActivity(intent);
                                 }else if(addType[0]==1){
                                     Intent intent = new Intent(getApplicationContext(),NewDailyActivity.class);
+                                    intent.putExtra("loginMember",loginMember);
                                     startActivity(intent);
                                 }else if(addType[0]==2){
                                     //아이디 검색 -> 친구추가
                                     Intent intent=new Intent(getApplicationContext(),NewFriendActivity.class);
+                                    intent.putExtra("loginMember",loginMember);
                                     startActivity(intent);
                                 }
                             }
@@ -120,13 +111,61 @@ public class MainMenuActivity extends AppCompatActivity {
         });
     }
 
-    public void sendListView(){
+    public void transactionListView(){
         showToast("송금 내역 클릭");
     }
 
     public void GroupView(final String tag){
+        //TAG 별로 그룹 정보 가져오기 실행
+//        Response.Listener<String> responseListener=new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                try {
+//                    JSONObject jsonObject=new JSONObject(response);
+//                    Boolean success=jsonObject.getBoolean(TAG_SUCCESS);
+//                    if(success){
+//                        JSONArray jsonArray=jsonObject.getJSONArray(tag);
+//
+//                        for (int i=0;i<jsonArray.length();i++){
+//                            JSONObject item=jsonArray.getJSONObject(i);
+//                            String groupname=item.getString("GroupName");
+//
+//                            Group group = new Group();
+//                            group.setGroupName(groupname);
+//                            groupAdapter.addItem(group);
+//                        }
+//
+//                        groupMembershiplList.setAdapter(groupAdapter);
+//
+//                        groupAdapter.setOnItemClickListener(new OnGroupItemClickListener() {
+//                            @Override
+//                            public void onItemClick(GroupAdapter.ViewHolder holder, View view, int position) {
+//                                Group item=groupAdapter.getItem(position);
+//                                showToast("아이템 선택됨 : "+ item.getGroupName());
+//
+//                                Intent intent = new Intent(MainMenuActivity.this,MembershipActivity.class);
+//
+//                                intent.putExtra("loginMember",loginMember);
+//                                intent.putExtra("loginMemberAccount",loginMemberAccount);
+//                                intent.putExtra("selectedGroupName",item.getGroupName());
+//                                startActivity(intent);
+//                            }
+//                        });
+//                    }
+//                    else{//그룹 가져오기 실패
+//                        showToast("로딩 실패ㅠ");
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        };
+//        RequestGroup requestGroup=new RequestGroup(loginMember.getMemID(),responseListener);
+//        RequestQueue queue=Volley.newRequestQueue(MainMenuActivity.this);
+//        queue.add(requestGroup);
+
         //그룹 가져와서 출력
-        RecyclerView groupMembershiplList=findViewById(R.id.group_membership_list);
+        groupMembershiplList=findViewById(R.id.group_membership_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         groupMembershiplList.setLayoutManager(layoutManager);
 
@@ -163,60 +202,6 @@ public class MainMenuActivity extends AppCompatActivity {
 
             }
         });
-
-    }
-    public void membershipView(){
-
-//        Response.Listener<String> responseListener=new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                try {
-//                    JSONObject jsonObject=new JSONObject(response);
-//                    JSONArray jsonArray=jsonObject.getJSONArray("GroupArray");
-//
-//                    for (int i=0;i<jsonArray.length();i++){
-//                        JSONObject item=jsonArray.getJSONObject(i);
-//                        String groupname=item.getString("GroupName");
-//
-//                        Group group = new Group();
-//                        group.setGroupName(groupname);
-//                        groupAdapter.addItem(group);
-//                    }
-//
-//                    groupMembershiplList.setAdapter(groupAdapter);
-//
-//                    groupAdapter.setOnItemClickListener(new OnGroupItemClickListener() {
-//                        @Override
-//                        public void onItemClick(GroupAdapter.ViewHolder holder, View view, int position) {
-//                            Group item=groupAdapter.getItem(position);
-//                            showToast("아이템 선택됨 : "+ item.getGroupName());
-//
-//                            Intent intent = new Intent(MainMenuActivity.this,MembershipActivity.class);
-//
-//                            intent.putExtra("loginMember",loginMember);
-//                            intent.putExtra("loginMemberAccount",loginMemberAccount);
-//                            intent.putExtra("selectedGroupName",item.getGroupName());
-//                            startActivity(intent);
-//                        }
-//                    });
-//
-//                    Boolean success=jsonObject.getBoolean("success");
-//                    if(success){
-//
-//                    }
-//                    else{//그룹 가져오기 실패
-//
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        };
-//        RequestGroup requestGroup=new RequestGroup(loginMember.getMemID(),responseListener);
-//        RequestQueue queue=Volley.newRequestQueue(MainMenuActivity.this);
-//        queue.add(requestGroup);
-
-
     }
     public void showToast(String data){
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();

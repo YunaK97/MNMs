@@ -8,11 +8,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RequestNewFriend extends StringRequest {
-    final static private String URL="http://jennyk97.dothome.co.kr/NewFriend.php";
+    //new friend -> 친구 id 검색 시
+    //해당 id의 사람을 member table에서 검색
+    final static private String URL1="http://jennyk97.dothome.co.kr/NewFriend.php";
+
+    //친구 추가 요청
+    //해당 친구 id 를 현재 loginMember의 친구로 등록
+    final static private String URL2="http://jennyk97.dothome.co.kr/NewFriendAdd.php";
     private Map<String,String> map;
 
     public RequestNewFriend(String friendID, Response.Listener<String> listener){
-        super(Method.POST,URL,listener,null);
+        super(Method.POST,URL1,listener,null);
+        map=new HashMap<>();
+        map.put("friendID", friendID);
+    }
+
+    public RequestNewFriend(String tag,String friendID, Response.Listener<String> listener){
+        super(Method.POST,URL2,listener,null);
         map=new HashMap<>();
         map.put("friendID", friendID);
     }

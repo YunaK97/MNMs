@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,7 +22,6 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -99,30 +97,34 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 final String memID=((TextView)findViewById(R.id.textID)).getText().toString();
-                //id만 서버로 보내서 중복확인
-                Response.Listener<String> responseListener=new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonObject=new JSONObject(response);
-                            boolean success=jsonObject.getBoolean(TAG_SUCCESS);
-                            if(success){
-                                showToast("사용가능한 아이디입니다.");
-                                signInMember.setMemID(memID);
-                                idValid=true;
+                if(memID.length()<4 || memID.length()>10) {
+                    showToast("4~10 글자 입력");
+                }else{
+                    //id만 서버로 보내서 중복확인
+                    Response.Listener<String> responseListener=new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject jsonObject=new JSONObject(response);
+                                boolean success=jsonObject.getBoolean(TAG_SUCCESS);
+                                if(success){
+                                    showToast("사용가능한 아이디입니다.");
+                                    signInMember.setMemID(memID);
+                                    idValid=true;
+                                }
+                                else{
+                                    showToast("사용 불가능한 아이디입니다.");
+                                    idValid=false;
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                             }
-                            else{
-                                showToast("사용 불가능한 아이디입니다.");
-                                idValid=false;
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
                         }
-                    }
-                };
-                RequestIdOverlap requestIdOverlap =new RequestIdOverlap(memID,responseListener);
-                RequestQueue queue= Volley.newRequestQueue(SignInActivity.this);
-                queue.add(requestIdOverlap);
+                    };
+                    RequestWork requestWork =new RequestWork(memID,responseListener);
+                    RequestQueue queue= Volley.newRequestQueue(SignInActivity.this);
+                    queue.add(requestWork);
+                }
             }
         });
 
@@ -215,15 +217,11 @@ public class SignInActivity extends AppCompatActivity {
                     };
 
                     //서버로 Volley를 이용해서 요청
-                    RequestRegister requestRegister=new RequestRegister(
-                            signInMember.getMemID(),signInMember.getMemPW(),
-                            signInMember.getMemName(),signInMember.getMemEmail(),
-                            memberAccount.getAccountBank(),memberAccount.getAccountNum(),
-                            memberAccount.getAccountBalance(),memberAccount.getAccountPassword(),
-                            responseListener);
-                    //RegisterRequest registerRequest = new RegisterRequest(member, responseListener);
+                    //RequestRegister registerRequest = new RequestRegister(signInMember,memberAccount, responseListener);
+                    RequestWork requestWork =new RequestWork(signInMember,memberAccount,responseListener);
                     RequestQueue queue = Volley.newRequestQueue( SignInActivity.this );
-                    queue.add( requestRegister );
+                    queue.add(requestWork);
+                    //queue.add( registerRequest );
                     }else{
                         showToast("잘못된 입력!(이메일,주민번호,아이디 확인~)");
                     }
@@ -271,7 +269,12 @@ public class SignInActivity extends AppCompatActivity {
 
         String accountPw=((TextView)findViewById(R.id.textAccountPW)).getText().toString();
         if(TextUtils.isEmpty(accountPw)) return false;
-        else memberAccount.setAccountPassword(accountPw);
+        else if(accountPw.length()!=4){
+            showToast("계좌 비밀번호는 4자리 입니다.");
+            return false;
+        }else {
+            memberAccount.setAccountPassword(accountPw);
+        }
 
         return true;
     }

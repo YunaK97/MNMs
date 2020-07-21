@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RequestNewMembership extends StringRequest {
+    //new membership 때
+    //매개변수 더 추가해야함 - 아직 미완성
     final static private String URL="http://jennyk97.dothome.co.kr/NewMembership.php";
     private Map<String,String> map;
 

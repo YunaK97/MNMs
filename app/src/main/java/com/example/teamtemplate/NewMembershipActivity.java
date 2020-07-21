@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
@@ -20,39 +21,38 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 public class NewMembershipActivity extends AppCompatActivity {
-    MemberAdapter memberAdapter;
-    ArrayList<Member> arrayList;
+    private MemberAdapter memberAdapter;
+    private ArrayList<Member> arrayList;
+    private Member loginMember;
+    private String TAG_SUCCESS="success";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_membership);
 
-        RecyclerView friend_list=findViewById(R.id.new_membership_list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
-        //GridLayoutManager layoutManager=new GridLayoutManager(this,2);
+        Intent intent=getIntent();
+        loginMember=(Member)intent.getSerializableExtra("loginMember");
 
-        friend_list.setLayoutManager(layoutManager);
+        /*
+            친구 가져와서 출력
+            그룹이름,회비,친구목록 php로 전송
+            생성 결과 받기
+         */
 
-        memberAdapter=new MemberAdapter();
+        TextView membership_name=findViewById(R.id.membership_name);
+        TextView membership_money=findViewById(R.id.membership_money);
 
         //친구 가져와서 출력
-        for(int i=0;i<10;i++){
-            Member member=new Member();
-            member.setMemName(i+"님");
-            memberAdapter.addItem(member);
-        }
-        friend_list.setAdapter(memberAdapter);
+        showFriendList();
 
-        for (int i=0;i<memberAdapter.getItemCount();i++){
-            if(memberAdapter.getItem(i).isChecked()){
-                arrayList.add(memberAdapter.getItem(i));
-            }
-        }
 
-        Button new_membership=findViewById(R.id.btn_new_membership);
-        new_membership.setOnClickListener(new View.OnClickListener() {
+        //membership 생성 버튼 클릭
+
+        Button btn_new_membership=findViewById(R.id.btn_new_membership);
+        btn_new_membership.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                showToast("멤버십 생성!");
                 //new_membership 생성 성공 여부
 //                Response.Listener<String> responseListener=new Response.Listener<String>() {
 //                    @Override
@@ -82,6 +82,51 @@ public class NewMembershipActivity extends AppCompatActivity {
 //                queue.add(requestIdOverlap);
             }
         });
+    }
+
+    public void showFriendList(){
+        //로그인 멤버의 아이디 전송
+//        Response.Listener<String> responseListener=new Response.Listener<String>() {
+//            @Override
+//            public void onResponse(String response) {
+//                try {
+//                    JSONObject jsonObject=new JSONObject(response);
+//                    boolean success=jsonObject.getBoolean(TAG_SUCCESS);
+//                    if(success){
+//
+//                    }
+//                    else{
+//                        showToast("로딩실패ㅠ");
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        };
+//        RequestShowFriend requestShowFriend=new RequestShowFriend(loginMember.getMemID(),responseListener);
+//        RequestQueue queue= Volley.newRequestQueue(NewMembershipActivity.this);
+//        queue.add(requestShowFriend);
+
+        //받은 데이터 출력
+        RecyclerView friend_list=findViewById(R.id.new_membership_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+
+        friend_list.setLayoutManager(layoutManager);
+
+        memberAdapter=new MemberAdapter();
+
+        for(int i=0;i<10;i++){
+            Member member=new Member();
+            member.setMemName(i+"님");
+            memberAdapter.addItem(member);
+        }
+        friend_list.setAdapter(memberAdapter);
+
+        for (int i=0;i<memberAdapter.getItemCount();i++){
+            if(memberAdapter.getItem(i).isChecked()){
+                arrayList.add(memberAdapter.getItem(i));
+            }
+        }
     }
 
     public void showToast(String data){
