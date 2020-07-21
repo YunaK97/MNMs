@@ -40,6 +40,7 @@ public class SignInActivity extends AppCompatActivity {
     final String TAG = getClass().getSimpleName();
     Button cameraBtn;
     final static int TAKE_PICTURE = 1;
+    String TAG_SUCCESS="success";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +105,7 @@ public class SignInActivity extends AppCompatActivity {
                     public void onResponse(String response) {
                         try {
                             JSONObject jsonObject=new JSONObject(response);
-                            boolean success=jsonObject.getBoolean("success");
+                            boolean success=jsonObject.getBoolean(TAG_SUCCESS);
                             if(success){
                                 showToast("사용가능한 아이디입니다.");
                                 signInMember.setMemID(memID);
@@ -191,7 +192,7 @@ public class SignInActivity extends AppCompatActivity {
                                     }
                                     JSONObject jsonObject = new JSONObject( response );
 
-                                    boolean success = jsonObject.getBoolean( "success" );
+                                    boolean success = jsonObject.getBoolean( TAG_SUCCESS );
                                     //회원가입 성공시
                                     if(success) {
                                         showToast("성공");

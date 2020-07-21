@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +22,7 @@ import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
     public final static int SIGNIN=221,BACK=321;
+    String TAG_SUCCESS="success";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         Button login,signin;
@@ -34,19 +36,21 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String id=((TextView)findViewById(R.id.id)).getText().toString();
                 String pw=((TextView)findViewById(R.id.pw)).getText().toString();
+                if(TextUtils.isEmpty(id) || TextUtils.isEmpty(pw)){
+                    showToast("빈칸 노노!");
+                }else {
+                    Member member = new Member();
+                    member.setMemID(id);
+                    member.setMemPW(pw);
 
-                Member member=new Member();
-                member.setMemID(id);
-                member.setMemPW(pw);
+                    //임시!
+                    loginProcess(member);
 
-                //임시!
-                loginProcess(member);
-
-                //로그인 정보 가져오기
-                //없으면 false
-                //있으면 true, 멤버정보 가져옴
-                //  메인화면으로 전환
-
+                    //로그인 정보 가져오기
+                    //없으면 false
+                    //있으면 true, 멤버정보 가져옴
+                    //  메인화면으로 전환
+                }
             }
         });
 
@@ -76,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
                         //String userID=jsonObject.getString("memID");
                         //String userPass=jsonObject.getString("memPW");
                         //Member loginMem= (Member) jsonObject.get("member");
-                    Boolean success=jsonObject.getBoolean("success");
+
+                    Boolean success=jsonObject.getBoolean(TAG_SUCCESS);
                     if(success){
                         String name=jsonObject.getString("memName");
                         String accNum=jsonObject.getString("accountNum");

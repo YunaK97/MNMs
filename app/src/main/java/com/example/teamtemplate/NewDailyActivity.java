@@ -15,7 +15,7 @@ public class NewDailyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_daily);
 
-        RecyclerView friend_list=findViewById(R.id.friend_list);
+        RecyclerView friend_list=findViewById(R.id.new_daily_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
         //GridLayoutManager layoutManager=new GridLayoutManager(this,2);
 
@@ -24,18 +24,11 @@ public class NewDailyActivity extends AppCompatActivity {
         memberAdapter=new MemberAdapter();
 
         //친구 가져와서 출력
-        Member member=new Member();
-        member.setMemName("김씨");
-        member.setMemID("kim");
-        Member member2=new Member();
-        member2.setMemName("이씨");
-        member2.setMemID("lee");
-        Member member3=new Member();
-        member3.setMemName("박씨");
-        member3.setMemID("park");
-        memberAdapter.addItem(member);
-        memberAdapter.addItem(member2);
-        memberAdapter.addItem(member3);
+        for(int i=0;i<10;i++){
+            Member member=new Member();
+            member.setMemName(i+"님이 검색되었습니다.");
+            memberAdapter.addItem(member);
+        }
 
         friend_list.setAdapter(memberAdapter);
 

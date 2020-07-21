@@ -3,6 +3,8 @@ package com.example.teamtemplate;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -33,12 +35,14 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
 
     static class ViewHolder extends RecyclerView.ViewHolder{
         TextView friend_name,friend_id;
+        CheckBox friend_check;
 
         public ViewHolder(View itemView,final OnMemberItemClickListener listener){
             super(itemView);
 
             friend_name=itemView.findViewById(R.id.friend_name);
             friend_id=itemView.findViewById(R.id.friend_id);
+            friend_check=itemView.findViewById(R.id.friend_check);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -55,6 +59,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
         public void setItem(Member item){
             friend_name.setText(item.getMemName());
             friend_id.setText(item.getMemID());
+            friend_check.setChecked(false);
         }
     }
 
@@ -78,12 +83,23 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //viewholder는 재사용된다! 계속 새로 만들순 없다.
 
-        Member item=items.get(position);
+        final Member item=items.get(position);
         holder.setItem(item);
+
+        holder.friend_check.setChecked(item.isChecked());
+        holder.friend_check.setOnCheckedChangeListener(null);
+        holder.friend_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                item.setChecked(isChecked);
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return items.size();
     }
+
+
 }

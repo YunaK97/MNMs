@@ -11,6 +11,7 @@ public class Member implements Serializable {
     private String memEmail;
     private String memSsn; //주민번호
     private String accountNum;
+    private boolean isChecked;
 
     //친구 그룹
 
@@ -51,5 +52,13 @@ public class Member implements Serializable {
 
     public void setAccountNum(String accountNum) {
         this.accountNum = accountNum;
+    }
+
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
     }
 }

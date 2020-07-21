@@ -33,7 +33,7 @@ public class MainMenuActivity extends AppCompatActivity {
     TextView textName,accName,textBalance;
     final int[] addType={0};
 
-    String TAG_MEMBERSHIP="membership",TAG_SHORT="shortmeet";
+    String TAG_MEMBERSHIP="membership",TAG_DAILY="daily";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +74,7 @@ public class MainMenuActivity extends AppCompatActivity {
         btn_short.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GroupView(TAG_SHORT);
+                GroupView(TAG_DAILY);
             }
         });
 
@@ -103,6 +103,8 @@ public class MainMenuActivity extends AppCompatActivity {
                                     startActivity(intent);
                                 }else if(addType[0]==2){
                                     //아이디 검색 -> 친구추가
+                                    Intent intent=new Intent(getApplicationContext(),NewFriendActivity.class);
+                                    startActivity(intent);
                                 }
                             }
                         })
@@ -122,7 +124,7 @@ public class MainMenuActivity extends AppCompatActivity {
         showToast("송금 내역 클릭");
     }
 
-    public void GroupView(String tag){
+    public void GroupView(final String tag){
         //그룹 가져와서 출력
         RecyclerView groupMembershiplList=findViewById(R.id.group_membership_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
@@ -134,8 +136,8 @@ public class MainMenuActivity extends AppCompatActivity {
             Group group = new Group();
             if(tag==TAG_MEMBERSHIP){
                 group.setGroupName("membership : "+i);
-            }else if(tag==TAG_SHORT){
-                group.setGroupName("shortmeet : "+i);
+            }else if(tag==TAG_DAILY){
+                group.setGroupName("daily : "+i);
             }
             groupAdapter.addItem(group);
         }
@@ -147,12 +149,18 @@ public class MainMenuActivity extends AppCompatActivity {
                 Group item=groupAdapter.getItem(position);
                 showToast("아이템 선택됨 : "+ item.getGroupName());
 
-                Intent intent = new Intent(MainMenuActivity.this,MembershipActivity.class);
+                if(TAG_MEMBERSHIP==tag){
+                    Intent intent = new Intent(MainMenuActivity.this,MembershipActivity.class);
 
-                intent.putExtra("loginMember",loginMember);
-                intent.putExtra("loginMemberAccount",loginMemberAccount);
-                intent.putExtra("selectedGroupName",item.getGroupName());
-                startActivity(intent);
+                    intent.putExtra("loginMember",loginMember);
+                    intent.putExtra("loginMemberAccount",loginMemberAccount);
+                    intent.putExtra("selectedGroupName",item.getGroupName());
+
+                    startActivity(intent);
+                }else if(TAG_DAILY==tag){
+                    showToast("daily 미구현");
+                }
+
             }
         });
 
