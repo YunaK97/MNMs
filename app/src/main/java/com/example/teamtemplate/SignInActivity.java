@@ -229,8 +229,9 @@ public class SignInActivity extends AppCompatActivity {
         else memberAccount.setAccountNum(accountNum);
 
         String accountBalance=((TextView)findViewById(R.id.textAccountBalance)).getText().toString();
+
         if(TextUtils.isEmpty(accountBalance)) return false;
-        else memberAccount.setAccountBalance(accountBalance);
+        else memberAccount.setAccountBalance(Integer.parseInt(accountBalance));
 
         String accountPw=((TextView)findViewById(R.id.textAccountPW)).getText().toString();
         if(TextUtils.isEmpty(accountPw)) return false;

@@ -78,20 +78,23 @@ public class MainActivity extends AppCompatActivity {
                         //Member loginMem= (Member) jsonObject.get("member");
                     Boolean success=jsonObject.getBoolean("success");
                     if(success){
-                        String id=jsonObject.getString("memID");
-                        String pw=jsonObject.getString("memPW");
                         String name=jsonObject.getString("memName");
-                        String email=jsonObject.getString("memEmail");
+                        String accNum=jsonObject.getString("accountNum");
+                        String accBalance=jsonObject.getString("accountBalance");
 
+                        System.out.println("잔액 "+accBalance);
                         Member loginMem=new Member();
-                        loginMem.setMemEmail(email);
-                        loginMem.setMemID(id);
                         loginMem.setMemName(name);
-                        loginMem.setMemPW(pw);
+
+                        Account memAcc=new Account();
+                        memAcc.setAccountNum(accNum);
+                        int balance=Integer.parseInt(accBalance);
+                        memAcc.setAccountBalance(balance);
 
                         showToast("로그인 성공하였습니다. "+loginMem.getMemName()+"님");
                         Intent intent=new Intent(MainActivity.this,MainMenuActivity.class);
                         intent.putExtra("loginMember",loginMem);
+                        intent.putExtra("loginMemberAccount",memAcc);
                         //멤버 나머지 속성 받기
 
                         startActivity(intent);
