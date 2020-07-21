@@ -44,7 +44,7 @@ public class MembershipAdapter extends RecyclerView.Adapter<MembershipAdapter.My
                                                        int viewType) {
         // create a new view
         LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.row_membership, parent, false);
+                .inflate(R.layout.layout_membership, parent, false);
         MyViewHolder vh = new MyViewHolder(v);
         return vh;
     }
