@@ -49,7 +49,6 @@ public class MembershipActivity extends AppCompatActivity {
         mData.setMsg("please2");
 
         myRef.push().setValue(mData);
-        //
 
         myRef.addChildEventListener(new ChildEventListener() {
             @Override

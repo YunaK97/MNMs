@@ -145,6 +145,13 @@ public class MainMenuActivity extends AppCompatActivity {
             public void onItemClick(GroupAdapter.ViewHolder holder, View view, int position) {
                 Group item=groupAdapter.getItem(position);
                 showToast("아이템 선택됨 : "+ item.getGroupName());
+
+                Intent intent = new Intent(MainMenuActivity.this,MembershipActivity.class);
+
+                intent.putExtra("loginMember",loginMember);
+                intent.putExtra("loginMemberAccount",loginMemberAccount);
+                intent.putExtra("selectedGroupName",item.getGroupName());
+                startActivity(intent);
             }
         });
     }
@@ -176,6 +183,12 @@ public class MainMenuActivity extends AppCompatActivity {
             public void onItemClick(GroupAdapter.ViewHolder holder, View view, int position) {
                 Group item=groupAdapter.getItem(position);
                 showToast("아이템 선택됨 : "+ item.getGroupName());
+                Intent intent = new Intent(MainMenuActivity.this,MembershipActivity.class);
+
+                intent.putExtra("loginMember",loginMember);
+                intent.putExtra("loginMemberAccount",loginMemberAccount);
+                intent.putExtra("selectedGroupName",item.getGroupName());
+                startActivity(intent);
             }
         });
     }
