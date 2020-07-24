@@ -12,30 +12,37 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 public class MembershipAdapter extends RecyclerView.Adapter<MembershipAdapter.MyViewHolder> {
-    private List<MembershipData> mDataset;
-    private String myNickName;
+    private List<Transaction> mDataset;
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
+
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         // each data item is  just a string in this case
-        public TextView TextView_nickname;
-        public TextView TextView_msg;
+        public TextView TextView_accountNum;
+        public TextView TextView_transID;
+        public TextView TextView_transHistory;
+        public TextView TextView_transMoney;
+        public TextView TextView_transVersion;
+        public TextView TextView_since;
+
         public View rootView;
 
         public MyViewHolder(View v) {
             super(v);
-            TextView_nickname = v.findViewById(R.id.TextView_nickname);
-            TextView_msg = v.findViewById(R.id.TextView_msg);
+            TextView_accountNum = v.findViewById(R.id.TextView_accountNum);
+            TextView_transID = v.findViewById(R.id.TextView_transId);
+            TextView_transHistory = v.findViewById(R.id.TextView_transHistory);
+            TextView_transMoney = v.findViewById(R.id.TextView_transMoney);
+            TextView_transVersion = v.findViewById(R.id.TextView_transVersion);
+            TextView_since = v.findViewById(R.id.TextView_since);
             rootView = v;
-
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MembershipAdapter(List<MembershipData> myDataset, Context context, String myNickName) {
+    public MembershipAdapter(List<Transaction> myDataset, Context context) {
         mDataset = myDataset;
-        this.myNickName = myNickName;
     }
 
     // Create new views (invoked by the layout manager)
@@ -53,11 +60,17 @@ public class MembershipAdapter extends RecyclerView.Adapter<MembershipAdapter.My
     public void onBindViewHolder(MyViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        MembershipData mData = mDataset.get(position);
+        Transaction tData = mDataset.get(position);
 
-        holder.TextView_nickname.setText(mData.getNickname());
-        holder.TextView_msg.setText(mData.getMsg());
+        System.out.println("**********************");
+        System.out.println(tData.getTransactID());
 
+        holder.TextView_accountNum.setText(tData.getAccountNum());
+        holder.TextView_transID.setText(tData.getTransactID());
+        holder.TextView_transHistory.setText(tData.getTransactHistroy());
+        holder.TextView_transMoney.setText(tData.getTransactMoney());
+        holder.TextView_transVersion.setText(tData.getTransactVersion());
+        holder.TextView_since.setText(tData.getSince());
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -65,12 +78,12 @@ public class MembershipAdapter extends RecyclerView.Adapter<MembershipAdapter.My
     public int getItemCount() {
         return mDataset == null ? 0 : mDataset.size();
     }
-    public MembershipData getChat(int position) {
+    public Transaction getChat(int position) {
         return mDataset != null ? mDataset.get(position) : null;
     }
 
-    public void addChat(MembershipData mData) {
-        mDataset.add(mData);
+    public void addItem(Transaction tData) {
+        mDataset.add(tData);
         notifyItemInserted(mDataset.size()-1);
     }
 }

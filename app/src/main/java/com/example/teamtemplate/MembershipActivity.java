@@ -6,13 +6,20 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +29,9 @@ public class MembershipActivity extends AppCompatActivity {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private List<MembershipData> dataList;
-    private String nick = "Server";
+    private List<Transaction> dataList;
+
+    String TAG_SUCCESS="success";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,48 +44,50 @@ public class MembershipActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         dataList = new ArrayList<>();
-        mAdapter = new MembershipAdapter(dataList, MembershipActivity.this, nick);
+        mAdapter = new MembershipAdapter(dataList, MembershipActivity.this);
         mRecyclerView.setAdapter(mAdapter);
 
-        // Write a message to the database
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference();
+        Transaction transact = new Transaction();
+        transact.setAccountNum("979796");
 
-        myRef.setValue("hello world");
+        membershipProcess(transact);
 
-        MembershipData mData = new MembershipData();
-        mData.setNickname(nick);
-        mData.setMsg("please2");
+    }
 
-        myRef.push().setValue(mData);
+    protected void membershipProcess(Transaction transact){
 
-        myRef.addChildEventListener(new ChildEventListener() {
+        final String accountNum = transact.getAccountNum();
+
+        Response.Listener<String> responseListener=new Response.Listener<String>() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                //MembershipData mData = snapshot.getValue(MembershipData.class);
-                //((MembershipAdapter) mAdapter).addChat(mData);
+            public void onResponse(String response) {
+                try {
+                    JSONObject jsonObject=new JSONObject(response);
+
+                    Boolean success=jsonObject.getBoolean(TAG_SUCCESS);
+                    if(success){
+                        Transaction transact = new Transaction();
+                        transact.setAccountNum(jsonObject.getString("accountNum"));
+                        transact.setTransactID(jsonObject.getString("transactID"));
+                        transact.setTransactHistroy(jsonObject.getString("transactHistory"));
+                        transact.setTransactMoney(jsonObject.getString("transactMoney"));
+                        transact.setTransactVersion(jsonObject.getString("transactVersion"));
+                        transact.setSince(jsonObject.getString("since"));
+
+                        ((MembershipAdapter) mAdapter).addItem(transact);
+                        System.out.println("----------OOOOOO-----------");
+
+                    }
+                    else{
+                        System.out.println("----------FFF-----------");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
+        };
+        RequestMembership requestMembership =new RequestMembership(accountNum,responseListener);
+        RequestQueue queue= Volley.newRequestQueue(MembershipActivity.this);
+        queue.add(requestMembership);
     }
 }

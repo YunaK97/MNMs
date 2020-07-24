@@ -11,7 +11,14 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".NewFriendActivity"></activity>
-        <activity android:name=".MembershipActivity"></activity>
+        <activity android:name=".MembershipActivity">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".NewDailyActivity"
             android:label="@string/app_new_daily" />
@@ -25,11 +32,7 @@
             android:name=".SignInActivity"
             android:label="@string/app_signin" />
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
     <uses-feature
