@@ -40,8 +40,7 @@ public class MembershipAdapter extends RecyclerView.Adapter<MembershipAdapter.My
 
     // Create new views (invoked by the layout manager)
     @Override
-    public MembershipAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                                       int viewType) {
+    public MembershipAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.layout_membership, parent, false);

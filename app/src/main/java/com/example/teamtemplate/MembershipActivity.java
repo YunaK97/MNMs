@@ -38,6 +38,7 @@ public class MembershipActivity extends AppCompatActivity {
         dataList = new ArrayList<>();
         mAdapter = new MembershipAdapter(dataList, MembershipActivity.this, nick);
         mRecyclerView.setAdapter(mAdapter);
+
         // Write a message to the database
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference();
