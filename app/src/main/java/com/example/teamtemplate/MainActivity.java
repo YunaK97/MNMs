@@ -77,12 +77,18 @@ public class MainActivity extends AppCompatActivity {
                     Boolean success=jsonObject.getBoolean(TAG_SUCCESS);
                     if(success){
                         String name=jsonObject.getString("memName");
+                        String id=jsonObject.getString("memID");
+                        String pw=jsonObject.getString("memPW");
+                        String email=jsonObject.getString("memEmail");
                         String accNum=jsonObject.getString("accountNum");
                         String accBalance=jsonObject.getString("accountBalance");
 
                         System.out.println("잔액 "+accBalance);
                         Member loginMem=new Member();
                         loginMem.setMemName(name);
+                        loginMem.setMemID(id);
+                        loginMem.setMemPW(pw);
+                        loginMem.setMemEmail(email);
 
                         Account memAcc=new Account();
                         memAcc.setAccountNum(accNum);

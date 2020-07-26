@@ -3,14 +3,19 @@ package com.example.teamtemplate;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,6 +38,13 @@ public class MainMenuActivity extends AppCompatActivity {
         Intent intent=getIntent();
         loginMember= (Member) intent.getSerializableExtra("loginMember");
         loginMemberAccount=(Account)intent.getSerializableExtra("loginMemberAccount");
+
+        //우측 상단 옵션메뉴
+        actionBar = getSupportActionBar();
+        //actionBar.setLogo(R.drawable.plus);
+        //actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME);
+        //actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_USE_LOGO);
+
 
         textName=findViewById(R.id.textName);
         String text="이름 : "+loginMember.getMemName();
@@ -72,43 +84,7 @@ public class MainMenuActivity extends AppCompatActivity {
         btn_addList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String[] select=new String[] {"회비모임","꿀잼모임","친구추가"};
-
-                AlertDialog.Builder dialog=new AlertDialog.Builder(MainMenuActivity.this);
-                dialog.setTitle("추가!")
-                        .setSingleChoiceItems(select, 0, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                addType[0]=which;
-                            }
-                        })
-                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if(addType[0]==0){
-                                    Intent intent = new Intent(getApplicationContext(),NewMembershipActivity.class);
-                                    intent.putExtra("loginMember",loginMember);
-                                    startActivity(intent);
-                                }else if(addType[0]==1){
-                                    Intent intent = new Intent(getApplicationContext(),NewDailyActivity.class);
-                                    intent.putExtra("loginMember",loginMember);
-                                    startActivity(intent);
-                                }else if(addType[0]==2){
-                                    //아이디 검색 -> 친구추가
-                                    Intent intent=new Intent(getApplicationContext(),NewFriendActivity.class);
-                                    intent.putExtra("loginMember",loginMember);
-                                    startActivity(intent);
-                                }
-                            }
-                        })
-                        .setNeutralButton("취소", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(getApplicationContext(),"취소",Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                dialog.create();
-                dialog.show();
+               //다른 기능 할것
             }
         });
     }
@@ -205,7 +181,67 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater menuInflater=getMenuInflater();
+        menuInflater.inflate(R.menu.menu_main,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_plus:
+                plusAction();
+                return true;
+            default:
+                showToast("나머지 클릭됨");
+                return  super.onOptionsItemSelected(item);
+        }
+    }
+
     public void showToast(String data){
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
+    }
+
+    public void plusAction(){
+        final String[] select=new String[] {"회비모임","꿀잼모임","친구추가"};
+
+        AlertDialog.Builder dialog=new AlertDialog.Builder(MainMenuActivity.this);
+        dialog.setTitle("추가!")
+                .setSingleChoiceItems(select, 0, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        addType[0]=which;
+                    }
+                })
+                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(addType[0]==0){
+                            Intent intent = new Intent(getApplicationContext(),NewMembershipActivity.class);
+                            intent.putExtra("loginMember",loginMember);
+                            startActivity(intent);
+                        }else if(addType[0]==1){
+                            Intent intent = new Intent(getApplicationContext(),NewDailyActivity.class);
+                            intent.putExtra("loginMember",loginMember);
+                            startActivity(intent);
+                        }else if(addType[0]==2){
+                            //아이디 검색 -> 친구추가
+                            Intent intent=new Intent(getApplicationContext(),NewFriendActivity.class);
+                            intent.putExtra("loginMember",loginMember);
+                            startActivity(intent);
+                        }
+                    }
+                })
+                .setNeutralButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getApplicationContext(),"취소",Toast.LENGTH_SHORT).show();
+                    }
+                });
+        dialog.create();
+        dialog.show();
     }
 }

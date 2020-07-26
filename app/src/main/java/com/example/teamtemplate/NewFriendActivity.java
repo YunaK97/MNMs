@@ -1,5 +1,6 @@
 package com.example.teamtemplate;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +23,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class NewFriendActivity extends AppCompatActivity {
-    MemberAdapter memberAdapter;
+    Member loginMember;
     String TAG_SUCCESS="success";
     String friend_id;
     TextView friend_name_text,friend_id_text;
@@ -31,10 +32,15 @@ public class NewFriendActivity extends AppCompatActivity {
     Button btn_addFriend;
     LinearLayout linearLayout;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_friend);
+
+        //intent 받아오기
+        Intent intent=getIntent();
+        loginMember= (Member) intent.getSerializableExtra("loginMember");
 
         //findViewById
         id_search=findViewById(R.id.id_search);
@@ -49,7 +55,11 @@ public class NewFriendActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //친구 ID 검색
                 friend_id=((TextView)findViewById(R.id.friend_search)).getText().toString();
-                searchFriend(friend_id);
+                if(friend_id!=loginMember.getMemID()) {
+                    searchFriend(friend_id);
+                }else{
+                    showToast("불가능한 id 입니다.");
+                }
             }
         });
 
@@ -58,27 +68,32 @@ public class NewFriendActivity extends AppCompatActivity {
             public void onClick(View v) {
 
                 if(friend_check.isChecked()) {
-                    showToast(friend_id+"선택됨!");
-//                    Response.Listener<String> responseListener = new Response.Listener<String>() {
-//                        @Override
-//                        public void onResponse(String response) {
-//                            try {
-//                                JSONObject jsonObject = new JSONObject(response);
-//                                boolean success = jsonObject.getBoolean(TAG_SUCCESS);
-//                                if (success) {
-//                                    showToast("친구추가 완료");
-//                                    finish();
-//                                } else {
-//                                    showToast("친구 추가 실패ㅠ");
-//                                }
-//                            } catch (JSONException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    };
-//                    RequestNewFriend requestNewFriendAdd = new RequestNewFriend("add", friend_id, responseListener);
-//                    RequestQueue queue = Volley.newRequestQueue(NewFriendActivity.this);
-//                    queue.add(requestNewFriendAdd);
+                    Response.Listener<String> responseListener = new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(response);
+                                boolean dup=jsonObject.getBoolean("dup");
+                                if(dup){
+                                    showToast("이미 친구사이입니다.");
+                                }else {
+                                    boolean success = jsonObject.getBoolean(TAG_SUCCESS);
+                                    if (success) {
+                                        showToast("친구추가 완료");
+                                        finish();
+                                    }
+                                    else {
+                                        showToast("친구 추가 실패ㅠ");
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    };
+                    RequestNewFriend requestNewFriendAdd = new RequestNewFriend("add", loginMember.getMemID(),friend_id, responseListener);
+                    RequestQueue queue = Volley.newRequestQueue(NewFriendActivity.this);
+                    queue.add(requestNewFriendAdd);
                 }
             }
         });

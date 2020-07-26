@@ -1,5 +1,7 @@
 package com.example.teamtemplate;
 
+import android.widget.Toast;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
@@ -23,9 +25,11 @@ public class RequestNewFriend extends StringRequest {
         map.put("memID", friendID);
     }
 
-    public RequestNewFriend(String tag,String friendID, Response.Listener<String> listener){
+    public RequestNewFriend(String tag,String memID,String friendID, Response.Listener<String> listener){
         super(Method.POST,URL2,listener,null);
+        System.out.println(tag+memID+friendID);
         map=new HashMap<>();
+        map.put("memID",memID);
         map.put("friendID", friendID);
     }
 
