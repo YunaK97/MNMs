@@ -62,9 +62,6 @@ public class MembershipAdapter extends RecyclerView.Adapter<MembershipAdapter.My
         // - replace the contents of the view with that element
         Transaction tData = mDataset.get(position);
 
-        System.out.println("**********************");
-        System.out.println(tData.getTransactID());
-
         holder.TextView_accountNum.setText(tData.getAccountNum());
         holder.TextView_transID.setText(tData.getTransactID());
         holder.TextView_transHistory.setText(tData.getTransactHistroy());
