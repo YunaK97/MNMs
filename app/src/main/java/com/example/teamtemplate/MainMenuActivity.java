@@ -8,12 +8,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MainMenuActivity extends AppCompatActivity {
+    private ActionBar actionBar;
     private Member loginMember;
     private Account loginMemberAccount;
     private RecyclerView groupMembershiplList;

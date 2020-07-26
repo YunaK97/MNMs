@@ -3,12 +3,12 @@ package com.example.teamtemplate;
 import java.io.Serializable;
 
 public class Transaction implements Serializable {
-    String transactID;
-    String transactHistroy;
-    String transactMoney;
-    String transactVersion;
-    String since;
-    String accountNum;
+    String transactID; // primary key
+    String transactHistroy; // 거래 내역
+    String transactMoney; // 돈 (+,-)
+    String transactVersion; //회비, 데일리, 개인간 송금
+    String since; //사용한 날짜
+    String accountNum; //사용한 계좌
 
     public String getTransactID() {
         return transactID;

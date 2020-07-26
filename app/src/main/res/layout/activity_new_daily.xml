@@ -26,7 +26,7 @@
             android:layout_weight="1"
             android:inputType="text"
             android:textSize="20dp"
-            android:text="ex) 아우디" />
+            android:hint="ex) 아우디" />
     </LinearLayout>
 
     <TextView

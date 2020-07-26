@@ -12,6 +12,7 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".NewFriendActivity"></activity>
         <activity android:name=".MembershipActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
