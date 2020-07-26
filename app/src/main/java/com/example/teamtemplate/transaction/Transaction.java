@@ -1,4 +1,4 @@
-package com.example.teamtemplate;
+package com.example.teamtemplate.transaction;
 
 import java.io.Serializable;
 
