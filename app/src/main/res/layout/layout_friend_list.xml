@@ -5,7 +5,7 @@
 
     <TextView
         android:background="@drawable/border"
-        android:id="@+id/friend_name"
+        android:id="@+id/friendlist_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -14,19 +14,12 @@
         android:text="친구이름" />
 
     <TextView
-        android:id="@+id/friend_id"
+        android:padding="5dp"
+        android:id="@+id/friendlistlist_id"
         android:background="@drawable/border"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textSize="20dp"
-        android:padding="5dp"
         android:text="친구ID" />
-    <CheckBox
-        android:id="@+id/friend_check"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:checked="false"
-        android:background="@drawable/border"
-        />
 </LinearLayout>

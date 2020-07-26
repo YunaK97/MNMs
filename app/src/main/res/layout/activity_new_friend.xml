@@ -42,6 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="20dp"
+            android:padding="5dp"
             android:text="친구이름" />
 
         <TextView
@@ -50,6 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:padding="5dp"
             android:textSize="20dp"
             android:text="친구ID" />
         <CheckBox

@@ -5,7 +5,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="80dp"
         android:layout_gravity="center"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="30dp"
@@ -83,12 +83,11 @@
             android:text="Daily만남"
             />
         <Button
-            android:id="@+id/btn_addList"
+            android:id="@+id/btn_friendList"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="+"
+            android:text="친구보기"
             android:layout_marginLeft="5dp"
-            android:textSize="20dp"
             />
     </LinearLayout>
 </LinearLayout>

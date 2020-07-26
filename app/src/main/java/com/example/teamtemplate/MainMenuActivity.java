@@ -80,11 +80,14 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         });
 
-        Button btn_addList=findViewById(R.id.btn_addList);
+        Button btn_addList=findViewById(R.id.btn_friendList);
         btn_addList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               //다른 기능 할것
+               //친구 목록 출력
+                Intent intent=new Intent(getApplicationContext(),FriendListActivity.class);
+                intent.putExtra("loginMember",loginMember);
+                startActivity(intent);
             }
         });
     }
@@ -206,7 +209,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     public void plusAction(){
-        final String[] select=new String[] {"회비모임","꿀잼모임","친구추가"};
+        final String[] select=new String[] {"회비모임","꿀잼모임"};
 
         AlertDialog.Builder dialog=new AlertDialog.Builder(MainMenuActivity.this);
         dialog.setTitle("추가!")
@@ -225,11 +228,6 @@ public class MainMenuActivity extends AppCompatActivity {
                             startActivity(intent);
                         }else if(addType[0]==1){
                             Intent intent = new Intent(getApplicationContext(),NewDailyActivity.class);
-                            intent.putExtra("loginMember",loginMember);
-                            startActivity(intent);
-                        }else if(addType[0]==2){
-                            //아이디 검색 -> 친구추가
-                            Intent intent=new Intent(getApplicationContext(),NewFriendActivity.class);
                             intent.putExtra("loginMember",loginMember);
                             startActivity(intent);
                         }
