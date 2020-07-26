@@ -54,13 +54,12 @@ public class MembershipActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mAdapter);
 
         Transaction transact = new Transaction();
-        transact.setAccountNum("979796");
+        transact.setAccountNum("1010");
 
-        //process(transact);
         membershipProcess(transact);
     }
 
-    protected void process(final Transaction transact) {
+    protected void membershipProcess(final Transaction transact) {
         final String accountNum = transact.getAccountNum();
         final String url="http://jennyk97.dothome.co.kr/ListTransaction.php";
 
@@ -68,12 +67,11 @@ public class MembershipActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try{
-                            System.out.println("----------OOO55OOO-----------");
                             JSONArray j = new JSONArray(response);
-                            System.out.println("----------OOO777OOO-----------");
                             // Parse json
                             for (int i = 0; i < j.length(); i++) {
                                 try {
+
                                     JSONObject jsonObject = j.getJSONObject(i);
 
                                     Transaction transact = new Transaction();
@@ -117,56 +115,6 @@ public class MembershipActivity extends AppCompatActivity {
 
         RequestQueue queue= Volley.newRequestQueue(MembershipActivity.this);
         queue.add(stringRequest);
-    }
-
-
-    protected void membershipProcess(final Transaction transact){
-
-        final String accountNum = transact.getAccountNum();
-        final String url="http://jennyk97.dothome.co.kr/ListTransaction.php";
-
-        //결과를 JsonArray 받을 것이므로..
-        //StringRequest가 아니라..
-        //JsonArrayRequest를 이용할 것임
-
-        final JsonArrayRequest jsonArrayRequest= new JsonArrayRequest(Request.Method.POST, url,  null, new Response.Listener<JSONArray>() {
-            //volley 라이브러리의 GET방식은 버튼 누를때마다 새로운 갱신 데이터를 불러들이지 않음. 그래서 POST 방식 사용
-
-            @Override
-            public void onResponse(JSONArray response) {
-                try {
-
-                    for (int i = 0; i < response.length(); i++) {
-                        JSONObject jsonObject = response.getJSONObject(i);
-
-                        Transaction transact = new Transaction();
-                        transact.setAccountNum(jsonObject.getString("accountNum"));
-                        transact.setTransactID(jsonObject.getString("transactID"));
-                        transact.setTransactHistroy(jsonObject.getString("transactHistory"));
-                        transact.setTransactMoney(jsonObject.getString("transactMoney"));
-                        transact.setTransactVersion(jsonObject.getString("transactVersion"));
-                        transact.setSince(jsonObject.getString("since"));
-
-                        ((MembershipAdapter) mAdapter).addItem(transact);
-                        System.out.println("----------OOOOOO-----------");
-
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("********에러********");
-                Log.e("#####볼리에러####", error.toString());
-            }
-        });
-
-        RequestQueue queue= Volley.newRequestQueue(MembershipActivity.this);
-        queue.add(jsonArrayRequest);
     }
 
 }
