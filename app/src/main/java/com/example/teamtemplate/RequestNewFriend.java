@@ -20,7 +20,7 @@ public class RequestNewFriend extends StringRequest {
     public RequestNewFriend(String friendID, Response.Listener<String> listener){
         super(Method.POST,URL1,listener,null);
         map=new HashMap<>();
-        map.put("friendID", friendID);
+        map.put("memID", friendID);
     }
 
     public RequestNewFriend(String tag,String friendID, Response.Listener<String> listener){
