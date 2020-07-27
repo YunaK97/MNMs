@@ -9,6 +9,9 @@ public class Transaction implements Serializable {
     String transactVersion; //회비, 데일리, 개인간 송금
     String since; //사용한 날짜
     String accountNum; //사용한 계좌
+    String MID; // MembershipGroup의 ID
+    String DID; // DailyGroup의 ID
+
 
     public String getTransactID() {
         return transactID;
@@ -57,4 +60,21 @@ public class Transaction implements Serializable {
     public void setAccountNum(String accountNum) {
         this.accountNum = accountNum;
     }
+
+    public String getMID() {
+        return MID;
+    }
+
+    public void setMID(String MID) {
+        this.MID = MID;
+    }
+
+    public String getDID() {
+        return DID;
+    }
+
+    public void setDID(String DID) {
+        this.DID = DID;
+    }
+
 }

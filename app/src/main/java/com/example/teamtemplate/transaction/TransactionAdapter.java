@@ -9,7 +9,9 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.teamtemplate.Member;
 import com.example.teamtemplate.R;
+import com.example.teamtemplate.membership.MembershipGroup;
 
 import java.util.List;
 
