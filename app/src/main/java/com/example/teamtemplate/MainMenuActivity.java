@@ -15,9 +15,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.teamtemplate.membership.MembershipActivity;
 
 public class MainMenuActivity extends AppCompatActivity {
     private ActionBar actionBar;
@@ -170,7 +171,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 showToast("아이템 선택됨 : "+ item.getGroupName());
 
                 if(TAG_MEMBERSHIP==tag){
-                    Intent intent = new Intent(MainMenuActivity.this,MembershipActivity.class);
+                    Intent intent = new Intent(MainMenuActivity.this, MembershipActivity.class);
 
                     intent.putExtra("loginMember",loginMember);
                     intent.putExtra("loginMemberAccount",loginMemberAccount);

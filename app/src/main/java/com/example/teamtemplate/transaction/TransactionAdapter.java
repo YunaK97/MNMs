@@ -1,4 +1,4 @@
-package com.example.teamtemplate;
+package com.example.teamtemplate.transaction;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,11 +9,13 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.teamtemplate.transaction.Transaction;
+import com.example.teamtemplate.Member;
+import com.example.teamtemplate.R;
+import com.example.teamtemplate.membership.MembershipGroup;
 
 import java.util.List;
 
-public class MembershipAdapter extends RecyclerView.Adapter<MembershipAdapter.MyViewHolder> {
+public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.MyViewHolder> {
     private List<Transaction> mDataset;
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -43,23 +45,23 @@ public class MembershipAdapter extends RecyclerView.Adapter<MembershipAdapter.My
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public MembershipAdapter(List<Transaction> myDataset, Context context) {
+    public TransactionAdapter(List<Transaction> myDataset, Context context) {
         mDataset = myDataset;
     }
 
     // Create new views (invoked by the layout manager)
     @Override
-    public MembershipAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public TransactionAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
         LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.layout_transaction, parent, false);
-        MyViewHolder vh = new MyViewHolder(v);
+        TransactionAdapter.MyViewHolder vh = new TransactionAdapter.MyViewHolder(v);
         return vh;
     }
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(TransactionAdapter.MyViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
         Transaction tData = mDataset.get(position);
@@ -86,3 +88,4 @@ public class MembershipAdapter extends RecyclerView.Adapter<MembershipAdapter.My
         notifyItemInserted(mDataset.size()-1);
     }
 }
+

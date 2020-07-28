@@ -11,14 +11,18 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".NewFriendActivity"></activity>
-        <activity android:name=".MembershipActivity">
-
+        <activity android:name="com.example.teamtemplate.membership.MembershipActivity" android:label="회원그룹방 거래내역">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name="com.example.teamtemplate.transaction.TransactionActivity" android:label="거래">
+        </activity>
+        <activity android:name="com.example.teamtemplate.daily.DailyActivity" android:label="일반그룹방 거래내역">
+        </activity>
+
         <activity
             android:name=".NewDailyActivity"
             android:label="@string/app_new_daily" />
