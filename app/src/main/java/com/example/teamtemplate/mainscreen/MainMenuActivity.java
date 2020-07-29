@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -94,28 +95,28 @@ public class MainMenuActivity extends AppCompatActivity {
         text="잔액 : "+loginMemberAccount.getAccountBalance();
         textBalance.setText(text);
 
-        Button btn_transaction=findViewById(R.id.btn_transaction);
+        ImageButton btn_transaction=findViewById(R.id.btn_transaction);
         btn_transaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pager.setCurrentItem(0);
             }
         });
-        Button btn_membership=findViewById(R.id.btn_membership);
+        ImageButton btn_membership=findViewById(R.id.btn_membership);
         btn_membership.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pager.setCurrentItem(1);
             }
         });
-        Button btn_daily=findViewById(R.id.btn_daily);
+        ImageButton btn_daily=findViewById(R.id.btn_daily);
         btn_daily.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pager.setCurrentItem(2);
             }
         });
-        Button btn_friendList=findViewById(R.id.btn_friendList);
+        ImageButton btn_friendList=findViewById(R.id.btn_friendList);
         btn_friendList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
