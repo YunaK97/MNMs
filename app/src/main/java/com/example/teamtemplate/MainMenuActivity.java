@@ -47,9 +47,9 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-//        actionBar = getSupportActionBar();
-//        actionBar.setLogo(R.drawable.home);
-//        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_USE_LOGO);
+        actionBar = getSupportActionBar();
+        actionBar.setTitle(R.string.app_mainmenu);
+        //actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_USE_LOGO);
 
         Intent intent=getIntent();
         loginMember= (Member) intent.getSerializableExtra("loginMember");
@@ -217,26 +217,34 @@ public class MainMenuActivity extends AppCompatActivity {
 
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_main,menu);
-//
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        int curId = item.getItemId();
-//
-//        switch (curId){
-//            case R.id.menu_plus:
-//                showToast("메뉴 선택됨");
-//                break;
-//            default:
-//                break;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int curId = item.getItemId();
+        Intent intent;
+
+        switch (curId){
+            case R.id.add_membership:
+                intent = new Intent(getApplicationContext(), NewMembershipActivity.class);
+                intent.putExtra("loginMember",loginMember);
+                startActivity(intent);
+
+                break;
+            case R.id.add_daily:
+                intent = new Intent(getApplicationContext(), NewDailyActivity.class);
+                intent.putExtra("loginMember",loginMember);
+                startActivity(intent);
+            default:
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     public void showToast(String data){
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
