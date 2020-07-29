@@ -41,8 +41,8 @@ public class MainMenuActivity extends AppCompatActivity {
         loginMemberAccount=(Account)intent.getSerializableExtra("loginMemberAccount");
 
         //우측 상단 옵션메뉴
-        actionBar = getSupportActionBar();
-        //actionBar.setLogo(R.drawable.plus);
+        //actionBar = getSupportActionBar();
+        //actionBar.setLogo(R.drawable.home);
         //actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME);
         //actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_USE_LOGO);
 
@@ -186,24 +186,24 @@ public class MainMenuActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        MenuInflater menuInflater=getMenuInflater();
-        menuInflater.inflate(R.menu.menu_main,menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.menu_plus:
-                plusAction();
-                return true;
-            default:
-                showToast("나머지 클릭됨");
-                return  super.onOptionsItemSelected(item);
-        }
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu){
+//        MenuInflater menuInflater=getMenuInflater();
+//        menuInflater.inflate(R.menu.menu_main,menu);
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        switch (item.getItemId()){
+//            case R.id.menu_plus:
+//                plusAction();
+//                return true;
+//            default:
+//                showToast("나머지 클릭됨");
+//                return  super.onOptionsItemSelected(item);
+//        }
+//    }
 
     public void showToast(String data){
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();

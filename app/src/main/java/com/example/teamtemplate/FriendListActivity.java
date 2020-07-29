@@ -20,7 +20,7 @@ import org.json.JSONObject;
 
 public class FriendListActivity extends AppCompatActivity {
     private FriendListAdapter friendListAdapter;
-    private Button btn_add;
+    private Button btn_add,btn_request;
     private Member loginMember;
     private String TAG_SUCCESS="success";
 
@@ -35,9 +35,10 @@ public class FriendListActivity extends AppCompatActivity {
         Intent intent=getIntent();
         loginMember= (Member) intent.getSerializableExtra("loginMember");
 
-        //tmpShowFriend();
-        showFriend();
+        tmpShowFriend();
+        //showFriend();
 
+        btn_request=findViewById(R.id.btn_request);
         btn_add=findViewById(R.id.btn_add);
         btn_add.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -45,6 +46,16 @@ public class FriendListActivity extends AppCompatActivity {
                 Intent intent=new Intent(getApplicationContext(),NewFriendActivity.class);
                 intent.putExtra("loginMember",loginMember);
                 startActivity(intent);
+            }
+        });
+
+        btn_request.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //친구 신청 목록 출력
+                //다이얼로그로 하나씩 출력하자!
+                //다이얼로그에 한명씩 출력 -> 수락,거절 선택 -> 모든 신청 활동 완료 -> 친구 목록 업데이트
+
             }
         });
     }

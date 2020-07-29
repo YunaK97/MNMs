@@ -5,18 +5,14 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_login"
+        android:label="management"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".NewFriendActivity"></activity>
+        <activity android:name=".FriendListActivity"></activity>
         <activity android:name="com.example.teamtemplate.membership.MembershipActivity" android:label="회원그룹방 거래내역">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name="com.example.teamtemplate.transaction.TransactionActivity" android:label="거래">
         </activity>
@@ -35,8 +31,14 @@
         <activity
             android:name=".SignInActivity"
             android:label="@string/app_signin" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".MainActivity"
+            android:label="@string/app_login"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
     <uses-feature
