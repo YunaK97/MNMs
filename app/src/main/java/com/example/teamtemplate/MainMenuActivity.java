@@ -2,16 +2,13 @@ package com.example.teamtemplate;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-//import android.support.v7.app.AppCompatActivity;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -28,9 +25,9 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 
 
 public class MainMenuActivity extends AppCompatActivity {
@@ -53,12 +50,10 @@ public class MainMenuActivity extends AppCompatActivity {
         loginMember= (Member) intent.getSerializableExtra("loginMember");
         loginMemberAccount=(Account)intent.getSerializableExtra("loginMemberAccount");
 
-        //우측 상단 옵션메뉴
-        //actionBar = getSupportActionBar();
-        //actionBar.setLogo(R.drawable.home);
-        //actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME);
-        //actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_USE_LOGO);
-        //Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
+        actionBar = getSupportActionBar();
+
+        actionBar.setLogo(R.drawable.home);
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_USE_LOGO);
 
         textName=findViewById(R.id.textName);
         String text="이름 : "+loginMember.getMemName();
@@ -132,7 +127,9 @@ public class MainMenuActivity extends AppCompatActivity {
                         for (int i=0;i<jsonArray.length();i++){
                             JSONObject item=jsonArray.getJSONObject(i);
                             String groupname=item.getString("groupName");
-                            String gid=item.getString("MID");
+                            String gid=item.getString("groupID");
+
+                            showToast(groupname);
 
                             Group group = new Group();
                             group.setGroupName(groupname);
@@ -202,22 +199,24 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
-        MenuInflater menuInflater=getMenuInflater();
-        menuInflater.inflate(R.menu.menu_main,menu);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main,menu);
+
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        int curId = item.getItemId();
+
+        switch (curId){
             case R.id.menu_plus:
-                plusAction();
-                return true;
+                showToast("메뉴 선택됨");
+                break;
             default:
-                showToast("나머지 클릭됨");
-                return  super.onOptionsItemSelected(item);
+                break;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     public void showToast(String data){
