@@ -126,7 +126,6 @@ public class DailyActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-
             }
         }, new Response.ErrorListener() {
             @Override
