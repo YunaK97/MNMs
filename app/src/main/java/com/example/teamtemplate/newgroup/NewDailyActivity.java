@@ -11,9 +11,17 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 import com.example.teamtemplate.Member;
 import com.example.teamtemplate.MemberAdapter;
 import com.example.teamtemplate.R;
+import com.example.teamtemplate.RequestShowFriend;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -21,6 +29,9 @@ public class NewDailyActivity extends AppCompatActivity {
     private MemberAdapter memberAdapter;
     private ArrayList<Member> arrayList;
     private Member loginMember;
+    private ArrayList<Member> selectedMember;
+    private String TAG_SUCCESS="success";
+    private String daily_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,12 +46,10 @@ public class NewDailyActivity extends AppCompatActivity {
             그룹이름,회비,친구목록 php로 전송
             생성 결과 받기
          */
-
-        TextView membership_name=findViewById(R.id.membership_name);
-        TextView membership_money=findViewById(R.id.membership_money);
+        daily_name=((TextView)findViewById(R.id.daily_name)).getText().toString();
 
         //친구 가져와서 출력
-        showFriendList();
+        showFriend();
 
         //membership 생성 버튼 클릭
 
@@ -49,80 +58,88 @@ public class NewDailyActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showToast("daily 멤버십 생성!");
-                //new_membership 생성 성공 여부
-//                Response.Listener<String> responseListener=new Response.Listener<String>() {
-//                    @Override
-//                    public void onResponse(String response) {
-//                        try {
-//                            JSONObject jsonObject=new JSONObject(response);
-//                            boolean success=jsonObject.getBoolean(TAG_SUCCESS);
-//                            if(success){
-//                                showToast("사용가능한 아이디입니다.");
-//                                signInMember.setMemID(memID);
-//                                idValid=true;
-//                            }
-//                            else{
-//                                showToast("사용 불가능한 아이디입니다.");
-//                                idValid=false;
-//                            }
-//                        } catch (JSONException e) {
-//                            e.printStackTrace();
-//                        }
-//                    }
-//                };
-//
-//                RequestNewMembership requestNewMembership=new RequestNewMembership();
-//                RequestIdOverlap requestIdOverlap =new RequestIdOverlap(memID,responseListener);
-//
-//                RequestQueue queue= Volley.newRequestQueue(SignInActivity.this);
-//                queue.add(requestIdOverlap);
+                //NewMembership();
             }
         });
     }
 
-    public void showFriendList(){
-        //로그인 멤버의 아이디 전송
-//        Response.Listener<String> responseListener=new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                try {
-//                    JSONObject jsonObject=new JSONObject(response);
-//                    boolean success=jsonObject.getBoolean(TAG_SUCCESS);
-//                    if(success){
-//
-//                    }
-//                    else{
-//                        showToast("로딩실패ㅠ");
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        };
-//        RequestShowFriend requestShowFriend=new RequestShowFriend(loginMember.getMemID(),responseListener);
-//        RequestQueue queue= Volley.newRequestQueue(NewMembershipActivity.this);
-//        queue.add(requestShowFriend);
-
-        //받은 데이터 출력
-        RecyclerView friend_list=findViewById(R.id.new_daily_list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
-
-        friend_list.setLayoutManager(layoutManager);
-
-        memberAdapter=new MemberAdapter();
-
-        for(int i=0;i<10;i++){
-            Member member=new Member();
-            member.setMemName(i+"님");
-            memberAdapter.addItem(member);
-        }
-        friend_list.setAdapter(memberAdapter);
-
-        for (int i=0;i<memberAdapter.getItemCount();i++){
-            if(memberAdapter.getItem(i).isChecked()){
-                arrayList.add(memberAdapter.getItem(i));
+    public void NewMembership(){
+        if(daily_name==null){
+            showToast("이러시면 안됨니다 고갱님 정보를 쓰세욥");
+        }else {
+            for (int i = 0; i < memberAdapter.getItemCount(); i++) {
+                if (memberAdapter.getItem(i).isChecked()) {
+                    Member member = new Member();
+                    member.setMemID((memberAdapter.getItem(i)).getMemID());
+                    member.setMemName((memberAdapter.getItem(i)).getMemName());
+                    selectedMember.add(member);
+                }
             }
+            //new_membership 생성 성공 여부
+            Response.Listener<String> responseListener=new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONObject jsonObject=new JSONObject(response);
+                        boolean success=jsonObject.getBoolean(TAG_SUCCESS);
+                        if(success){
+                            showToast("생성 성공!");
+                            finish();
+                        }
+                        else{
+                            showToast("daily생성 실패!");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            };
+
+            RequestNewMembership requestNewMembership =new RequestNewMembership(loginMember,selectedMember,daily_name,responseListener);
+            RequestQueue queue= Volley.newRequestQueue(NewDailyActivity.this);
+            queue.add(requestNewMembership);
+
         }
+    }
+    public void showFriend(){
+        Response.Listener<String> responseListener=new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray=new JSONArray(response);
+
+                    if(jsonArray.length()==0){
+                        showToast("친구가 없습니다.");
+                        return;
+                    }
+
+                    RecyclerView friend_list = findViewById(R.id.daily_selected_friend);
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(NewDailyActivity.this, LinearLayoutManager.VERTICAL, false);
+
+                    friend_list.setLayoutManager(layoutManager);
+
+                    memberAdapter = new MemberAdapter();
+
+                    for (int i=0;i<jsonArray.length();i++) {
+                        JSONObject item = jsonArray.getJSONObject(i);
+                        String friendId = item.getString("memID");
+                        String friendName = item.getString("memName");
+
+                        Member member=new Member();
+                        member.setMemName(friendName);
+                        member.setMemID(friendId);
+                        memberAdapter.addItem(member);
+                    }
+                    friend_list.setAdapter(memberAdapter);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        RequestShowFriend requestShowFriend=new RequestShowFriend(loginMember.getMemID(),responseListener);
+        RequestQueue queue= Volley.newRequestQueue(NewDailyActivity.this);
+        queue.add(requestShowFriend);
     }
 
     public void showToast(String data){

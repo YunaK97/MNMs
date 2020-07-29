@@ -49,8 +49,8 @@ public class NewMembershipActivity extends AppCompatActivity {
             생성 결과 받기
          */
 
-        membership_name=findViewById(R.id.membership_name).toString();
-        membership_money=findViewById(R.id.membership_money).toString();
+        membership_name=((TextView)findViewById(R.id.membership_name)).getText().toString();
+        membership_money=((TextView)findViewById(R.id.membership_money)).getText().toString();
 
         //친구 가져와서 출력
         showFriend();

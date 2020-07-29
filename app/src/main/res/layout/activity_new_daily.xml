@@ -20,7 +20,7 @@
             android:text="톡방이름" />
 
         <EditText
-            android:id="@+id/talk_name"
+            android:id="@+id/daily_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -37,7 +37,7 @@
         android:textSize="20dp"
         />
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/new_daily_list"
+        android:id="@+id/daily_selected_friend"
         android:layout_width="match_parent"
         android:layout_height="300dp" />
     <Button
