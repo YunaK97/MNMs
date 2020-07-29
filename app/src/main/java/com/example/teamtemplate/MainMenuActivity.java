@@ -46,14 +46,14 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
+//        actionBar = getSupportActionBar();
+//        actionBar.setLogo(R.drawable.home);
+//        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_USE_LOGO);
+
         Intent intent=getIntent();
         loginMember= (Member) intent.getSerializableExtra("loginMember");
         loginMemberAccount=(Account)intent.getSerializableExtra("loginMemberAccount");
 
-        actionBar = getSupportActionBar();
-
-        actionBar.setLogo(R.drawable.home);
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_USE_LOGO);
 
         textName=findViewById(R.id.textName);
         String text="이름 : "+loginMember.getMemName();
@@ -198,26 +198,26 @@ public class MainMenuActivity extends AppCompatActivity {
 //        });
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main,menu);
-
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        int curId = item.getItemId();
-
-        switch (curId){
-            case R.id.menu_plus:
-                showToast("메뉴 선택됨");
-                break;
-            default:
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu_main,menu);
+//
+//        return true;
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+//        int curId = item.getItemId();
+//
+//        switch (curId){
+//            case R.id.menu_plus:
+//                showToast("메뉴 선택됨");
+//                break;
+//            default:
+//                break;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     public void showToast(String data){
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
