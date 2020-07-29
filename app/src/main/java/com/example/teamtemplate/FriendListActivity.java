@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.google.gson.JsonArray;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,8 +36,8 @@ public class FriendListActivity extends AppCompatActivity {
         Intent intent=getIntent();
         loginMember= (Member) intent.getSerializableExtra("loginMember");
 
-        tmpShowFriend();
-        //showFriend();
+        //tmpShowFriend();
+        showFriend();
 
         btn_request=findViewById(R.id.btn_request);
         btn_add=findViewById(R.id.btn_add);
@@ -65,8 +66,15 @@ public class FriendListActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
-                    JSONObject jsonObject=new JSONObject(response);
-                    JSONArray jsonArray=jsonObject.getJSONArray("response");
+                    //JSONObject jsonObject=new JSONObject(response);
+                    //JSONArray jsonArray=jsonObject.getJSONArray("response");
+                    JSONArray jsonArray=new JSONArray(response);
+
+                    if(jsonArray.length()==0){
+                        showToast("친구가 없습니다.");
+                        return;
+                    }
+
                     RecyclerView friend_list = findViewById(R.id.friend_list);
                     LinearLayoutManager layoutManager = new LinearLayoutManager(FriendListActivity.this, LinearLayoutManager.VERTICAL, false);
 

@@ -2,21 +2,36 @@ package com.example.teamtemplate;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+//import android.support.v7.app.AppCompatActivity;
 
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.toolbox.Volley;
 import com.example.teamtemplate.membership.MembershipActivity;
 import com.example.teamtemplate.newgroup.NewDailyActivity;
 import com.example.teamtemplate.newgroup.NewMembershipActivity;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 
 public class MainMenuActivity extends AppCompatActivity {
     private ActionBar actionBar;
@@ -43,7 +58,7 @@ public class MainMenuActivity extends AppCompatActivity {
         //actionBar.setLogo(R.drawable.home);
         //actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME);
         //actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_USE_LOGO);
-
+        //Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
 
         textName=findViewById(R.id.textName);
         String text="이름 : "+loginMember.getMemName();
@@ -97,53 +112,6 @@ public class MainMenuActivity extends AppCompatActivity {
 
     public void GroupView(final String tag){
         //TAG 별로 그룹 정보 가져오기 실행
-//        Response.Listener<String> responseListener=new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                try {
-//                    JSONObject jsonObject=new JSONObject(response);
-//                    Boolean success=jsonObject.getBoolean(TAG_SUCCESS);
-//                    if(success){
-//                        JSONArray jsonArray=jsonObject.getJSONArray(tag);
-//
-//                        for (int i=0;i<jsonArray.length();i++){
-//                            JSONObject item=jsonArray.getJSONObject(i);
-//                            String groupname=item.getString("GroupName");
-//
-//                            Group group = new Group();
-//                            group.setGroupName(groupname);
-//                            groupAdapter.addItem(group);
-//                        }
-//
-//                        groupMembershiplList.setAdapter(groupAdapter);
-//
-//                        groupAdapter.setOnItemClickListener(new OnGroupItemClickListener() {
-//                            @Override
-//                            public void onItemClick(GroupAdapter.ViewHolder holder, View view, int position) {
-//                                Group item=groupAdapter.getItem(position);
-//                                showToast("아이템 선택됨 : "+ item.getGroupName());
-//
-//                                Intent intent = new Intent(MainMenuActivity.this,MembershipActivity.class);
-//
-//                                intent.putExtra("loginMember",loginMember);
-//                                intent.putExtra("loginMemberAccount",loginMemberAccount);
-//                                intent.putExtra("selectedGroupName",item.getGroupName());
-//                                startActivity(intent);
-//                            }
-//                        });
-//                    }
-//                    else{//그룹 가져오기 실패
-//                        showToast("로딩 실패ㅠ");
-//                    }
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        };
-//        RequestGroup requestGroup=new RequestGroup(loginMember.getMemID(),responseListener);
-//        RequestQueue queue=Volley.newRequestQueue(MainMenuActivity.this);
-//        queue.add(requestGroup);
-
         //그룹 가져와서 출력
         groupMembershiplList=findViewById(R.id.group_membership_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
@@ -151,57 +119,106 @@ public class MainMenuActivity extends AppCompatActivity {
 
         groupAdapter=new GroupAdapter();
 
-        for(int i=0;i<10;i++){
-            Group group = new Group();
-            if(tag==TAG_MEMBERSHIP){
-                group.setGroupName("membership : "+i);
-            }else if(tag==TAG_DAILY){
-                group.setGroupName("daily : "+i);
-            }
-            groupAdapter.addItem(group);
-        }
-        groupMembershiplList.setAdapter(groupAdapter);
-
-        groupAdapter.setOnItemClickListener(new OnGroupItemClickListener() {
+        Response.Listener<String> responseListener=new Response.Listener<String>() {
             @Override
-            public void onItemClick(GroupAdapter.ViewHolder holder, View view, int position) {
-                Group item=groupAdapter.getItem(position);
-                showToast("아이템 선택됨 : "+ item.getGroupName());
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray=new JSONArray(response);
+                    //showToast("dkdkdkk");
+                    if(jsonArray.length()==0){
+                        showToast("그룹이 없습니다.");
 
-                if(TAG_MEMBERSHIP==tag){
-                    Intent intent = new Intent(MainMenuActivity.this, MembershipActivity.class);
+                    }else{
+                        for (int i=0;i<jsonArray.length();i++){
+                            JSONObject item=jsonArray.getJSONObject(i);
+                            String groupname=item.getString("groupName");
+                            String gid=item.getString("MID");
 
-                    intent.putExtra("loginMember",loginMember);
-                    intent.putExtra("loginMemberAccount",loginMemberAccount);
-                    intent.putExtra("selectedGroupName",item.getGroupName());
+                            Group group = new Group();
+                            group.setGroupName(groupname);
+                            group.setGid(gid);
+                            groupAdapter.addItem(group);
+                        }
 
-                    startActivity(intent);
-                }else if(TAG_DAILY==tag){
-                    showToast("daily 미구현");
+                        groupMembershiplList.setAdapter(groupAdapter);
+
+                        groupAdapter.setOnItemClickListener(new OnGroupItemClickListener() {
+                            @Override
+                            public void onItemClick(GroupAdapter.ViewHolder holder, View view, int position) {
+                                Group item=groupAdapter.getItem(position);
+                                showToast("아이템 선택됨 : "+ item.getGroupName());
+
+                                Intent intent = new Intent(MainMenuActivity.this,MembershipActivity.class);
+
+                                intent.putExtra("loginMember",loginMember);
+                                intent.putExtra("loginMemberAccount",loginMemberAccount);
+                                intent.putExtra("gname",item.getGroupName());
+                                intent.putExtra("gid",item.getGid());
+                                startActivity(intent);
+                            }
+                        });
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    System.out.println("오류 : "+e.toString());
                 }
-
             }
-        });
+        };
+        RequestGroup requestGroup=new RequestGroup(loginMember.getMemID(),responseListener);
+        RequestQueue queue= Volley.newRequestQueue(MainMenuActivity.this);
+        queue.add(requestGroup);
+
+//        for(int i=0;i<10;i++){
+//            Group group = new Group();
+//            if(tag==TAG_MEMBERSHIP){
+//                group.setGroupName("membership : "+i);
+//            }else if(tag==TAG_DAILY){
+//                group.setGroupName("daily : "+i);
+//            }
+//            groupAdapter.addItem(group);
+//        }
+//        groupMembershiplList.setAdapter(groupAdapter);
+//
+//        groupAdapter.setOnItemClickListener(new OnGroupItemClickListener() {
+//            @Override
+//            public void onItemClick(GroupAdapter.ViewHolder holder, View view, int position) {
+//                Group item=groupAdapter.getItem(position);
+//                showToast("아이템 선택됨 : "+ item.getGroupName());
+//
+//                if(TAG_MEMBERSHIP==tag){
+//                    Intent intent = new Intent(MainMenuActivity.this, MembershipActivity.class);
+//
+//                    intent.putExtra("loginMember",loginMember);
+//                    intent.putExtra("loginMemberAccount",loginMemberAccount);
+//                    intent.putExtra("selectedGroupName",item.getGroupName());
+//
+//                    startActivity(intent);
+//                }else if(TAG_DAILY==tag){
+//                    showToast("daily 미구현");
+//                }
+//
+//            }
+//        });
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu){
-//        MenuInflater menuInflater=getMenuInflater();
-//        menuInflater.inflate(R.menu.menu_main,menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-//        switch (item.getItemId()){
-//            case R.id.menu_plus:
-//                plusAction();
-//                return true;
-//            default:
-//                showToast("나머지 클릭됨");
-//                return  super.onOptionsItemSelected(item);
-//        }
-//    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater menuInflater=getMenuInflater();
+        menuInflater.inflate(R.menu.menu_main,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_plus:
+                plusAction();
+                return true;
+            default:
+                showToast("나머지 클릭됨");
+                return  super.onOptionsItemSelected(item);
+        }
+    }
 
     public void showToast(String data){
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();

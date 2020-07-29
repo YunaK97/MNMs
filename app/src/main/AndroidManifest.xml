@@ -27,6 +27,7 @@
             android:label="@string/app_new_membership" />
         <activity
             android:name=".MainMenuActivity"
+            android:theme="@style/AppTheme2"
             android:label="@string/app_mainmenu" />
         <activity
             android:name=".mainscreen.SignInActivity"

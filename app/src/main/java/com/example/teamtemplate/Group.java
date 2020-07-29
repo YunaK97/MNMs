@@ -2,7 +2,7 @@ package com.example.teamtemplate;
 
 public class Group {
     private String groupName;
-    //groupID;
+    private String gid;
     //memberID;
     //
     public String getGroupName() {
@@ -11,5 +11,13 @@ public class Group {
 
     public void setGroupName(String groupName) {
         this.groupName = groupName;
+    }
+
+    public String getGid() {
+        return gid;
+    }
+
+    public void setGid(String gid) {
+        this.gid = gid;
     }
 }
