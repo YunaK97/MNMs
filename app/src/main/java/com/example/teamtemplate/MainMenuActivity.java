@@ -77,7 +77,8 @@ public class MainMenuActivity extends AppCompatActivity {
         btn_membership.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GroupView(TAG_MEMBERSHIP);
+                tmpGroupView(TAG_MEMBERSHIP);
+                //GroupView(TAG_MEMBERSHIP);
             }
         });
 
@@ -85,7 +86,8 @@ public class MainMenuActivity extends AppCompatActivity {
         btn_daily.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                GroupView(TAG_DAILY);
+                tmpGroupView(TAG_DAILY);
+                //GroupView(TAG_DAILY);
             }
         });
 
@@ -105,6 +107,46 @@ public class MainMenuActivity extends AppCompatActivity {
         showToast("송금 내역 클릭");
     }
 
+    public void tmpGroupView(final String tag){
+        groupMembershiplList=findViewById(R.id.group_membership_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        groupMembershiplList.setLayoutManager(layoutManager);
+
+        groupAdapter=new GroupAdapter();
+
+        for(int i=0;i<10;i++){
+            Group group = new Group();
+            if(tag==TAG_MEMBERSHIP){
+                group.setGroupName("membership : "+i);
+            }else if(tag==TAG_DAILY){
+                group.setGroupName("daily : "+i);
+            }
+            groupAdapter.addItem(group);
+        }
+        groupMembershiplList.setAdapter(groupAdapter);
+
+        groupAdapter.setOnItemClickListener(new OnGroupItemClickListener() {
+            @Override
+            public void onItemClick(GroupAdapter.ViewHolder holder, View view, int position) {
+                Group item=groupAdapter.getItem(position);
+                showToast("아이템 선택됨 : "+ item.getGroupName());
+
+                if(TAG_MEMBERSHIP==tag){
+                    Intent intent = new Intent(MainMenuActivity.this, MembershipActivity.class);
+
+                    intent.putExtra("loginMember",loginMember);
+                    intent.putExtra("loginMemberAccount",loginMemberAccount);
+                    intent.putExtra("selectedGroupName",item.getGroupName());
+
+                    startActivity(intent);
+                }else if(TAG_DAILY==tag){
+                    showToast("daily 미구현");
+                }
+
+            }
+        });
+
+    }
     public void GroupView(final String tag){
         //TAG 별로 그룹 정보 가져오기 실행
         //그룹 가져와서 출력
@@ -165,37 +207,6 @@ public class MainMenuActivity extends AppCompatActivity {
         RequestQueue queue= Volley.newRequestQueue(MainMenuActivity.this);
         queue.add(requestGroup);
 
-//        for(int i=0;i<10;i++){
-//            Group group = new Group();
-//            if(tag==TAG_MEMBERSHIP){
-//                group.setGroupName("membership : "+i);
-//            }else if(tag==TAG_DAILY){
-//                group.setGroupName("daily : "+i);
-//            }
-//            groupAdapter.addItem(group);
-//        }
-//        groupMembershiplList.setAdapter(groupAdapter);
-//
-//        groupAdapter.setOnItemClickListener(new OnGroupItemClickListener() {
-//            @Override
-//            public void onItemClick(GroupAdapter.ViewHolder holder, View view, int position) {
-//                Group item=groupAdapter.getItem(position);
-//                showToast("아이템 선택됨 : "+ item.getGroupName());
-//
-//                if(TAG_MEMBERSHIP==tag){
-//                    Intent intent = new Intent(MainMenuActivity.this, MembershipActivity.class);
-//
-//                    intent.putExtra("loginMember",loginMember);
-//                    intent.putExtra("loginMemberAccount",loginMemberAccount);
-//                    intent.putExtra("selectedGroupName",item.getGroupName());
-//
-//                    startActivity(intent);
-//                }else if(TAG_DAILY==tag){
-//                    showToast("daily 미구현");
-//                }
-//
-//            }
-//        });
     }
 
 //    @Override
