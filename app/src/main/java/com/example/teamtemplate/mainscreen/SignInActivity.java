@@ -1,4 +1,4 @@
-package com.example.teamtemplate;
+package com.example.teamtemplate.mainscreen;
 
 import android.Manifest;
 import android.app.Activity;
@@ -19,6 +19,9 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.example.teamtemplate.Account;
+import com.example.teamtemplate.Member;
+import com.example.teamtemplate.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;

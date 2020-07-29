@@ -1,4 +1,4 @@
-package com.example.teamtemplate;
+package com.example.teamtemplate.newgroup;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,6 +14,9 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.example.teamtemplate.Member;
+import com.example.teamtemplate.MemberAdapter;
+import com.example.teamtemplate.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;

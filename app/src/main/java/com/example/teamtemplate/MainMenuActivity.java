@@ -3,15 +3,11 @@ package com.example.teamtemplate;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.teamtemplate.membership.MembershipActivity;
+import com.example.teamtemplate.newgroup.NewDailyActivity;
+import com.example.teamtemplate.newgroup.NewMembershipActivity;
 
 public class MainMenuActivity extends AppCompatActivity {
     private ActionBar actionBar;
@@ -224,11 +222,11 @@ public class MainMenuActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if(addType[0]==0){
-                            Intent intent = new Intent(getApplicationContext(),NewMembershipActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), NewMembershipActivity.class);
                             intent.putExtra("loginMember",loginMember);
                             startActivity(intent);
                         }else if(addType[0]==1){
-                            Intent intent = new Intent(getApplicationContext(),NewDailyActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), NewDailyActivity.class);
                             intent.putExtra("loginMember",loginMember);
                             startActivity(intent);
                         }

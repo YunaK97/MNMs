@@ -1,4 +1,4 @@
-package com.example.teamtemplate;
+package com.example.teamtemplate.newgroup;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -10,6 +10,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.teamtemplate.Member;
+import com.example.teamtemplate.MemberAdapter;
+import com.example.teamtemplate.R;
 
 import java.util.ArrayList;
 

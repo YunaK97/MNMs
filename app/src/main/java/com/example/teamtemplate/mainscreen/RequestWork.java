@@ -1,8 +1,10 @@
-package com.example.teamtemplate;
+package com.example.teamtemplate.mainscreen;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
+import com.example.teamtemplate.Account;
+import com.example.teamtemplate.Member;
 
 import java.util.HashMap;
 import java.util.Map;

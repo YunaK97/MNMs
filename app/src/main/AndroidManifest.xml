@@ -20,18 +20,18 @@
         </activity>
 
         <activity
-            android:name=".NewDailyActivity"
+            android:name=".newgroup.NewDailyActivity"
             android:label="@string/app_new_daily" />
         <activity
-            android:name=".NewMembershipActivity"
+            android:name=".newgroup.NewMembershipActivity"
             android:label="@string/app_new_membership" />
         <activity
             android:name=".MainMenuActivity"
             android:label="@string/app_mainmenu" />
         <activity
-            android:name=".SignInActivity"
+            android:name=".mainscreen.SignInActivity"
             android:label="@string/app_signin" />
-        <activity android:name=".MainActivity"
+        <activity android:name=".mainscreen.MainActivity"
             android:label="@string/app_login"
             >
             <intent-filter>

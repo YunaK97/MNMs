@@ -1,4 +1,4 @@
-package com.example.teamtemplate;
+package com.example.teamtemplate.mainscreen;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +14,10 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.example.teamtemplate.Account;
+import com.example.teamtemplate.MainMenuActivity;
+import com.example.teamtemplate.Member;
+import com.example.teamtemplate.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -96,7 +100,7 @@ public class MainActivity extends AppCompatActivity {
                         memAcc.setAccountBalance(balance);
 
                         showToast("로그인 성공하였습니다. "+loginMem.getMemName()+"님");
-                        Intent intent=new Intent(MainActivity.this,MainMenuActivity.class);
+                        Intent intent=new Intent(MainActivity.this, MainMenuActivity.class);
                         intent.putExtra("loginMember",loginMem);
                         intent.putExtra("loginMemberAccount",memAcc);
                         //멤버 나머지 속성 받기
