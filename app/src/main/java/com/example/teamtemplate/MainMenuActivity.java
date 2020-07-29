@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
+import com.example.teamtemplate.daily.DailyActivity;
 import com.example.teamtemplate.membership.MembershipActivity;
 import com.example.teamtemplate.newgroup.NewDailyActivity;
 import com.example.teamtemplate.newgroup.NewMembershipActivity;
@@ -136,11 +137,19 @@ public class MainMenuActivity extends AppCompatActivity {
 
                     intent.putExtra("loginMember",loginMember);
                     intent.putExtra("loginMemberAccount",loginMemberAccount);
-                    intent.putExtra("selectedGroupName",item.getGroupName());
+                    intent.putExtra("gname",item.getGroupName());
+                    intent.putExtra("gid",item.getGid());
 
                     startActivity(intent);
                 }else if(TAG_DAILY==tag){
-                    showToast("daily 미구현");
+                    Intent intent = new Intent(MainMenuActivity.this, DailyActivity.class);
+
+                    intent.putExtra("loginMember",loginMember);
+                    intent.putExtra("loginMemberAccount",loginMemberAccount);
+                    intent.putExtra("gname",item.getGroupName());
+                    intent.putExtra("gid",item.getGid());
+
+                    startActivity(intent);
                 }
 
             }
@@ -161,7 +170,6 @@ public class MainMenuActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 try {
                     JSONArray jsonArray=new JSONArray(response);
-                    //showToast("dkdkdkk");
                     if(jsonArray.length()==0){
                         showToast("그룹이 없습니다.");
 
