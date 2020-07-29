@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="20dp"
-            android:inputType="text"
+            android:inputType="number"
             android:hint="ex) 3" />
     </LinearLayout>
 
@@ -59,7 +59,7 @@
         android:textSize="20dp"
         />
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/new_membership_list"
+        android:id="@+id/membership_select_friend"
         android:layout_width="match_parent"
         android:layout_height="300dp" />
     <Button

@@ -14,13 +14,10 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class NewFriendActivity extends AppCompatActivity {
     Member loginMember;
@@ -126,28 +123,6 @@ public class NewFriendActivity extends AppCompatActivity {
         RequestNewFriend requestNewFriend=new RequestNewFriend(friend_id,responseListener);
         RequestQueue queue= Volley.newRequestQueue(NewFriendActivity.this);
         queue.add(requestNewFriend);
-    }
-
-    public void printFriendList(JSONObject jsonObject) throws JSONException {
-//        JSONArray jsonArray=jsonObject.getJSONArray("FriendArray");
-//
-//        RecyclerView friend_list = findViewById(R.id.new_friend_list);
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(NewFriendActivity.this, LinearLayoutManager.VERTICAL, false);
-//
-//        friend_list.setLayoutManager(layoutManager);
-//
-//        memberAdapter = new MemberAdapter();
-//
-//        for (int i=0;i<jsonArray.length();i++) {
-//            JSONObject item = jsonArray.getJSONObject(i);
-//            String friendName = item.getString("FriendName");
-//
-//            Member member=new Member();
-//            member.setMemName(friendName);
-//            memberAdapter.addItem(member);
-//        }
-//
-//        friend_list.setAdapter(memberAdapter);
     }
 
     public void showToast(String data) {
