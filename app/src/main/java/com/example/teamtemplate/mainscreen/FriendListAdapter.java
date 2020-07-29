@@ -1,43 +1,47 @@
-package com.example.teamtemplate;
+package com.example.teamtemplate.mainscreen;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.teamtemplate.Member;
+import com.example.teamtemplate.R;
+
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> {
-    ArrayList<Group> items=new ArrayList<Group>();
+public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.ViewHolder> {
+    ArrayList<Member> items=new ArrayList<Member>();
 
-    OnGroupItemClickListener listener;
+    OnFriendItemClickListener listener;
 
-    public void addItem(Group item){
+    public void addItem(Member item){
         items.add(item);
     }
 
-    public void setItems(ArrayList<Group> items){
+    public void setItems(ArrayList<Member> items){
         this.items=items;
     }
 
-    public Group getItem(int position) {
+    public Member getItem(int position) {
         return items.get(position);
     }
 
-    public void setItem(int position,Group item){
+    public void setItem(int position,Member item){
         items.set(position,item);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView group_name;
+        TextView friendlist_name,friendlist_id;
 
-        public ViewHolder(View itemView,final OnGroupItemClickListener listener){
+        public ViewHolder(View itemView,final OnFriendItemClickListener listener){
             super(itemView);
 
-            group_name=itemView.findViewById(R.id.group_name);
+            friendlist_name=itemView.findViewById(R.id.friendlist_name);
+            friendlist_id=itemView.findViewById(R.id.friendlistlist_id);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -51,12 +55,13 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
             });
         }
 
-        public void setItem(Group item){
-            group_name.setText(item.getGroupName());
+        public void setItem(Member item){
+            friendlist_name.setText(item.getMemName());
+            friendlist_id.setText(item.getMemID());
         }
     }
 
-    public void setOnItemClickListener(OnGroupItemClickListener listener){
+    public void setOnItemClickListener(OnFriendItemClickListener listener){
         this.listener=listener;
     }
 
@@ -67,7 +72,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
         //inflater 참조방법
         LayoutInflater inflater=LayoutInflater.from(parent.getContext());
-        View itemView=inflater.inflate(R.layout.layout_group,parent,false);
+        View itemView=inflater.inflate(R.layout.layout_friend_list,parent,false);
 
         return new ViewHolder(itemView,listener);
     }
@@ -76,7 +81,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //viewholder는 재사용된다! 계속 새로 만들순 없다.
 
-        Group item=items.get(position);
+        final Member item=items.get(position);
         holder.setItem(item);
     }
 

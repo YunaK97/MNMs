@@ -10,8 +10,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".NewFriendActivity"></activity>
-        <activity android:name=".FriendListActivity"></activity>
+        <activity android:name=".newgroupfriend.NewFriendActivity"></activity>
+        <activity android:name=".friend.FriendListActivity"></activity>
         <activity android:name="com.example.teamtemplate.membership.MembershipActivity" android:label="회원그룹방 거래내역">
         </activity>
         <activity android:name="com.example.teamtemplate.transaction.TransactionActivity" android:label="거래">
@@ -20,18 +20,18 @@
         </activity>
 
         <activity
-            android:name=".newgroup.NewDailyActivity"
+            android:name=".newgroupfriend.NewDailyActivity"
             android:label="@string/app_new_daily" />
         <activity
-            android:name=".newgroup.NewMembershipActivity"
+            android:name=".newgroupfriend.NewMembershipActivity"
             android:label="@string/app_new_membership" />
         <activity
-            android:name=".MainMenuActivity"
+            android:name=".mainscreen.MainMenuActivity"
             android:label="@string/app_mainmenu" />
         <activity
-            android:name=".mainscreen.SignInActivity"
+            android:name=".firstscreen.SignInActivity"
             android:label="@string/app_signin" />
-        <activity android:name=".mainscreen.MainActivity"
+        <activity android:name=".firstscreen.MainActivity"
             android:label="@string/app_login"
             >
             <intent-filter>

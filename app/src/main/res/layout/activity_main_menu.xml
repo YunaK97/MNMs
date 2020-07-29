@@ -5,7 +5,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="30dp"
@@ -45,10 +45,9 @@
             android:textSize="20dp" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/group_membership_list"
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:background="@drawable/border"
         android:layout_height="300dp" />
 
     <LinearLayout

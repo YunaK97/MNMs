@@ -1,4 +1,4 @@
-package com.example.teamtemplate.mainscreen;
+package com.example.teamtemplate.firstscreen;
 
 import android.Manifest;
 import android.app.Activity;

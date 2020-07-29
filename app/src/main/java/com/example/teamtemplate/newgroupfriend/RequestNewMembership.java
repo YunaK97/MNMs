@@ -1,11 +1,9 @@
-package com.example.teamtemplate.newgroup;
+package com.example.teamtemplate.newgroupfriend;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.toolbox.StringRequest;
 import com.example.teamtemplate.Member;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

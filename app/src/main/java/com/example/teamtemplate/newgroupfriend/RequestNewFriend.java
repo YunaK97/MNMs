@@ -1,6 +1,4 @@
-package com.example.teamtemplate;
-
-import android.widget.Toast;
+package com.example.teamtemplate.newgroupfriend;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;

@@ -1,4 +1,4 @@
-package com.example.teamtemplate.mainscreen;
+package com.example.teamtemplate.firstscreen;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,7 +15,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
 import com.example.teamtemplate.Account;
-import com.example.teamtemplate.MainMenuActivity;
+import com.example.teamtemplate.mainscreen.MainMenuActivity;
 import com.example.teamtemplate.Member;
 import com.example.teamtemplate.R;
 

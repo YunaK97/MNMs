@@ -1,8 +1,4 @@
-package com.example.teamtemplate.newgroup;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+package com.example.teamtemplate.newgroupfriend;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,14 +10,10 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.toolbox.Volley;
-import com.example.teamtemplate.FriendListActivity;
-import com.example.teamtemplate.FriendListAdapter;
 import com.example.teamtemplate.Member;
 import com.example.teamtemplate.MemberAdapter;
-import com.example.teamtemplate.NewFriendActivity;
 import com.example.teamtemplate.R;
 import com.example.teamtemplate.RequestShowFriend;
-import com.example.teamtemplate.mainscreen.SignInActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,16 +21,22 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class NewMembershipActivity extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+public class NewDailyActivity extends AppCompatActivity {
     private MemberAdapter memberAdapter;
-    private ArrayList<Member> selectedMember;
+    private ArrayList<Member> arrayList;
     private Member loginMember;
+    private ArrayList<Member> selectedMember;
     private String TAG_SUCCESS="success";
-    private String membership_name,membership_money;
+    private String daily_name;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_membership);
+        setContentView(R.layout.activity_new_daily);
 
         Intent intent=getIntent();
         loginMember=(Member)intent.getSerializableExtra("loginMember");
@@ -48,27 +46,25 @@ public class NewMembershipActivity extends AppCompatActivity {
             그룹이름,회비,친구목록 php로 전송
             생성 결과 받기
          */
-
-        membership_name=((TextView)findViewById(R.id.membership_name)).getText().toString();
-        membership_money=((TextView)findViewById(R.id.membership_money)).getText().toString();
+        daily_name=((TextView)findViewById(R.id.daily_name)).getText().toString();
 
         //친구 가져와서 출력
         showFriend();
 
         //membership 생성 버튼 클릭
-        Button btn_new_membership=findViewById(R.id.btn_new_membership);
-        btn_new_membership.setOnClickListener(new View.OnClickListener() {
+
+        Button btn_new_daily=findViewById(R.id.btn_new_daily);
+        btn_new_daily.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showToast("멤버십 생성!");
-                finish();
+                showToast("daily 멤버십 생성!");
                 //NewMembership();
             }
         });
     }
 
     public void NewMembership(){
-        if(membership_money==null || membership_name==null){
+        if(daily_name==null){
             showToast("이러시면 안됨니다 고갱님 정보를 쓰세욥");
         }else {
             for (int i = 0; i < memberAdapter.getItemCount(); i++) {
@@ -91,7 +87,7 @@ public class NewMembershipActivity extends AppCompatActivity {
                             finish();
                         }
                         else{
-                            showToast("membership생성 실패!");
+                            showToast("daily생성 실패!");
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -99,13 +95,12 @@ public class NewMembershipActivity extends AppCompatActivity {
                 }
             };
 
-            RequestNewMembership requestNewMembership =new RequestNewMembership(loginMember,selectedMember,membership_money,membership_name,responseListener);
-            RequestQueue queue= Volley.newRequestQueue(NewMembershipActivity.this);
+            RequestNewMembership requestNewMembership =new RequestNewMembership(loginMember,selectedMember,daily_name,responseListener);
+            RequestQueue queue= Volley.newRequestQueue(NewDailyActivity.this);
             queue.add(requestNewMembership);
 
         }
     }
-
     public void showFriend(){
         Response.Listener<String> responseListener=new Response.Listener<String>() {
             @Override
@@ -118,8 +113,8 @@ public class NewMembershipActivity extends AppCompatActivity {
                         return;
                     }
 
-                    RecyclerView friend_list = findViewById(R.id.membership_select_friend);
-                    LinearLayoutManager layoutManager = new LinearLayoutManager(NewMembershipActivity.this, LinearLayoutManager.VERTICAL, false);
+                    RecyclerView friend_list = findViewById(R.id.daily_selected_friend);
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(NewDailyActivity.this, LinearLayoutManager.VERTICAL, false);
 
                     friend_list.setLayoutManager(layoutManager);
 
@@ -135,15 +130,15 @@ public class NewMembershipActivity extends AppCompatActivity {
                         member.setMemID(friendId);
                         memberAdapter.addItem(member);
                     }
-
                     friend_list.setAdapter(memberAdapter);
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
         };
         RequestShowFriend requestShowFriend=new RequestShowFriend(loginMember.getMemID(),responseListener);
-        RequestQueue queue= Volley.newRequestQueue(NewMembershipActivity.this);
+        RequestQueue queue= Volley.newRequestQueue(NewDailyActivity.this);
         queue.add(requestShowFriend);
     }
 

@@ -1,4 +1,4 @@
-package com.example.teamtemplate.mainscreen;
+package com.example.teamtemplate.firstscreen;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
