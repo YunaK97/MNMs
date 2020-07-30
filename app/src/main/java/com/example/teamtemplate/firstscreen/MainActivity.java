@@ -70,13 +70,6 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(String response) {
                 try {
                     JSONObject jsonObject=new JSONObject(response);
-                    //Gson gson=new Gson();
-                    //Member loginMem= (Member) gson.fromJson(response,Member.class);
-
-                    //if(loginMem.getMemID() != null){ //로그인에 성공한 경우
-                        //String userID=jsonObject.getString("memID");
-                        //String userPass=jsonObject.getString("memPW");
-                        //Member loginMem= (Member) jsonObject.get("member");
 
                     Boolean success=jsonObject.getBoolean(TAG_SUCCESS);
                     if(success){

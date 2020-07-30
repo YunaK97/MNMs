@@ -74,7 +74,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
 
         //inflater 참조방법
         LayoutInflater inflater=LayoutInflater.from(parent.getContext());
-        View itemView=inflater.inflate(R.layout.layout_friend,parent,false);
+        View itemView=inflater.inflate(R.layout.layout_select_friend,parent,false);
 
         return new ViewHolder(itemView,listener);
     }

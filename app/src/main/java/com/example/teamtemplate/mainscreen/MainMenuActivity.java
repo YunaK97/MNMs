@@ -195,8 +195,8 @@ public class MainMenuActivity extends AppCompatActivity {
                 });
         dialog.create();
         dialog.show();
-    }
 
+}
     class MyPagerAdapter extends FragmentStatePagerAdapter {
         ArrayList<Fragment> items =new ArrayList<Fragment>();
 
