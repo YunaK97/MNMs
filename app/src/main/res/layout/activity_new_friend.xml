@@ -69,6 +69,13 @@
         android:layout_height="match_parent"
         android:visibility="gone"
         android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="받은 요청"
+            android:textColor="#10e655"
+            android:textSize="30dp"
+            />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/request_friend"
             android:layout_width="match_parent"

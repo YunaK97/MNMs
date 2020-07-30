@@ -216,7 +216,6 @@ public class NewFriendActivity extends AppCompatActivity {
                     JSONObject jsonObject=new JSONObject(response);
                     boolean success=jsonObject.getBoolean(TAG_SUCCESS);
                     if(success){
-                        showToast("성공");
                         String friend_name=jsonObject.getString("memName");
 
                         friend_name_text.setText(friend_name);
