@@ -2,6 +2,7 @@ package com.example.teamtemplate.newgroupfriend;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -111,52 +112,67 @@ public class NewFriendActivity extends AppCompatActivity {
     }
 
     public void showRequest(){
-        linearLayout.setVisibility(View.GONE);
-
-        requestedRecyclerView=(RecyclerView)findViewById(R.id.request_friend);
-        LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
-        requestedRecyclerView.setLayoutManager(layoutManager);
-        memberAdapter=new MemberAdapter();
-
-        for (int i=0;i<10;i++){
-            Member member=new Member();
-            member.setMemName(i+"님");
-            member.setMemID("id : "+i);
-            memberAdapter.addItem(member);
-        }
-
-        requestedRecyclerView.setAdapter(memberAdapter);
-
-        request_friend_layout.setVisibility(View.VISIBLE);
+//        linearLayout.setVisibility(View.GONE);
+//
+//        requestedRecyclerView=(RecyclerView)findViewById(R.id.request_friend);
+//        LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+//        requestedRecyclerView.setLayoutManager(layoutManager);
+//        memberAdapter=new MemberAdapter();
+//
+//        for (int i=0;i<10;i++){
+//            Member member=new Member();
+//            member.setMemName(i+"님");
+//            member.setMemID("id : "+i);
+//            memberAdapter.addItem(member);
+//        }
+//
+//        requestedRecyclerView.setAdapter(memberAdapter);
+//
+//        request_friend_layout.setVisibility(View.VISIBLE);
 
         //받은 요청 출력
-//        Response.Listener<String> responseListener = new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                try {
-//                    JSONArray jsonArray = new JSONArray(response);
-//
-//                    for(int i=0;i<jsonArray.length();i++){
-//                        JSONObject jsonObject=jsonArray.getJSONObject(i);
-//
-//                        String friendName=jsonObject.getString("memName");
-//                        String friendID=jsonObject.getString("memID");
-//
-//                        Member member=new Member();
-//                        member.setMemName(friendName);
-//                        member.setMemID(friendID);
-//                        memberAdapter.addItem(member);
-//                    }
-//
-//                    requestedRecyclerView.setAdapter(memberAdapter);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        };
-//        RequestNewFriend requestNewFriendAdd = new RequestNewFriend(REQUESTED,loginMember.getMemID(),responseListener);
-//        RequestQueue queue = Volley.newRequestQueue(NewFriendActivity.this);
-//        queue.add(requestNewFriendAdd);
+
+        Response.Listener<String> responseListener = new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    String TAG="response";
+                    Log.d(TAG,"log : "+response);
+                    JSONArray jsonArray = new JSONArray(response);
+                    if(jsonArray.length()==0){
+                        return;
+                    }
+
+                    linearLayout.setVisibility(View.GONE);
+
+                    requestedRecyclerView=(RecyclerView)findViewById(R.id.request_friend);
+                    LinearLayoutManager layoutManager=new LinearLayoutManager(NewFriendActivity.this,LinearLayoutManager.VERTICAL,false);
+                    requestedRecyclerView.setLayoutManager(layoutManager);
+                    memberAdapter=new MemberAdapter();
+
+                    for(int i=0;i<jsonArray.length();i++){
+                        JSONObject jsonObject=jsonArray.getJSONObject(i);
+
+                        String friendName=jsonObject.getString("memName");
+                        String friendID=jsonObject.getString("memID");
+
+                        Member member=new Member();
+                        member.setMemName(friendName);
+                        member.setMemID(friendID);
+                        memberAdapter.addItem(member);
+                    }
+
+                    requestedRecyclerView.setAdapter(memberAdapter);
+
+                    request_friend_layout.setVisibility(View.VISIBLE);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        RequestNewFriend requestNewFriendAdd = new RequestNewFriend(REQUESTED,loginMember.getMemID(),responseListener);
+        RequestQueue queue = Volley.newRequestQueue(NewFriendActivity.this);
+        queue.add(requestNewFriendAdd);
 
         //체크박스 -> 수락버튼 -> accept
         request_accept.setOnClickListener(new View.OnClickListener() {
