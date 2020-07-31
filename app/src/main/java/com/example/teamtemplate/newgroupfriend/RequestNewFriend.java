@@ -38,7 +38,6 @@ public class RequestNewFriend extends StringRequest {
 
     public RequestNewFriend(String tag,String memID,String friendID, Response.Listener<String> listener){
         super(Method.POST,URL2,listener,null);
-        System.out.println(tag);
         map=new HashMap<>();
         map.put("memID",memID);
         map.put("friendID", friendID);
@@ -46,7 +45,6 @@ public class RequestNewFriend extends StringRequest {
 
     public RequestNewFriend(String tag,String memID,Response.Listener<String> listener){
         super(Method.POST,URL3,listener,null);
-        System.out.println(tag);
         map=new HashMap<>();
         map.put("memID",memID);
     }

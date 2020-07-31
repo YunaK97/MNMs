@@ -39,7 +39,7 @@ public class NewFriendActivity extends AppCompatActivity {
     LinearLayout linearLayout,request_friend_layout;
     RecyclerView requestedRecyclerView;
     MemberAdapter memberAdapter;
-    ArrayList selectedFriend;
+    ArrayList<Member> selectedFriend;
 
     private String REQUESTED="123";
 
@@ -112,25 +112,6 @@ public class NewFriendActivity extends AppCompatActivity {
     }
 
     public void showRequest(){
-//        linearLayout.setVisibility(View.GONE);
-//
-//        requestedRecyclerView=(RecyclerView)findViewById(R.id.request_friend);
-//        LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
-//        requestedRecyclerView.setLayoutManager(layoutManager);
-//        memberAdapter=new MemberAdapter();
-//
-//        for (int i=0;i<10;i++){
-//            Member member=new Member();
-//            member.setMemName(i+"님");
-//            member.setMemID("id : "+i);
-//            memberAdapter.addItem(member);
-//        }
-//
-//        requestedRecyclerView.setAdapter(memberAdapter);
-//
-//        request_friend_layout.setVisibility(View.VISIBLE);
-
-        //받은 요청 출력
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -178,9 +159,7 @@ public class NewFriendActivity extends AppCompatActivity {
         request_accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showToast("친구 수락!");
-                request_friend_layout.setVisibility(View.GONE);
-               // requestFriend("friend");
+               requestFriend("friend");
             }
         });
 
@@ -189,14 +168,15 @@ public class NewFriendActivity extends AppCompatActivity {
         request_reject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showToast("친구 거절!");
-                request_friend_layout.setVisibility(View.GONE);
-                //requestFriend("reject");
+                //showToast("친구 거절!");
+                //request_friend_layout.setVisibility(View.GONE);
+                requestFriend("refused");
             }
         });
     }
 
     public void requestFriend(String TAG_RESULT){
+        selectedFriend= new ArrayList<>();
         for(int i=0;i<memberAdapter.getItemCount();i++){
             if(memberAdapter.getItem(i).isChecked()) {
                 selectedFriend.add(memberAdapter.getItem(i));
@@ -206,8 +186,9 @@ public class NewFriendActivity extends AppCompatActivity {
             @Override
             public void onResponse(String response) {
                 try {
+                    String TAG="honey";
+                    Log.d(TAG,response);
                     JSONObject jsonObject=new JSONObject(response);
-
                     Boolean success=jsonObject.getBoolean(TAG_SUCCESS);
                     if(success){
                         showToast("친구 신청 처리 완료!");
