@@ -69,7 +69,7 @@ public class FriendList extends Fragment {
                     JSONArray jsonArray=new JSONArray(response);
 
                     if(jsonArray.length()==0){
-                        showToast("친구가 없습니다.");
+                        //showToast("친구가 없습니다.");
                         return;
                     }
 

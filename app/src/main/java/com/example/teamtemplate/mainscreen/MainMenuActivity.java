@@ -135,26 +135,21 @@ public class MainMenuActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int curId = item.getItemId();
-        Intent intent;
-
-        switch (curId){
-            case R.id.add_membership:
-                intent = new Intent(getApplicationContext(), NewMembershipActivity.class);
-                intent.putExtra("loginMember",loginMember);
-                startActivity(intent);
-
-                break;
-            case R.id.add_daily:
-                intent = new Intent(getApplicationContext(), NewDailyActivity.class);
-                intent.putExtra("loginMember",loginMember);
-                startActivity(intent);
-            case R.id.add_friend:
-                intent=new Intent(getApplicationContext(), NewFriendActivity.class);
-                intent.putExtra("loginMember",loginMember);
-                startActivity(intent);
-            default:
-                break;
+        //Intent intent;
+        if(curId==R.id.add_membership){
+            Intent intent = new Intent(getApplicationContext(), NewMembershipActivity.class);
+            intent.putExtra("loginMember",loginMember);
+            startActivity(intent);
+        }else if(curId==R.id.add_daily){
+            Intent intent = new Intent(getApplicationContext(), NewDailyActivity.class);
+            intent.putExtra("loginMember",loginMember);
+            startActivity(intent);
+        }else if(curId==R.id.add_friend){
+            Intent intent=new Intent(getApplicationContext(), NewFriendActivity.class);
+            intent.putExtra("loginMember",loginMember);
+            startActivity(intent);
         }
+
         return super.onOptionsItemSelected(item);
     }
 
