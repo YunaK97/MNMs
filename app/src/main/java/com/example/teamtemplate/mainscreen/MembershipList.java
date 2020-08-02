@@ -21,8 +21,7 @@ import com.example.teamtemplate.Group;
 import com.example.teamtemplate.Member;
 import com.example.teamtemplate.R;
 import com.example.teamtemplate.RequestGroup;
-import com.example.teamtemplate.daily.DailyActivity;
-import com.example.teamtemplate.membership.MembershipActivity;
+import com.example.teamtemplate.transaction.MembershipActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;

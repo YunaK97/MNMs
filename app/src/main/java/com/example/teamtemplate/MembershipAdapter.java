@@ -33,10 +33,8 @@ public class MembershipAdapter extends RecyclerView.Adapter<MembershipAdapter.My
         public MyViewHolder(View v) {
             super(v);
             TextView_accountNum = v.findViewById(R.id.TextView_accountNum);
-            TextView_transID = v.findViewById(R.id.TextView_transId);
             TextView_transHistory = v.findViewById(R.id.TextView_transHistory);
             TextView_transMoney = v.findViewById(R.id.TextView_transMoney);
-            TextView_transVersion = v.findViewById(R.id.TextView_transVersion);
             TextView_since = v.findViewById(R.id.TextView_since);
             rootView = v;
         }

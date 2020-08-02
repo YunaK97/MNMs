@@ -1,11 +1,14 @@
-package com.example.teamtemplate.membership;
+package com.example.teamtemplate.transaction;
 
+import androidx.annotation.IdRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.android.volley.Request;
@@ -14,10 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.example.teamtemplate.Member;
 import com.example.teamtemplate.R;
-import com.example.teamtemplate.transaction.Transaction;
-import com.example.teamtemplate.transaction.TransactionAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,24 +29,45 @@ import java.util.List;
 import java.util.Map;
 
 
-public class MembershipActivity extends AppCompatActivity {
-    public TextView tv_president;
-    public TextView tv_payday;
+public class DailyActivity extends AppCompatActivity {
+    public RadioButton rbt_up;
+    public RadioButton rbt_round;
+    public RadioButton rbt_down;
+    public RadioGroup radioGroup;
+    public TextView tv_calc;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private List<Transaction> dataList;
 
-    MembershipGroup membershipGroup = new MembershipGroup();
+    DailyGroup dailyGroup = new DailyGroup();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_membership);
+        setContentView(R.layout.activity_daily);
 
-        tv_president = findViewById(R.id.ms_president);
-        tv_payday = findViewById(R.id.ms_payday);
+        radioGroup = (RadioGroup)findViewById(R.id.radioGroup);
+        rbt_up = findViewById(R.id.rbt_up);
+        rbt_round = findViewById(R.id.rbt_round);
+        rbt_down = findViewById(R.id.rbt_down);
+        tv_calc = findViewById(R.id.tv_calc);
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int i) {
+                if(i == R.id.rbt_up) {
+                    dailyGroup.setDutchPay("up");
+                }
+                else if(i== R.id.rbt_round){
+                    dailyGroup.setDutchPay("round");
+                }
+                else if(i == R.id.rbt_down) {
+                    dailyGroup.setDutchPay("down");
+            }
+        }
+    });
 
         mRecyclerView = findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -54,15 +75,15 @@ public class MembershipActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         dataList = new ArrayList<>();
-        mAdapter = new TransactionAdapter(dataList, MembershipActivity.this);
+        mAdapter = new TransactionAdapter(dataList, DailyActivity.this);
         mRecyclerView.setAdapter(mAdapter);
 
         Transaction transact = new Transaction();
         transact.setAccountNum("1010");
         transactionProcess(transact);
 
-        membershipGroup.setMID("M1");
-        membershipProcess(membershipGroup);
+        dailyGroup.setDID("D1");
+        dailyProcess(dailyGroup);
     }
 
     protected void transactionProcess(final Transaction transact) {
@@ -102,7 +123,6 @@ public class MembershipActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-
             }
         }, new Response.ErrorListener() {
             @Override
@@ -120,39 +140,35 @@ public class MembershipActivity extends AppCompatActivity {
             }
         };
 
-        RequestQueue queue= Volley.newRequestQueue(MembershipActivity.this);
+        RequestQueue queue= Volley.newRequestQueue(DailyActivity.this);
         queue.add(stringRequest);
     }
 
-    protected void membershipProcess(final MembershipGroup membershipGroup) {
-        final String MID = membershipGroup.getMID();
-        final String url="http://jennyk97.dothome.co.kr/MembershipGroup.php";
+    protected void dailyProcess(final DailyGroup dailyGroup) {
+        final String DID = dailyGroup.getDID();
+        final String dutchPay = dailyGroup.getDutchPay();
+        final String url="http://jennyk97.dothome.co.kr/DailyGroup.php";
 
         StringRequest stringRequest2 = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 System.out.println("11111111111");
-                        try {
+                try {
 
-                            JSONObject jsonObject = new JSONObject(response);
+                    JSONObject jsonObject = new JSONObject(response);
 
-                            MembershipGroup mg = new MembershipGroup();
-                            mg.setMID(jsonObject.getString("MID"));
-                            mg.setPresident(jsonObject.getString("president"));
-                            mg.setPayDay(jsonObject.getString("payDay"));
-                            mg.setMemberMoney(jsonObject.getString("memberMoney"));
-                            mg.setTotalMoney(jsonObject.getString("totalMoney"));
-                            mg.setGID(jsonObject.getString("GID"));
+                    DailyGroup dg = new DailyGroup();
+                    dg.setDID(jsonObject.getString("DID"));
+                    dg.setMoney(jsonObject.getString("money"));
+                    dg.setDutchPay(jsonObject.getString("dutchPay"));
+                    dg.setGID(jsonObject.getString("GID"));
 
-                            tv_president.setText("방장:"+mg.getPresident()+" ");
-                            tv_payday.setText("회비 납입일:"+mg.getPayDay()+" ");
+                    System.out.println("----------OOO222OOO-----------");
 
-                            System.out.println("----------OOO222OOO-----------");
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
 
         }, new Response.ErrorListener() {
             @Override
@@ -164,12 +180,13 @@ public class MembershipActivity extends AppCompatActivity {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("MID", MID);
-                System.out.println("========MID========");
+                params.put("dutchPay", dutchPay);
+                params.put("DID", DID);
+                System.out.println("========dutchPay DID========");
                 return params;
             }
         };
-        RequestQueue queue= Volley.newRequestQueue(MembershipActivity.this);
+        RequestQueue queue= Volley.newRequestQueue(DailyActivity.this);
         queue.add(stringRequest2);
     }
 

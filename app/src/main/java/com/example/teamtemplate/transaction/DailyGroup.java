@@ -1,4 +1,4 @@
-package com.example.teamtemplate.daily;
+package com.example.teamtemplate.transaction;
 
 public class DailyGroup {
     String DID;

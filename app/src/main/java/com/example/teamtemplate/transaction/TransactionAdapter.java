@@ -9,9 +9,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.teamtemplate.Member;
 import com.example.teamtemplate.R;
-import com.example.teamtemplate.membership.MembershipGroup;
 
 import java.util.List;
 
@@ -24,10 +22,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         // each data item is  just a string in this case
         public TextView TextView_accountNum;
-        public TextView TextView_transID;
         public TextView TextView_transHistory;
         public TextView TextView_transMoney;
-        public TextView TextView_transVersion;
         public TextView TextView_since;
 
         public View rootView;
@@ -35,10 +31,8 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         public MyViewHolder(View v) {
             super(v);
             TextView_accountNum = v.findViewById(R.id.TextView_accountNum);
-            TextView_transID = v.findViewById(R.id.TextView_transId);
             TextView_transHistory = v.findViewById(R.id.TextView_transHistory);
             TextView_transMoney = v.findViewById(R.id.TextView_transMoney);
-            TextView_transVersion = v.findViewById(R.id.TextView_transVersion);
             TextView_since = v.findViewById(R.id.TextView_since);
             rootView = v;
         }
@@ -56,6 +50,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.layout_transaction, parent, false);
         TransactionAdapter.MyViewHolder vh = new TransactionAdapter.MyViewHolder(v);
+        v.setBackgroundResource(R.drawable.view_item);
         return vh;
     }
 
@@ -67,11 +62,10 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         Transaction tData = mDataset.get(position);
 
         holder.TextView_accountNum.setText(tData.getAccountNum());
-        holder.TextView_transID.setText(tData.getTransactID());
         holder.TextView_transHistory.setText(tData.getTransactHistroy());
         holder.TextView_transMoney.setText(tData.getTransactMoney());
-        holder.TextView_transVersion.setText(tData.getTransactVersion());
         holder.TextView_since.setText(tData.getSince());
+
     }
 
     // Return the size of your dataset (invoked by the layout manager)
