@@ -2,6 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.teamtemplate">
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,13 +21,28 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".newgroupfriend.NewFriendActivity"></activity>
-        <activity android:name=".friend.FriendListActivity"></activity>
-        <activity android:name=".transaction.MembershipActivity" android:label="회원그룹방 거래내역">
+        <activity
+            android:name=".view.ViewActivity"
+            android:label="@string/title_activity_view"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".transaction.TransactionActivity" android:label="거래">
+        <activity android:name=".newgroupfriend.NewFriendActivity" />
+        <activity android:name=".friend.FriendListActivity" />
+        <activity
+            android:name=".transaction.MembershipActivity"
+            android:label="회원그룹방 거래내역" />
+        <activity
+            android:name=".transaction.TransactionActivity"
+            android:label="거래" />
+        <activity
+            android:name=".daily.DailyActivity"
+            android:label="일반그룹방 거래내역"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".transaction.DailyActivity" android:label="일반그룹방 거래내역">
+        <activity
+            android:name=".daily.DailyActivity2"
+            android:label="일반그룹방2 거래내역"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,22 +62,9 @@
         <activity
             android:name=".firstscreen.SignInActivity"
             android:label="@string/app_signin" />
-        <activity android:name=".firstscreen.MainActivity"
-            android:label="@string/app_login">
-
-        </activity>
+        <activity
+            android:name=".firstscreen.MainActivity"
+            android:label="@string/app_login" />
     </application>
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="true" />
-
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
 </manifest>
