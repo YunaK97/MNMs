@@ -29,7 +29,7 @@
         <activity android:name=".newgroupfriend.NewFriendActivity" />
         <activity android:name=".friend.FriendListActivity" />
         <activity
-            android:name=".transaction.MembershipActivity"
+            android:name=".membership.MembershipActivity"
             android:label="회원그룹방 거래내역" />
         <activity
             android:name=".transaction.TransactionActivity"
@@ -37,11 +37,6 @@
         <activity
             android:name=".daily.DailyActivity"
             android:label="일반그룹방 거래내역"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-        <activity
-            android:name=".daily.DailyActivity2"
-            android:label="일반그룹방2 거래내역"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

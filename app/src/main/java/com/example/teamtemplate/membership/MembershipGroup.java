@@ -1,4 +1,4 @@
-package com.example.teamtemplate.transaction;
+package com.example.teamtemplate.membership;
 
 public class MembershipGroup {
     String MID;

@@ -40,7 +40,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public TransactionAdapter(List<Transaction> myDataset, Context context) {
+    public TransactionAdapter(List<Transaction> myDataset) {
         mDataset = myDataset;
     }
 

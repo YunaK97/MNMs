@@ -43,7 +43,7 @@ public class TransactionActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
 
         dataList = new ArrayList<>();
-        mAdapter = new TransactionAdapter(dataList, TransactionActivity.this);
+        mAdapter = new TransactionAdapter(dataList);
         mRecyclerView.setAdapter(mAdapter);
 
         Transaction transact = new Transaction();

@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:layout_marginTop="10dp"
         android:gravity="center_horizontal"
         android:textSize="23sp"
         android:id="@+id/TextView_since"
@@ -15,21 +16,23 @@
 
     <TextView
         android:textSize="23sp"
+        android:gravity="center_horizontal"
         android:id="@+id/TextView_accountNum"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
         android:textSize="23sp"
+        android:gravity="center_horizontal"
         android:id="@+id/TextView_transHistory"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
         android:textSize="23sp"
+        android:gravity="center_horizontal"
         android:id="@+id/TextView_transMoney"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
 
 </LinearLayout>
