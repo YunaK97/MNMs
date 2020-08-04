@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_membership">
+
+    <fragment
+        android:id="@+id/nav_membership"
+        android:name="com.example.teamtemplate.membership.ui.home.MembershipFragment"
+        android:label="회원그룹방"
+        tools:layout="@layout/activity_membership" />
+
+    <fragment
+        android:id="@+id/nav_manage"
+        android:name="com.example.teamtemplate.membership.ui.manage.ManageFragment"
+        android:label="회비관리"
+        tools:layout="@layout/fragment_manage" />
+
+</navigation>

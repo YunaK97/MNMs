@@ -5,13 +5,12 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_daily"
+            android:id="@+id/nav_membership"
             android:icon="@drawable/ic_menu_camera"
-            android:title="일반그룹방" />
+            android:title="회원그룹방" />
         <item
-            android:id="@+id/nav_qr"
+            android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_camera"
-            android:title="QR코드" />
-
+            android:title="회비관리" />
     </group>
 </menu>

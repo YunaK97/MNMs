@@ -3,19 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_daily">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="com.example.teamtemplate.daily.ui.home.HomeFragment"
+        android:id="@+id/nav_daily"
+        android:name="com.example.teamtemplate.daily.ui.home.DailyFragment"
         android:label="일반그룹방"
         tools:layout="@layout/activity_daily" />
 
     <fragment
-        android:id="@+id/nav_fragment_qr"
+        android:id="@+id/nav_qr"
         android:name="com.example.teamtemplate.daily.ui.qr.QRFragment"
         android:label="QR코드"
         tools:layout="@layout/fragment_qr" />
-
 
 </navigation>

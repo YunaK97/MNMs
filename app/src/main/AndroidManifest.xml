@@ -21,16 +21,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity
-            android:name=".view.ViewActivity"
-            android:label="@string/title_activity_view"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+
         <activity android:name=".newgroupfriend.NewFriendActivity" />
         <activity android:name=".friend.FriendListActivity" />
         <activity
             android:name=".membership.MembershipActivity"
-            android:label="회원그룹방 거래내역" />
+            android:label="회원그룹방 거래내역"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
         <activity
             android:name=".transaction.TransactionActivity"
             android:label="거래" />
@@ -44,7 +43,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".newgroupfriend.NewDailyActivity"
             android:label="@string/app_new_daily" />
