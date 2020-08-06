@@ -39,6 +39,7 @@ public class DailyFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private List<Transaction> dataList;
 
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_daily, container, false);
 
@@ -57,7 +58,7 @@ public class DailyFragment extends Fragment {
 
         DailyGroup dailyGroup = new DailyGroup();
         dailyGroup.setDID("D1");
-        dailyProcess(dailyGroup);
+        //dailyProcess(dailyGroup);
 
         return v;
     }
@@ -120,6 +121,7 @@ public class DailyFragment extends Fragment {
         queue.add(stringRequest);
     }
 
+    /*
     protected void dailyProcess(final DailyGroup dailyGroup) {
         final String DID = dailyGroup.getDID();
         final String dutchPay = dailyGroup.getDutchPay();
@@ -128,7 +130,6 @@ public class DailyFragment extends Fragment {
         StringRequest stringRequest2 = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                System.out.println("11111111111");
                 try {
 
                     JSONObject jsonObject = new JSONObject(response);
@@ -156,7 +157,6 @@ public class DailyFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("dutchPay", dutchPay);
                 params.put("DID", DID);
                 System.out.println("========dutchPay DID========");
                 return params;
@@ -165,5 +165,6 @@ public class DailyFragment extends Fragment {
         RequestQueue queue= Volley.newRequestQueue(getActivity());
         queue.add(stringRequest2);
     }
+    */
 
 }

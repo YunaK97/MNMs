@@ -125,7 +125,6 @@ public class MembershipFragment extends Fragment {
         StringRequest stringRequest2 = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                System.out.println("11111111111");
                 try {
 
                     JSONObject jsonObject = new JSONObject(response);

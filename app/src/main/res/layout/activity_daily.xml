@@ -11,40 +11,6 @@
         android:layout_height="wrap_content">
 
 
-<!--        <RadioGroup android:id="@+id/radioGroup"-->
-<!--            android:orientation="horizontal"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent">-->
-
-<!--        <RadioButton-->
-<!--            android:id="@+id/rbt_up"-->
-<!--            android:text="올림"-->
-<!--            android:textSize="15sp"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content" />-->
-
-<!--        <RadioButton-->
-<!--            android:id="@+id/rbt_round"-->
-<!--            android:text="반올림"-->
-<!--            android:textSize="15sp"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content" />-->
-
-<!--        <RadioButton-->
-<!--            android:id="@+id/rbt_down"-->
-<!--            android:text="내림"-->
-<!--            android:textSize="15sp"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content" />-->
-
-<!--        </RadioGroup>-->
-
-        <TextView
-            android:id="@+id/tv_calc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

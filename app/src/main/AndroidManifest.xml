@@ -37,11 +37,7 @@
             android:name=".daily.DailyActivity"
             android:label="일반그룹방 거래내역"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".newgroupfriend.NewDailyActivity"
@@ -57,7 +53,13 @@
             android:label="@string/app_signin" />
         <activity
             android:name=".firstscreen.MainActivity"
-            android:label="@string/app_login" />
+            android:label="@string/app_login" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

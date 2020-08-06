@@ -17,4 +17,10 @@
         android:label="QR코드"
         tools:layout="@layout/fragment_qr" />
 
+    <fragment
+        android:id="@+id/nav_dutch"
+        android:name="com.example.teamtemplate.daily.ui.dutch.DutchPayFragment"
+        android:label="더치페이"
+        tools:layout="@layout/fragment_dutch" />
+
 </navigation>

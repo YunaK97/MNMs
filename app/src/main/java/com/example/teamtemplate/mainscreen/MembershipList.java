@@ -21,6 +21,7 @@ import com.example.teamtemplate.Group;
 import com.example.teamtemplate.Member;
 import com.example.teamtemplate.R;
 import com.example.teamtemplate.RequestGroup;
+import com.example.teamtemplate.membership.MembershipActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -81,14 +82,14 @@ public class MembershipList extends Fragment {
                 Group item=groupAdapter.getItem(position);
                 showToast("아이템 선택됨 : "+ item.getGroupName());
 
-//                    Intent intent = new Intent(rootView.getContext(), MembershipActivity.class);
-//
-//                    intent.putExtra("loginMember",loginMember);
-//                    intent.putExtra("loginMemberAccount",loginMemberAccount);
-//                    intent.putExtra("gname",item.getGroupName());
-//                    intent.putExtra("gid",item.getGid());
-//
-//                    startActivity(intent);
+                    Intent intent = new Intent(rootView.getContext(), MembershipActivity.class);
+
+                    intent.putExtra("loginMember",loginMember);
+                    intent.putExtra("loginMemberAccount",loginMemberAccount);
+                    intent.putExtra("gname",item.getGroupName());
+                    intent.putExtra("gid",item.getGid());
+
+                    startActivity(intent);
             }
         });
 
@@ -131,13 +132,13 @@ public class MembershipList extends Fragment {
                                 Group item=groupAdapter.getItem(position);
                                 showToast("아이템 선택됨 : "+ item.getGroupName());
 
-//                                Intent intent = new Intent(rootView.getContext(), MembershipActivity.class);
-//
-//                                intent.putExtra("loginMember",loginMember);
-//                                intent.putExtra("loginMemberAccount",loginMemberAccount);
-//                                intent.putExtra("gname",item.getGroupName());
-//                                intent.putExtra("gid",item.getGid());
-//                                startActivity(intent);
+                                Intent intent = new Intent(rootView.getContext(), MembershipActivity.class);
+
+                                intent.putExtra("loginMember",loginMember);
+                                intent.putExtra("loginMemberAccount",loginMemberAccount);
+                                intent.putExtra("gname",item.getGroupName());
+                                intent.putExtra("gid",item.getGid());
+                                startActivity(intent);
                             }
                         });
                     }
