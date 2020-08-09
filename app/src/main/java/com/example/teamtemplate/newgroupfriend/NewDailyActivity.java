@@ -95,9 +95,9 @@ public class NewDailyActivity extends AppCompatActivity {
                 }
             };
 
-            RequestNewMembership requestNewMembership =new RequestNewMembership(loginMember,selectedMember,daily_name,responseListener);
+            RequestNewGroup requestNewGroup =new RequestNewGroup(loginMember,selectedMember,daily_name,responseListener);
             RequestQueue queue= Volley.newRequestQueue(NewDailyActivity.this);
-            queue.add(requestNewMembership);
+            queue.add(requestNewGroup);
 
         }
     }

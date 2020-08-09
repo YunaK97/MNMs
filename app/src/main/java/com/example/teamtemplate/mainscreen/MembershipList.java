@@ -34,6 +34,7 @@ public class MembershipList extends Fragment {
     private GroupAdapter groupAdapter;
     private Context context;
     private String TAG_MEMBERSHIP="MEMBERSHIP";
+    private ViewGroup rootView;
 
     public MembershipList() {
         // Required empty public constructor
@@ -49,7 +50,7 @@ public class MembershipList extends Fragment {
                              Bundle savedInstanceState) {
         context=container.getContext();
 
-        ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.fragment_membership_list, container, false);
+        rootView = (ViewGroup)inflater.inflate(R.layout.fragment_membership_list, container, false);
 
         //loginMember,loginMemberAccount 가져오기
         Bundle bundle=getArguments();
@@ -62,6 +63,13 @@ public class MembershipList extends Fragment {
 
         return rootView;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //groupView(rootView);
+    }
+
     public void tmpGroupView(final ViewGroup rootView){
         groupMembershiplList=rootView.findViewById(R.id.main_membership_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(),LinearLayoutManager.VERTICAL,false);

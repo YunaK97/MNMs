@@ -32,12 +32,18 @@ public class FriendList extends Fragment {
     private Member loginMember;
     private String TAG_SUCCESS="success";
     private Context context;
+    private ViewGroup rootView;
 
     public FriendList() {
         // Required empty public constructor
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        showFriend(rootView);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,7 +56,7 @@ public class FriendList extends Fragment {
                              Bundle savedInstanceState) {
         context=container.getContext();
 
-        ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.fragment_friend_list, container, false);
+        rootView = (ViewGroup)inflater.inflate(R.layout.fragment_friend_list, container, false);
 
         Bundle bundle=getArguments();
         loginMember= (Member) bundle.getSerializable("loginMember");

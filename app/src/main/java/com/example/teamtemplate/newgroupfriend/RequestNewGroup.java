@@ -12,14 +12,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class RequestNewMembership extends StringRequest {
-    //new membership 때
-    //매개변수 더 추가해야함 - 아직 미완성
-    final static private String URL="http://jennyk97.dothome.co.kr/NewMembership.php";
+public class RequestNewGroup extends StringRequest {
+    //new membership
+    //아직 미완성
+    final static private String URL1="http://jennyk97.dothome.co.kr/NewMembership.php";
     private Map<String,String> map;
 
-    public RequestNewMembership(Member loginMember, ArrayList<Member> selectedFriend,String membershipMoney,String membershipName,Response.Listener<String> listener){
-        super(Method.POST,URL,listener,null);
+    //new daily
+    final static private String URL2="http://jennyk97.dothome.co.kr/NewDaily.php";
+
+    public RequestNewGroup(Member loginMember, ArrayList<Member> selectedFriend, String membershipMoney, String membershipName, Response.Listener<String> listener){
+        super(Method.POST,URL1,listener,null);
         map=new HashMap<>();
         map.put("memID", loginMember.getMemID());
         map.put("memName",loginMember.getMemName());
@@ -37,8 +40,8 @@ public class RequestNewMembership extends StringRequest {
         }catch (Exception e){
         }
     }
-    public RequestNewMembership(Member loginMember, ArrayList<Member> selectedFriend,String daily_name,Response.Listener<String> listener){
-        super(Method.POST,URL,listener,null);
+    public RequestNewGroup(Member loginMember, ArrayList<Member> selectedFriend, String daily_name, Response.Listener<String> listener){
+        super(Method.POST,URL2,listener,null);
         map=new HashMap<>();
         map.put("memID", loginMember.getMemID());
         map.put("memName",loginMember.getMemName());

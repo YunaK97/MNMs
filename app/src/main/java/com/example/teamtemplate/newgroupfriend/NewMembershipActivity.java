@@ -64,6 +64,7 @@ public class NewMembershipActivity extends AppCompatActivity {
     }
 
     public void NewMembership(){
+        selectedMember=new ArrayList<>();
         if(membership_money==null || membership_name==null){
             showToast("이러시면 안됨니다 고갱님 정보를 쓰세욥");
         }else {
@@ -95,9 +96,9 @@ public class NewMembershipActivity extends AppCompatActivity {
                 }
             };
 
-            RequestNewMembership requestNewMembership =new RequestNewMembership(loginMember,selectedMember,membership_money,membership_name,responseListener);
+            RequestNewGroup requestNewGroup =new RequestNewGroup(loginMember,selectedMember,membership_money,membership_name,responseListener);
             RequestQueue queue= Volley.newRequestQueue(NewMembershipActivity.this);
-            queue.add(requestNewMembership);
+            queue.add(requestNewGroup);
 
         }
     }

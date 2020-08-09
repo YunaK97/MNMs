@@ -35,6 +35,7 @@ public class DailyList extends Fragment {
     private GroupAdapter groupAdapter;
     private Context context;
     private String TAG_MEMBERSHIP="MEMBERSHIP";
+    private ViewGroup rootView;
 
     public DailyList() {
         // Required empty public constructor
@@ -44,15 +45,18 @@ public class DailyList extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         context=container.getContext();
 
-        ViewGroup rootView = (ViewGroup)inflater.inflate(R.layout.fragment_daily_list, container, false);
+        rootView = (ViewGroup)inflater.inflate(R.layout.fragment_daily_list, container, false);
 
         //loginMember,loginMemberAccount 가져오기
         Bundle bundle=getArguments();
@@ -64,6 +68,12 @@ public class DailyList extends Fragment {
         tmpGroupView(rootView);
 
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        //groupView(rootView);
     }
 
     public void tmpGroupView(final ViewGroup rootView){

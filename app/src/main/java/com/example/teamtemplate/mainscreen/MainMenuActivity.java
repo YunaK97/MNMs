@@ -48,6 +48,8 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
+        //overridePendingTransition(0,0);
+
         //액션바
         actionBar = getSupportActionBar();
         actionBar.setTitle(R.string.app_mainmenu);
