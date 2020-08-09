@@ -51,7 +51,6 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         LinearLayout v = (LinearLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.layout_transaction, parent, false);
         TransactionAdapter.MyViewHolder vh = new TransactionAdapter.MyViewHolder(v);
-        //v.setBackgroundResource(R.drawable.view_item);
         return vh;
     }
 

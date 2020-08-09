@@ -5,8 +5,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
@@ -28,10 +31,12 @@ import java.util.Map;
 
 
 public class DutchPayFragment extends Fragment {
-
-    TextView tv_total;
-    TextView tv_calc;
-
+    public TextView tv_total;
+    public TextView tv_calc;
+    public RadioButton rbt_up;
+    public RadioButton rbt_round;
+    public RadioButton rbt_down;
+    public RadioGroup radioGroup;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dutch, container, false);
@@ -39,9 +44,30 @@ public class DutchPayFragment extends Fragment {
         tv_total = v.findViewById(R.id.tv_total);
         tv_calc = v.findViewById(R.id.tv_calc);
 
+        radioGroup = v.findViewById(R.id.radioGroup);
+        rbt_up = v.findViewById(R.id.rbt_up);
+        rbt_round = v.findViewById(R.id.rbt_round);
+        rbt_down = v.findViewById(R.id.rbt_down);
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, @IdRes int i) {
+                if(i == R.id.rbt_up) {
+
+                }
+                else if(i== R.id.rbt_round){
+
+                }
+                else if(i == R.id.rbt_down) {
+
+                }
+            }
+        });
+
         DailyGroup dailyGroup = new DailyGroup();
         dailyGroup.setDID("D1");
         dailyProcess(dailyGroup);
+
         return v;
     }
 

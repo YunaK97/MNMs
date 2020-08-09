@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,9 +41,30 @@ public class DailyFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
     private List<Transaction> dataList;
 
-
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.activity_daily, container, false);
+
+//        // Spinner
+//        Spinner yearSpinner = v.findViewById(R.id.spinner_year);
+//        ArrayAdapter yearAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.date_year, android.R.layout.simple_spinner_item);
+//        yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        yearSpinner.setAdapter(yearAdapter);
+//
+//        Spinner monthSpinner = v.findViewById(R.id.spinner_month);
+//        ArrayAdapter monthAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.date_month, android.R.layout.simple_spinner_item);
+//        monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        monthSpinner.setAdapter(monthAdapter);
+//
+//        // Spinner
+//        Spinner yearSpinner2 = v.findViewById(R.id.spinner_year2);
+//        ArrayAdapter yearAdapter2 = ArrayAdapter.createFromResource(getActivity(), R.array.date_year, android.R.layout.simple_spinner_item);
+//        yearAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        yearSpinner2.setAdapter(yearAdapter2);
+//
+//        Spinner monthSpinner2 = v.findViewById(R.id.spinner_month2);
+//        ArrayAdapter monthAdapter2 = ArrayAdapter.createFromResource(getActivity(), R.array.date_month, android.R.layout.simple_spinner_item);
+//        monthAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        monthSpinner2.setAdapter(monthAdapter2);
 
         mRecyclerView = v.findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -120,51 +143,4 @@ public class DailyFragment extends Fragment {
         RequestQueue queue= Volley.newRequestQueue(getActivity());
         queue.add(stringRequest);
     }
-
-    /*
-    protected void dailyProcess(final DailyGroup dailyGroup) {
-        final String DID = dailyGroup.getDID();
-        final String dutchPay = dailyGroup.getDutchPay();
-        final String url="http://jennyk97.dothome.co.kr/DailyGroup.php";
-
-        StringRequest stringRequest2 = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-
-                    JSONObject jsonObject = new JSONObject(response);
-
-                    DailyGroup dg = new DailyGroup();
-                    dg.setDID(jsonObject.getString("DID"));
-                    dg.setMoney(jsonObject.getString("money"));
-                    dg.setDutchPay(jsonObject.getString("dutchPay"));
-                    dg.setGID(jsonObject.getString("GID"));
-
-                    System.out.println("----------OOO222OOO-----------");
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("********에러********");
-                Log.e("#####볼리에러####", error.toString());
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("DID", DID);
-                System.out.println("========dutchPay DID========");
-                return params;
-            }
-        };
-        RequestQueue queue= Volley.newRequestQueue(getActivity());
-        queue.add(stringRequest2);
-    }
-    */
-
 }
