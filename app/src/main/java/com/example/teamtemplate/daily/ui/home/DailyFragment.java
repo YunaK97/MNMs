@@ -21,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.teamtemplate.Group;
 import com.example.teamtemplate.R;
 import com.example.teamtemplate.daily.DailyGroup;
 import com.example.teamtemplate.transaction.Transaction;
@@ -75,15 +76,19 @@ public class DailyFragment extends Fragment {
         mAdapter = new TransactionAdapter(dataList);
         mRecyclerView.setAdapter(mAdapter);
 
-        Transaction transaction = new Transaction();
-        transaction.setDID("D1");
-        transactionProcess(transaction);
+//        Transaction transaction = new Transaction();
+//        transaction.setDID("D1");
+//        transactionProcess(transaction);
+
+        DailyGroup dailyGroup = new DailyGroup();
+        dailyGroup.setGID("G1");
+        transactionProcess(dailyGroup);
 
         return v;
     }
 
-    protected void transactionProcess(final Transaction transact) {
-        final String DID = transact.getDID();
+    protected void transactionProcess(final DailyGroup dailyGroup) {
+        final String GID = dailyGroup.getGID();
         final String url="http://jennyk97.dothome.co.kr/DailyTransaction.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -130,8 +135,8 @@ public class DailyFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("DID", DID);
-                System.out.println("========accountNUM========");
+                params.put("GID", GID);
+                System.out.println("========GID========");
                 return params;
             }
         };

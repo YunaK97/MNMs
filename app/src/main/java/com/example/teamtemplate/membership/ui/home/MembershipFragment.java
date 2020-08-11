@@ -49,19 +49,18 @@ public class MembershipFragment extends Fragment {
         mAdapter = new TransactionAdapter(dataList);
         mRecyclerView.setAdapter(mAdapter);
 
-        Transaction transaction = new Transaction();
-        transaction.setMID("M1");
-        transactionProcess(transaction);
-
         MembershipGroup membershipGroup = new MembershipGroup();
+        membershipGroup.setGID("G2");
+        transactionProcess(membershipGroup);
+
         membershipGroup.setMID("M1");
-        membershipProcess(membershipGroup);
+        //membershipProcess(membershipGroup);
 
         return v;
     }
 
-    protected void transactionProcess(final Transaction transact) {
-        final String MID = transact.getMID();
+    protected void transactionProcess(final MembershipGroup membershipGroup) {
+        final String GID = membershipGroup.getGID();
         final String url = "http://jennyk97.dothome.co.kr/MembershipTransaction.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -108,8 +107,8 @@ public class MembershipFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("MID", MID);
-                System.out.println("========accountNUM========");
+                params.put("GID", GID);
+                System.out.println("========GID========");
                 return params;
             }
         };
