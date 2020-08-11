@@ -1,5 +1,6 @@
 package com.example.teamtemplate.daily;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -13,6 +14,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.teamtemplate.R;
+import com.example.teamtemplate.daily.ui.home.DailyFragment;
+import com.example.teamtemplate.transaction.Transaction;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -45,6 +48,16 @@ public class DailyActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+//        Transaction transaction = new Transaction();
+//        DailyGroup dailyGroup = new DailyGroup();
+
+//        Intent intent = new Intent(this.getIntent());
+//
+//        transaction.setAccountNum(intent.getStringExtra("loginMemberAccount"));
+//        dailyGroup.setGID(intent.getStringExtra("gid"));
+
+
     }
 
     @Override

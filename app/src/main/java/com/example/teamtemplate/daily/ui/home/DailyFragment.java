@@ -75,20 +75,16 @@ public class DailyFragment extends Fragment {
         mAdapter = new TransactionAdapter(dataList);
         mRecyclerView.setAdapter(mAdapter);
 
-        Transaction transact = new Transaction();
-        transact.setAccountNum("1010");
-        transactionProcess(transact);
-
-        DailyGroup dailyGroup = new DailyGroup();
-        dailyGroup.setDID("D1");
-        //dailyProcess(dailyGroup);
+        Transaction transaction = new Transaction();
+        transaction.setDID("D1");
+        transactionProcess(transaction);
 
         return v;
     }
 
     protected void transactionProcess(final Transaction transact) {
-        final String accountNum = transact.getAccountNum();
-        final String url="http://jennyk97.dothome.co.kr/ListTransaction.php";
+        final String DID = transact.getDID();
+        final String url="http://jennyk97.dothome.co.kr/DailyTransaction.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -134,7 +130,7 @@ public class DailyFragment extends Fragment {
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
-                params.put("accountNum", accountNum);
+                params.put("DID", DID);
                 System.out.println("========accountNUM========");
                 return params;
             }

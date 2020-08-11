@@ -1,6 +1,8 @@
 package com.example.teamtemplate.daily;
 
-public class DailyGroup {
+import java.io.Serializable;
+
+public class DailyGroup implements Serializable {
     String DID;
     String money;
     String dutchPay;
