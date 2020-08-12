@@ -12,8 +12,11 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.teamtemplate.Member;
 import com.example.teamtemplate.MemberAdapter;
@@ -24,6 +27,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -168,11 +173,49 @@ public class NewFriendActivity extends AppCompatActivity {
         request_reject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //showToast("친구 거절!");
-                //request_friend_layout.setVisibility(View.GONE);
-                requestFriend("refused");
+                requestFriend("reject");
             }
         });
+    }
+
+    public void deleteFriend(final String delMemberId){
+        final String url="http://jennyk97.dothome.co.kr/DeleteFriend.php";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try{
+                    Log.d("deleteFriend",response);
+                    JSONObject jsonObject=new JSONObject(response);
+                    Boolean success=jsonObject.getBoolean(TAG_SUCCESS);
+                    if(success) {
+                        //삭제 성공여부 확인
+                        showToast("친구 삭제 성공");
+                    }else{
+                        showToast("친구 삭제 실패");
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("friendID", delMemberId);
+                params.put("memID",loginMember.getMemID());
+                return params;
+            }
+        };
+
+        RequestQueue queue= Volley.newRequestQueue(NewFriendActivity.this);
+        queue.add(stringRequest);
     }
 
     public void requestFriend(String TAG_RESULT){
@@ -181,6 +224,14 @@ public class NewFriendActivity extends AppCompatActivity {
             if(memberAdapter.getItem(i).isChecked()) {
                 selectedFriend.add(memberAdapter.getItem(i));
             }
+        }
+
+        if(TAG_RESULT.equals("reject")) {
+            for (Member member : selectedFriend){
+                deleteFriend(member.getMemID());
+            }
+
+            return;
         }
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override

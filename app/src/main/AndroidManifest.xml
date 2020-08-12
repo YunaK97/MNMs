@@ -25,7 +25,6 @@
 
 
         <activity android:name=".newgroupfriend.NewFriendActivity" />
-        <activity android:name=".friend.FriendListActivity" />
         <activity
             android:name=".membership.MembershipActivity"
             android:label="회원그룹방 거래내역"

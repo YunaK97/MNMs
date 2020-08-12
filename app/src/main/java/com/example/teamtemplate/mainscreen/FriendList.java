@@ -118,7 +118,6 @@ public class FriendList extends Fragment {
                             builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialogInterface, int i) {
-                                    showToast("삭제");
                                     deleteFriend(delMember.getMemID());
                                     showFriend(rootView);
                                 }
