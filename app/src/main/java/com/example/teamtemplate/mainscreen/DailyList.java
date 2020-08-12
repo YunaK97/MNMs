@@ -62,8 +62,8 @@ public class DailyList extends Fragment {
         loginMemberAccount= (Account) bundle.getSerializable("loginMemberAccount");
 
         //그룹리스트 출력
-        //groupView(rootView);
-        tmpGroupView(rootView);
+        groupView(rootView);
+        //tmpGroupView(rootView);
 
         return rootView;
     }
@@ -71,7 +71,7 @@ public class DailyList extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        //groupView(rootView);
+        groupView(rootView);
     }
 
     public void tmpGroupView(final ViewGroup rootView){
@@ -127,12 +127,14 @@ public class DailyList extends Fragment {
                             JSONObject item=jsonArray.getJSONObject(i);
                             String groupname=item.getString("groupName");
                             String gid=item.getString("groupID");
+                            String mid=item.getString("DID");
 
                             showToast(groupname);
 
                             Group group = new Group();
                             group.setGroupName(groupname);
                             group.setGid(gid);
+                            group.setMid(mid);
                             groupAdapter.addItem(group);
                         }
 
@@ -148,8 +150,7 @@ public class DailyList extends Fragment {
 
                                 intent.putExtra("loginMember",loginMember);
                                 intent.putExtra("loginMemberAccount",loginMemberAccount);
-                                intent.putExtra("gname",item.getGroupName());
-                                intent.putExtra("gid",item.getGid());
+                                intent.putExtra("dailyGroup",item);
                                 startActivity(intent);
                             }
                         });
@@ -160,7 +161,7 @@ public class DailyList extends Fragment {
                 }
             }
         };
-        RequestGroup requestGroup=new RequestGroup(loginMember.getMemID(),responseListener);
+        RequestGroup requestGroup=new RequestGroup("daily",loginMember.getMemID(),responseListener);
         RequestQueue queue= Volley.newRequestQueue(rootView.getContext());
         queue.add(requestGroup);
     }

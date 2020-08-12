@@ -67,7 +67,7 @@ public class MembershipList extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        //groupView(rootView);
+        groupView(rootView);
     }
 
     public void tmpGroupView(final ViewGroup rootView){
@@ -127,8 +127,6 @@ public class MembershipList extends Fragment {
                             String groupname=item.getString("groupName");
                             String gid=item.getString("groupID");
                             String mid=item.getString("MID");
-
-                            showToast(groupname);
 
                             Group group = new Group();
                             group.setGroupName(groupname);

@@ -129,6 +129,9 @@ public class FriendList extends Fragment {
                                     showToast("삭제 취소");
                                 }
                             });
+
+                            AlertDialog alertDialog = builder.create();
+                            alertDialog.show();
                         }
                     });
                 } catch (JSONException e) {
