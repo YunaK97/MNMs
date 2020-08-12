@@ -61,7 +61,6 @@ public class MembershipActivity extends AppCompatActivity {
 
 //        System.out.println("-----------------------------------");
 //        System.out.println(group.getGid());
-
     }
 
     @Override
