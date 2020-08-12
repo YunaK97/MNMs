@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -100,34 +101,39 @@ public class MembershipList extends Fragment {
             }
         });
 
+
     }
 
     public void groupView(final ViewGroup rootView){
-        groupMembershiplList=(RecyclerView)rootView.findViewById(R.id.main_membership_list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(),LinearLayoutManager.VERTICAL,false);
-        groupMembershiplList.setLayoutManager(layoutManager);
-
-        groupAdapter=new GroupAdapter();
 
         Response.Listener<String> responseListener=new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
+                    Log.d("membershipList",response);
                     JSONArray jsonArray=new JSONArray(response);
                     if(jsonArray.length()==0){
                         showToast("그룹이 없습니다.");
 
                     }else{
+                        groupMembershiplList=(RecyclerView)rootView.findViewById(R.id.main_membership_list);
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(),LinearLayoutManager.VERTICAL,false);
+                        groupMembershiplList.setLayoutManager(layoutManager);
+
+                        groupAdapter=new GroupAdapter();
+
                         for (int i=0;i<jsonArray.length();i++){
                             JSONObject item=jsonArray.getJSONObject(i);
                             String groupname=item.getString("groupName");
                             String gid=item.getString("groupID");
+                            String mid=item.getString("MID");
 
                             showToast(groupname);
 
                             Group group = new Group();
                             group.setGroupName(groupname);
                             group.setGid(gid);
+                            group.setMid(mid);
                             groupAdapter.addItem(group);
                         }
 
@@ -143,8 +149,8 @@ public class MembershipList extends Fragment {
 
                                 intent.putExtra("loginMember",loginMember);
                                 intent.putExtra("loginMemberAccount",loginMemberAccount);
-                                intent.putExtra("gname",item.getGroupName());
-                                intent.putExtra("gid",item.getGid());
+                                intent.putExtra("membershipGroup",item);
+
                                 startActivity(intent);
                             }
                         });

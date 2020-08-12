@@ -105,8 +105,7 @@ public class TransactionList extends Fragment {
             @Override
             public void onResponse(String response) {
                 try{
-                    String tag="honey";
-                    Log.d(tag,response);
+                    Log.d("honey",response);
                     JSONArray j = new JSONArray(response);
                     // Parse json
                     for (int i = 0; i < j.length(); i++) {

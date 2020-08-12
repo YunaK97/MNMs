@@ -111,6 +111,15 @@ public class MainMenuActivity extends AppCompatActivity {
                 pager.setCurrentItem(1);
             }
         });
+        //membership 탈퇴
+        btn_membership.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                //
+
+                return true;
+            }
+        });
         ImageButton btn_daily=findViewById(R.id.btn_daily);
         btn_daily.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -118,11 +127,29 @@ public class MainMenuActivity extends AppCompatActivity {
                 pager.setCurrentItem(2);
             }
         });
+        //daily 탈퇴
+        btn_daily.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                //
+
+                return true;
+            }
+        });
         ImageButton btn_friendList=findViewById(R.id.btn_friendList);
         btn_friendList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pager.setCurrentItem(3);
+            }
+        });
+        //친구 삭제
+        btn_friendList.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                //
+
+                return true;
             }
         });
     }

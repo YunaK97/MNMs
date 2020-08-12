@@ -1,6 +1,9 @@
 package com.example.teamtemplate.mainscreen;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,19 +14,28 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.teamtemplate.Member;
 import com.example.teamtemplate.R;
 import com.example.teamtemplate.RequestShowFriend;
+import com.example.teamtemplate.membership.MembershipActivity;
+import com.example.teamtemplate.transaction.TransactionAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class FriendList extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -70,8 +82,7 @@ public class FriendList extends Fragment {
             @Override
             public void onResponse(String response) {
                 try {
-                    String TAG="response";
-                    Log.d(TAG,response);
+                    Log.d("showFriend",response);
                     JSONArray jsonArray=new JSONArray(response);
 
                     if(jsonArray.length()==0){
@@ -96,8 +107,30 @@ public class FriendList extends Fragment {
                         member.setMemID(friendId);
                         friendListAdapter.addItem(member);
                     }
-
                     friend_list.setAdapter(friendListAdapter);
+                    friendListAdapter.setOnItemLongClickListener(new OnFriendItemLongClickListener() {
+                        @Override
+                        public void onItemLongClick(FriendListAdapter.ViewHolder holder, View view, int position) {
+                            final Member delMember=friendListAdapter.getItem(position);
+                            AlertDialog.Builder builder=new AlertDialog.Builder(context);
+
+                            builder.setTitle(delMember.getMemID()).setMessage("친구목록에서 삭제하시겠습니까?");
+                            builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    showToast("삭제");
+                                    deleteFriend(delMember.getMemID());
+                                    showFriend(rootView);
+                                }
+                            });
+                            builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    showToast("삭제 취소");
+                                }
+                            });
+                        }
+                    });
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -106,6 +139,46 @@ public class FriendList extends Fragment {
         RequestShowFriend requestShowFriend=new RequestShowFriend(loginMember.getMemID(),responseListener);
         RequestQueue queue= Volley.newRequestQueue(rootView.getContext());
         queue.add(requestShowFriend);
+    }
+
+    public void deleteFriend(final String delMemberId){
+        final String url="http://jennyk97.dothome.co.kr/DeleteFriend.php";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try{
+                    Log.d("honey",response);
+                    JSONObject jsonObject=new JSONObject(response);
+                    Boolean success=jsonObject.getBoolean(TAG_SUCCESS);
+                    if(success) {
+                        //삭제 성공여부 확인
+                        showToast("친구 삭제 성공");
+                    }else{
+                        showToast("친구 삭제 실패");
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("friendID", delMemberId);
+                params.put("memID",loginMember.getMemID());
+                return params;
+            }
+        };
+
+        RequestQueue queue= Volley.newRequestQueue(getActivity());
+        queue.add(stringRequest);
     }
 
     public void showToast(String data){

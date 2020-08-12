@@ -1,5 +1,6 @@
 package com.example.teamtemplate.mainscreen;
 
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> {
-    ArrayList<Group> items=new ArrayList<Group>();
+    private ArrayList<Group> items=new ArrayList<Group>();
 
     OnGroupItemClickListener listener;
 
@@ -62,6 +63,8 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     public void setOnItemClickListener(OnGroupItemClickListener listener){
         this.listener=listener;
     }
+
+
 
     @NonNull
     @Override

@@ -13,10 +13,12 @@ import java.util.ArrayList;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.ViewHolder> {
     ArrayList<Member> items=new ArrayList<Member>();
 
     OnFriendItemClickListener listener;
+    OnFriendItemLongClickListener longlistener;
 
     public void addItem(Member item){
         items.add(item);
@@ -37,7 +39,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
     static class ViewHolder extends RecyclerView.ViewHolder{
         TextView friendlist_name,friendlist_id;
 
-        public ViewHolder(View itemView,final OnFriendItemClickListener listener){
+        public ViewHolder(View itemView,final OnFriendItemClickListener listener,final OnFriendItemLongClickListener longlistener){
             super(itemView);
 
             friendlist_name=itemView.findViewById(R.id.friendlist_name);
@@ -53,6 +55,18 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
                     }
                 }
             });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v)
+                {
+                    int position = getAdapterPosition();
+                    if(longlistener!=null){
+                        longlistener.onItemLongClick(ViewHolder.this, v, position);
+                    }
+                    return true;
+                }
+            });
         }
 
         public void setItem(Member item){
@@ -65,6 +79,10 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         this.listener=listener;
     }
 
+    public void setOnItemLongClickListener(OnFriendItemLongClickListener listener) {
+        this.longlistener=listener;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -74,7 +92,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         LayoutInflater inflater=LayoutInflater.from(parent.getContext());
         View itemView=inflater.inflate(R.layout.layout_friend_list,parent,false);
 
-        return new ViewHolder(itemView,listener);
+        return new ViewHolder(itemView,listener,longlistener);
     }
 
     @Override
