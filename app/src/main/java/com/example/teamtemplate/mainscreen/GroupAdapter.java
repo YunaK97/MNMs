@@ -1,6 +1,5 @@
 package com.example.teamtemplate.mainscreen;
 
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +17,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     private ArrayList<Group> items=new ArrayList<Group>();
 
     OnGroupItemClickListener listener;
+    OnGroupItemLongClickListener longListener;
 
     public void addItem(Group item){
         items.add(item);
@@ -38,7 +38,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     static class ViewHolder extends RecyclerView.ViewHolder{
         TextView group_name;
 
-        public ViewHolder(View itemView,final OnGroupItemClickListener listener){
+        public ViewHolder(View itemView,final OnGroupItemClickListener listener,final OnGroupItemLongClickListener longListener){
             super(itemView);
 
             group_name=itemView.findViewById(R.id.group_name);
@@ -53,6 +53,17 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
                     }
                 }
             });
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    int position = getAdapterPosition();
+                    if(longListener!=null){
+                        longListener.onItemLongClick(ViewHolder.this, view, position);
+                    }
+                    return true;
+                }
+            });
         }
 
         public void setItem(Group item){
@@ -62,6 +73,10 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
 
     public void setOnItemClickListener(OnGroupItemClickListener listener){
         this.listener=listener;
+    }
+
+    public void setOnItemLongClickListener(OnGroupItemLongClickListener listener){
+        this.longListener=listener;
     }
 
 
@@ -75,7 +90,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         LayoutInflater inflater=LayoutInflater.from(parent.getContext());
         View itemView=inflater.inflate(R.layout.layout_group,parent,false);
 
-        return new ViewHolder(itemView,listener);
+        return new ViewHolder(itemView,listener,longListener);
     }
 
     @Override

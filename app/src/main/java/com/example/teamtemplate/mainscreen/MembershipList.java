@@ -22,7 +22,6 @@ import com.example.teamtemplate.Group;
 import com.example.teamtemplate.Member;
 import com.example.teamtemplate.R;
 import com.example.teamtemplate.membership.MembershipActivity;
-import com.example.teamtemplate.membership.ui.home.MembershipFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -117,12 +116,12 @@ public class MembershipList extends Fragment {
                                 intent.putExtra("membershipGroup",item);
 
                                 startActivity(intent);
-                                Bundle bundle=new Bundle();
-                                bundle.putSerializable("loginMember", loginMember);
-                                bundle.putSerializable("loginMemberAccount", loginMemberAccount);
-
-                                MembershipFragment membershipFragment=new MembershipFragment();
-                                membershipFragment.setArguments(bundle);
+//                                Bundle bundle=new Bundle();
+//                                bundle.putSerializable("loginMember", loginMember);
+//                                bundle.putSerializable("loginMemberAccount", loginMemberAccount);
+//
+//                                MembershipFragment membershipFragment=new MembershipFragment();
+//                                membershipFragment.setArguments(bundle);
 
                             }
                         });
