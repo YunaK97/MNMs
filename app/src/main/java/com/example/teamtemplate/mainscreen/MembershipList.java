@@ -123,6 +123,7 @@ public class MembershipList extends Fragment {
 
                                 MembershipFragment membershipFragment=new MembershipFragment();
                                 membershipFragment.setArguments(bundle);
+
                             }
                         });
                     }
