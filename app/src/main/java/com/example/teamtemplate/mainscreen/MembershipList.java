@@ -20,7 +20,6 @@ import com.example.teamtemplate.Account;
 import com.example.teamtemplate.Group;
 import com.example.teamtemplate.Member;
 import com.example.teamtemplate.R;
-import com.example.teamtemplate.RequestGroup;
 import com.example.teamtemplate.membership.MembershipActivity;
 
 import org.json.JSONArray;
