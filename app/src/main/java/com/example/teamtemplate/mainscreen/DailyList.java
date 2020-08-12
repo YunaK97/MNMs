@@ -82,7 +82,7 @@ public class DailyList extends Fragment {
         groupView(rootView);
     }
 
-    public void groupView(final ViewGroup rootView){
+    protected void groupView(final ViewGroup rootView){
 
         Response.Listener<String> responseListener=new Response.Listener<String>() {
             @Override
@@ -124,6 +124,7 @@ public class DailyList extends Fragment {
                             @Override
                             public void onItemLongClick(GroupAdapter.ViewHolder holder, View view, int position) {
                                 selectOutGroup(position);
+                                groupView(rootView);
                             }
                         });
                     }
@@ -138,7 +139,7 @@ public class DailyList extends Fragment {
         queue.add(requestGroup);
     }
 
-    public void outGroup(final Group outGroup){
+    protected void outGroup(final Group outGroup){
         showToast(outGroup.getGroupName()+":"+outGroup.getGid() + "나가기 구현중");
 
         final String url="http://jennyk97.dothome.co.kr/OutGroup.php";
@@ -172,7 +173,7 @@ public class DailyList extends Fragment {
                 Map<String, String> params = new HashMap<>();
                 params.put("memID",loginMember.getMemID());
                 params.put("groupName",outGroup.getGroupName());
-                params.put("GID",outGroup.getGid());
+                params.put("groupID",outGroup.getGid());
                 params.put("DID",outGroup.getDid());
                 return params;
             }
@@ -182,7 +183,7 @@ public class DailyList extends Fragment {
         queue.add(stringRequest);
     }
 
-    public void selectOutGroup(int position){
+    protected void selectOutGroup(int position){
         final Group outGroup=groupAdapter.getItem(position);
         AlertDialog.Builder builder=new AlertDialog.Builder(context);
 
@@ -191,7 +192,6 @@ public class DailyList extends Fragment {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 outGroup(outGroup);
-                groupView(rootView);
             }
         });
         builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -205,7 +205,7 @@ public class DailyList extends Fragment {
         alertDialog.show();
     }
 
-    public void intoDaily(int position){
+    protected void intoDaily(int position){
         Group item=groupAdapter.getItem(position);
         Intent intent = new Intent(rootView.getContext(), DailyActivity.class);
 
@@ -215,7 +215,7 @@ public class DailyList extends Fragment {
         startActivity(intent);
     }
 
-    public void showToast(String data){
+    protected void showToast(String data){
         Toast.makeText(context, data, Toast.LENGTH_LONG).show();
     }
 }

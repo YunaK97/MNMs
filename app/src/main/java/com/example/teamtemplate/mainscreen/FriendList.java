@@ -72,7 +72,7 @@ public class FriendList extends Fragment {
 
         return rootView;
     }
-    public void showFriend(final ViewGroup rootView){
+    protected void showFriend(final ViewGroup rootView){
         Response.Listener<String> responseListener=new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -80,16 +80,11 @@ public class FriendList extends Fragment {
                     Log.d("showFriend",response);
                     JSONArray jsonArray=new JSONArray(response);
 
-                    if(jsonArray.length()==0){
-                        //showToast("친구가 없습니다.");
-                        return;
-                    }
+                    if(jsonArray.length()==0){ return; }
 
                     RecyclerView friend_list = rootView.findViewById(R.id.main_friend_list);
                     LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
-
                     friend_list.setLayoutManager(layoutManager);
-
                     friendListAdapter = new FriendListAdapter();
 
                     for (int i=0;i<jsonArray.length();i++) {
@@ -106,26 +101,7 @@ public class FriendList extends Fragment {
                     friendListAdapter.setOnItemLongClickListener(new OnFriendItemLongClickListener() {
                         @Override
                         public void onItemLongClick(FriendListAdapter.ViewHolder holder, View view, int position) {
-                            final Member delMember=friendListAdapter.getItem(position);
-                            AlertDialog.Builder builder=new AlertDialog.Builder(context);
-
-                            builder.setTitle(delMember.getMemID()).setMessage("친구목록에서 삭제하시겠습니까?");
-                            builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    deleteFriend(delMember.getMemID());
-                                    showFriend(rootView);
-                                }
-                            });
-                            builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    showToast("삭제 취소");
-                                }
-                            });
-
-                            AlertDialog alertDialog = builder.create();
-                            alertDialog.show();
+                            selectDelFriend(position);
                         }
                     });
                 } catch (JSONException e) {
@@ -138,7 +114,29 @@ public class FriendList extends Fragment {
         queue.add(requestShowFriend);
     }
 
-    public void deleteFriend(final String delMemberId){
+    protected void selectDelFriend(int position){
+        final Member delMember=friendListAdapter.getItem(position);
+        AlertDialog.Builder builder=new AlertDialog.Builder(context);
+
+        builder.setTitle(delMember.getMemID()).setMessage("친구목록에서 삭제하시겠습니까?");
+        builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                deleteFriend(delMember.getMemID());
+            }
+        });
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                showToast("삭제 취소");
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    protected void deleteFriend(final String delMemberId){
         final String url="http://jennyk97.dothome.co.kr/DeleteFriend.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -151,6 +149,7 @@ public class FriendList extends Fragment {
                     if(success) {
                         //삭제 성공여부 확인
                         showToast("친구 삭제 성공");
+                        showFriend(rootView);
                     }else{
                         showToast("친구 삭제 실패");
                     }
@@ -178,7 +177,7 @@ public class FriendList extends Fragment {
         queue.add(stringRequest);
     }
 
-    public void showToast(String data){
+    protected void showToast(String data){
         Toast.makeText(context, data, Toast.LENGTH_LONG).show();
     }
 }

@@ -70,14 +70,10 @@ public class TransactionList extends Fragment {
 
         //그룹리스트 출력
         transactionView(rootView);
-        //tmpTransactionView(rootView);
 
         return rootView;
     }
 
-    public void tmpTransactionView(ViewGroup rootView){
-
-    }
 
     public void transactionView(ViewGroup rootView){
         transactionList=rootView.findViewById(R.id.main_transaction_list);

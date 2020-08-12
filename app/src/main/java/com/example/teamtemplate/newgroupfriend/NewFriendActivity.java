@@ -116,7 +116,7 @@ public class NewFriendActivity extends AppCompatActivity {
         });
     }
 
-    public void showRequest(){
+    protected void showRequest(){
 
         Response.Listener<String> responseListener = new Response.Listener<String>() {
             @Override
@@ -178,7 +178,7 @@ public class NewFriendActivity extends AppCompatActivity {
         });
     }
 
-    public void deleteFriend(final String delMemberId){
+    protected void deleteFriend(final String delMemberId){
         final String url="http://jennyk97.dothome.co.kr/DeleteFriend.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -190,9 +190,9 @@ public class NewFriendActivity extends AppCompatActivity {
                     Boolean success=jsonObject.getBoolean(TAG_SUCCESS);
                     if(success) {
                         //삭제 성공여부 확인
-                        showToast("친구 삭제 성공");
+                        showToast("거절 성공");
                     }else{
-                        showToast("친구 삭제 실패");
+                        showToast("거절 실패");
                     }
 
                 } catch (JSONException e) {
@@ -218,7 +218,7 @@ public class NewFriendActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-    public void requestFriend(String TAG_RESULT){
+    protected void requestFriend(String TAG_RESULT){
         selectedFriend= new ArrayList<>();
         for(int i=0;i<memberAdapter.getItemCount();i++){
             if(memberAdapter.getItem(i).isChecked()) {
@@ -256,7 +256,7 @@ public class NewFriendActivity extends AppCompatActivity {
         queue.add(requestNewFriendAdd);
     }
 
-    public void searchFriend(final String friend_id){
+    protected void searchFriend(final String friend_id){
         Response.Listener<String> responseListener=new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -284,7 +284,7 @@ public class NewFriendActivity extends AppCompatActivity {
         queue.add(requestNewFriend);
     }
 
-    public void showToast(String data) {
+    protected void showToast(String data) {
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
 

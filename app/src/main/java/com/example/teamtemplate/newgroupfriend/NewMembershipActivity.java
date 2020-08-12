@@ -63,7 +63,7 @@ public class NewMembershipActivity extends AppCompatActivity {
         });
     }
 
-    public void NewMembership(){
+    protected void NewMembership(){
         selectedMember=new ArrayList<>();
         if(membership_money==null || membership_name==null){
             showToast("이러시면 안됨니다 고갱님 정보를 쓰세욥");
@@ -103,7 +103,7 @@ public class NewMembershipActivity extends AppCompatActivity {
         }
     }
 
-    public void showFriend(){
+    protected void showFriend(){
         Response.Listener<String> responseListener=new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -144,7 +144,7 @@ public class NewMembershipActivity extends AppCompatActivity {
         queue.add(requestShowFriend);
     }
 
-    public void showToast(String data){
+    protected void showToast(String data){
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
 }

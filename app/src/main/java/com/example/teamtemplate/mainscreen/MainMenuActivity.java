@@ -34,20 +34,25 @@ public class MainMenuActivity extends AppCompatActivity {
     private ActionBar actionBar;
     private Member loginMember;
     private Account loginMemberAccount;
-    private RecyclerView groupMembershiplList;
-    private GroupAdapter groupAdapter;
     private TextView textName,accName,textBalance;
+    private ImageButton btn_transaction,btn_membership,btn_daily,btn_friendList;
     final private int[] addType={0};
     private ViewPager pager;
-
-    private String TAG_MEMBERSHIP="membership",TAG_DAILY="daily",TAG_SUCCESS="success";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        //overridePendingTransition(0,0);
+        //id찾기
+        pager=findViewById(R.id.pager);
+        textName=findViewById(R.id.textName);
+        accName=findViewById(R.id.accName);
+        textBalance=findViewById(R.id.textBalance);
+        btn_transaction=findViewById(R.id.btn_transaction);
+        btn_membership=findViewById(R.id.btn_membership);
+        btn_daily=findViewById(R.id.btn_daily);
+        btn_friendList=findViewById(R.id.btn_friendList);
 
         //액션바
         actionBar = getSupportActionBar();
@@ -60,7 +65,6 @@ public class MainMenuActivity extends AppCompatActivity {
         loginMemberAccount=(Account)intent.getSerializableExtra("loginMemberAccount");
 
         //송금내역,membership,daily pager
-        pager=findViewById(R.id.pager);
         pager.setOffscreenPageLimit(4);
 
         MyPagerAdapter adapter=new MyPagerAdapter(getSupportFragmentManager());
@@ -86,24 +90,20 @@ public class MainMenuActivity extends AppCompatActivity {
         friendList.setArguments(bundle);
         //////////////////////////////
 
-        textName=findViewById(R.id.textName);
         String text="이름 : "+loginMember.getMemName();
         textName.setText(text);
-        accName=findViewById(R.id.accName);
         text="계좌번호 : "+loginMemberAccount.getAccountNum();
         accName.setText(text);
-        textBalance=findViewById(R.id.textBalance);
         text="잔액 : "+loginMemberAccount.getAccountBalance();
         textBalance.setText(text);
 
-        ImageButton btn_transaction=findViewById(R.id.btn_transaction);
         btn_transaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 pager.setCurrentItem(0);
             }
         });
-        ImageButton btn_membership=findViewById(R.id.btn_membership);
+
         btn_membership.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,7 +119,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 return true;
             }
         });
-        ImageButton btn_daily=findViewById(R.id.btn_daily);
+
         btn_daily.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,7 +135,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 return true;
             }
         });
-        ImageButton btn_friendList=findViewById(R.id.btn_friendList);
+
         btn_friendList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -181,11 +181,11 @@ public class MainMenuActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void showToast(String data){
+    protected void showToast(String data){
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
 
-    public void plusAction(){
+    protected void plusAction(){
         final String[] select=new String[] {"회비모임","꿀잼모임"};
 
         AlertDialog.Builder dialog=new AlertDialog.Builder(MainMenuActivity.this);
@@ -220,6 +220,7 @@ public class MainMenuActivity extends AppCompatActivity {
         dialog.show();
 
 }
+
 
     class MyPagerAdapter extends FragmentStatePagerAdapter {
         ArrayList<Fragment> items =new ArrayList<Fragment>();
