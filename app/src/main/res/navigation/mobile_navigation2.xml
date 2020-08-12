@@ -12,9 +12,15 @@
         tools:layout="@layout/activity_membership" />
 
     <fragment
-        android:id="@+id/nav_manage"
-        android:name="com.example.teamtemplate.membership.ui.manage.ManageFragment"
+        android:id="@+id/nav_manage_mem"
+        android:name="com.example.teamtemplate.membership.ui.manage.ManageMemFragment"
+        android:label="회원관리"
+        tools:layout="@layout/fragment_manage_mem" />
+
+    <fragment
+        android:id="@+id/nav_manage_fee"
+        android:name="com.example.teamtemplate.membership.ui.manage.ManageFeeFragment"
         android:label="회비관리"
-        tools:layout="@layout/fragment_manage" />
+        tools:layout="@layout/fragment_manage_fee" />
 
 </navigation>

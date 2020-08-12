@@ -57,8 +57,8 @@ public class MembershipList extends Fragment {
         loginMemberAccount= (Account) bundle.getSerializable("loginMemberAccount");
 
         //그룹리스트 출력
-        //groupView(rootView);
-        tmpGroupView(rootView);
+        groupView(rootView);
+        //tmpGroupView(rootView);
 
         return rootView;
     }

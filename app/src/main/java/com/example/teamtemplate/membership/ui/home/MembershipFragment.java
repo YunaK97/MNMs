@@ -53,9 +53,6 @@ public class MembershipFragment extends Fragment {
         membershipGroup.setGID("G2");
         transactionProcess(membershipGroup);
 
-        membershipGroup.setMID("M1");
-        //membershipProcess(membershipGroup);
-
         return v;
     }
 
@@ -117,49 +114,5 @@ public class MembershipFragment extends Fragment {
         queue.add(stringRequest);
     }
 
-    protected void membershipProcess(final MembershipGroup membershipGroup) {
-        final String MID = membershipGroup.getMID();
-        final String url="http://jennyk97.dothome.co.kr/MembershipGroup.php";
-
-        StringRequest stringRequest2 = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-
-                    JSONObject jsonObject = new JSONObject(response);
-
-                    MembershipGroup mg = new MembershipGroup();
-                    mg.setMID(jsonObject.getString("MID"));
-                    mg.setPresident(jsonObject.getString("president"));
-                    mg.setPayDay(jsonObject.getString("payDay"));
-                    mg.setMemberMoney(jsonObject.getString("memberMoney"));
-                    mg.setTotalMoney(jsonObject.getString("totalMoney"));
-                    mg.setGID(jsonObject.getString("GID"));
-
-                    System.out.println("----------OOO222OOO-----------");
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("********에러********");
-                Log.e("#####볼리에러####", error.toString());
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("MID", MID);
-                System.out.println("========MID========");
-                return params;
-            }
-        };
-        RequestQueue queue= Volley.newRequestQueue(getActivity());
-        queue.add(stringRequest2);
-    }
 
 }

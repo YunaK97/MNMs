@@ -5,8 +5,14 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_manage_mem"
+            android:icon="@drawable/ic_menu_camera"
+            android:title="회원관리" />
+
+        <item
+            android:id="@+id/nav_manage_fee"
             android:icon="@drawable/ic_menu_camera"
             android:title="회비관리" />
+
     </group>
 </menu>
