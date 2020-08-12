@@ -94,12 +94,12 @@ public class DailyList extends Fragment {
                             JSONObject item=jsonArray.getJSONObject(i);
                             String groupname=item.getString("groupName");
                             String gid=item.getString("groupID");
-                            String mid=item.getString("DID");
+                            String did=item.getString("DID");
 
                             Group group = new Group();
                             group.setGroupName(groupname);
                             group.setGid(gid);
-                            group.setMid(mid);
+                            group.setDid(did);
                             groupAdapter.addItem(group);
                         }
 
