@@ -11,6 +11,7 @@ public class RequestGroup extends StringRequest {
     //그룹을 출력 -> membership,daily 2개이므로 request를 하나 더 생성해야함 ->(미구현)
     //memID에 해당하는 그룹을 출력
     final static private String URL="http://jennyk97.dothome.co.kr/MembergroupInfo.php";
+    final static private String URL2="";
     private Map<String,String> map;
 
     public RequestGroup(String memID, Response.Listener<String> listener){
