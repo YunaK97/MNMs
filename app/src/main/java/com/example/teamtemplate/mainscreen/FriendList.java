@@ -151,7 +151,7 @@ public class FriendList extends Fragment {
             @Override
             public void onResponse(String response) {
                 try{
-                    Log.d("honey",response);
+                    Log.d("deleteFriend",response);
                     JSONObject jsonObject=new JSONObject(response);
                     Boolean success=jsonObject.getBoolean(TAG_SUCCESS);
                     if(success) {
