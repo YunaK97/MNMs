@@ -1,5 +1,6 @@
 package com.example.teamtemplate.membership;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.View;
@@ -12,7 +13,11 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.teamtemplate.Account;
+import com.example.teamtemplate.Group;
+import com.example.teamtemplate.Member;
 import com.example.teamtemplate.R;
+import com.example.teamtemplate.membership.ui.home.MembershipFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -45,6 +50,18 @@ public class MembershipActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+//        Intent intent = getIntent();
+//        Group group = (Group)intent.getSerializableExtra("membershipGroup");
+
+//        Bundle bundle=new Bundle();
+//        bundle.putSerializable("membershipGroup", group);
+//        MembershipFragment membershipFragment = new MembershipFragment();
+//        membershipFragment.setArguments(bundle);
+
+//        System.out.println("-----------------------------------");
+//        System.out.println(group.getGid());
+
     }
 
     @Override

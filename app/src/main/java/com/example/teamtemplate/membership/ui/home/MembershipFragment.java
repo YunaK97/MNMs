@@ -17,6 +17,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.teamtemplate.Group;
+import com.example.teamtemplate.Member;
 import com.example.teamtemplate.R;
 import com.example.teamtemplate.membership.MembershipGroup;
 import com.example.teamtemplate.transaction.Transaction;
@@ -49,9 +51,20 @@ public class MembershipFragment extends Fragment {
         mAdapter = new TransactionAdapter(dataList);
         mRecyclerView.setAdapter(mAdapter);
 
-        MembershipGroup membershipGroup = new MembershipGroup();
-        membershipGroup.setGID("G2");
-        transactionProcess(membershipGroup);
+//        Bundle bundle=getArguments();
+//        Member loginMember= (Member) bundle.getSerializable("loginMember");
+//        System.out.println("-----------------------------------");
+//        System.out.println(loginMember.getMemID());
+
+//
+//        Group group = (Group) bundle.getSerializable("membershipGroup");
+//
+//        System.out.println("-----------------------------------");
+//        System.out.println(group.getGid());
+//
+//        MembershipGroup membershipGroup = new MembershipGroup();
+//        membershipGroup.setGID(group.getGid());
+//        transactionProcess(membershipGroup);
 
         return v;
     }

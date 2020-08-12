@@ -13,6 +13,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.teamtemplate.Group;
 import com.example.teamtemplate.R;
 import com.example.teamtemplate.daily.ui.home.DailyFragment;
 import com.example.teamtemplate.transaction.Transaction;
@@ -49,14 +50,11 @@ public class DailyActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-//        Transaction transaction = new Transaction();
-//        DailyGroup dailyGroup = new DailyGroup();
+        Intent intent = getIntent();
+        Group group = (Group)intent.getSerializableExtra("dailyGroup");
 
-//        Intent intent = new Intent(this.getIntent());
-//
-//        transaction.setAccountNum(intent.getStringExtra("loginMemberAccount"));
-//        dailyGroup.setGID(intent.getStringExtra("gid"));
-
+        Bundle bundle=new Bundle();
+        bundle.putSerializable("dailyGroup", group);
 
     }
 

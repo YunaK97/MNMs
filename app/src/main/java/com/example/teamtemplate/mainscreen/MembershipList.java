@@ -110,13 +110,13 @@ public class MembershipList extends Fragment {
                                 Group item=groupAdapter.getItem(position);
                                 showToast("아이템 선택됨 : "+ item.getGroupName());
 
-//                                Intent intent = new Intent(rootView.getContext(), MembershipActivity.class);
-//
-//                                intent.putExtra("loginMember",loginMember);
-//                                intent.putExtra("loginMemberAccount",loginMemberAccount);
-//                                intent.putExtra("membershipGroup",item);
-//
-//                                startActivity(intent);
+                                Intent intent = new Intent(rootView.getContext(), MembershipActivity.class);
+
+                                intent.putExtra("loginMember",loginMember);
+                                intent.putExtra("loginMemberAccount",loginMemberAccount);
+                                intent.putExtra("membershipGroup",item);
+
+                                startActivity(intent);
                                 Bundle bundle=new Bundle();
                                 bundle.putSerializable("loginMember", loginMember);
                                 bundle.putSerializable("loginMemberAccount", loginMemberAccount);
