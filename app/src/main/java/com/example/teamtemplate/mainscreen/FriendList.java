@@ -4,11 +4,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,7 +18,6 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.teamtemplate.Member;
 import com.example.teamtemplate.R;
-import com.example.teamtemplate.RequestShowFriend;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,6 +26,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,6 +35,7 @@ public class FriendList extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private FriendListAdapter friendListAdapter;
     private Member loginMember;
+    private RecyclerView friend_list;
     private String TAG_SUCCESS="success";
     private Context context;
     private ViewGroup rootView;
@@ -76,7 +72,9 @@ public class FriendList extends Fragment {
         return rootView;
     }
     protected void showFriend(final ViewGroup rootView){
-        Response.Listener<String> responseListener=new Response.Listener<String>() {
+        final String url="http://jennyk97.dothome.co.kr/ShowFriend.php";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -85,7 +83,7 @@ public class FriendList extends Fragment {
 
                     if(jsonArray.length()==0){ return; }
 
-                    RecyclerView friend_list = rootView.findViewById(R.id.main_friend_list);
+                    friend_list = rootView.findViewById(R.id.main_friend_list);
                     LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
                     friend_list.setLayoutManager(layoutManager);
                     friendListAdapter = new FriendListAdapter();
@@ -111,10 +109,21 @@ public class FriendList extends Fragment {
                     e.printStackTrace();
                 }
             }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("memID",loginMember.getMemID());
+                return params;
+            }
         };
-        RequestShowFriend requestShowFriend=new RequestShowFriend(loginMember.getMemID(),responseListener);
-        RequestQueue queue= Volley.newRequestQueue(rootView.getContext());
-        queue.add(requestShowFriend);
+
+        RequestQueue queue= Volley.newRequestQueue(getActivity());
+        queue.add(stringRequest);
     }
 
     protected void selectDelFriend(int position){

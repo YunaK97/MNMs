@@ -78,12 +78,12 @@ public class MembershipList extends Fragment {
     }
 
     protected void groupView(final ViewGroup rootView){
+        final String url="http://jennyk97.dothome.co.kr/MembergroupInfo.php";
 
-        Response.Listener<String> responseListener=new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
-                    Log.d("membershipList",response);
                     JSONArray jsonArray=new JSONArray(response);
                     if(jsonArray.length()==0){
                         showToast("그룹이 없습니다.");
@@ -94,18 +94,17 @@ public class MembershipList extends Fragment {
                         groupMembershiplList.setLayoutManager(layoutManager);
 
                         groupAdapter=new GroupAdapter();
-
                         for (int i=0;i<jsonArray.length();i++){
                             JSONObject item=jsonArray.getJSONObject(i);
                             String groupname=item.getString("groupName");
                             String gid=item.getString("groupID");
-                            String mid=item.getString("MID");
+                            String did=item.getString("MID");
                             //String groupTime=item.getString("groupTime");
 
                             Group group = new Group();
                             group.setGroupName(groupname);
                             group.setGid(gid);
-                            group.setMid(mid);
+                            group.setDid(did);
                             //group.setTime(groupTime);
                             groupAdapter.addItem(group);
                         }
@@ -118,6 +117,7 @@ public class MembershipList extends Fragment {
                                 intoMembership(position);
                             }
                         });
+
                         groupAdapter.setOnItemLongClickListener(new OnGroupItemLongClickListener() {
                             @Override
                             public void onItemLongClick(GroupAdapter.ViewHolder holder, View view, int position) {
@@ -130,11 +130,22 @@ public class MembershipList extends Fragment {
                     e.printStackTrace();
                     System.out.println("오류 : "+e.toString());
                 }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("memID",loginMember.getMemID());
+                return params;
             }
         };
-        RequestGroup requestGroup=new RequestGroup(loginMember.getMemID(),responseListener);
-        RequestQueue queue= Volley.newRequestQueue(rootView.getContext());
-        queue.add(requestGroup);
+        RequestQueue queue= Volley.newRequestQueue(getActivity());
+        queue.add(stringRequest);
     }
 
     protected void intoMembership(int position){

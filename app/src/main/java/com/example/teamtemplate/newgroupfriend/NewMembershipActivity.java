@@ -7,21 +7,23 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.teamtemplate.Member;
 import com.example.teamtemplate.MemberAdapter;
 import com.example.teamtemplate.R;
-import com.example.teamtemplate.RequestShowFriend;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -32,8 +34,8 @@ public class NewMembershipActivity extends AppCompatActivity {
     private ArrayList<Member> selectedMember;
     private Member loginMember;
     private String TAG_SUCCESS="success";
-    private String membership_name;
-    private int membership_money=0;
+    private RecyclerView friend_list;
+    private String membership_name, membership_money;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +51,7 @@ public class NewMembershipActivity extends AppCompatActivity {
          */
 
         membership_name=((TextView)findViewById(R.id.membership_name)).getText().toString();
-        membership_money=Integer.parseInt(((TextView)findViewById(R.id.membership_money)).getText().toString());
+        membership_money=((TextView)findViewById(R.id.membership_money)).getText().toString();
 
         //친구 가져와서 출력
         showFriend();
@@ -68,7 +70,7 @@ public class NewMembershipActivity extends AppCompatActivity {
 
     protected void NewMembership(){
         selectedMember=new ArrayList<>();
-        if(membership_money==0 || membership_name==null){
+        if(membership_money==null || membership_name==null){
             showToast("이러시면 안됨니다 고갱님 정보를 쓰세욥");
         }else {
             for (int i = 0; i < memberAdapter.getItemCount(); i++) {
@@ -79,8 +81,8 @@ public class NewMembershipActivity extends AppCompatActivity {
                     selectedMember.add(member);
                 }
             }
-            //new_membership 생성 성공 여부
-            Response.Listener<String> responseListener=new Response.Listener<String>() {
+            String url="http://jennyk97.dothome.co.kr/NewMembership.php";
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {
@@ -91,23 +93,47 @@ public class NewMembershipActivity extends AppCompatActivity {
                             finish();
                         }
                         else{
-                            showToast("membership생성 실패!");
+                            showToast("membership 실패!");
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                }
+            }){
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("memID",loginMember.getMemID());
+                    params.put("memName",loginMember.getMemName());
+                    params.put("membershipName",membership_name);
+                    try {
+                        JSONArray jsonArray=new JSONArray();
+                        for (int i=0;i<selectedMember.size();i++){
+                            JSONObject jsonObject=new JSONObject();
+                            jsonObject.put("memID",selectedMember.get(i).getMemID());
+                            jsonObject.put("memName", selectedMember.get(i).getMemName());
+                            jsonArray.put(jsonObject);
+                        }
+                        params.put("friend",jsonArray.toString());
+                    }catch (Exception e){
+                    }
+                    return params;
+                }
             };
 
-            RequestNewGroup requestNewGroup =new RequestNewGroup(loginMember,selectedMember,membership_money,membership_name,responseListener);
-            RequestQueue queue= Volley.newRequestQueue(NewMembershipActivity.this);
-            queue.add(requestNewGroup);
-
+            RequestQueue queue= Volley.newRequestQueue(this);
+            queue.add(stringRequest);
         }
     }
 
     protected void showFriend(){
-        Response.Listener<String> responseListener=new Response.Listener<String>() {
+        final String url="http://jennyk97.dothome.co.kr//ShowFriend.php";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -118,7 +144,7 @@ public class NewMembershipActivity extends AppCompatActivity {
                         return;
                     }
 
-                    RecyclerView friend_list = findViewById(R.id.membership_select_friend);
+                    friend_list = findViewById(R.id.membership_select_friend);
                     LinearLayoutManager layoutManager = new LinearLayoutManager(NewMembershipActivity.this, LinearLayoutManager.VERTICAL, false);
 
                     friend_list.setLayoutManager(layoutManager);
@@ -141,10 +167,21 @@ public class NewMembershipActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("memID",loginMember.getMemID());
+                return params;
+            }
         };
-        RequestShowFriend requestShowFriend=new RequestShowFriend(loginMember.getMemID(),responseListener);
-        RequestQueue queue= Volley.newRequestQueue(NewMembershipActivity.this);
-        queue.add(requestShowFriend);
+
+        RequestQueue queue= Volley.newRequestQueue(this);
+        queue.add(stringRequest);
     }
 
     protected void showToast(String data){

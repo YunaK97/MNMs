@@ -86,39 +86,53 @@ public class NewFriendActivity extends AppCompatActivity {
         btn_addFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Response.Listener<String> responseListener = new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            boolean dup=jsonObject.getBoolean("dup");
-                            if(dup){
-                                showToast("이미 친구사이입니다.");
-                            }else {
-                                boolean success = jsonObject.getBoolean(TAG_SUCCESS);
-                                if (success) {
-                                    showToast("친구추가 완료");
-                                    finish();
-                                }
-                                else {
-                                    showToast("친구 추가 실패ㅠ");
-                                }
+            final String url="http://jennyk97.dothome.co.kr/NewFriendAdd.php";
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                @Override
+                public void onResponse(String response) {
+                    try {
+                        JSONObject jsonObject = new JSONObject(response);
+                        boolean dup=jsonObject.getBoolean("dup");
+                        if(dup){
+                            showToast("이미 친구사이입니다.");
+                        }else {
+                            boolean success = jsonObject.getBoolean(TAG_SUCCESS);
+                            if (success) {
+                                showToast("친구추가 신청 완료");
+                                finish();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                            else {
+                                showToast("친구 추가 실패ㅠ");
+                            }
                         }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-                };
-                RequestNewFriend requestNewFriendAdd = new RequestNewFriend("add", loginMember.getMemID(),friend_id, responseListener);
-                RequestQueue queue = Volley.newRequestQueue(NewFriendActivity.this);
-                queue.add(requestNewFriendAdd);
+                }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                }
+            }){
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("memID",loginMember.getMemID());
+                    params.put("friendID",friend_id);
+                    return params;
+                }
+            };
+
+            RequestQueue queue= Volley.newRequestQueue(NewFriendActivity.this);
+            queue.add(stringRequest);
             }
         });
     }
 
     protected void showRequest(){
 
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
+        final String url="http://jennyk97.dothome.co.kr/RequestedFriend.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -156,10 +170,21 @@ public class NewFriendActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("memID",loginMember.getMemID());
+                return params;
+            }
         };
-        RequestNewFriend requestNewFriendAdd = new RequestNewFriend(REQUESTED,loginMember.getMemID(),responseListener);
-        RequestQueue queue = Volley.newRequestQueue(NewFriendActivity.this);
-        queue.add(requestNewFriendAdd);
+
+        RequestQueue queue= Volley.newRequestQueue(NewFriendActivity.this);
+        queue.add(stringRequest);
 
         //체크박스 -> 수락버튼 -> accept
         request_accept.setOnClickListener(new View.OnClickListener() {
@@ -219,7 +244,7 @@ public class NewFriendActivity extends AppCompatActivity {
         queue.add(stringRequest);
     }
 
-    protected void requestFriend(String TAG_RESULT){
+    protected void requestFriend(final String TAG_RESULT){
         selectedFriend= new ArrayList<>();
         for(int i=0;i<memberAdapter.getItemCount();i++){
             if(memberAdapter.getItem(i).isChecked()) {
@@ -234,7 +259,9 @@ public class NewFriendActivity extends AppCompatActivity {
 
             return;
         }
-        Response.Listener<String> responseListener = new Response.Listener<String>() {
+
+        final String url="http://jennyk97.dothome.co.kr/RequestedResult.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -251,14 +278,38 @@ public class NewFriendActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("memID",loginMember.getMemID());
+                params.put("TAG",TAG_RESULT);
+                try {
+                    JSONArray jsonArray=new JSONArray();
+                    for (int i=0;i<selectedFriend.size();i++){
+                        JSONObject jsonObject=new JSONObject();
+                        jsonObject.put("memID",selectedFriend.get(i).getMemID());
+                        jsonObject.put("memName", selectedFriend.get(i).getMemName());
+                        jsonArray.put(jsonObject);
+                    }
+                    params.put("friend",jsonArray.toString());
+                }catch (Exception e){
+                }
+                return params;
+            }
         };
-        RequestNewFriend requestNewFriendAdd = new RequestNewFriend(loginMember,selectedFriend, TAG_RESULT,responseListener);
-        RequestQueue queue = Volley.newRequestQueue(NewFriendActivity.this);
-        queue.add(requestNewFriendAdd);
+
+        RequestQueue queue= Volley.newRequestQueue(NewFriendActivity.this);
+        queue.add(stringRequest);
     }
 
     protected void searchFriend(final String friend_id){
-        Response.Listener<String> responseListener=new Response.Listener<String>() {
+        final String url="http://jennyk97.dothome.co.kr/NewFriend.php";
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -279,10 +330,21 @@ public class NewFriendActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("memID",friend_id);
+                return params;
+            }
         };
-        RequestNewFriend requestNewFriend=new RequestNewFriend(friend_id,responseListener);
+
         RequestQueue queue= Volley.newRequestQueue(NewFriendActivity.this);
-        queue.add(requestNewFriend);
+        queue.add(stringRequest);
     }
 
     protected void showToast(String data) {

@@ -6,13 +6,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.teamtemplate.Account;
 import com.example.teamtemplate.mainscreen.MainMenuActivity;
@@ -21,6 +25,9 @@ import com.example.teamtemplate.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private final static int SIGNIN=221,BACK=321;
@@ -60,12 +67,27 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    protected void loginProcess(Member member){
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode,resultCode,data);
 
-        final String memID=member.getMemID();
-        final String memPW=member.getMemPW();
+        if(requestCode == SIGNIN){
+            boolean result=data.getBooleanExtra("result",false);
+            int back=data.getIntExtra("back",0);
+            if(back==0){
+                if(result) {
+                    showToast("회원가입 성공! -> 로그인합시다");
+                }else{
+                    showToast("쏴리,,회원가입 실패ㅠ");
+                }
+            }
+        }
+    }
 
-        Response.Listener<String> responseListener=new Response.Listener<String>() {
+    protected void loginProcess(final Member member){
+        final String url="http://jennyk97.dothome.co.kr/Login.php";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -107,28 +129,24 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        };
-        RequestWork requestWork =new RequestWork(memID,memPW,responseListener);
-        RequestQueue queue= Volley.newRequestQueue(MainActivity.this);
-        queue.add(requestWork);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode,resultCode,data);
-
-        if(requestCode == SIGNIN){
-            boolean result=data.getBooleanExtra("result",false);
-            int back=data.getIntExtra("back",0);
-            if(back==0){
-                if(result) {
-                    showToast("회원가입 성공! -> 로그인합시다");
-                }else{
-                    showToast("쏴리,,회원가입 실패ㅠ");
-                }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
             }
-        }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("memPW", member.getMemPW());
+                params.put("memID",member.getMemID());
+                return params;
+            }
+        };
+
+        RequestQueue queue= Volley.newRequestQueue(this);
+        queue.add(stringRequest);
     }
+
 
     protected void showToast(String data){
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();

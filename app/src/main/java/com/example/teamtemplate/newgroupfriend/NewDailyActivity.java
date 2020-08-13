@@ -2,26 +2,32 @@ package com.example.teamtemplate.newgroupfriend;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.teamtemplate.Member;
 import com.example.teamtemplate.MemberAdapter;
 import com.example.teamtemplate.R;
-import com.example.teamtemplate.RequestShowFriend;
+import com.example.teamtemplate.mainscreen.FriendListAdapter;
+import com.example.teamtemplate.mainscreen.OnFriendItemLongClickListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,6 +37,7 @@ public class NewDailyActivity extends AppCompatActivity {
     private MemberAdapter memberAdapter;
     private ArrayList<Member> arrayList;
     private Member loginMember;
+    private RecyclerView friend_list;
     private ArrayList<Member> selectedMember;
     private String TAG_SUCCESS="success";
     private String daily_name;
@@ -77,8 +84,8 @@ public class NewDailyActivity extends AppCompatActivity {
                     selectedMember.add(member);
                 }
             }
-            //new_membership 생성 성공 여부
-            Response.Listener<String> responseListener=new Response.Listener<String>() {
+            String url="http://jennyk97.dothome.co.kr/NewDaily.php";
+            StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                 @Override
                 public void onResponse(String response) {
                     try {
@@ -95,16 +102,42 @@ public class NewDailyActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                 }
+            }, new Response.ErrorListener() {
+                @Override
+                public void onErrorResponse(VolleyError error) {
+                }
+            }){
+                @Override
+                protected Map<String, String> getParams() {
+                    Map<String, String> params = new HashMap<>();
+                    params.put("memID",loginMember.getMemID());
+                    params.put("memName",loginMember.getMemName());
+                    params.put("dailyName",daily_name);
+                    try {
+                        JSONArray jsonArray=new JSONArray();
+                        for (int i=0;i<selectedMember.size();i++){
+                            JSONObject jsonObject=new JSONObject();
+                            jsonObject.put("memID",selectedMember.get(i).getMemID());
+                            jsonObject.put("memName", selectedMember.get(i).getMemName());
+                            jsonArray.put(jsonObject);
+                        }
+                        params.put("friend",jsonArray.toString());
+                    }catch (Exception e){
+                    }
+                    return params;
+                }
             };
 
-            RequestNewGroup requestNewGroup =new RequestNewGroup(loginMember,selectedMember,daily_name,responseListener);
-            RequestQueue queue= Volley.newRequestQueue(NewDailyActivity.this);
-            queue.add(requestNewGroup);
+            RequestQueue queue= Volley.newRequestQueue(this);
+            queue.add(stringRequest);
 
         }
     }
+
     protected void showFriend(){
-        Response.Listener<String> responseListener=new Response.Listener<String>() {
+        final String url="http://jennyk97.dothome.co.kr/ShowFriend.php";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -115,11 +148,9 @@ public class NewDailyActivity extends AppCompatActivity {
                         return;
                     }
 
-                    RecyclerView friend_list = findViewById(R.id.daily_selected_friend);
+                    friend_list = findViewById(R.id.daily_selected_friend);
                     LinearLayoutManager layoutManager = new LinearLayoutManager(NewDailyActivity.this, LinearLayoutManager.VERTICAL, false);
-
                     friend_list.setLayoutManager(layoutManager);
-
                     memberAdapter = new MemberAdapter();
 
                     for (int i=0;i<jsonArray.length();i++) {
@@ -132,16 +163,27 @@ public class NewDailyActivity extends AppCompatActivity {
                         member.setMemID(friendId);
                         memberAdapter.addItem(member);
                     }
-                    friend_list.setAdapter(memberAdapter);
 
+                    friend_list.setAdapter(memberAdapter);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
             }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("memID",loginMember.getMemID());
+                return params;
+            }
         };
-        RequestShowFriend requestShowFriend=new RequestShowFriend(loginMember.getMemID(),responseListener);
-        RequestQueue queue= Volley.newRequestQueue(NewDailyActivity.this);
-        queue.add(requestShowFriend);
+
+        RequestQueue queue= Volley.newRequestQueue(this);
+        queue.add(stringRequest);
     }
 
     protected void showToast(String data){

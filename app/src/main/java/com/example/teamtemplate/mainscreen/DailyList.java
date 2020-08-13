@@ -83,8 +83,9 @@ public class DailyList extends Fragment {
     }
 
     protected void groupView(final ViewGroup rootView){
+        final String url="http://jennyk97.dothome.co.kr/DailygroupInfo.php";
 
-        Response.Listener<String> responseListener=new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -134,11 +135,22 @@ public class DailyList extends Fragment {
                     e.printStackTrace();
                     System.out.println("오류 : "+e.toString());
                 }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("memID",loginMember.getMemID());
+                return params;
             }
         };
-        RequestGroup requestGroup=new RequestGroup("daily",loginMember.getMemID(),responseListener);
-        RequestQueue queue= Volley.newRequestQueue(rootView.getContext());
-        queue.add(requestGroup);
+        RequestQueue queue= Volley.newRequestQueue(getActivity());
+        queue.add(stringRequest);
     }
 
     protected void outGroup(final Group outGroup){
