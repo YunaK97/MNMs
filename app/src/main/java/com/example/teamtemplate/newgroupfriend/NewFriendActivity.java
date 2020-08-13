@@ -74,7 +74,7 @@ public class NewFriendActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //친구 ID 검색
                 friend_id=((TextView)findViewById(R.id.friend_search)).getText().toString();
-                if(friend_id.equals(loginMember.getMemID()) || friend_id.length()<4) {
+                if(friend_id.equals(loginMember.getMemID())) {
                     showToast("불가능한 id 입니다.");
                 }else{
                     request_friend_layout.setVisibility(View.GONE);
