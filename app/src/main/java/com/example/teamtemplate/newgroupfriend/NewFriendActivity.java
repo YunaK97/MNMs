@@ -46,8 +46,6 @@ public class NewFriendActivity extends AppCompatActivity {
     MemberAdapter memberAdapter;
     ArrayList<Member> selectedFriend;
 
-    private String REQUESTED="123";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,7 +144,7 @@ public class NewFriendActivity extends AppCompatActivity {
 
                     linearLayout.setVisibility(View.GONE);
 
-                    requestedRecyclerView=(RecyclerView)findViewById(R.id.request_friend);
+                    requestedRecyclerView= findViewById(R.id.request_friend);
                     LinearLayoutManager layoutManager=new LinearLayoutManager(NewFriendActivity.this,LinearLayoutManager.VERTICAL,false);
                     requestedRecyclerView.setLayoutManager(layoutManager);
                     memberAdapter=new MemberAdapter();
@@ -213,7 +211,7 @@ public class NewFriendActivity extends AppCompatActivity {
                 try{
                     Log.d("deleteFriend",response);
                     JSONObject jsonObject=new JSONObject(response);
-                    Boolean success=jsonObject.getBoolean(TAG_SUCCESS);
+                    boolean success=jsonObject.getBoolean(TAG_SUCCESS);
                     if(success) {
                         //삭제 성공여부 확인
                         showToast("거절 성공");
@@ -268,7 +266,7 @@ public class NewFriendActivity extends AppCompatActivity {
                     String TAG="honey";
                     Log.d(TAG,response);
                     JSONObject jsonObject=new JSONObject(response);
-                    Boolean success=jsonObject.getBoolean(TAG_SUCCESS);
+                    boolean success=jsonObject.getBoolean(TAG_SUCCESS);
                     if(success){
                         showToast("친구 신청 처리 완료!");
                         showRequest();
@@ -298,6 +296,7 @@ public class NewFriendActivity extends AppCompatActivity {
                     }
                     params.put("friend",jsonArray.toString());
                 }catch (Exception e){
+                    e.printStackTrace();
                 }
                 return params;
             }

@@ -67,7 +67,7 @@ public class MainMenuActivity extends AppCompatActivity {
         //송금내역,membership,daily pager
         pager.setOffscreenPageLimit(4);
 
-        MyPagerAdapter adapter=new MyPagerAdapter(getSupportFragmentManager());
+        MyPagerAdapter adapter= new MyPagerAdapter(getSupportFragmentManager());
 
         TransactionList transactionList=new TransactionList();
         adapter.addItem(transactionList);
@@ -283,10 +283,10 @@ public class MainMenuActivity extends AppCompatActivity {
 }
 
 
-    class MyPagerAdapter extends FragmentStatePagerAdapter {
-        ArrayList<Fragment> items =new ArrayList<Fragment>();
+    static class MyPagerAdapter extends FragmentStatePagerAdapter {
+        ArrayList<Fragment> items = new ArrayList<>();
 
-        public MyPagerAdapter(FragmentManager fm){
+        MyPagerAdapter(FragmentManager fm){
             super(fm);
         }
 

@@ -122,6 +122,7 @@ public class NewMembershipActivity extends AppCompatActivity {
                         }
                         params.put("friend",jsonArray.toString());
                     }catch (Exception e){
+                        e.printStackTrace();
                     }
                     return params;
                 }

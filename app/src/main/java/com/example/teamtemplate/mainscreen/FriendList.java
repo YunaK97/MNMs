@@ -65,13 +65,14 @@ public class FriendList extends Fragment {
         rootView = (ViewGroup)inflater.inflate(R.layout.fragment_friend_list, container, false);
 
         Bundle bundle=getArguments();
-        loginMember= (Member) bundle.getSerializable("loginMember");
-
+        if(bundle!=null) {
+            loginMember = (Member) bundle.getSerializable("loginMember");
+        }
         showFriend(rootView);
 
         return rootView;
     }
-    protected void showFriend(final ViewGroup rootView){
+    private void showFriend(final ViewGroup rootView){
         final String url="http://jennyk97.dothome.co.kr/ShowFriend.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -122,11 +123,11 @@ public class FriendList extends Fragment {
             }
         };
 
-        RequestQueue queue= Volley.newRequestQueue(getActivity());
+        RequestQueue queue= Volley.newRequestQueue(context);
         queue.add(stringRequest);
     }
 
-    protected void selectDelFriend(int position){
+    private void selectDelFriend(int position){
         final Member delMember=friendListAdapter.getItem(position);
         AlertDialog.Builder builder=new AlertDialog.Builder(context,R.style.CustomDialog);
 
@@ -149,7 +150,7 @@ public class FriendList extends Fragment {
         alertDialog.show();
     }
 
-    protected void deleteFriend(final String delMemberId){
+    private void deleteFriend(final String delMemberId){
         final String url="http://jennyk97.dothome.co.kr/DeleteFriend.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -158,7 +159,7 @@ public class FriendList extends Fragment {
                 try{
                     Log.d("deleteFriend",response);
                     JSONObject jsonObject=new JSONObject(response);
-                    Boolean success=jsonObject.getBoolean(TAG_SUCCESS);
+                    boolean success=jsonObject.getBoolean(TAG_SUCCESS);
                     if(success) {
                         //삭제 성공여부 확인
                         showToast("친구 삭제 성공");
@@ -186,11 +187,11 @@ public class FriendList extends Fragment {
             }
         };
 
-        RequestQueue queue= Volley.newRequestQueue(getActivity());
+        RequestQueue queue= Volley.newRequestQueue(context);
         queue.add(stringRequest);
     }
 
-    protected void showToast(String data){
+    private void showToast(String data){
         Toast.makeText(context, data, Toast.LENGTH_LONG).show();
     }
 }

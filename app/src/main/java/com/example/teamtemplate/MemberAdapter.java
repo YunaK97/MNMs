@@ -13,9 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder> {
-    ArrayList<Member> items=new ArrayList<Member>();
+    private ArrayList<Member> items= new ArrayList<>();
 
-    OnMemberItemClickListener listener;
+    private OnMemberItemClickListener listener;
 
     public void addItem(Member item){
         items.add(item);
@@ -37,7 +37,7 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
         TextView friend_name,friend_id;
         CheckBox friend_check;
 
-        public ViewHolder(View itemView,final OnMemberItemClickListener listener){
+        ViewHolder(View itemView, final OnMemberItemClickListener listener){
             super(itemView);
 
             friend_name=itemView.findViewById(R.id.friend_name);

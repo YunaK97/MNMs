@@ -62,9 +62,10 @@ public class MembershipList extends Fragment {
 
         //loginMember,loginMemberAccount 가져오기
         Bundle bundle=getArguments();
-        loginMember= (Member) bundle.getSerializable("loginMember");
-        loginMemberAccount= (Account) bundle.getSerializable("loginMemberAccount");
-
+        if(bundle!=null) {
+            loginMember = (Member) bundle.getSerializable("loginMember");
+            loginMemberAccount = (Account) bundle.getSerializable("loginMemberAccount");
+        }
         //그룹리스트 출력
         groupView(rootView);
 
@@ -77,7 +78,7 @@ public class MembershipList extends Fragment {
         groupView(rootView);
     }
 
-    protected void groupView(final ViewGroup rootView){
+    private void groupView(final ViewGroup rootView){
         final String url="http://jennyk97.dothome.co.kr/MembergroupInfo.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -89,7 +90,7 @@ public class MembershipList extends Fragment {
                         showToast("그룹이 없습니다.");
 
                     }else{
-                        groupMembershiplList=(RecyclerView)rootView.findViewById(R.id.main_membership_list);
+                        groupMembershiplList= rootView.findViewById(R.id.main_membership_list);
                         LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(),LinearLayoutManager.VERTICAL,false);
                         groupMembershiplList.setLayoutManager(layoutManager);
 
@@ -146,11 +147,11 @@ public class MembershipList extends Fragment {
                 return params;
             }
         };
-        RequestQueue queue= Volley.newRequestQueue(getActivity());
+        RequestQueue queue= Volley.newRequestQueue(context);
         queue.add(stringRequest);
     }
 
-    protected void intoMembership(int position){
+    private void intoMembership(int position){
         Group item=groupAdapter.getItem(position);
         showToast("아이템 선택됨 : "+ item.getGroupName());
 
@@ -169,7 +170,7 @@ public class MembershipList extends Fragment {
 //                                membershipFragment.setArguments(bundle);
     }
 
-    protected void outGroup(final Group outGroup){
+    private void outGroup(final Group outGroup){
         showToast(outGroup.getGroupName()+":"+outGroup.getGid() + "나가기 구현중");
 
         final String url="http://jennyk97.dothome.co.kr/OutGroup.php";
@@ -180,7 +181,7 @@ public class MembershipList extends Fragment {
                 try{
                     Log.d("outMembership",response);
                     JSONObject jsonObject=new JSONObject(response);
-                    Boolean success=jsonObject.getBoolean("success");
+                    boolean success=jsonObject.getBoolean("success");
                     if(success) {
                         //삭제 성공여부 확인
                         showToast("그룹 나가기 성공");
@@ -209,11 +210,11 @@ public class MembershipList extends Fragment {
             }
         };
 
-        RequestQueue queue= Volley.newRequestQueue(getActivity());
+        RequestQueue queue= Volley.newRequestQueue(context);
         queue.add(stringRequest);
     }
 
-    protected void selectOutGroup(int position){
+    private void selectOutGroup(int position){
         final Group outGroup=groupAdapter.getItem(position);
         AlertDialog.Builder builder=new AlertDialog.Builder(context,R.style.CustomDialog);
 
@@ -235,7 +236,7 @@ public class MembershipList extends Fragment {
         alertDialog.show();
     }
 
-    protected void showToast(String data){
+    private void showToast(String data){
         Toast.makeText(context, data, Toast.LENGTH_LONG).show();
     }
 }

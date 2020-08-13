@@ -2,9 +2,7 @@ package com.example.teamtemplate.newgroupfriend;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,8 +16,6 @@ import com.android.volley.toolbox.Volley;
 import com.example.teamtemplate.Member;
 import com.example.teamtemplate.MemberAdapter;
 import com.example.teamtemplate.R;
-import com.example.teamtemplate.mainscreen.FriendListAdapter;
-import com.example.teamtemplate.mainscreen.OnFriendItemLongClickListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -123,6 +119,7 @@ public class NewDailyActivity extends AppCompatActivity {
                         }
                         params.put("friend",jsonArray.toString());
                     }catch (Exception e){
+                        e.printStackTrace();
                     }
                     return params;
                 }

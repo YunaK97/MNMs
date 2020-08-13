@@ -65,9 +65,10 @@ public class TransactionList extends Fragment {
 
         //loginMember,loginMemberAccount 가져오기
         Bundle bundle=getArguments();
-        loginMember= (Member) bundle.getSerializable("loginMember");
-        loginMemberAccount= (Account) bundle.getSerializable("loginMemberAccount");
-
+        if(bundle!=null) {
+            loginMember = (Member) bundle.getSerializable("loginMember");
+            loginMemberAccount = (Account) bundle.getSerializable("loginMemberAccount");
+        }
         //그룹리스트 출력
         transactionView(rootView);
 
@@ -75,7 +76,7 @@ public class TransactionList extends Fragment {
     }
 
 
-    public void transactionView(ViewGroup rootView){
+    private void transactionView(ViewGroup rootView){
         transactionList=rootView.findViewById(R.id.main_transaction_list);
         LinearLayoutManager layoutManager=new LinearLayoutManager(rootView.getContext(),LinearLayoutManager.VERTICAL,false);
         transactionList.setLayoutManager(layoutManager);
@@ -88,12 +89,9 @@ public class TransactionList extends Fragment {
         Transaction transact = new Transaction();
         transact.setAccountNum("1010");
         transactionProcess(transact);
-
-        return;
-
     }
 
-    protected void transactionProcess(final Transaction transaction){
+    private void transactionProcess(final Transaction transaction){
         final String accountNum = transaction.getAccountNum();
         final String url="http://jennyk97.dothome.co.kr/ListTransaction.php";
 
@@ -143,7 +141,7 @@ public class TransactionList extends Fragment {
             }
         };
 
-        RequestQueue queue= Volley.newRequestQueue(getActivity());
+        RequestQueue queue= Volley.newRequestQueue(context);
         queue.add(stringRequest);
     }
 }

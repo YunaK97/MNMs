@@ -15,10 +15,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.ViewHolder> {
-    ArrayList<Member> items=new ArrayList<Member>();
+    private ArrayList<Member> items= new ArrayList<>();
 
-    OnFriendItemClickListener listener;
-    OnFriendItemLongClickListener longlistener;
+    private OnFriendItemClickListener listener;
+    private OnFriendItemLongClickListener longlistener;
 
     public void addItem(Member item){
         items.add(item);
@@ -39,7 +39,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
     static class ViewHolder extends RecyclerView.ViewHolder{
         TextView friendlist_name,friendlist_id;
 
-        public ViewHolder(View itemView,final OnFriendItemClickListener listener,final OnFriendItemLongClickListener longlistener){
+        ViewHolder(View itemView, final OnFriendItemClickListener listener, final OnFriendItemLongClickListener longlistener){
             super(itemView);
 
             friendlist_name=itemView.findViewById(R.id.friendlist_name);
@@ -79,7 +79,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         this.listener=listener;
     }
 
-    public void setOnItemLongClickListener(OnFriendItemLongClickListener listener) {
+    void setOnItemLongClickListener(OnFriendItemLongClickListener listener) {
         this.longlistener=listener;
     }
 

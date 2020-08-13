@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> {
-    private ArrayList<Group> items=new ArrayList<Group>();
+    private ArrayList<Group> items= new ArrayList<>();
 
     OnGroupItemClickListener listener;
     OnGroupItemLongClickListener longListener;
@@ -38,7 +38,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     static class ViewHolder extends RecyclerView.ViewHolder{
         TextView group_name;
 
-        public ViewHolder(View itemView,final OnGroupItemClickListener listener,final OnGroupItemLongClickListener longListener){
+        ViewHolder(View itemView, final OnGroupItemClickListener listener, final OnGroupItemLongClickListener longListener){
             super(itemView);
 
             group_name=itemView.findViewById(R.id.group_name);
@@ -71,11 +71,11 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         }
     }
 
-    public void setOnItemClickListener(OnGroupItemClickListener listener){
+    void setOnItemClickListener(OnGroupItemClickListener listener){
         this.listener=listener;
     }
 
-    public void setOnItemLongClickListener(OnGroupItemLongClickListener listener){
+    void setOnItemLongClickListener(OnGroupItemLongClickListener listener){
         this.longListener=listener;
     }
 
