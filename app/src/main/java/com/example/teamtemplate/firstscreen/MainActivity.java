@@ -53,8 +53,6 @@ public class MainActivity extends AppCompatActivity {
         login= findViewById(R.id.login);
         signin= findViewById(R.id.signin);
         autoLogin=findViewById(R.id.autoLogin);
-        id=((TextView)findViewById(R.id.id)).getText().toString();
-        pw=((TextView)findViewById(R.id.pw)).getText().toString();
 
         String tmpId=preferences.getString("loginId","");
         String tmpPw=preferences.getString("loginPw","");
@@ -68,6 +66,8 @@ public class MainActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                id=((TextView)findViewById(R.id.id)).getText().toString();
+                pw=((TextView)findViewById(R.id.pw)).getText().toString();
                 if(TextUtils.isEmpty(id) || TextUtils.isEmpty(pw)){
                     showToast("빈칸 노노!");
                 }else {
