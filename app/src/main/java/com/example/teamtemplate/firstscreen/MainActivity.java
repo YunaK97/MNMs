@@ -37,12 +37,14 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     String TAG_SUCCESS="success";
+    String id,pw;
     private  CheckBox autoLogin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Button login,signin;
+
 
         preferences= PreferenceManager.getDefaultSharedPreferences(this);
         editor=preferences.edit();
@@ -51,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
         login= findViewById(R.id.login);
         signin= findViewById(R.id.signin);
         autoLogin=findViewById(R.id.autoLogin);
+        id=((TextView)findViewById(R.id.id)).getText().toString();
+        pw=((TextView)findViewById(R.id.pw)).getText().toString();
 
         String tmpId=preferences.getString("loginId","");
         String tmpPw=preferences.getString("loginPw","");
@@ -64,8 +68,6 @@ public class MainActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String id=((TextView)findViewById(R.id.id)).getText().toString();
-                String pw=((TextView)findViewById(R.id.pw)).getText().toString();
                 if(TextUtils.isEmpty(id) || TextUtils.isEmpty(pw)){
                     showToast("빈칸 노노!");
                 }else {
@@ -112,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     JSONObject jsonObject=new JSONObject(response);
 
-                    Boolean success=jsonObject.getBoolean(TAG_SUCCESS);
+                    boolean success=jsonObject.getBoolean(TAG_SUCCESS);
                     if(success){
                         String name=jsonObject.getString("memName");
                         String id=jsonObject.getString("memID");

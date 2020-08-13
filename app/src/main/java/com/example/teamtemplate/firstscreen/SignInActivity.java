@@ -44,6 +44,7 @@ public class SignInActivity extends AppCompatActivity {
 //회원가입 완료
     boolean idValid=false,ssnValid=false,emailValid=false,pwValid=false;
     Member signInMember = new Member();
+    ArrayAdapter bankTypeAdapter;
     Account signInMemberAccount = new Account();
     Spinner email_type,bank_type;
     final String TAG = getClass().getSimpleName();
@@ -74,7 +75,7 @@ public class SignInActivity extends AppCompatActivity {
         });
 
         bank_type= findViewById(R.id.bank_type);
-        final ArrayAdapter bankTypeAdapter=ArrayAdapter.createFromResource(this,R.array.bank_type,R.layout.support_simple_spinner_dropdown_item);
+        bankTypeAdapter=ArrayAdapter.createFromResource(this,R.array.bank_type,R.layout.support_simple_spinner_dropdown_item);
         bankTypeAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         bank_type.setAdapter(bankTypeAdapter);
         bank_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -390,7 +391,6 @@ public class SignInActivity extends AppCompatActivity {
         }else {
             signInMemberAccount.setAccountPassword(accountPw);
         }
-
         return true;
     }
 
