@@ -299,8 +299,6 @@ public class MainMenuActivity extends AppCompatActivity {
             return items.get(position);
         }
 
-
-
         @Override
         public int getCount() {
             return items.size();
