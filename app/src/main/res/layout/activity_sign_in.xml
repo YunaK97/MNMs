@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="@string/text_signin"
-        android:textColor="@color/colorBlack"
+        android:textColor="@android:color/holo_red_dark"
         android:textSize="30sp" />
 
     <LinearLayout
@@ -42,11 +42,9 @@
 
             <Button
                 android:id="@+id/overlap"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/CustomButton"
                 android:layout_gravity="center"
-                android:text="@string/btn_overlap"
-                android:textSize="15sp" />
+                android:text="@string/btn_overlap" />
         </LinearLayout>
 
         <EditText
@@ -79,7 +77,7 @@
                 />
 
             <Spinner
-                android:background="@drawable/border"
+                android:background="@drawable/sidecustom"
                 android:id="@+id/email_type"
                 android:layout_marginLeft="5dp"
                 android:layout_width="250dp"
@@ -90,23 +88,20 @@
 
             <Button
                 android:id="@+id/emailCheck"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/btn_email"
-                android:textSize="15sp" />
+                style="@style/CustomButton"
+                />
         </LinearLayout>
 
     </LinearLayout>
 
     <Button
         android:id="@+id/identify"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="5dp"
         android:text="@string/btn_identify"
-        android:textSize="15sp" />
+        style="@style/CustomButton"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -128,7 +123,7 @@
                 android:inputType="text"
                 android:layout_weight="1" />
             <Spinner
-                android:background="@drawable/border"
+                android:background="@drawable/sidecustom"
                 android:id="@+id/bank_type"
                 android:layout_width="250dp"
                 android:layout_height="25dp"
@@ -163,12 +158,10 @@
 
     <Button
         android:id="@+id/signComplete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
         android:text="@string/btn_signin"
-        android:textSize="15sp" />
+        style="@style/CustomButton"/>
 
 </LinearLayout>

@@ -42,9 +42,8 @@
         android:layout_height="300dp" />
     <Button
         android:id="@+id/btn_new_daily"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="데일리톡방 생성!"
+        style="@style/CustomButton"
+        android:text="@string/app_new_daily"
         android:layout_gravity="bottom|center"
         />
 

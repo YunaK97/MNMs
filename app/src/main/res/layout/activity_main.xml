@@ -21,15 +21,11 @@
 
         <EditText
             android:id="@+id/id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/sideblack"
+            style="@style/CustomTextView"
             android:ems="10"
             android:hint="@string/hint_id"
+            android:textColorHint="@android:color/holo_red_light"
             android:inputType="text"
-            android:textSize="25sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -37,15 +33,11 @@
 
         <EditText
             android:id="@+id/pw"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/sideblack"
+            style="@style/CustomTextView"
             android:ems="10"
             android:hint="@string/hint_pw"
+            android:textColorHint="@android:color/holo_red_light"
             android:inputType="textPassword"
-            android:textSize="25sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -62,14 +54,14 @@
 
         <Button
             android:id="@+id/login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/CustomButton"
+            android:layout_marginRight="5dp"
             android:text="@string/btn_login" />
 
         <Button
             android:id="@+id/signin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/CustomButton"
+            android:layout_marginLeft="5dp"
             android:text="@string/btn_signin" />
 
     </LinearLayout>

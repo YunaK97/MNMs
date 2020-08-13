@@ -64,9 +64,8 @@
         android:layout_height="300dp" />
     <Button
         android:id="@+id/btn_new_membership"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="회비톡방 생성!"
+        style="@style/CustomButton"
+        android:text="@string/app_new_membership"
         android:layout_gravity="bottom|center"
         />
 

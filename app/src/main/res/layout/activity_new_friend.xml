@@ -56,9 +56,8 @@
             android:text="친구ID" />
         <Button
             android:id="@+id/btn_addFriend"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="친구추가"
+            style="@style/CustomButton"
+            android:text="@string/app_new_friend"
             android:textSize="20sp"
             android:layout_gravity="center"/>
     </LinearLayout>
