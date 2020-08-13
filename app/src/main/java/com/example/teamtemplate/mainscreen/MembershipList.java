@@ -99,12 +99,14 @@ public class MembershipList extends Fragment {
                             String groupname=item.getString("groupName");
                             String gid=item.getString("groupID");
                             String did=item.getString("MID");
+                            //String notSubmit=item.getString("notSubmit");
                             //String groupTime=item.getString("groupTime");
 
                             Group group = new Group();
                             group.setGroupName(groupname);
                             group.setGid(gid);
                             group.setDid(did);
+                            //group.setNotSubmit(notSubmit);
                             //group.setTime(groupTime);
                             groupAdapter.addItem(group);
                         }

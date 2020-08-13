@@ -9,9 +9,18 @@ public class Group implements Serializable {
     private String mid;
     private String did;
     private String time;
+    private String notSubmit;
     //memberID;
     //
 
+
+    public String getNotSubmit() {
+        return notSubmit;
+    }
+
+    public void setNotSubmit(String notSubmit) {
+        this.notSubmit = notSubmit;
+    }
 
     public String getTime() {
         return time;

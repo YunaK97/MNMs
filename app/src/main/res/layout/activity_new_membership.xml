@@ -48,8 +48,31 @@
             android:layout_weight="1"
             android:textSize="20sp"
             android:inputType="number"
+            android:hint="ex)5" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="158dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="미납횟수(단위:회)"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/membership_notsubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="20sp"
+            android:inputType="number"
             android:hint="ex) 3" />
     </LinearLayout>
+
 
     <TextView
         android:layout_marginTop="20dp"

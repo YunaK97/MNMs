@@ -35,7 +35,7 @@ public class NewMembershipActivity extends AppCompatActivity {
     private Member loginMember;
     private String TAG_SUCCESS="success";
     private RecyclerView friend_list;
-    private String membership_name, membership_money;
+    private String membership_name, membership_money,membership_notsubmit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +52,7 @@ public class NewMembershipActivity extends AppCompatActivity {
 
         membership_name=((TextView)findViewById(R.id.membership_name)).getText().toString();
         membership_money=((TextView)findViewById(R.id.membership_money)).getText().toString();
+        membership_notsubmit=((TextView)findViewById(R.id.membership_notsubmit)).getText().toString();
 
         //친구 가져와서 출력
         showFriend();
@@ -70,7 +71,7 @@ public class NewMembershipActivity extends AppCompatActivity {
 
     protected void NewMembership(){
         selectedMember=new ArrayList<>();
-        if(membership_money==null || membership_name==null){
+        if(membership_money==null || membership_name==null || membership_notsubmit==null){
             showToast("이러시면 안됨니다 고갱님 정보를 쓰세욥");
         }else {
             for (int i = 0; i < memberAdapter.getItemCount(); i++) {
@@ -110,6 +111,7 @@ public class NewMembershipActivity extends AppCompatActivity {
                     params.put("memID",loginMember.getMemID());
                     params.put("memName",loginMember.getMemName());
                     params.put("membershipName",membership_name);
+                    params.put("membershipNotSubmit",membership_notsubmit);
                     try {
                         JSONArray jsonArray=new JSONArray();
                         for (int i=0;i<selectedMember.size();i++){
