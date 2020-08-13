@@ -6,9 +6,9 @@
     <TextView
         android:background="@drawable/border"
         android:id="@+id/group_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:text="그룹이름" />
 </LinearLayout>

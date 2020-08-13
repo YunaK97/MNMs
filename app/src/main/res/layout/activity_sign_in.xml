@@ -10,7 +10,7 @@
         android:layout_gravity="center"
         android:text="@string/text_signin"
         android:textColor="@color/colorBlack"
-        android:textSize="30dp" />
+        android:textSize="30sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,17 +21,10 @@
 
         <EditText
             android:id="@+id/textName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/sideblack"
+            style="@style/CustomTextView"
             android:ems="10"
             android:inputType="text"
-            android:hint="@string/hint_name"
-            android:textSize="25dp" />
+            android:hint="@string/hint_name" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,17 +33,12 @@
 
             <EditText
                 android:id="@+id/textID"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_width="0dp"
+                style="@style/CustomTextView"
                 android:layout_weight="1"
-                android:background="@drawable/sideblack"
                 android:ems="10"
                 android:inputType="text"
-                android:hint="@string/hint_id"
-                android:textSize="25dp" />
+                android:hint="@string/hint_id" />
 
             <Button
                 android:id="@+id/overlap"
@@ -58,21 +46,16 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/btn_overlap"
-                android:textSize="15dp" />
+                android:textSize="15sp" />
         </LinearLayout>
 
         <EditText
             android:id="@+id/textPW"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/sideblack"
+            style="@style/CustomTextView"
             android:ems="10"
             android:hint="@string/hint_pw"
-            android:inputType="textPassword"
-            android:textSize="25dp" />
+            android:inputType="textPassword" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -82,21 +65,16 @@
             <EditText
                 android:id="@+id/textEmail"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="15dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="5dp"
+                style="@style/CustomTextView"
                 android:layout_weight="1"
-                android:background="@drawable/sideblack"
                 android:ems="10"
                 android:hint="@string/hint_email"
-                android:inputType="text"
-                android:textSize="25dp" />
+                android:inputType="text" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="\@"
-                android:textSize="25dp"
+                android:textSize="25sp"
                 android:textColor="@color/colorBlack"
                 />
 
@@ -107,7 +85,8 @@
                 android:layout_width="250dp"
                 android:layout_height="25dp"
                 android:dropDownWidth="250dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:layout_marginStart="5dp" />
 
             <Button
                 android:id="@+id/emailCheck"
@@ -115,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/btn_email"
-                android:textSize="15dp" />
+                android:textSize="15sp" />
         </LinearLayout>
 
     </LinearLayout>
@@ -127,7 +106,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="5dp"
         android:text="@string/btn_identify"
-        android:textSize="15dp" />
+        android:textSize="15sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -144,15 +123,10 @@
             <EditText
                 android:id="@+id/textAccountNum"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/sideblack"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                style="@style/CustomTextView"
                 android:hint="@string/hint_accnum"
                 android:inputType="text"
-                android:layout_weight="1"
-                android:textSize="25dp" />
+                android:layout_weight="1" />
             <Spinner
                 android:background="@drawable/border"
                 android:id="@+id/bank_type"
@@ -160,7 +134,8 @@
                 android:layout_height="25dp"
                 android:dropDownWidth="150dp"
                 android:layout_marginRight="10dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:layout_marginEnd="10dp" />
         </LinearLayout>
 
         <LinearLayout
@@ -168,28 +143,20 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
             <EditText
-                android:layout_marginLeft="10dp"
                 android:id="@+id/textAccountPW"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:hint="@string/hint_bankpw"
                 android:inputType="numberPassword"
-                android:textSize="25dp"
-                android:background="@drawable/border"
+                style="@style/CustomTextView"
                 android:layout_weight="1"
                 />
             <EditText
                 android:layout_weight="1"
                 android:id="@+id/textAccountBalance"
                 android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/sideblack"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
+                style="@style/CustomTextView"
                 android:hint="@string/hint_acc"
-                android:inputType="number"
-                android:textSize="25dp" />
+                android:inputType="number"/>
         </LinearLayout>
 
     </LinearLayout>
@@ -202,6 +169,6 @@
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
         android:text="@string/btn_signin"
-        android:textSize="15dp" />
+        android:textSize="15sp" />
 
 </LinearLayout>

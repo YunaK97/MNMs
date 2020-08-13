@@ -16,7 +16,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:text="톡방이름" />
 
         <EditText
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="text"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:hint="ex) 아우디" />
     </LinearLayout>
 
@@ -34,7 +34,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="친구선택"
-        android:textSize="20dp"
+        android:textSize="20sp"
         />
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/daily_selected_friend"
