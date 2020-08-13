@@ -63,28 +63,28 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_margin="5dp"
-            android:background="@drawable/no1"
+            android:background="@drawable/tab_selector"
             />
         <ImageButton
             android:id="@+id/btn_membership"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_margin="5dp"
-            android:background="@drawable/no2"
+            android:background="@drawable/tab_selector"
             />
         <ImageButton
             android:id="@+id/btn_daily"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_margin="5dp"
-            android:background="@drawable/no3"
+            android:background="@drawable/tab_selector"
             />
         <ImageButton
             android:id="@+id/btn_friendList"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_margin="5dp"
-            android:background="@drawable/no4"
+            android:background="@drawable/tab_selector"
             />
     </LinearLayout>
 </LinearLayout>

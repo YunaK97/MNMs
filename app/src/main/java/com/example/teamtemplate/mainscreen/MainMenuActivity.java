@@ -79,6 +79,52 @@ public class MainMenuActivity extends AppCompatActivity {
         adapter.addItem(friendList);
 
         pager.setAdapter(adapter);
+        btn_transaction.setSelected(true);
+        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position){
+                    case 0:
+                        btn_transaction.setSelected(true);
+                        btn_membership.setSelected(false);
+                        btn_daily.setSelected(false);
+                        btn_friendList.setSelected(false);
+//                        btn_transaction.setImageResource(R.drawable.selected);
+//                        btn_membership.setImageResource(R.drawable.no2);
+//                        btn_daily.setImageResource(R.drawable.no3);
+//                        btn_friendList.setImageResource(R.drawable.no4);
+                        break;
+                    case 1:
+                        btn_transaction.setSelected(false);
+                        btn_membership.setSelected(true);
+                        btn_daily.setSelected(false);
+                        btn_friendList.setSelected(false);
+                        break;
+                    case 2:
+                        btn_transaction.setSelected(false);
+                        btn_membership.setSelected(false);
+                        btn_daily.setSelected(true);
+                        btn_friendList.setSelected(false);
+                        break;
+                    case 3:
+                        btn_transaction.setSelected(false);
+                        btn_membership.setSelected(false);
+                        btn_daily.setSelected(false);
+                        btn_friendList.setSelected(true);
+                        break;
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
         Bundle bundle=new Bundle();
         bundle.putSerializable("loginMember", loginMember);
@@ -100,6 +146,10 @@ public class MainMenuActivity extends AppCompatActivity {
         btn_transaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btn_transaction.setSelected(true);
+                btn_membership.setSelected(false);
+                btn_daily.setSelected(false);
+                btn_friendList.setSelected(false);
                 pager.setCurrentItem(0);
             }
         });
@@ -107,6 +157,10 @@ public class MainMenuActivity extends AppCompatActivity {
         btn_membership.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btn_transaction.setSelected(false);
+                btn_membership.setSelected(true);
+                btn_daily.setSelected(false);
+                btn_friendList.setSelected(false);
                 pager.setCurrentItem(1);
             }
         });
@@ -123,6 +177,10 @@ public class MainMenuActivity extends AppCompatActivity {
         btn_daily.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btn_transaction.setSelected(false);
+                btn_membership.setSelected(false);
+                btn_daily.setSelected(true);
+                btn_friendList.setSelected(false);
                 pager.setCurrentItem(2);
             }
         });
@@ -139,6 +197,10 @@ public class MainMenuActivity extends AppCompatActivity {
         btn_friendList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                btn_transaction.setSelected(false);
+                btn_membership.setSelected(false);
+                btn_daily.setSelected(false);
+                btn_friendList.setSelected(true);
                 pager.setCurrentItem(3);
             }
         });
@@ -160,6 +222,7 @@ public class MainMenuActivity extends AppCompatActivity {
         return true;
     }
 
+    //상단 우측의 추가 버튼 클릭
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int curId = item.getItemId();
@@ -238,6 +301,8 @@ public class MainMenuActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             return items.get(position);
         }
+
+
 
         @Override
         public int getCount() {

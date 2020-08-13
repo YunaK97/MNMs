@@ -6,14 +6,7 @@
         <item name="colorPrimaryDark">#FA7F7F</item>
         <item name="colorAccent">#FFFFFF</item>
         <item name="android:textStyle">bold</item>
-    </style>
-
-    <style name="AppTheme2" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@android:color/holo_red_light</item>
-        <item name="colorPrimaryDark">#FA7F7F</item>
-        <item name="colorAccent">#FFFFFF</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:dialogTheme">@style/CustomDialog</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -46,6 +39,11 @@
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:background">@drawable/btn_background</item>
+    </style>
+
+    <style name="CustomDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:textColorPrimary">@android:color/holo_red_dark</item>
+        <item name="colorAccent">@android:color/holo_red_light</item>
     </style>
 
 </resources>

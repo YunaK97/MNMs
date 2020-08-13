@@ -126,6 +126,7 @@ public class NewFriendActivity extends AppCompatActivity {
                     Log.d(TAG,"log : "+response);
                     JSONArray jsonArray = new JSONArray(response);
                     if(jsonArray.length()==0){
+                        request_friend_layout.setVisibility(View.GONE);
                         return;
                     }
 
@@ -243,7 +244,7 @@ public class NewFriendActivity extends AppCompatActivity {
                     Boolean success=jsonObject.getBoolean(TAG_SUCCESS);
                     if(success){
                         showToast("친구 신청 처리 완료!");
-                        request_friend_layout.setVisibility(View.GONE);
+                        showRequest();
                     }
 
                 } catch (JSONException e) {

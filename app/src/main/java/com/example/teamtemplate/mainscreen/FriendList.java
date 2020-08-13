@@ -32,6 +32,9 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 public class FriendList extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -116,9 +119,10 @@ public class FriendList extends Fragment {
 
     protected void selectDelFriend(int position){
         final Member delMember=friendListAdapter.getItem(position);
-        AlertDialog.Builder builder=new AlertDialog.Builder(context);
+        AlertDialog.Builder builder=new AlertDialog.Builder(context,R.style.CustomDialog);
 
         builder.setTitle(delMember.getMemID()).setMessage("친구목록에서 삭제하시겠습니까?");
+
         builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
@@ -132,7 +136,7 @@ public class FriendList extends Fragment {
             }
         });
 
-        AlertDialog alertDialog = builder.create();
+        final AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
 

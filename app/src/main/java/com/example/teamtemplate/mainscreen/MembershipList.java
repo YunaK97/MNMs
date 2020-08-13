@@ -200,7 +200,7 @@ public class MembershipList extends Fragment {
 
     protected void selectOutGroup(int position){
         final Group outGroup=groupAdapter.getItem(position);
-        AlertDialog.Builder builder=new AlertDialog.Builder(context);
+        AlertDialog.Builder builder=new AlertDialog.Builder(context,R.style.CustomDialog);
 
         builder.setTitle(outGroup.getGroupName()).setMessage("친구목록에서 삭제하시겠습니까?");
         builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
