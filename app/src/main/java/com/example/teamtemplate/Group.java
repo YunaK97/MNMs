@@ -1,14 +1,26 @@
 package com.example.teamtemplate;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Group implements Serializable {
     private String groupName;
     private String gid;
     private String mid;
     private String did;
+    private String time;
     //memberID;
     //
+
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
     public String getGroupName() {
         return groupName;
     }

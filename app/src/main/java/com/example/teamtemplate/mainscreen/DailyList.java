@@ -103,11 +103,13 @@ public class DailyList extends Fragment {
                             String groupname=item.getString("groupName");
                             String gid=item.getString("groupID");
                             String did=item.getString("DID");
+                            //String groupTime=item.getString("groupTime");
 
                             Group group = new Group();
                             group.setGroupName(groupname);
                             group.setGid(gid);
                             group.setDid(did);
+                            //group.setTime(groupTime);
                             groupAdapter.addItem(group);
                         }
 

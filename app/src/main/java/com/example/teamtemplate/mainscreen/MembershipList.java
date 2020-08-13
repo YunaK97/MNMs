@@ -100,11 +100,13 @@ public class MembershipList extends Fragment {
                             String groupname=item.getString("groupName");
                             String gid=item.getString("groupID");
                             String mid=item.getString("MID");
+                            //String groupTime=item.getString("groupTime");
 
                             Group group = new Group();
                             group.setGroupName(groupname);
                             group.setGid(gid);
                             group.setMid(mid);
+                            //group.setTime(groupTime);
                             groupAdapter.addItem(group);
                         }
 

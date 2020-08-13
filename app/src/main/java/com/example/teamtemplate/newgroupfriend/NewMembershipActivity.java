@@ -19,7 +19,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,7 +32,8 @@ public class NewMembershipActivity extends AppCompatActivity {
     private ArrayList<Member> selectedMember;
     private Member loginMember;
     private String TAG_SUCCESS="success";
-    private String membership_name,membership_money;
+    private String membership_name;
+    private int membership_money=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +49,7 @@ public class NewMembershipActivity extends AppCompatActivity {
          */
 
         membership_name=((TextView)findViewById(R.id.membership_name)).getText().toString();
-        membership_money=((TextView)findViewById(R.id.membership_money)).getText().toString();
+        membership_money=Integer.parseInt(((TextView)findViewById(R.id.membership_money)).getText().toString());
 
         //친구 가져와서 출력
         showFriend();
@@ -65,7 +68,7 @@ public class NewMembershipActivity extends AppCompatActivity {
 
     protected void NewMembership(){
         selectedMember=new ArrayList<>();
-        if(membership_money==null || membership_name==null){
+        if(membership_money==0 || membership_name==null){
             showToast("이러시면 안됨니다 고갱님 정보를 쓰세욥");
         }else {
             for (int i = 0; i < memberAdapter.getItemCount(); i++) {

@@ -21,13 +21,13 @@ public class RequestNewGroup extends StringRequest {
     //new daily
     final static private String URL2="http://jennyk97.dothome.co.kr/NewDaily.php";
 
-    public RequestNewGroup(Member loginMember, ArrayList<Member> selectedFriend, String membershipMoney, String membershipName, Response.Listener<String> listener){
+    public RequestNewGroup(Member loginMember, ArrayList<Member> selectedFriend, int membershipMoney, String membershipName, Response.Listener<String> listener){
         super(Method.POST,URL1,listener,null);
         map=new HashMap<>();
         map.put("memID", loginMember.getMemID());
         map.put("memName",loginMember.getMemName());
         map.put("membershipName",membershipName);
-        map.put("membershipMoney",membershipMoney);
+        map.put("membershipMoney",membershipMoney+"");
         try {
             JSONArray jsonArray=new JSONArray();
             for (int i=0;i<selectedFriend.size();i++){
@@ -40,7 +40,7 @@ public class RequestNewGroup extends StringRequest {
         }catch (Exception e){
         }
     }
-    public RequestNewGroup(Member loginMember, ArrayList<Member> selectedFriend, String daily_name, Response.Listener<String> listener){
+    public RequestNewGroup(Member loginMember, ArrayList<Member> selectedFriend, String daily_name,Response.Listener<String> listener){
         super(Method.POST,URL2,listener,null);
         map=new HashMap<>();
         map.put("memID", loginMember.getMemID());
