@@ -137,7 +137,8 @@ public class MainActivity extends AppCompatActivity {
                             editor.putString("loginId",loginMem.getMemID());
                             editor.putString("loginPw",loginMem.getMemID());
                             editor.commit();
-                        }else{
+                        }
+                        else{
                             editor.clear();
                             editor.commit();
                         }

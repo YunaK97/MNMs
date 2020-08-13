@@ -94,10 +94,6 @@ public class MainMenuActivity extends AppCompatActivity {
                         btn_membership.setSelected(false);
                         btn_daily.setSelected(false);
                         btn_friendList.setSelected(false);
-//                        btn_transaction.setImageResource(R.drawable.selected);
-//                        btn_membership.setImageResource(R.drawable.no2);
-//                        btn_daily.setImageResource(R.drawable.no3);
-//                        btn_friendList.setImageResource(R.drawable.no4);
                         break;
                     case 1:
                         btn_transaction.setSelected(false);
@@ -239,6 +235,8 @@ public class MainMenuActivity extends AppCompatActivity {
             Intent intent=new Intent(getApplicationContext(), NewFriendActivity.class);
             intent.putExtra("loginMember",loginMember);
             startActivity(intent);
+        }else if(curId==R.id.logout){
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
