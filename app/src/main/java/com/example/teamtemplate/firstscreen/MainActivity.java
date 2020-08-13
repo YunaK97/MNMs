@@ -4,11 +4,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,14 +34,32 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private final static int SIGNIN=221,BACK=321;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
     String TAG_SUCCESS="success";
+    private  CheckBox autoLogin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Button login,signin;
         super.onCreate(savedInstanceState);
+
+        Button login,signin;
+
+        preferences= PreferenceManager.getDefaultSharedPreferences(this);
+        editor=preferences.edit();
+
         setContentView(R.layout.activity_main);
         login= findViewById(R.id.login);
         signin= findViewById(R.id.signin);
+        autoLogin=findViewById(R.id.autoLogin);
+
+        String tmpId=preferences.getString("loginId","");
+        String tmpPw=preferences.getString("loginPw","");
+        if(!tmpId.equals("") && !tmpPw.equals("")) {
+            Member member=new Member();
+            member.setMemID(tmpId);
+            member.setMemPW(tmpPw);
+            loginProcess(member);
+        }
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,9 +72,7 @@ public class MainActivity extends AppCompatActivity {
                     Member member = new Member();
                     member.setMemID(id);
                     member.setMemPW(pw);
-
                     loginProcess(member);
-
                 }
             }
         });
@@ -114,7 +133,14 @@ public class MainActivity extends AppCompatActivity {
                         int balance=Integer.parseInt(accBalance);
                         memAcc.setAccountBalance(balance);
 
-                        showToast("로그인 성공하였습니다. "+loginMem.getMemName()+"님");
+                        if(autoLogin.isChecked()){
+                            editor.putString("loginId",loginMem.getMemID());
+                            editor.putString("loginPw",loginMem.getMemID());
+                            editor.commit();
+                        }else{
+                            editor.clear();
+                            editor.commit();
+                        }
                         Intent intent=new Intent(MainActivity.this, MainMenuActivity.class);
                         intent.putExtra("loginMember",loginMem);
                         intent.putExtra("loginMemberAccount",memAcc);

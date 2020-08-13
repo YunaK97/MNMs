@@ -63,6 +63,15 @@
             style="@style/CustomButton"
             android:layout_marginLeft="5dp"
             android:text="@string/btn_signin" />
+        <CheckBox
+            android:id="@+id/autoLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="false"
+            android:text="자동로그인"
+            android:background="@drawable/sidecustom"
+            android:buttonTint="@android:color/holo_red_light"
+            />
 
     </LinearLayout>
 
