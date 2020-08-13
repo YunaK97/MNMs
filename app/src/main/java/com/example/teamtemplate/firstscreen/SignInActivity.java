@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -34,7 +35,7 @@ public class SignInActivity extends AppCompatActivity {
 //아이디 중복확인
 //민증확인(카메라)
 //회원가입 완료
-    boolean idValid=false,ssnValid=false,emailValid=false;
+    boolean idValid=false,ssnValid=false,emailValid=false,pwValid=false;
     Member signInMember = new Member();
     Account memberAccount = new Account();
     Spinner email_type,bank_type;
@@ -187,7 +188,7 @@ public class SignInActivity extends AppCompatActivity {
                 if(!getUserInfo() || !getAccountInfo()){
                     showToast("빈칸 ㄴㄴ해");
                 }else{
-                    if(emailValid&&idValid&&ssnValid){
+                    if(emailValid&&idValid&&ssnValid&&pwValid){
                         Response.Listener<String> responseListener = new Response.Listener<String>() {
                             @Override
                             public void onResponse(String response) {
@@ -226,7 +227,15 @@ public class SignInActivity extends AppCompatActivity {
                     queue.add(requestWork);
                     //queue.add( registerRequest );
                     }else{
-                        showToast("잘못된 입력!(이메일,주민번호,아이디 확인~)");
+                        if(!emailValid){
+                            showToast("이메일 다시 확인");
+                        }else if(!ssnValid){
+                            showToast("민증 다시 확인");
+                        }else if(!idValid){
+                            showToast("아이디 다시 확인");
+                        }else if(!pwValid){
+                            showToast("비밀번호 불일치");
+                        }
                     }
                 }
             }
@@ -256,7 +265,12 @@ public class SignInActivity extends AppCompatActivity {
         else signInMember.setMemName(name);
         String pw=((TextView)findViewById(R.id.textPW)).getText().toString();
         if(TextUtils.isEmpty(pw)) return false;
-        signInMember.setMemPW(pw);
+        String checkPw=((TextView)findViewById(R.id.textCheckPW)).getText().toString();
+        if(TextUtils.isEmpty(checkPw)) return false;
+        if(pw.equals(checkPw)){
+            pwValid=true;
+            signInMember.setMemPW(pw);
+        }
         return true;
     }
 
