@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
-    private final static int SIGNIN=221,BACK=321;
+    private final static int SIGNIN=221,LOGOUT=333;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     String TAG_SUCCESS="success";
@@ -45,14 +45,8 @@ public class MainActivity extends AppCompatActivity {
 
         Button login,signin;
 
-
         preferences= PreferenceManager.getDefaultSharedPreferences(this);
         editor=preferences.edit();
-
-        setContentView(R.layout.activity_main);
-        login= findViewById(R.id.login);
-        signin= findViewById(R.id.signin);
-        autoLogin=findViewById(R.id.autoLogin);
 
         String tmpId=preferences.getString("loginId","");
         String tmpPw=preferences.getString("loginPw","");
@@ -62,6 +56,11 @@ public class MainActivity extends AppCompatActivity {
             member.setMemPW(tmpPw);
             loginProcess(member);
         }
+
+        setContentView(R.layout.activity_main);
+        login= findViewById(R.id.login);
+        signin= findViewById(R.id.signin);
+        autoLogin=findViewById(R.id.autoLogin);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
-
         if(requestCode == SIGNIN){
             boolean result=data.getBooleanExtra("result",false);
             int back=data.getIntExtra("back",0);
@@ -102,7 +100,12 @@ public class MainActivity extends AppCompatActivity {
                     showToast("쏴리,,회원가입 실패ㅠ");
                 }
             }
+        }else if(requestCode==LOGOUT){
+            editor.clear();
+            editor.commit();
+
         }
+        //로그아웃 시 -> 앱 재시작때 자동로그인 되지 않도록 하기
     }
 
     protected void loginProcess(final Member member){
@@ -149,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("loginMemberAccount",memAcc);
                         //멤버 나머지 속성 받기
 
-                        startActivity(intent);
+                        startActivityForResult(intent,LOGOUT);
                     }
                     else{//로그인에 실패한 경우
                         showToast("로그인에 실패했습니다.");

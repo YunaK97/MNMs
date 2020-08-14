@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -138,12 +139,9 @@ public class SignInActivity extends AppCompatActivity {
         cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch(v.getId()){
-                    case R.id.identify:
-                        // 카메라 앱을 여는 소스
-                        Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(cameraIntent, TAKE_PICTURE);
-                        break;
+                if (v.getId() == R.id.identify) {// 카메라 앱을 여는 소스
+                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(cameraIntent, TAKE_PICTURE);
                 }
                 String tmpssn="970822-10041004";
                 showToast("민증확인! (구현중)");
@@ -315,7 +313,7 @@ public class SignInActivity extends AppCompatActivity {
                         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
                         intent.putExtra("result", true);
                         intent.putExtra("back",0);
-                        setResult(Activity.RESULT_OK, intent);
+                        setResult(221, intent);
 
                         finish();
                     } else {
@@ -375,9 +373,7 @@ public class SignInActivity extends AppCompatActivity {
         if(TextUtils.isEmpty(accountNum)) return false;
         else signInMemberAccount.setAccountNum(accountNum);
 
-        String accountBalance=((TextView)findViewById(R.id.textAccountBalance)).getText().toString();
-        accountBalance.replaceAll(" ","");
-
+        String accountBalance="1000000";
         if(TextUtils.isEmpty(accountBalance)) return false;
         else signInMemberAccount.setAccountBalance(Integer.parseInt(accountBalance));
 

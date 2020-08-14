@@ -132,6 +132,16 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
+            <Spinner
+                android:background="@drawable/sidecustom"
+                android:id="@+id/bank_type"
+                android:layout_width="200dp"
+                android:layout_height="25dp"
+                android:dropDownWidth="150dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp" />
+
             <EditText
                 android:id="@+id/textAccountNum"
                 android:layout_width="match_parent"
@@ -139,37 +149,18 @@
                 android:hint="@string/hint_accnum"
                 android:inputType="text"
                 android:layout_weight="1" />
-            <Spinner
-                android:background="@drawable/sidecustom"
-                android:id="@+id/bank_type"
-                android:layout_width="250dp"
-                android:layout_height="25dp"
-                android:dropDownWidth="150dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
-                android:layout_marginEnd="10dp" />
+
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <EditText
-                android:id="@+id/textAccountPW"
-                android:layout_width="wrap_content"
-                android:hint="@string/hint_bankpw"
-                android:inputType="numberPassword"
-                style="@style/CustomTextView"
-                android:layout_weight="1"
-                />
-            <EditText
-                android:layout_weight="1"
-                android:id="@+id/textAccountBalance"
-                android:layout_width="100dp"
-                style="@style/CustomTextView"
-                android:hint="@string/hint_acc"
-                android:inputType="number"/>
-        </LinearLayout>
+        <EditText
+            android:id="@+id/textAccountPW"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:hint="@string/hint_bankpw"
+            android:inputType="numberPassword"
+            style="@style/CustomTextView"
+            android:layout_weight="1"
+             />
 
     </LinearLayout>
 

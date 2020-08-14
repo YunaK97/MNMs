@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.example.teamtemplate.Account;
 import com.example.teamtemplate.Member;
 import com.example.teamtemplate.R;
+import com.example.teamtemplate.firstscreen.MainActivity;
 import com.example.teamtemplate.newgroupfriend.NewDailyActivity;
 import com.example.teamtemplate.newgroupfriend.NewFriendActivity;
 import com.example.teamtemplate.newgroupfriend.NewMembershipActivity;
@@ -235,6 +236,14 @@ public class MainMenuActivity extends AppCompatActivity {
             intent.putExtra("loginMember",loginMember);
             startActivity(intent);
         }else if(curId==R.id.logout){
+            //구현 필요 -> 환경설정
+            /*
+            * 1.로그아웃
+            * 2.비밀번호변경
+            *
+            * */
+            Intent intent=new Intent(MainMenuActivity.this,MainActivity.class);
+            setResult(333,intent);
             finish();
         }
 
@@ -280,6 +289,28 @@ public class MainMenuActivity extends AppCompatActivity {
         dialog.show();
 
 }
+
+    @Override
+    public void onBackPressed(){
+        AlertDialog.Builder dialog=new AlertDialog.Builder(MainMenuActivity.this,R.style.CustomDialog);
+
+        dialog.setTitle("종료하시겠습니까?");
+        dialog.setNeutralButton("종료", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finishAffinity();
+                System.runFinalization();
+                System.exit(0);
+            }
+        });
+        dialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        dialog.create().show();
+    }
 
 
     static class MyPagerAdapter extends FragmentStatePagerAdapter {
