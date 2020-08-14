@@ -39,7 +39,9 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/daily_selected_friend"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        />
     <Button
         android:id="@+id/btn_new_daily"
         style="@style/CustomButton"

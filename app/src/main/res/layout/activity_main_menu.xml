@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,17 +20,17 @@
 
         <TextView
             android:id="@+id/textName"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:text="이름 : ex) 김나현"
             android:textColor="@android:color/holo_red_dark"
             android:textSize="20sp" />
 
         <TextView
             android:id="@+id/accName"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="계좌번호 : ex)123-12-4567"
@@ -37,7 +39,7 @@
 
         <TextView
             android:id="@+id/textBalance"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="5dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="잔액 : 1000000 (원)"
@@ -48,11 +50,12 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/pager"
         android:layout_width="match_parent"
-        android:layout_height="300dp" />
+        android:layout_height="350sp"
+        android:layout_margin="3dp" />
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40sp"
         android:orientation="horizontal"
         android:layout_gravity="bottom|center"
         android:layout_marginBottom="10dp"
@@ -60,29 +63,29 @@
         >
         <ImageButton
             android:id="@+id/btn_transaction"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
             android:layout_margin="5dp"
             android:background="@drawable/tab_selector"
             />
         <ImageButton
             android:id="@+id/btn_membership"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
             android:layout_margin="5dp"
             android:background="@drawable/tab_selector"
             />
         <ImageButton
             android:id="@+id/btn_daily"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
             android:layout_margin="5dp"
             android:background="@drawable/tab_selector"
             />
         <ImageButton
             android:id="@+id/btn_friendList"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="30sp"
+            android:layout_height="30sp"
             android:layout_margin="5dp"
             android:background="@drawable/tab_selector"
             />

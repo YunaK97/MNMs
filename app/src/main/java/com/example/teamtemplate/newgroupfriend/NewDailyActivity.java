@@ -64,6 +64,7 @@ public class NewDailyActivity extends AppCompatActivity {
             public void onClick(View v) {
                 showToast("daily 멤버십 생성!");
                 //NewMembership();
+                finish();
             }
         });
     }
