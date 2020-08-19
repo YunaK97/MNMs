@@ -78,6 +78,7 @@ public class MembershipList extends Fragment {
         groupView(rootView);
     }
 
+
     private void groupView(final ViewGroup rootView){
         final String url="http://jennyk97.dothome.co.kr/MembergroupInfo.php";
 
