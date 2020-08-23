@@ -52,6 +52,7 @@ public class MembershipFragment extends Fragment {
         mRecyclerView.setAdapter(mAdapter);
 
         Bundle bundle = getArguments();
+        System.out.println("------------start------------");
         if (bundle == null) {
             System.out.println("------------NULL1------------");
 
