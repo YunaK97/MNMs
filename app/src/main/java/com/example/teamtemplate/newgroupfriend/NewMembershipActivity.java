@@ -34,6 +34,7 @@ public class NewMembershipActivity extends AppCompatActivity {
     private ArrayList<Member> selectedMember;
     private Member loginMember;
     private String TAG_SUCCESS="success";
+    private ArrayList<String> groupName;
     private RecyclerView friend_list;
     private String membership_name, membership_money,membership_notsubmit;
     @Override
@@ -44,93 +45,138 @@ public class NewMembershipActivity extends AppCompatActivity {
         Intent intent=getIntent();
         loginMember=(Member)intent.getSerializableExtra("loginMember");
 
-        /*
-            친구 가져와서 출력
-            그룹이름,회비,친구목록 php로 전송
-            생성 결과 받기
-         */
-
-        membership_name=((TextView)findViewById(R.id.membership_name)).getText().toString();
-        membership_money=((TextView)findViewById(R.id.membership_money)).getText().toString();
-        membership_notsubmit=((TextView)findViewById(R.id.membership_notsubmit)).getText().toString();
-
         //친구 가져와서 출력
         showFriend();
+
+        groupNameList();
 
         //membership 생성 버튼 클릭
         Button btn_new_membership=findViewById(R.id.btn_new_membership);
         btn_new_membership.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showToast("멤버십 생성!");
-                finish();
-                //NewMembership();
+                NewMembership();
             }
         });
     }
 
     protected void NewMembership(){
         selectedMember=new ArrayList<>();
+        membership_name=((TextView)findViewById(R.id.membership_name)).getText().toString();
+        membership_money=((TextView)findViewById(R.id.membership_money)).getText().toString();
+        membership_notsubmit=((TextView)findViewById(R.id.membership_notsubmit)).getText().toString();
         if(membership_money==null || membership_name==null || membership_notsubmit==null){
             showToast("이러시면 안됨니다 고갱님 정보를 쓰세욥");
-        }else {
-            for (int i = 0; i < memberAdapter.getItemCount(); i++) {
-                if (memberAdapter.getItem(i).isChecked()) {
-                    Member member = new Member();
-                    member.setMemID((memberAdapter.getItem(i)).getMemID());
-                    member.setMemName((memberAdapter.getItem(i)).getMemName());
-                    selectedMember.add(member);
+        }else
+        {
+            boolean overlap=true;
+            for(String s:groupName){
+                if(s.equals(membership_name)){
+                    overlap=false;
                 }
             }
-            String url="http://jennyk97.dothome.co.kr/NewMembership.php";
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    try {
-                        JSONObject jsonObject=new JSONObject(response);
-                        boolean success=jsonObject.getBoolean(TAG_SUCCESS);
-                        if(success){
-                            showToast("생성 성공!");
-                            finish();
-                        }
-                        else{
-                            showToast("membership 실패!");
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+            if(!overlap){
+                showToast("이미 존재하는 그룹이름입니다.");
+            }else if(overlap) {
+                for (int i = 0; i < memberAdapter.getItemCount(); i++) {
+                    if (memberAdapter.getItem(i).isChecked()) {
+                        Member member = new Member();
+                        member.setMemID((memberAdapter.getItem(i)).getMemID());
+                        selectedMember.add(member);
                     }
                 }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                }
-            }){
-                @Override
-                protected Map<String, String> getParams() {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("memID",loginMember.getMemID());
-                    params.put("memName",loginMember.getMemName());
-                    params.put("membershipName",membership_name);
-                    params.put("membershipNotSubmit",membership_notsubmit);
-                    try {
-                        JSONArray jsonArray=new JSONArray();
-                        for (int i=0;i<selectedMember.size();i++){
-                            JSONObject jsonObject=new JSONObject();
-                            jsonObject.put("memID",selectedMember.get(i).getMemID());
-                            jsonObject.put("memName", selectedMember.get(i).getMemName());
-                            jsonArray.put(jsonObject);
+                String url = "http://jennyk97.dothome.co.kr/NewMembership.php";
+                StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            JSONObject jsonObject = new JSONObject(response);
+                            boolean success = jsonObject.getBoolean(TAG_SUCCESS);
+                            if (success) {
+                                showToast("생성 성공!");
+                                finish();
+                            } else {
+                                showToast("membership 실패!");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                        params.put("friend",jsonArray.toString());
-                    }catch (Exception e){
-                        e.printStackTrace();
                     }
-                    return params;
-                }
-            };
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }) {
+                    @Override
+                    protected Map<String, String> getParams() {
+                        Map<String, String> params = new HashMap<>();
+                        params.put("memID", loginMember.getMemID());
+                        params.put("memName", loginMember.getMemName());
+                        params.put("membershipName", membership_name);
+                        params.put("membershipMoney",membership_money);
+                        params.put("membershipNotSubmit", membership_notsubmit);
+                        try {
+                            JSONArray jsonArray = new JSONArray();
+                            for (int i = 0; i < selectedMember.size(); i++) {
+                                JSONObject jsonObject = new JSONObject();
+                                jsonObject.put("memID", selectedMember.get(i).getMemID());
+                                jsonArray.put(jsonObject);
+                            }
+                            params.put("friend", jsonArray.toString());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        return params;
+                    }
+                };
 
-            RequestQueue queue= Volley.newRequestQueue(this);
-            queue.add(stringRequest);
+                RequestQueue queue = Volley.newRequestQueue(this);
+                queue.add(stringRequest);
+            }
         }
+    }
+
+
+    private void groupNameList(){
+        groupName=new ArrayList<>();
+
+        final String url="http://jennyk97.dothome.co.kr/MembergroupInfo.php";
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                try {
+                    JSONArray jsonArray=new JSONArray(response);
+                    if(jsonArray.length()==0){
+                        showToast("그룹이 없습니다.");
+
+                    }else{
+                        for (int i=0;i<jsonArray.length();i++){
+                            JSONObject item=jsonArray.getJSONObject(i);
+                            String groupname=item.getString("groupName");
+                            groupName.add(groupname);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    System.out.println("오류 : "+e.toString());
+                }
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        }){
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> params = new HashMap<>();
+                params.put("memID",loginMember.getMemID());
+                return params;
+            }
+        };
+        RequestQueue queue= Volley.newRequestQueue(this);
+        queue.add(stringRequest);
     }
 
     protected void showFriend(){
