@@ -100,14 +100,14 @@ public class MembershipList extends Fragment {
                             JSONObject item=jsonArray.getJSONObject(i);
                             String groupname=item.getString("groupName");
                             String gid=item.getString("groupID");
-                            String did=item.getString("MID");
+                            String mid=item.getString("MID");
                             //String notSubmit=item.getString("notSubmit");
                             //String groupTime=item.getString("groupTime");
 
                             Group group = new Group();
                             group.setGroupName(groupname);
                             group.setGid(gid);
-                            group.setDid(did);
+                            group.setMid(mid);
                             //group.setNotSubmit(notSubmit);
                             //group.setTime(groupTime);
                             groupAdapter.addItem(group);
@@ -172,9 +172,8 @@ public class MembershipList extends Fragment {
     }
 
     private void outGroup(final Group outGroup){
-        showToast(outGroup.getGroupName()+":"+outGroup.getGid() + "나가기 구현중");
 
-        final String url="http://jennyk97.dothome.co.kr/OutGroup.php";
+        final String url="http://jennyk97.dothome.co.kr/OutMGroup.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
@@ -185,7 +184,7 @@ public class MembershipList extends Fragment {
                     boolean success=jsonObject.getBoolean("success");
                     if(success) {
                         //삭제 성공여부 확인
-                        showToast("그룹 나가기 성공");
+                        groupView(rootView);
                     }else{
                         showToast("그룹 나가기 실패");
                     }

@@ -152,20 +152,17 @@ public class DailyList extends Fragment {
     }
 
     private void outGroup(final Group outGroup){
-        showToast(outGroup.getGroupName()+":"+outGroup.getGid() + "나가기 구현중");
-
         final String url="http://jennyk97.dothome.co.kr/OutGroup.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try{
-                    Log.d("outDaily",response);
                     JSONObject jsonObject=new JSONObject(response);
                     boolean success=jsonObject.getBoolean("success");
                     if(success) {
                         //삭제 성공여부 확인
-                        showToast("그룹 나가기 성공");
+                        groupView(rootView);
                     }else{
                         showToast("그룹 나가기 실패");
                     }
