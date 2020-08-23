@@ -170,7 +170,6 @@ public class DailyList extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         }, new Response.ErrorListener() {
             @Override
