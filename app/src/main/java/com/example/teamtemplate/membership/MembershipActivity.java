@@ -8,16 +8,19 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.example.teamtemplate.Account;
 import com.example.teamtemplate.Group;
-import com.example.teamtemplate.Member;
 import com.example.teamtemplate.R;
 import com.example.teamtemplate.membership.ui.home.MembershipFragment;
+import com.example.teamtemplate.membership.ui.manage.ManageFeeFragment;
+import com.example.teamtemplate.membership.ui.manage.ManageMemFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -28,7 +31,8 @@ public class MembershipActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view2);
+        setContentView(R.layout.activity_membership);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -39,7 +43,7 @@ public class MembershipActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.activity_membership);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -51,16 +55,26 @@ public class MembershipActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-//        Intent intent = getIntent();
-//        Group group = (Group)intent.getSerializableExtra("membershipGroup");
+        Intent intent = getIntent();
+        Group group = (Group)intent.getSerializableExtra("membershipGroup");
 
-//        Bundle bundle=new Bundle();
-//        bundle.putSerializable("membershipGroup", group);
-//        MembershipFragment membershipFragment = new MembershipFragment();
-//        membershipFragment.setArguments(bundle);
+        // 추가 시켜 줄 fragment 를 생성
+        MembershipFragment membershipFragment=new MembershipFragment();
+        ManageFeeFragment manageFeeFragment = new ManageFeeFragment();
 
-//        System.out.println("-----------------------------------");
-//        System.out.println(group.getGid());
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        fragmentTransaction.add(R.id.fragment_container, membershipFragment);
+        //fragmentTransaction.add(R.id.fragment_container, manageFeeFragment);
+        fragmentTransaction.commit();
+
+        Bundle bundle=new Bundle();
+        bundle.putSerializable("membershipGroup", group);
+
+        membershipFragment.setArguments(bundle);
+        manageFeeFragment.setArguments(bundle);
+
     }
 
     @Override
@@ -76,4 +90,5 @@ public class MembershipActivity extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
 }

@@ -78,7 +78,6 @@ public class MembershipList extends Fragment {
         groupView(rootView);
     }
 
-
     private void groupView(final ViewGroup rootView){
         final String url="http://jennyk97.dothome.co.kr/MembergroupInfo.php";
 
@@ -158,8 +157,8 @@ public class MembershipList extends Fragment {
 
         Intent intent = new Intent(rootView.getContext(), MembershipActivity.class);
 
-        intent.putExtra("loginMember",loginMember);
-        intent.putExtra("loginMemberAccount",loginMemberAccount);
+//        intent.putExtra("loginMember",loginMember);
+//        intent.putExtra("loginMemberAccount",loginMemberAccount);
         intent.putExtra("membershipGroup",item);
 
         startActivity(intent);

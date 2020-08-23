@@ -9,7 +9,7 @@
         android:id="@+id/nav_daily"
         android:name="com.example.teamtemplate.daily.ui.home.DailyFragment"
         android:label="일반그룹방"
-        tools:layout="@layout/activity_daily" />
+        tools:layout="@layout/fragment_daily" />
 
     <fragment
         android:id="@+id/nav_qr"

@@ -19,6 +19,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.teamtemplate.Group;
 import com.example.teamtemplate.R;
 import com.example.teamtemplate.daily.DailyGroup;
 
@@ -64,9 +65,24 @@ public class DutchPayFragment extends Fragment {
             }
         });
 
-        DailyGroup dailyGroup = new DailyGroup();
-        dailyGroup.setDID("D1");
-        dailyProcess(dailyGroup);
+        Bundle bundle = getArguments();
+        if (bundle == null) {
+            System.out.println("------------NULL------------");
+
+        }
+        else {
+            System.out.println("------------DutchPayFragment------------");
+            Group group = (Group) bundle.getSerializable("dailyGroup");
+
+            System.out.println(group.getGid());
+
+            DailyGroup dailyGroup = new DailyGroup();
+            dailyGroup.setDID(group.getGid());
+            dailyProcess(dailyGroup);
+
+        }
+
+
 
         return v;
     }

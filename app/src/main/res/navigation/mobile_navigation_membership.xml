@@ -9,7 +9,7 @@
         android:id="@+id/nav_membership"
         android:name="com.example.teamtemplate.membership.ui.home.MembershipFragment"
         android:label="회원그룹방"
-        tools:layout="@layout/activity_membership" />
+        tools:layout="@layout/fragment_membership" />
 
     <fragment
         android:id="@+id/nav_manage_mem"

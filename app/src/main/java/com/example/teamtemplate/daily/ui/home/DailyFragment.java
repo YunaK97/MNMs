@@ -5,12 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +20,7 @@ import com.android.volley.toolbox.Volley;
 import com.example.teamtemplate.Group;
 import com.example.teamtemplate.R;
 import com.example.teamtemplate.daily.DailyGroup;
+import com.example.teamtemplate.membership.MembershipGroup;
 import com.example.teamtemplate.transaction.Transaction;
 import com.example.teamtemplate.transaction.TransactionAdapter;
 
@@ -43,7 +40,7 @@ public class DailyFragment extends Fragment {
     private List<Transaction> dataList;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_daily, container, false);
+        View v = inflater.inflate(R.layout.fragment_daily, container, false);
 
 //        // Spinner
 //        Spinner yearSpinner = v.findViewById(R.id.spinner_year);
@@ -76,13 +73,19 @@ public class DailyFragment extends Fragment {
         mAdapter = new TransactionAdapter(dataList);
         mRecyclerView.setAdapter(mAdapter);
 
-//        Transaction transaction = new Transaction();
-//        transaction.setDID("D1");
-//        transactionProcess(transaction);
+        Bundle bundle = getArguments();
+        if (bundle == null) {
+            System.out.println("------------NULL------------");
 
-        DailyGroup dailyGroup = new DailyGroup();
-        dailyGroup.setGID("G1");
-        transactionProcess(dailyGroup);
+        }
+        else {
+            System.out.println("------------DailyFragment------------");
+            Group group = (Group) bundle.getSerializable("dailyGroup");
+
+            DailyGroup dailyGroup = new DailyGroup();
+            dailyGroup.setGID(group.getGid());
+            transactionProcess(dailyGroup);
+        }
 
         return v;
     }

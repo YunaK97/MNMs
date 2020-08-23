@@ -8,6 +8,8 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -15,8 +17,10 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.teamtemplate.Group;
 import com.example.teamtemplate.R;
+import com.example.teamtemplate.daily.ui.dutch.DutchPayFragment;
 import com.example.teamtemplate.daily.ui.home.DailyFragment;
-import com.example.teamtemplate.transaction.Transaction;
+import com.example.teamtemplate.membership.ui.home.MembershipFragment;
+import com.example.teamtemplate.membership.ui.manage.ManageFeeFragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
@@ -27,7 +31,7 @@ public class DailyActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view);
+        setContentView(R.layout.activity_daily);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
@@ -38,7 +42,7 @@ public class DailyActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = findViewById(R.id.activity_daily);
         NavigationView navigationView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -53,11 +57,25 @@ public class DailyActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Group group = (Group)intent.getSerializableExtra("dailyGroup");
 
+        // 추가 시켜 줄 fragment 를 생성
+        DailyFragment dailyFragment = new DailyFragment();
+        DutchPayFragment dutchPayFragment = new DutchPayFragment();
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        fragmentTransaction.add(R.id.fragment_container2, dailyFragment);
+        //fragmentTransaction.add(R.id.fragment_container2, dutchPayFragment);
+
+        fragmentTransaction.commit();
+
         Bundle bundle=new Bundle();
         bundle.putSerializable("dailyGroup", group);
 
-    }
+        dailyFragment.setArguments(bundle);
+        dutchPayFragment.setArguments(bundle);
 
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

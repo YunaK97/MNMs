@@ -18,7 +18,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.teamtemplate.Group;
-import com.example.teamtemplate.Member;
 import com.example.teamtemplate.R;
 import com.example.teamtemplate.membership.MembershipGroup;
 import com.example.teamtemplate.transaction.Transaction;
@@ -40,7 +39,8 @@ public class MembershipFragment extends Fragment {
     private List<Transaction> dataList;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_membership, container, false);
+
+        View v = inflater.inflate(R.layout.fragment_membership, container, false);
 
         mRecyclerView = v.findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -51,20 +51,19 @@ public class MembershipFragment extends Fragment {
         mAdapter = new TransactionAdapter(dataList);
         mRecyclerView.setAdapter(mAdapter);
 
-//        Bundle bundle=getArguments();
-//        Member loginMember= (Member) bundle.getSerializable("loginMember");
-//        System.out.println("-----------------------------------");
-//        System.out.println(loginMember.getMemID());
+        Bundle bundle = getArguments();
+        if (bundle == null) {
+            System.out.println("------------NULL1------------");
 
-//
-//        Group group = (Group) bundle.getSerializable("membershipGroup");
-//
-//        System.out.println("-----------------------------------");
-//        System.out.println(group.getGid());
-//
-//        MembershipGroup membershipGroup = new MembershipGroup();
-//        membershipGroup.setGID(group.getGid());
-//        transactionProcess(membershipGroup);
+        }
+        else {
+            System.out.println("------------MembershipFragment------------");
+            Group group = (Group) bundle.getSerializable("membershipGroup");
+
+            MembershipGroup membershipGroup = new MembershipGroup();
+            membershipGroup.setGID(group.getGid());
+            transactionProcess(membershipGroup);
+        }
 
         return v;
     }

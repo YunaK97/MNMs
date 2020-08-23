@@ -16,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.teamtemplate.Group;
 import com.example.teamtemplate.R;
 import com.example.teamtemplate.membership.MembershipGroup;
 
@@ -38,9 +39,18 @@ public class ManageFeeFragment extends Fragment {
         tv_memberMoney = v.findViewById(R.id.tv_memberMoney);
         tv_totalMoney = v.findViewById(R.id.tv_totalMoney);
 
-        MembershipGroup membershipGroup = new MembershipGroup();
-        membershipGroup.setMID("M1");
-        membershipProcess(membershipGroup);
+        Bundle bundle = getArguments();
+        if (bundle == null) {
+            System.out.println("------------NULL------------");
+
+        } else {
+            System.out.println("------------ManageFeeFragment------------");
+            Group group = (Group) bundle.getSerializable("membershipGroup");
+
+            MembershipGroup membershipGroup = new MembershipGroup();
+            membershipGroup.setMID(group.getMid());
+            membershipProcess(membershipGroup);
+        }
 
         return v;
     }

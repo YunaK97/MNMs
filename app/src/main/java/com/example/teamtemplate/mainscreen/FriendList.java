@@ -3,6 +3,7 @@ package com.example.teamtemplate.mainscreen;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,8 +17,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.teamtemplate.Group;
 import com.example.teamtemplate.Member;
 import com.example.teamtemplate.R;
+import com.example.teamtemplate.membership.MembershipActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -100,7 +103,24 @@ public class FriendList extends Fragment {
                         friendListAdapter.addItem(member);
                     }
                     friend_list.setAdapter(friendListAdapter);
+                    friendListAdapter.setOnItemClickListener(new OnFriendItemClickListener() {
+                        @Override
+                        public void onItemClick(FriendListAdapter.ViewHolder holder, View view, int position) {
+                            Group tmpGroup=new Group();
+                            tmpGroup.setGid("G1");
+                            tmpGroup.setMid("M1");
+                            tmpGroup.setGroupName("tmpMembership");
+                            tmpGroup.setDid("D1");
+                            tmpGroup.setNotSubmit("3");
+                            tmpGroup.setTime("2020");
+
+                            Intent intent=new Intent(getContext(), MembershipActivity.class);
+                            intent.putExtra("membershipGroup",tmpGroup);
+                            startActivity(intent);
+                        }
+                    });
                     friendListAdapter.setOnItemLongClickListener(new OnFriendItemLongClickListener() {
+
                         @Override
                         public void onItemLongClick(FriendListAdapter.ViewHolder holder, View view, int position) {
                             selectDelFriend(position);
