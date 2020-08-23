@@ -9,6 +9,7 @@
     tools:openDrawer="start">
 
     <FrameLayout
+        android:paddingTop="60dp"
         android:id="@+id/fragment_container2"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

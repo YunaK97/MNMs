@@ -8,15 +8,17 @@
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <include
         layout="@layout/app_bar_membership"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <FrameLayout
+        android:paddingTop="60dp"
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
