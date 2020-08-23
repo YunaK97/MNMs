@@ -2,6 +2,7 @@ package com.example.teamtemplate.newgroupfriend;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -62,14 +63,14 @@ public class NewDailyActivity extends AppCompatActivity {
         btn_new_daily.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showToast("daily 멤버십 생성!");
-                //NewMembership();
+                NewMembership();
                 finish();
             }
         });
     }
 
     protected void NewMembership(){
+        selectedMember=new ArrayList<>();
         if(daily_name==null){
             showToast("이러시면 안됨니다 고갱님 정보를 쓰세욥");
         }else {
@@ -86,6 +87,7 @@ public class NewDailyActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(String response) {
                     try {
+                        Log.d("newDaily",response);
                         JSONObject jsonObject=new JSONObject(response);
                         boolean success=jsonObject.getBoolean(TAG_SUCCESS);
                         if(success){
