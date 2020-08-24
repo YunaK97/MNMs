@@ -52,6 +52,7 @@ public class ManageFeeFragment extends Fragment {
             membershipProcess(membershipGroup);
         }
 
+
         return v;
     }
 

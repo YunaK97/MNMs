@@ -27,8 +27,7 @@
         <activity android:name=".newgroupfriend.NewFriendActivity" />
         <activity
             android:name=".membership.MembershipActivity"
-            android:label="회원그룹방 거래내역"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="회원그룹방 거래내역">
 
         </activity>
         <activity
@@ -37,7 +36,7 @@
         <activity
             android:name=".daily.DailyActivity"
             android:label="일반그룹방 거래내역"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar" >
 
         </activity>
         <activity

@@ -1,94 +1,89 @@
 package com.example.teamtemplate.membership;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.teamtemplate.Group;
 import com.example.teamtemplate.R;
 import com.example.teamtemplate.membership.ui.home.MembershipFragment;
 import com.example.teamtemplate.membership.ui.manage.ManageFeeFragment;
-import com.example.teamtemplate.membership.ui.manage.ManageMemFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
 
 public class MembershipActivity extends AppCompatActivity {
-    private AppBarConfiguration mAppBarConfiguration;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_membership);
+        private Context mContext;
+        private TabLayout mTabLayout;
+        private ViewPager mViewPager;
+        private CustomPagerAdapter mCustomPagerAdapter;
 
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        DrawerLayout drawer = findViewById(R.id.activity_membership);
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_membership)
-                .setDrawerLayout(drawer)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
-        NavigationUI.setupWithNavController(navigationView, navController);
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_membership);
+            mContext = getApplicationContext();
 
-        Intent intent = getIntent();
-        Group group = (Group)intent.getSerializableExtra("membershipGroup");
+            Intent intent = getIntent();
+            Group group = (Group)intent.getSerializableExtra("membershipGroup");
 
-        // 추가 시켜 줄 fragment 를 생성
-        MembershipFragment membershipFragment=new MembershipFragment();
-        ManageFeeFragment manageFeeFragment = new ManageFeeFragment();
+            // 추가 시켜 줄 fragment 를 생성
+            MembershipFragment membershipFragment=new MembershipFragment();
+            ManageFeeFragment manageFeeFragment = new ManageFeeFragment();
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            Bundle bundle=new Bundle();
+            bundle.putSerializable("membershipGroup", group);
 
-        fragmentTransaction.add(R.id.fragment_container, membershipFragment);
-        //fragmentTransaction.add(R.id.fragment_container, manageFeeFragment);
-        fragmentTransaction.commit();
+            membershipFragment.setArguments(bundle);
+            manageFeeFragment.setArguments(bundle);
 
-        Bundle bundle=new Bundle();
-        bundle.putSerializable("membershipGroup", group);
+            mTabLayout = (TabLayout) findViewById(R.id.layout_tab);
+            mTabLayout.addTab(mTabLayout.newTab().setCustomView(createTabView("거래내역")));
+            mTabLayout.addTab(mTabLayout.newTab().setCustomView(createTabView("회비관리")));
+            mTabLayout.addTab(mTabLayout.newTab().setCustomView(createTabView("회원목록")));
 
-        membershipFragment.setArguments(bundle);
-        manageFeeFragment.setArguments(bundle);
+            mViewPager = (ViewPager) findViewById(R.id.pager_content);
+            mCustomPagerAdapter = new CustomPagerAdapter(getSupportFragmentManager());
+
+            mCustomPagerAdapter.addItem(membershipFragment);
+            mCustomPagerAdapter.addItem(manageFeeFragment);
+
+            mViewPager.setAdapter(mCustomPagerAdapter);
+            mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mTabLayout));
+
+            mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+
+                @Override
+                public void onTabSelected(TabLayout.Tab tab) {
+                    mViewPager.setCurrentItem(tab.getPosition());
+                }
+
+                @Override
+                public void onTabUnselected(TabLayout.Tab tab) {
+
+
+                }
+
+                @Override
+                public void onTabReselected(TabLayout.Tab tab) {
+
+                }
+            });
+        }
+
+        private View createTabView(String tabName) {
+            View tabView = LayoutInflater.from(mContext).inflate(R.layout.custom_tab, null);
+            TextView txt_name = (TextView) tabView.findViewById(R.id.txt_name);
+            txt_name.setText(tabName);
+            return tabView;
+
+        }
 
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.view2, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        return NavigationUI.navigateUp(navController, mAppBarConfiguration)
-                || super.onSupportNavigateUp();
-    }
-
-}
