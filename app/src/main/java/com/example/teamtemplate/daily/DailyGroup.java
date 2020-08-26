@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class DailyGroup implements Serializable {
     String DID;
-    String money;
+    int money;
     String dutchPay;
     String GID;
 
@@ -16,11 +16,11 @@ public class DailyGroup implements Serializable {
         this.DID = DID;
     }
 
-    public String getMoney() {
+    public int getMoney() {
         return money;
     }
 
-    public void setMoney(String money) {
+    public void setMoney(int money) {
         this.money = money;
     }
 
@@ -39,5 +39,4 @@ public class DailyGroup implements Serializable {
     public void setGID(String GID) {
         this.GID = GID;
     }
-
 }

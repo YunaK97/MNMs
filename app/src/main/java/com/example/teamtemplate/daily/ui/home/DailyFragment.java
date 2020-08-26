@@ -42,28 +42,6 @@ public class DailyFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_daily, container, false);
 
-//        // Spinner
-//        Spinner yearSpinner = v.findViewById(R.id.spinner_year);
-//        ArrayAdapter yearAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.date_year, android.R.layout.simple_spinner_item);
-//        yearAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        yearSpinner.setAdapter(yearAdapter);
-//
-//        Spinner monthSpinner = v.findViewById(R.id.spinner_month);
-//        ArrayAdapter monthAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.date_month, android.R.layout.simple_spinner_item);
-//        monthAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        monthSpinner.setAdapter(monthAdapter);
-//
-//        // Spinner
-//        Spinner yearSpinner2 = v.findViewById(R.id.spinner_year2);
-//        ArrayAdapter yearAdapter2 = ArrayAdapter.createFromResource(getActivity(), R.array.date_year, android.R.layout.simple_spinner_item);
-//        yearAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        yearSpinner2.setAdapter(yearAdapter2);
-//
-//        Spinner monthSpinner2 = v.findViewById(R.id.spinner_month2);
-//        ArrayAdapter monthAdapter2 = ArrayAdapter.createFromResource(getActivity(), R.array.date_month, android.R.layout.simple_spinner_item);
-//        monthAdapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        monthSpinner2.setAdapter(monthAdapter2);
-
         mRecyclerView = v.findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());

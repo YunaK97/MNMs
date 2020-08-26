@@ -35,8 +35,7 @@
             android:label="거래" />
         <activity
             android:name=".daily.DailyActivity"
-            android:label="일반그룹방 거래내역"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:label="일반그룹방 거래내역" >
 
         </activity>
         <activity

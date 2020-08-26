@@ -4,16 +4,17 @@ public class MembershipGroup {
     String MID;
     String president;
     String payDay;
-    String memberMoney;
-    String totalMoney;
+    int memberMoney;
+    int totalMoney;
+    int notSubmit;
     String GID;
 
     public String getMID() {
         return MID;
     }
 
-    public void setMID(String mID) {
-        this.MID = mID;
+    public void setMID(String MID) {
+        this.MID = MID;
     }
 
     public String getPresident() {
@@ -32,28 +33,35 @@ public class MembershipGroup {
         this.payDay = payDay;
     }
 
-    public String getMemberMoney() {
+    public int getMemberMoney() {
         return memberMoney;
     }
 
-    public void setMemberMoney(String memberMoney) {
+    public void setMemberMoney(int memberMoney) {
         this.memberMoney = memberMoney;
     }
 
-    public String getTotalMoney() {
+    public int getTotalMoney() {
         return totalMoney;
     }
 
-    public void setTotalMoney(String totalMoney) {
+    public void setTotalMoney(int totalMoney) {
         this.totalMoney = totalMoney;
+    }
+
+    public int getNotSubmit() {
+        return notSubmit;
+    }
+
+    public void setNotSubmit(int notSubmit) {
+        this.notSubmit = notSubmit;
     }
 
     public String getGID() {
         return GID;
     }
 
-    public void setGID(String gID) {
-        this.GID = gID;
+    public void setGID(String GID) {
+        this.GID = GID;
     }
-
 }

@@ -9,26 +9,7 @@ public class Group implements Serializable {
     private String mid;
     private String did;
     private String time;
-    private String notSubmit;
-    //memberID;
-    //
-
-
-    public String getNotSubmit() {
-        return notSubmit;
-    }
-
-    public void setNotSubmit(String notSubmit) {
-        this.notSubmit = notSubmit;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
+    private int notSubmit;
 
     public String getGroupName() {
         return groupName;
@@ -60,5 +41,21 @@ public class Group implements Serializable {
 
     public void setDid(String did) {
         this.did = did;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public int getNotSubmit() {
+        return notSubmit;
+    }
+
+    public void setNotSubmit(int notSubmit) {
+        this.notSubmit = notSubmit;
     }
 }
