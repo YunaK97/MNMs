@@ -111,7 +111,7 @@ public class FriendList extends Fragment {
                             tmpGroup.setMid("M1");
                             tmpGroup.setGroupName("tmpMembership");
                             tmpGroup.setDid("D1");
-                            tmpGroup.setNotSubmit("3");
+                            tmpGroup.setNotSubmit(3);
                             tmpGroup.setTime("2020");
 
                             Intent intent=new Intent(getContext(), MembershipActivity.class);

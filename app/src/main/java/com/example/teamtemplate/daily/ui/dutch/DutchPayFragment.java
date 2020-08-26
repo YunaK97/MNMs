@@ -74,15 +74,11 @@ public class DutchPayFragment extends Fragment {
             System.out.println("------------DutchPayFragment------------");
             Group group = (Group) bundle.getSerializable("dailyGroup");
 
-            System.out.println(group.getGid());
-
             DailyGroup dailyGroup = new DailyGroup();
-            dailyGroup.setDID(group.getGid());
+            dailyGroup.setDID(group.getDid());
             dailyProcess(dailyGroup);
 
         }
-
-
 
         return v;
     }
@@ -91,7 +87,7 @@ public class DutchPayFragment extends Fragment {
         final String DID = dailyGroup.getDID();
         final String url="http://jennyk97.dothome.co.kr/DailyGroup.php";
 
-        StringRequest stringRequest2 = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -100,11 +96,11 @@ public class DutchPayFragment extends Fragment {
 
                     DailyGroup dg = new DailyGroup();
                     dg.setDID(jsonObject.getString("DID"));
-                    dg.setMoney(jsonObject.getString("money"));
+                    dg.setMoney(jsonObject.getInt("money"));
                     dg.setDutchPay(jsonObject.getString("dutchPay"));
                     dg.setGID(jsonObject.getString("GID"));
 
-                    tv_total.setText(dg.getMoney());
+                    tv_total.setText("총 사용 금액: " + String.valueOf(dg.getMoney()));
 
                     System.out.println("----------OOO222OOO-----------");
 
@@ -129,7 +125,7 @@ public class DutchPayFragment extends Fragment {
             }
         };
         RequestQueue queue= Volley.newRequestQueue(getActivity());
-        queue.add(stringRequest2);
+        queue.add(stringRequest);
     }
 
 

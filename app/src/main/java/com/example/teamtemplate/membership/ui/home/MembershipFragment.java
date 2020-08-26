@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -19,6 +20,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.teamtemplate.Group;
 import com.example.teamtemplate.R;
+import com.example.teamtemplate.membership.MembershipActivity;
 import com.example.teamtemplate.membership.MembershipGroup;
 import com.example.teamtemplate.transaction.Transaction;
 import com.example.teamtemplate.transaction.TransactionAdapter;
@@ -54,7 +56,7 @@ public class MembershipFragment extends Fragment {
         Bundle bundle = getArguments();
         System.out.println("------------start------------");
         if (bundle == null) {
-            System.out.println("------------NULL1------------");
+            System.out.println("------------NULL------------");
 
         }
         else {

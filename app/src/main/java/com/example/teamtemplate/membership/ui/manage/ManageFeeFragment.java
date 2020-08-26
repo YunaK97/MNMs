@@ -51,7 +51,6 @@ public class ManageFeeFragment extends Fragment {
             membershipGroup.setMID(group.getMid());
             membershipProcess(membershipGroup);
         }
-
         return v;
     }
 
@@ -59,7 +58,7 @@ public class ManageFeeFragment extends Fragment {
         final String MID = membershipGroup.getMID();
         final String url="http://jennyk97.dothome.co.kr/MembershipGroup.php";
 
-        StringRequest stringRequest2 = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -70,13 +69,14 @@ public class ManageFeeFragment extends Fragment {
                     mg.setMID(jsonObject.getString("MID"));
                     mg.setPresident(jsonObject.getString("president"));
                     mg.setPayDay(jsonObject.getString("payDay"));
-                    mg.setMemberMoney(jsonObject.getString("memberMoney"));
-                    mg.setTotalMoney(jsonObject.getString("totalMoney"));
+                    mg.setMemberMoney(jsonObject.getInt("memberMoney"));
+                    mg.setTotalMoney(jsonObject.getInt("totalMoney"));
+                    mg.setNotSubmit(jsonObject.getInt("notSubmit"));
                     mg.setGID(jsonObject.getString("GID"));
 
-                    tv_payday.setText(mg.getPayDay());
-                    tv_memberMoney.setText(mg.getMemberMoney());
-                    tv_payday.setText(mg.getTotalMoney());
+                    tv_payday.setText("회비 납입일: " + mg.getPayDay());
+                    tv_memberMoney.setText("내가 낸 회비: " + String.valueOf(mg.getMemberMoney()));
+                    tv_totalMoney.setText("총 회비: " + String.valueOf(mg.getTotalMoney()));
 
                     System.out.println("----------OOO444OOO-----------");
 
@@ -101,7 +101,7 @@ public class ManageFeeFragment extends Fragment {
             }
         };
         RequestQueue queue= Volley.newRequestQueue(getActivity());
-        queue.add(stringRequest2);
+        queue.add(stringRequest);
     }
 
 }

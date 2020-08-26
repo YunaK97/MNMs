@@ -16,6 +16,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.teamtemplate.Group;
 import com.example.teamtemplate.R;
 import com.example.teamtemplate.membership.MembershipGroup;
 
@@ -34,9 +35,18 @@ public class ManageMemFragment extends Fragment {
 
         tv_president = v.findViewById(R.id.tv_president);
 
-        MembershipGroup membershipGroup = new MembershipGroup();
-        membershipGroup.setMID("M1");
-        membershipProcess(membershipGroup);
+        Bundle bundle = getArguments();
+        if (bundle == null) {
+            System.out.println("------------NULL------------");
+
+        } else {
+            System.out.println("------------ManageMemFragment------------");
+            Group group = (Group) bundle.getSerializable("membershipGroup");
+
+            MembershipGroup membershipGroup = new MembershipGroup();
+            membershipGroup.setMID(group.getMid());
+            membershipProcess(membershipGroup);
+        }
 
         return v;
     }
@@ -45,7 +55,7 @@ public class ManageMemFragment extends Fragment {
         final String MID = membershipGroup.getMID();
         final String url="http://jennyk97.dothome.co.kr/MembershipGroup.php";
 
-        StringRequest stringRequest2 = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 try {
@@ -56,11 +66,12 @@ public class ManageMemFragment extends Fragment {
                     mg.setMID(jsonObject.getString("MID"));
                     mg.setPresident(jsonObject.getString("president"));
                     mg.setPayDay(jsonObject.getString("payDay"));
-                    mg.setMemberMoney(jsonObject.getString("memberMoney"));
-                    mg.setTotalMoney(jsonObject.getString("totalMoney"));
+                    mg.setMemberMoney(jsonObject.getInt("memberMoney"));
+                    mg.setTotalMoney(jsonObject.getInt("totalMoney"));
+                    mg.setNotSubmit(jsonObject.getInt("notSubmit"));
                     mg.setGID(jsonObject.getString("GID"));
 
-                    tv_president.setText(mg.getPresident());
+                    tv_president.setText("방장: " + mg.getPresident());
 
                     System.out.println("----------OOO333OOO-----------");
 
@@ -80,12 +91,12 @@ public class ManageMemFragment extends Fragment {
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("MID", MID);
-                System.out.println("========MID========");
+                System.out.println("========MID2========");
                 return params;
             }
         };
         RequestQueue queue= Volley.newRequestQueue(getActivity());
-        queue.add(stringRequest2);
+        queue.add(stringRequest);
     }
 
 }

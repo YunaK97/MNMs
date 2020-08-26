@@ -11,33 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-
-<!--        <Spinner-->
-<!--        android:id="@+id/spinner_year"-->
-<!--        android:layout_width="90dp"-->
-<!--        android:layout_height="wrap_content" />-->
-
-<!--        <Spinner-->
-<!--            android:id="@+id/spinner_month"-->
-<!--            android:layout_width="60dp"-->
-<!--            android:layout_height="wrap_content" />-->
-
-<!--        <TextView-->
-<!--            android:text="~"-->
-<!--            android:textSize="20sp"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content" />-->
-
-<!--        ﻿<Spinner-->
-<!--        android:id="@+id/spinner_year2"-->
-<!--        android:layout_width="90dp"-->
-<!--        android:layout_height="wrap_content" />-->
-
-<!--        <Spinner-->
-<!--            android:id="@+id/spinner_month2"-->
-<!--            android:layout_width="60dp"-->
-<!--            android:layout_height="wrap_content" />-->
-
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
