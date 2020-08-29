@@ -1,6 +1,7 @@
 package com.example.teamtemplate.transaction;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         // each data item is  just a string in this case
-        public TextView TextView_accountNum;
+        public TextView TextView_transVersion;
         public TextView TextView_transHistory;
         public TextView TextView_transMoney;
         public TextView TextView_since;
@@ -30,7 +31,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
         public MyViewHolder(View v) {
             super(v);
-            TextView_accountNum = v.findViewById(R.id.TextView_accountNum);
+            TextView_transVersion = v.findViewById(R.id.TextView_transVersion);
             TextView_transHistory = v.findViewById(R.id.TextView_transHistory);
             TextView_transMoney = v.findViewById(R.id.TextView_transMoney);
             TextView_since = v.findViewById(R.id.TextView_since);
@@ -61,7 +62,16 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         // - replace the contents of the view with that element
         Transaction tData = mDataset.get(position);
 
-        holder.TextView_accountNum.setText(tData.getAccountNum());
+        if(tData.transactVersion.contentEquals("입금")){
+            holder.TextView_transVersion.setTextColor(Color.BLUE);
+            holder.TextView_transMoney.setTextColor(Color.BLUE);
+        }
+        else {
+            holder.TextView_transVersion.setTextColor(Color.RED);
+            holder.TextView_transMoney.setTextColor(Color.RED);
+        }
+
+        holder.TextView_transVersion.setText(tData.getTransactVersion());
         holder.TextView_transHistory.setText(tData.getTransactHistroy());
         holder.TextView_transMoney.setText(tData.getTransactMoney());
         holder.TextView_since.setText(tData.getSince());
