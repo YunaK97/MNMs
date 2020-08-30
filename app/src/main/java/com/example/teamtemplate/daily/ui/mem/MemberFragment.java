@@ -1,11 +1,13 @@
-package com.example.teamtemplate.daily.ui.home;
+package com.example.teamtemplate.daily.ui.mem;
 
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,7 +22,6 @@ import com.android.volley.toolbox.Volley;
 import com.example.teamtemplate.Group;
 import com.example.teamtemplate.R;
 import com.example.teamtemplate.daily.DailyGroup;
-import com.example.teamtemplate.membership.MembershipGroup;
 import com.example.teamtemplate.transaction.Transaction;
 import com.example.teamtemplate.transaction.TransactionAdapter;
 
@@ -33,14 +34,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DailyFragment extends Fragment {
+
+public class MemberFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     private List<Transaction> dataList;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_daily, container, false);
+        View v = inflater.inflate(R.layout.fragment_member, container, false);
 
         mRecyclerView = v.findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -57,20 +59,20 @@ public class DailyFragment extends Fragment {
 
         }
         else {
-            System.out.println("------------DailyFragment------------");
+            System.out.println("------------MemberFragment------------");
             Group group = (Group) bundle.getSerializable("dailyGroup");
 
             DailyGroup dailyGroup = new DailyGroup();
             dailyGroup.setGID(group.getGid());
-            transactionProcess(dailyGroup);
+            //dailyFriendProcess(dailyGroup);
+
         }
 
         return v;
     }
-
-    protected void transactionProcess(final DailyGroup dailyGroup) {
+    protected void dailyFriendProcess(final DailyGroup dailyGroup) {
         final String GID = dailyGroup.getGID();
-        final String url="http://jennyk97.dothome.co.kr/DailyTransaction.php";
+        final String url="http://jennyk97.dothome.co.kr/DailyMemList.php";
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override

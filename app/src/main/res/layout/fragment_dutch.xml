@@ -16,8 +16,8 @@
 
             <RadioGroup android:id="@+id/radioGroup"
                 android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
             <RadioButton
                 android:id="@+id/rbt_up"
@@ -46,5 +46,11 @@
         android:id="@+id/tv_calc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
+
+    <Button
+        android:id="@+id/bt_qr"
+        android:text="QR코드로 송금"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
