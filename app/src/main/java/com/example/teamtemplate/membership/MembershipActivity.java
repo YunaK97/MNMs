@@ -8,7 +8,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.teamtemplate.Account;
 import com.example.teamtemplate.Group;
+import com.example.teamtemplate.Member;
 import com.example.teamtemplate.R;
 import com.google.android.material.tabs.TabLayout;
 
@@ -22,10 +24,14 @@ public class MembershipActivity extends AppCompatActivity {
         setContentView(R.layout.activity_membership);
 
         Intent intent = getIntent();
-        Group group = (Group) intent.getSerializableExtra("membershipGroup");
+        MembershipGroup membershipGroup = (MembershipGroup) intent.getSerializableExtra("membershipGroup");
+        Member member=(Member)intent.getSerializableExtra("loginMember");
+        Account account=(Account)intent.getSerializableExtra("loginMemberAccount");
 
         Bundle bundle = new Bundle();
-        bundle.putSerializable("membershipGroup", group);
+        bundle.putSerializable("membershipGroup", membershipGroup);
+        bundle.putSerializable("loginMember",member);
+        bundle.putSerializable("loginMemberAccount",account);
 
         viewPager = findViewById(R.id.viewpager);
         MembershipPagerAdapter adapter = new MembershipPagerAdapter(getSupportFragmentManager(), bundle);

@@ -4,13 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +19,11 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.teamtemplate.Account;
 import com.example.teamtemplate.Group;
+import com.example.teamtemplate.HttpClient;
 import com.example.teamtemplate.Member;
 import com.example.teamtemplate.R;
 import com.example.teamtemplate.daily.DailyActivity;
+import com.example.teamtemplate.daily.DailyGroup;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,14 +32,22 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 public class DailyList extends Fragment {
     private Member loginMember;
     private Account loginMemberAccount;
+
     private RecyclerView groupMembershiplList;
     private GroupAdapter groupAdapter;
     private Context context;
-    private String TAG_MEMBERSHIP="MEMBERSHIP";
     private ViewGroup rootView;
+
+    //URLs
+    private String urlDailyGroupInfo="http://jennyk97.dothome.co.kr/DailygroupInfo.php";
+    private String urlDailyOutGroup="http://jennyk97.dothome.co.kr/OutGroup.php";
 
     public DailyList() {
         // Required empty public constructor
@@ -69,7 +74,7 @@ public class DailyList extends Fragment {
         }
 
         //그룹리스트 출력
-        groupView(rootView);
+        groupView();
 
         return rootView;
     }
@@ -77,119 +82,34 @@ public class DailyList extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        groupView(rootView);
+        groupView();
     }
 
-    private void groupView(final ViewGroup rootView){
-        final String url="http://jennyk97.dothome.co.kr/DailygroupInfo.php";
+    private void groupView(){
+        NetworkTask networkTask=new NetworkTask();
+        networkTask.setURL(urlDailyGroupInfo);
+        networkTask.setTAG("dailyGroupInfo");
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONArray jsonArray=new JSONArray(response);
-                    if(jsonArray.length()==0){
-                        showToast("그룹이 없습니다.");
+        Map<String, String> params = new HashMap<>();
+        params.put("memID",loginMember.getMemID());
 
-                    }else{
-                        groupMembershiplList= rootView.findViewById(R.id.main_daily_list);
-                        LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(),LinearLayoutManager.VERTICAL,false);
-                        groupMembershiplList.setLayoutManager(layoutManager);
-
-                        groupAdapter=new GroupAdapter();
-                        for (int i=0;i<jsonArray.length();i++){
-                            JSONObject item=jsonArray.getJSONObject(i);
-                            String groupname=item.getString("groupName");
-                            String gid=item.getString("groupID");
-                            String did=item.getString("DID");
-                            //String groupTime=item.getString("groupTime");
-
-                            Group group = new Group();
-                            group.setGroupName(groupname);
-                            group.setGid(gid);
-                            group.setDid(did);
-                            //group.setTime(groupTime);
-                            groupAdapter.addItem(group);
-                        }
-
-                        groupMembershiplList.setAdapter(groupAdapter);
-
-                        groupAdapter.setOnItemClickListener(new OnGroupItemClickListener() {
-                            @Override
-                            public void onItemClick(GroupAdapter.ViewHolder holder, View view, int position) {
-                                intoDaily(position);
-                            }
-                        });
-
-                        groupAdapter.setOnItemLongClickListener(new OnGroupItemLongClickListener() {
-                            @Override
-                            public void onItemLongClick(GroupAdapter.ViewHolder holder, View view, int position) {
-                                selectOutGroup(position);
-                                groupView(rootView);
-                            }
-                        });
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    System.out.println("오류 : "+e.toString());
-                }
-
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("memID",loginMember.getMemID());
-                return params;
-            }
-        };
-        RequestQueue queue= Volley.newRequestQueue(context);
-        queue.add(stringRequest);
+        networkTask.execute(params);
     }
 
     private void outGroup(final Group outGroup){
-        final String url="http://jennyk97.dothome.co.kr/OutGroup.php";
+        NetworkTask networkTask=new NetworkTask();
+        networkTask.setURL(urlDailyOutGroup);
+        networkTask.setTAG("dailyOutGroup");
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try{
-                    JSONObject jsonObject=new JSONObject(response);
-                    boolean success=jsonObject.getBoolean("success");
-                    if(success) {
-                        //삭제 성공여부 확인
-                        groupView(rootView);
-                    }else{
-                        showToast("그룹 나가기 실패");
-                    }
+        Map<String, String> params = new HashMap<>();
+        params.put("memID",loginMember.getMemID());
+        params.put("groupName",outGroup.getGroupName());
+        params.put("groupID",outGroup.getGID());
+        params.put("DID",((DailyGroup)outGroup).getDID());
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("memID",loginMember.getMemID());
-                params.put("groupName",outGroup.getGroupName());
-                params.put("groupID",outGroup.getGid());
-                params.put("DID",outGroup.getDid());
-                return params;
-            }
-        };
-
-        RequestQueue queue= Volley.newRequestQueue(context);
-        queue.add(stringRequest);
+        networkTask.execute(params);
     }
+
 
     private void selectOutGroup(int position){
         final Group outGroup=groupAdapter.getItem(position);
@@ -225,5 +145,103 @@ public class DailyList extends Fragment {
 
     private void showToast(String data){
         Toast.makeText(context, data, Toast.LENGTH_LONG).show();
+    }
+
+    public class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+        protected String url;
+        String TAG;
+
+        void setURL(String url){
+            this.url=url;
+        }
+        void setTAG(String TAG){
+            this.TAG=TAG;
+        }
+        @Override
+        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+
+            // Http 요청 준비 작업
+            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+
+            // Parameter 를 전송한다.
+            http.addAllParameters(maps[0]);
+
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
+            // 응답 본문 가져오기
+
+            return post.getBody();
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            if(TAG.equals("dailyGroupInfo")){
+                try {
+                    JSONArray jsonArray=new JSONArray(response);
+                    if(jsonArray.length()==0){
+                        showToast("그룹이 없습니다.");
+
+                    }else{
+                        groupMembershiplList= rootView.findViewById(R.id.main_daily_list);
+                        LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(),LinearLayoutManager.VERTICAL,false);
+                        groupMembershiplList.setLayoutManager(layoutManager);
+
+                        groupAdapter=new GroupAdapter();
+                        for (int i=0;i<jsonArray.length();i++){
+                            JSONObject item=jsonArray.getJSONObject(i);
+                            String groupname=item.getString("groupName");
+                            String gid=item.getString("groupID");
+                            String did=item.getString("DID");
+                            //String groupTime=item.getString("groupTime");
+
+                            DailyGroup group = new DailyGroup();
+                            group.setGroupName(groupname);
+                            group.setGID(gid);
+                            group.setDID(did);
+                            //group.setTime(groupTime);
+                            groupAdapter.addItem(group);
+                        }
+
+                        groupMembershiplList.setAdapter(groupAdapter);
+
+                        groupAdapter.setOnItemClickListener(new OnGroupItemClickListener() {
+                            @Override
+                            public void onItemClick(GroupAdapter.ViewHolder holder, View view, int position) {
+                                intoDaily(position);
+                            }
+                        });
+
+                        groupAdapter.setOnItemLongClickListener(new OnGroupItemLongClickListener() {
+                            @Override
+                            public void onItemLongClick(GroupAdapter.ViewHolder holder, View view, int position) {
+                                selectOutGroup(position);
+                                groupView();
+                            }
+                        });
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    System.out.println("오류 : "+e.toString());
+                }
+            }
+            else if(TAG.equals("dailyOutGroup")){
+                try{
+                    JSONObject jsonObject=new JSONObject(response);
+                    boolean success=jsonObject.getBoolean("success");
+                    if(success) {
+                        //삭제 성공여부 확인
+                        groupView();
+                    }else{
+                        showToast("그룹 나가기 실패");
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

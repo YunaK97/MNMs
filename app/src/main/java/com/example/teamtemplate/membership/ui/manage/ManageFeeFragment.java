@@ -1,5 +1,7 @@
 package com.example.teamtemplate.membership.ui.manage;
 
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +19,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.teamtemplate.Group;
+import com.example.teamtemplate.HttpClient;
+import com.example.teamtemplate.Member;
 import com.example.teamtemplate.R;
+import com.example.teamtemplate.firstscreen.MainActivity;
+import com.example.teamtemplate.mainscreen.MainMenuActivity;
 import com.example.teamtemplate.membership.MembershipGroup;
 
 import org.json.JSONException;
@@ -28,9 +34,14 @@ import java.util.Map;
 
 
 public class ManageFeeFragment extends Fragment {
+
+    //layouts
     public TextView tv_payday;
     public TextView tv_memberMoney;
     public TextView tv_totalMoney;
+
+    //URLs
+    public String urlMembershipGroup="http://jennyk97.dothome.co.kr/MembershipGroup.php";
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_manage_fee, container, false);
@@ -40,21 +51,26 @@ public class ManageFeeFragment extends Fragment {
         tv_totalMoney = v.findViewById(R.id.tv_totalMoney);
 
         Bundle bundle = getArguments();
-        if (bundle == null) {
-            System.out.println("------------NULL------------");
-
-        } else {
-            System.out.println("------------ManageFeeFragment------------");
-            Group group = (Group) bundle.getSerializable("membershipGroup");
-
-            MembershipGroup membershipGroup = new MembershipGroup();
-            membershipGroup.setMID(group.getMid());
-            membershipProcess(membershipGroup);
+        if (bundle != null){
+            MembershipGroup membershipGroup = (MembershipGroup) bundle.getSerializable("membershipGroup");
+            tmpmembershipProcess(membershipGroup);
         }
         return v;
     }
 
     protected void membershipProcess(final MembershipGroup membershipGroup) {
+        String MID = membershipGroup.getMID();
+
+        NetworkTask networkTask=new NetworkTask();
+        networkTask.setURL(urlMembershipGroup);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("MID", MID);
+
+        networkTask.execute(params);
+    }
+
+    protected void tmpmembershipProcess(final MembershipGroup membershipGroup) {
         final String MID = membershipGroup.getMID();
         final String url="http://jennyk97.dothome.co.kr/MembershipGroup.php";
 
@@ -78,7 +94,6 @@ public class ManageFeeFragment extends Fragment {
                     tv_memberMoney.setText("내가 낸 회비: " + String.valueOf(mg.getMemberMoney()));
                     tv_totalMoney.setText("총 회비: " + String.valueOf(mg.getTotalMoney()));
 
-                    System.out.println("----------OOO444OOO-----------");
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -88,15 +103,13 @@ public class ManageFeeFragment extends Fragment {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                System.out.println("********에러********");
-                Log.e("#####볼리에러####", error.toString());
+                error.printStackTrace();
             }
         }){
             @Override
             protected Map<String, String> getParams() {
                 Map<String, String> params = new HashMap<>();
                 params.put("MID", MID);
-                System.out.println("========MID========");
                 return params;
             }
         };
@@ -104,4 +117,54 @@ public class ManageFeeFragment extends Fragment {
         queue.add(stringRequest);
     }
 
+    public class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+        protected String url;
+        void setURL(String url){
+            this.url=url;
+        }
+        @Override
+        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+
+            // Http 요청 준비 작업
+            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+
+            // Parameter 를 전송한다.
+            http.addAllParameters(maps[0]);
+
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
+            // 응답 본문 가져오기
+
+            return post.getBody();
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            try {
+
+                JSONObject jsonObject = new JSONObject(response);
+
+                MembershipGroup mg = new MembershipGroup();
+                mg.setMID(jsonObject.getString("MID"));
+                mg.setPresident(jsonObject.getString("president"));
+                mg.setPayDay(jsonObject.getString("payDay"));
+                mg.setMemberMoney(jsonObject.getInt("memberMoney"));
+                mg.setTotalMoney(jsonObject.getInt("totalMoney"));
+                mg.setNotSubmit(jsonObject.getInt("notSubmit"));
+                mg.setGID(jsonObject.getString("GID"));
+
+                tv_payday.setText("회비 납입일: " + mg.getPayDay());
+                tv_memberMoney.setText("내가 낸 회비: " + String.valueOf(mg.getMemberMoney()));
+                tv_totalMoney.setText("총 회비: " + String.valueOf(mg.getTotalMoney()));
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
 }

@@ -1,12 +1,12 @@
 package com.example.teamtemplate.daily;
 
+import com.example.teamtemplate.Group;
+
 import java.io.Serializable;
 
-public class DailyGroup implements Serializable {
-    String DID;
-    int money;
-    String dutchPay;
-    String GID;
+public class DailyGroup extends Group implements Serializable {
+    String DID; //daily ID
+    int money; // 총 사용한 돈 -> 그냥 계좌내역 받아와서 계산할까,,,?
 
     public String getDID() {
         return DID;
@@ -24,19 +24,4 @@ public class DailyGroup implements Serializable {
         this.money = money;
     }
 
-    public String getDutchPay() {
-        return dutchPay;
-    }
-
-    public void setDutchPay(String dutchPay) {
-        this.dutchPay = dutchPay;
-    }
-
-    public String getGID() {
-        return GID;
-    }
-
-    public void setGID(String GID) {
-        this.GID = GID;
-    }
 }

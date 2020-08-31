@@ -1,6 +1,5 @@
-package com.example.teamtemplate.transaction;
+package com.example.teamtemplate;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,8 +8,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
-
-import com.example.teamtemplate.R;
 
 import java.util.List;
 

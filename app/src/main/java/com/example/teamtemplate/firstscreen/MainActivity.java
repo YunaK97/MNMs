@@ -1,10 +1,8 @@
 package com.example.teamtemplate.firstscreen;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
@@ -22,9 +20,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.teamtemplate.Account;
-import com.example.teamtemplate.mainscreen.MainMenuActivity;
+import com.example.teamtemplate.HttpClient;
 import com.example.teamtemplate.Member;
 import com.example.teamtemplate.R;
+import com.example.teamtemplate.mainscreen.MainMenuActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,13 +31,23 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 public class MainActivity extends AppCompatActivity {
+    //layouts
+    private  CheckBox autoLogin;
+
+    //URLs
+    private String urlLogin="http://jennyk97.dothome.co.kr/Login.php";
+
+    //variables
     private final static int SIGNIN=221,LOGOUT=333;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     String TAG_SUCCESS="success";
     String id,pw;
-    private  CheckBox autoLogin;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,82 +113,19 @@ public class MainActivity extends AppCompatActivity {
         }else if(requestCode==LOGOUT){
             editor.clear();
             editor.commit();
-
         }
-        //로그아웃 시 -> 앱 재시작때 자동로그인 되지 않도록 하기
     }
 
     protected void loginProcess(final Member member){
-        final String url="http://jennyk97.dothome.co.kr/Login.php";
+        NetworkTask networkTask=new NetworkTask();
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("memPW", member.getMemPW());
+        params.put("memID",member.getMemID());
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    JSONObject jsonObject=new JSONObject(response);
+        networkTask.setURL(urlLogin);
 
-                    boolean success=jsonObject.getBoolean(TAG_SUCCESS);
-                    if(success){
-                        String name=jsonObject.getString("memName");
-                        String id=jsonObject.getString("memID");
-                        String pw=jsonObject.getString("memPW");
-                        String email=jsonObject.getString("memEmail");
-                        String accNum=jsonObject.getString("accountNum");
-                        String accBalance=jsonObject.getString("accountBalance");
-
-                        System.out.println("잔액 "+accBalance);
-                        Member loginMem=new Member();
-                        loginMem.setMemName(name);
-                        loginMem.setMemID(id);
-                        loginMem.setMemPW(pw);
-                        loginMem.setMemEmail(email);
-
-                        Account memAcc=new Account();
-                        memAcc.setAccountNum(accNum);
-                        int balance=Integer.parseInt(accBalance);
-                        memAcc.setAccountBalance(balance);
-
-                        if(autoLogin.isChecked()){
-                            editor.putString("loginId",loginMem.getMemID());
-                            editor.putString("loginPw",loginMem.getMemID());
-                            editor.commit();
-                        }
-                        else{
-                            editor.clear();
-                            editor.commit();
-                        }
-                        Intent intent=new Intent(MainActivity.this, MainMenuActivity.class);
-                        intent.putExtra("loginMember",loginMem);
-                        intent.putExtra("loginMemberAccount",memAcc);
-                        //멤버 나머지 속성 받기
-
-                        startActivityForResult(intent,LOGOUT);
-                    }
-                    else{//로그인에 실패한 경우
-                        showToast("로그인에 실패했습니다.");
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("memPW", member.getMemPW());
-                params.put("memID",member.getMemID());
-                return params;
-            }
-        };
-
-        RequestQueue queue= Volley.newRequestQueue(this);
-        queue.add(stringRequest);
+        networkTask.execute(params);
     }
-
 
     protected void showToast(String data){
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
@@ -199,4 +145,81 @@ public class MainActivity extends AppCompatActivity {
             showToast("이용해주셔서 감사합니다.");
         }
     }
+
+    public class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+        protected String url;
+        void setURL(String url){
+            this.url=url;
+        }
+        @Override
+        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+
+            // Http 요청 준비 작업
+            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+
+            // Parameter 를 전송한다.
+            http.addAllParameters(maps[0]);
+
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
+            // 응답 본문 가져오기
+
+            return post.getBody();
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            try {
+                JSONObject jsonObject=new JSONObject(response);
+
+                boolean success=jsonObject.getBoolean(TAG_SUCCESS);
+                if(success){
+                    String name=jsonObject.getString("memName");
+                    String id=jsonObject.getString("memID");
+                    String pw=jsonObject.getString("memPW");
+                    String email=jsonObject.getString("memEmail");
+                    String accNum=jsonObject.getString("accountNum");
+                    String accBalance=jsonObject.getString("accountBalance");
+
+                    System.out.println("잔액 "+accBalance);
+                    Member loginMem=new Member();
+                    loginMem.setMemName(name);
+                    loginMem.setMemID(id);
+                    loginMem.setMemPW(pw);
+                    loginMem.setMemEmail(email);
+
+                    Account memAcc=new Account();
+                    memAcc.setAccountNum(accNum);
+                    int balance=Integer.parseInt(accBalance);
+                    memAcc.setAccountBalance(balance);
+
+                    if(autoLogin.isChecked()){
+                        editor.putString("loginId",loginMem.getMemID());
+                        editor.putString("loginPw",loginMem.getMemID());
+                        editor.commit();
+                    }
+                    else{
+                        editor.clear();
+                        editor.commit();
+                    }
+                    Intent intent=new Intent(MainActivity.this, MainMenuActivity.class);
+                    intent.putExtra("loginMember",loginMem);
+                    intent.putExtra("loginMemberAccount",memAcc);
+                    //멤버 나머지 속성 받기
+
+                    startActivityForResult(intent,LOGOUT);
+                }
+                else{//로그인에 실패한 경우
+                    showToast("로그인에 실패했습니다.");
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
 }

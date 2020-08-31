@@ -3,10 +3,10 @@ package com.example.teamtemplate;
 import java.io.Serializable;
 
 public class Account implements Serializable {
-    private String accountNum;
-    private String accountBank;
-    private int accountBalance;
-    private String accountPassword;
+    private String accountNum; //계좌번호
+    private String accountBank; //은행
+    private int accountBalance; //잔액
+    private String accountPassword; //계좌 비밀번호
 
     public String getAccountNum() {
         return accountNum;

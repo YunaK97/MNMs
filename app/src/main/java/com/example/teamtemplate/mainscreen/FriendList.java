@@ -3,7 +3,7 @@ package com.example.teamtemplate.mainscreen;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,16 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.example.teamtemplate.Group;
+import com.example.teamtemplate.HttpClient;
 import com.example.teamtemplate.Member;
 import com.example.teamtemplate.R;
-import com.example.teamtemplate.membership.MembershipActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,12 +29,20 @@ import androidx.recyclerview.widget.RecyclerView;
 public class FriendList extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private FriendListAdapter friendListAdapter;
     private Member loginMember;
+
+    //layouts
+    private FriendListAdapter friendListAdapter;
     private RecyclerView friend_list;
-    private String TAG_SUCCESS="success";
     private Context context;
     private ViewGroup rootView;
+
+    //URLs
+    String urlShowFriend="http://jennyk97.dothome.co.kr/ShowFriend.php";
+    String urlDeleteFriend="http://jennyk97.dothome.co.kr/DeleteFriend.php";
+
+    //variabls
+    private String TAG_SUCCESS="success";
 
     public FriendList() {
         // Required empty public constructor
@@ -51,7 +52,7 @@ public class FriendList extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        showFriend(rootView);
+        showFriend();
     }
 
     @Override
@@ -71,80 +72,19 @@ public class FriendList extends Fragment {
         if(bundle!=null) {
             loginMember = (Member) bundle.getSerializable("loginMember");
         }
-        showFriend(rootView);
+        showFriend();
 
         return rootView;
     }
-    private void showFriend(final ViewGroup rootView){
-        final String url="http://jennyk97.dothome.co.kr/ShowFriend.php";
+    private void showFriend(){
+        NetworkTask networkTask=new NetworkTask();
+        networkTask.setURL(urlShowFriend);
+        networkTask.setTAG("showFriend");
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    Log.d("showFriend",response);
-                    JSONArray jsonArray=new JSONArray(response);
+        Map<String, String> params = new HashMap<>();
+        params.put("memID",loginMember.getMemID());
 
-                    if(jsonArray.length()==0){ return; }
-
-                    friend_list = rootView.findViewById(R.id.main_friend_list);
-                    LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
-                    friend_list.setLayoutManager(layoutManager);
-                    friendListAdapter = new FriendListAdapter();
-
-                    for (int i=0;i<jsonArray.length();i++) {
-                        JSONObject item = jsonArray.getJSONObject(i);
-                        String friendId = item.getString("memID");
-                        String friendName = item.getString("memName");
-
-                        Member member=new Member();
-                        member.setMemName(friendName);
-                        member.setMemID(friendId);
-                        friendListAdapter.addItem(member);
-                    }
-                    friend_list.setAdapter(friendListAdapter);
-                    friendListAdapter.setOnItemClickListener(new OnFriendItemClickListener() {
-                        @Override
-                        public void onItemClick(FriendListAdapter.ViewHolder holder, View view, int position) {
-                            Group tmpGroup=new Group();
-                            tmpGroup.setGid("G1");
-                            tmpGroup.setMid("M1");
-                            tmpGroup.setGroupName("tmpMembership");
-                            tmpGroup.setDid("D1");
-                            tmpGroup.setNotSubmit(3);
-                            tmpGroup.setTime("2020");
-
-                            Intent intent=new Intent(getContext(), MembershipActivity.class);
-                            intent.putExtra("membershipGroup",tmpGroup);
-                            startActivity(intent);
-                        }
-                    });
-                    friendListAdapter.setOnItemLongClickListener(new OnFriendItemLongClickListener() {
-
-                        @Override
-                        public void onItemLongClick(FriendListAdapter.ViewHolder holder, View view, int position) {
-                            selectDelFriend(position);
-                        }
-                    });
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("memID",loginMember.getMemID());
-                return params;
-            }
-        };
-
-        RequestQueue queue= Volley.newRequestQueue(context);
-        queue.add(stringRequest);
+        networkTask.execute(params);
     }
 
     private void selectDelFriend(int position){
@@ -171,11 +111,93 @@ public class FriendList extends Fragment {
     }
 
     private void deleteFriend(final String delMemberId){
-        final String url="http://jennyk97.dothome.co.kr/DeleteFriend.php";
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        NetworkTask networkTask=new NetworkTask();
+        networkTask.setURL(urlDeleteFriend);
+        networkTask.setTAG("deleteFriend");
+
+        Map<String, String> params = new HashMap<>();
+        params.put("friendID", delMemberId);
+        params.put("memID",loginMember.getMemID());
+
+        networkTask.execute(params);
+    }
+
+    private void showToast(String data){
+        Toast.makeText(context, data, Toast.LENGTH_LONG).show();
+    }
+
+
+    public class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+        protected String url;
+        String TAG;
+
+        void setURL(String url){
+            this.url=url;
+        }
+        void setTAG(String TAG){
+            this.TAG=TAG;
+        }
+        @Override
+        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+
+            // Http 요청 준비 작업
+            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+
+            // Parameter 를 전송한다.
+            http.addAllParameters(maps[0]);
+
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
+            // 응답 본문 가져오기
+
+            return post.getBody();
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            if(TAG.equals("showFriend")){
+                try {
+                    JSONArray jsonArray=new JSONArray(response);
+
+                    if(jsonArray.length()==0){ return; }
+
+                    friend_list = rootView.findViewById(R.id.main_friend_list);
+                    LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
+                    friend_list.setLayoutManager(layoutManager);
+                    friendListAdapter = new FriendListAdapter();
+
+                    for (int i=0;i<jsonArray.length();i++) {
+                        JSONObject item = jsonArray.getJSONObject(i);
+                        String friendId = item.getString("memID");
+                        String friendName = item.getString("memName");
+
+                        Member member=new Member();
+                        member.setMemName(friendName);
+                        member.setMemID(friendId);
+                        friendListAdapter.addItem(member);
+                    }
+                    friend_list.setAdapter(friendListAdapter);
+                    friendListAdapter.setOnItemClickListener(new OnFriendItemClickListener() {
+                        @Override
+                        public void onItemClick(FriendListAdapter.ViewHolder holder, View view, int position) {
+
+                        }
+                    });
+                    friendListAdapter.setOnItemLongClickListener(new OnFriendItemLongClickListener() {
+                        @Override
+                        public void onItemLongClick(FriendListAdapter.ViewHolder holder, View view, int position) {
+                            selectDelFriend(position);
+                        }
+                    });
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if(TAG.equals("deleteFriend")){
                 try{
                     Log.d("deleteFriend",response);
                     JSONObject jsonObject=new JSONObject(response);
@@ -183,7 +205,7 @@ public class FriendList extends Fragment {
                     if(success) {
                         //삭제 성공여부 확인
                         showToast("친구 삭제 성공");
-                        showFriend(rootView);
+                        showFriend();
                     }else{
                         showToast("친구 삭제 실패");
                     }
@@ -191,27 +213,7 @@ public class FriendList extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("friendID", delMemberId);
-                params.put("memID",loginMember.getMemID());
-                return params;
-            }
-        };
-
-        RequestQueue queue= Volley.newRequestQueue(context);
-        queue.add(stringRequest);
-    }
-
-    private void showToast(String data){
-        Toast.makeText(context, data, Toast.LENGTH_LONG).show();
+        }
     }
 }

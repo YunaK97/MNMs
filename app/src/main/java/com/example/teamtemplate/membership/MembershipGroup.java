@@ -1,13 +1,16 @@
 package com.example.teamtemplate.membership;
 
-public class MembershipGroup {
-    String MID;
-    String president;
-    String payDay;
-    int memberMoney;
-    int totalMoney;
-    int notSubmit;
-    String GID;
+import com.example.teamtemplate.Group;
+
+import java.io.Serializable;
+
+public class MembershipGroup extends Group implements Serializable {
+    String MID; //membership ID
+    String president; //방장
+    String payDay; //회비날
+    int memberMoney; //회비
+    int totalMoney; //총액 -> 계좌내역 받아와서 계산할까?
+    int notSubmit; //최대 미납횟수
 
     public String getMID() {
         return MID;
@@ -57,11 +60,4 @@ public class MembershipGroup {
         this.notSubmit = notSubmit;
     }
 
-    public String getGID() {
-        return GID;
-    }
-
-    public void setGID(String GID) {
-        this.GID = GID;
-    }
 }

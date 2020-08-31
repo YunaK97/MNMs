@@ -1,5 +1,6 @@
 package com.example.teamtemplate.membership.ui.manage;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.teamtemplate.Group;
+import com.example.teamtemplate.HttpClient;
 import com.example.teamtemplate.R;
 import com.example.teamtemplate.membership.MembershipGroup;
 
@@ -28,7 +30,12 @@ import java.util.Map;
 
 
 public class ManageMemFragment extends Fragment {
+
+    //layouts
     public TextView tv_president;
+
+    //URLs
+    public String urlMembershipGroup="http://jennyk97.dothome.co.kr/MembershipGroup.php";
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_manage_mem, container, false);
@@ -36,15 +43,9 @@ public class ManageMemFragment extends Fragment {
         tv_president = v.findViewById(R.id.tv_president);
 
         Bundle bundle = getArguments();
-        if (bundle == null) {
-            System.out.println("------------NULL------------");
+        if (bundle != null) {
+            MembershipGroup membershipGroup = (MembershipGroup) bundle.getSerializable("membershipGroup");
 
-        } else {
-            System.out.println("------------ManageMemFragment------------");
-            Group group = (Group) bundle.getSerializable("membershipGroup");
-
-            MembershipGroup membershipGroup = new MembershipGroup();
-            membershipGroup.setMID(group.getMid());
             membershipProcess(membershipGroup);
         }
 
@@ -53,50 +54,59 @@ public class ManageMemFragment extends Fragment {
 
     protected void membershipProcess(final MembershipGroup membershipGroup) {
         final String MID = membershipGroup.getMID();
-        final String url="http://jennyk97.dothome.co.kr/MembershipGroup.php";
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
+        NetworkTask networkTask=new NetworkTask();
+        networkTask.setURL(urlMembershipGroup);
+        Map<String, String> params = new HashMap<>();
+        params.put("MID", MID);
 
-                    JSONObject jsonObject = new JSONObject(response);
+        networkTask.execute(params);
 
-                    MembershipGroup mg = new MembershipGroup();
-                    mg.setMID(jsonObject.getString("MID"));
-                    mg.setPresident(jsonObject.getString("president"));
-                    mg.setPayDay(jsonObject.getString("payDay"));
-                    mg.setMemberMoney(jsonObject.getInt("memberMoney"));
-                    mg.setTotalMoney(jsonObject.getInt("totalMoney"));
-                    mg.setNotSubmit(jsonObject.getInt("notSubmit"));
-                    mg.setGID(jsonObject.getString("GID"));
+    }
 
-                    tv_president.setText("방장: " + mg.getPresident());
+    public class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+        protected String url;
+        void setURL(String url){
+            this.url=url;
+        }
+        @Override
+        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
 
-                    System.out.println("----------OOO333OOO-----------");
+            // Http 요청 준비 작업
+            HttpClient.Builder http = new HttpClient.Builder("POST", url);
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            // Parameter 를 전송한다.
+            http.addAllParameters(maps[0]);
+
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
+            // 응답 본문 가져오기
+
+            return post.getBody();
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+
+                MembershipGroup mg = new MembershipGroup();
+                mg.setMID(jsonObject.getString("MID"));
+                mg.setPresident(jsonObject.getString("president"));
+                mg.setPayDay(jsonObject.getString("payDay"));
+                mg.setMemberMoney(jsonObject.getInt("memberMoney"));
+                mg.setTotalMoney(jsonObject.getInt("totalMoney"));
+                mg.setNotSubmit(jsonObject.getInt("notSubmit"));
+                mg.setGID(jsonObject.getString("GID"));
+
+                tv_president.setText("방장: " + mg.getPresident());
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("********에러********");
-                Log.e("#####볼리에러####", error.toString());
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("MID", MID);
-                System.out.println("========MID2========");
-                return params;
-            }
-        };
-        RequestQueue queue= Volley.newRequestQueue(getActivity());
-        queue.add(stringRequest);
+        }
     }
 
 }

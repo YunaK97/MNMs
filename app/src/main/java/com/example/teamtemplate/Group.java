@@ -4,12 +4,9 @@ import java.io.Serializable;
 import java.util.Date;
 
 public class Group implements Serializable {
-    private String groupName;
-    private String gid;
-    private String mid;
-    private String did;
-    private String time;
-    private int notSubmit;
+    private String groupName; //그룹이름
+    private String GID; //그룹 ID
+    private String time; //그룹 생성 시간
 
     public String getGroupName() {
         return groupName;
@@ -17,30 +14,6 @@ public class Group implements Serializable {
 
     public void setGroupName(String groupName) {
         this.groupName = groupName;
-    }
-
-    public String getGid() {
-        return gid;
-    }
-
-    public void setGid(String gid) {
-        this.gid = gid;
-    }
-
-    public String getMid() {
-        return mid;
-    }
-
-    public void setMid(String mid) {
-        this.mid = mid;
-    }
-
-    public String getDid() {
-        return did;
-    }
-
-    public void setDid(String did) {
-        this.did = did;
     }
 
     public String getTime() {
@@ -51,11 +24,11 @@ public class Group implements Serializable {
         this.time = time;
     }
 
-    public int getNotSubmit() {
-        return notSubmit;
+    public String getGID() {
+        return GID;
     }
 
-    public void setNotSubmit(int notSubmit) {
-        this.notSubmit = notSubmit;
+    public void setGID(String GID) {
+        this.GID = GID;
     }
 }

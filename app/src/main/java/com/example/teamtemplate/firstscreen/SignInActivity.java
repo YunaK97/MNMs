@@ -4,7 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -25,9 +25,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.teamtemplate.Account;
+import com.example.teamtemplate.HttpClient;
 import com.example.teamtemplate.Member;
 import com.example.teamtemplate.R;
-import com.example.teamtemplate.mainscreen.MainMenuActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -40,19 +40,28 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 public class SignInActivity extends AppCompatActivity {
-//아이디 중복확인
-//민증확인(카메라)
-//회원가입 완료
-    boolean idValid=false,ssnValid=false,emailValid=false,pwValid=false;
-    Member signInMember = new Member();
-    ArrayAdapter bankTypeAdapter;
     Account signInMemberAccount = new Account();
+    Member signInMember = new Member();
+
+    //layouts
+    ArrayAdapter bankTypeAdapter;
     Spinner email_type,bank_type;
-    final String TAG = getClass().getSimpleName();
     Button cameraBtn;
-    final static int TAKE_PICTURE = 1;
+
+    //urls
+    String urlIdOverlap="http://jennyk97.dothome.co.kr/IdOverlap.php";
+    String urlEmailOverlap="http://jennyk97.dothome.co.kr/EmailOverlap.php";
+    String urlRegister="http://jennyk97.dothome.co.kr/Register.php";
+
+    //TAGs
     String TAG_SUCCESS="success",emailForm;
-    int TAG_EMAIL=123;
+    final String TAG = getClass().getSimpleName();
+
+    //Variables
+    boolean idValid=false,ssnValid=false,emailValid=false,pwValid=false;
+    final static int TAKE_PICTURE = 1;
+    String checkID,checkEmail;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,14 +118,14 @@ public class SignInActivity extends AppCompatActivity {
         overlap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String memID=((TextView)findViewById(R.id.textID)).getText().toString();
-                memID.replaceAll(" ","");
+                checkID=((TextView)findViewById(R.id.textID)).getText().toString();
+                checkID.replaceAll(" ","");
 
-                if(memID.length()<4 || memID.length()>10) {
+                if(checkID.length()<4 || checkID.length()>10) {
                     showToast("4~10 글자 입력");
                 }else{
                     //id만 서버로 보내서 중복확인
-                    checkOverlap("id",memID);
+                    checkOverlap("id");
                 }
             }
         });
@@ -128,8 +137,8 @@ public class SignInActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String emailID=((TextView)findViewById(R.id.textEmail)).getText().toString();
                 if (TextUtils.isEmpty(emailID)) return;
-
-                checkOverlap("email",emailID+emailForm);
+                checkEmail=emailID+emailForm;
+                checkOverlap("email");
 
             }
         });
@@ -210,145 +219,47 @@ public class SignInActivity extends AppCompatActivity {
     }
 
 
-    protected void checkOverlap(String TAG_TYPE, final String checkString){
+    protected void checkOverlap(String TAG_TYPE){
         if(TAG_TYPE.equals("id")){
-            final String url="http://jennyk97.dothome.co.kr/IdOverlap.php";
+            NetworkTask networkTask=new NetworkTask();
+            networkTask.setURL(urlIdOverlap);
+            networkTask.setTAG("idOverlap");
 
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    try {
-                        JSONObject jsonObject=new JSONObject(response);
-                        boolean success=jsonObject.getBoolean(TAG_SUCCESS);
-                        if(success){
-                            showToast("사용가능한 아이디입니다.");
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("memID",checkID);
 
-                            signInMember.setMemID(checkString);
-                            idValid=true;
-                        }
-                        else{
-                            showToast("사용 불가능한 아이디입니다.");
-                            idValid=false;
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                }
-            }){
-                @Override
-                protected Map<String, String> getParams() {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("memID", checkString);
-                    return params;
-                }
-            };
+            networkTask.execute(params);
+        }else if(TAG_TYPE.equals("email")){
+            NetworkTask networkTask=new NetworkTask();
+            networkTask.setURL(urlEmailOverlap);
+            networkTask.setTAG("emailOverlap");
 
-            RequestQueue queue= Volley.newRequestQueue(SignInActivity.this);
-            queue.add(stringRequest);
-        }
-        else if(TAG_TYPE.equals("email")){
-            final String url="http://jennyk97.dothome.co.kr/EmailOverlap.php";
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("memEmail",checkEmail);
 
-            StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                @Override
-                public void onResponse(String response) {
-                    try {
-                        Log.d("emailCheck",response);
-                        JSONObject jsonObject=new JSONObject(response);
-                        boolean success=jsonObject.getBoolean(TAG_SUCCESS);
-                        if(success){
-                            signInMember.setMemEmail(checkString);
-                            Log.d("emailuse",signInMember.getMemEmail());
-                            emailValid=true;
-                            showToast("사용가능한 이메일");
-                        }
-                        else{
-                            emailValid=false;
-                            showToast("사용 불가능한 이메일");
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                }
-            }){
-                @Override
-                protected Map<String, String> getParams() {
-                    Map<String, String> params = new HashMap<>();
-                    params.put("memID", checkString);
-                    return params;
-                }
-            };
-
-            RequestQueue queue= Volley.newRequestQueue(SignInActivity.this);
-            queue.add(stringRequest);
+            networkTask.execute(params);
         }
     }
 
     protected void registerProcess(){
-        final String url="http://jennyk97.dothome.co.kr/Register.php";
+        NetworkTask networkTask=new NetworkTask();
+        networkTask.setURL(urlRegister);
+        networkTask.setTAG("register");
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-                    if(response.isEmpty()){
-                        showToast("error!");
-                    }
-                    JSONObject jsonObject = new JSONObject( response );
+        Map<String, String> params = new HashMap<>();
+        params.put("memID", signInMember.getMemID());
+        params.put("memPW", signInMember.getMemPW());
+        params.put("memName", signInMember.getMemName());
+        params.put("memEmail",signInMember.getMemEmail());
 
-                    boolean success = jsonObject.getBoolean( TAG_SUCCESS );
-                    //회원가입 성공시
-                    if(success) {
-                        showToast("성공");
+        params.put("accountBank",signInMemberAccount.getAccountBank());
+        params.put("accountBalance",signInMemberAccount.getAccountBalance()+"");
+        params.put("accountNum",signInMemberAccount.getAccountNum());
+        params.put("accountPassword",signInMemberAccount.getAccountPassword());
 
-                        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                        intent.putExtra("result", true);
-                        intent.putExtra("back",0);
-                        setResult(221, intent);
-
-                        finish();
-                    } else {
-                        //회원가입 실패
-                        showToast("실패");
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("memID", signInMember.getMemID());
-                params.put("memPW", signInMember.getMemPW());
-                params.put("memName", signInMember.getMemName());
-                params.put("memEmail",signInMember.getMemEmail());
-
-                params.put("accountBank",signInMemberAccount.getAccountBank());
-                params.put("accountBalance",signInMemberAccount.getAccountBalance()+"");
-                params.put("accountNum",signInMemberAccount.getAccountNum());
-                params.put("accountPassword",signInMemberAccount.getAccountPassword());
-                return params;
-            }
-        };
-
-        RequestQueue queue= Volley.newRequestQueue(SignInActivity.this);
-        queue.add(stringRequest);
+        networkTask.execute(params);
     }
+
     protected boolean getUserInfo(){
         String name=((TextView)findViewById(R.id.textName)).getText().toString();
         name.replaceAll(" ","");
@@ -394,4 +305,101 @@ public class SignInActivity extends AppCompatActivity {
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
 
+    public class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+        protected String url;
+        String TAG;
+
+        void setURL(String url){
+            this.url=url;
+        }
+        void setTAG(String TAG){
+            this.TAG=TAG;
+        }
+        @Override
+        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+
+            // Http 요청 준비 작업
+            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+
+            // Parameter 를 전송한다.
+            http.addAllParameters(maps[0]);
+
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
+            // 응답 본문 가져오기
+
+            return post.getBody();
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            if(TAG.equals("idOverlap")){
+                try {
+                    JSONObject jsonObject=new JSONObject(response);
+                    boolean success=jsonObject.getBoolean(TAG_SUCCESS);
+                    if(success){
+                        showToast("사용가능한 아이디입니다.");
+
+                        signInMember.setMemID(checkID);
+                        idValid=true;
+                    }
+                    else{
+                        showToast("사용 불가능한 아이디입니다.");
+                        idValid=false;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if(TAG.equals("emailOverlap")){
+                try {
+                    JSONObject jsonObject=new JSONObject(response);
+                    boolean success=jsonObject.getBoolean(TAG_SUCCESS);
+                    if(success){
+                        showToast("사용가능한 이메일.");
+
+                        signInMember.setMemEmail(checkEmail);
+                        emailValid=true;
+                    }
+                    else{
+                        showToast("사용 불가능한 이메일.");
+                        emailValid=false;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if(TAG.equals("register")){
+                try {
+                    if(response.isEmpty()){
+                        showToast("error!");
+                    }
+                    JSONObject jsonObject = new JSONObject( response );
+
+                    boolean success = jsonObject.getBoolean( TAG_SUCCESS );
+                    //회원가입 성공시
+                    if(success) {
+                        showToast("성공");
+
+                        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                        intent.putExtra("result", true);
+                        intent.putExtra("back",0);
+                        setResult(221, intent);
+
+                        finish();
+                    } else {
+                        //회원가입 실패
+                        showToast("실패");
+                    }
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+    }
 }

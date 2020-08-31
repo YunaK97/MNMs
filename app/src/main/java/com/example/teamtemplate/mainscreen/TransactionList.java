@@ -1,29 +1,18 @@
 package com.example.teamtemplate.mainscreen;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.teamtemplate.Account;
+import com.example.teamtemplate.HttpClient;
 import com.example.teamtemplate.Member;
 import com.example.teamtemplate.R;
-import com.example.teamtemplate.membership.MembershipGroup;
-import com.example.teamtemplate.transaction.Transaction;
-import com.example.teamtemplate.transaction.TransactionAdapter;
+import com.example.teamtemplate.Transaction;
+import com.example.teamtemplate.TransactionAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,22 +23,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 
 public class TransactionList extends Fragment {
     private Member loginMember;
     private Account loginMemberAccount;
+
+    //layouts
     private Context context;
     private ViewGroup rootView;
     private RecyclerView transactionList;
     private TransactionAdapter transactionAdapter;
     private List<Transaction> dataList;
 
+    //URLs
+    String urlListTransaction="http://jennyk97.dothome.co.kr/ListTransaction.php";
+
     public TransactionList() {
 
     }
-
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +70,6 @@ public class TransactionList extends Fragment {
         return rootView;
     }
 
-
     private void transactionView(ViewGroup rootView){
         transactionList=rootView.findViewById(R.id.main_transaction_list);
         LinearLayoutManager layoutManager=new LinearLayoutManager(rootView.getContext(),LinearLayoutManager.VERTICAL,false);
@@ -92,14 +86,49 @@ public class TransactionList extends Fragment {
     }
 
     private void transactionProcess(final Transaction transaction){
-        final String accountNum = transaction.getAccountNum();
-        final String url="http://jennyk97.dothome.co.kr/ListTransaction.php";
+        NetworkTask networkTask=new NetworkTask();
+        networkTask.setURL(urlListTransaction);
+        networkTask.setTAG("listTransaction");
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        Map<String, String> params = new HashMap<>();
+        params.put("accountNum", transaction.getAccountNum());
+
+        networkTask.execute(params);
+    }
+
+    public class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+        protected String url;
+        String TAG;
+
+        void setURL(String url){
+            this.url=url;
+        }
+        void setTAG(String TAG){
+            this.TAG=TAG;
+        }
+        @Override
+        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+
+            // Http 요청 준비 작업
+            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+
+            // Parameter 를 전송한다.
+            http.addAllParameters(maps[0]);
+
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
+            // 응답 본문 가져오기
+
+            return post.getBody();
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            if(TAG.equals("listTransaction")){
                 try{
-                    Log.d("honey",response);
                     JSONArray j = new JSONArray(response);
                     // Parse json
                     for (int i = 0; i < j.length(); i++) {
@@ -128,20 +157,6 @@ public class TransactionList extends Fragment {
                 }
 
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("accountNum", accountNum);
-                return params;
-            }
-        };
-
-        RequestQueue queue= Volley.newRequestQueue(context);
-        queue.add(stringRequest);
+        }
     }
 }

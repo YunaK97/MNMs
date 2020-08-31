@@ -1,6 +1,7 @@
 package com.example.teamtemplate.newgroupfriend;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -13,6 +14,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.example.teamtemplate.HttpClient;
 import com.example.teamtemplate.Member;
 import com.example.teamtemplate.MemberAdapter;
 import com.example.teamtemplate.R;
@@ -30,12 +32,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class NewMembershipActivity extends AppCompatActivity {
-    private MemberAdapter memberAdapter;
-    private ArrayList<Member> selectedMember;
     private Member loginMember;
+
+    //layouts
+    private RecyclerView friend_list;
+    private MemberAdapter memberAdapter;
+
+    //URLs
+    String urlNewMembership= "http://jennyk97.dothome.co.kr/NewMembership.php";
+    String urlShowFriend="http://jennyk97.dothome.co.kr//ShowFriend.php";
+    String urlMemberGroupInfo="http://jennyk97.dothome.co.kr/MembergroupInfo.php";
+
+    //variables
     private String TAG_SUCCESS="success";
     private ArrayList<String> groupName;
-    private RecyclerView friend_list;
+    private ArrayList<Member> selectedMember;
     private String membership_name, membership_money,membership_notsubmit;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,66 +96,108 @@ public class NewMembershipActivity extends AppCompatActivity {
                         selectedMember.add(member);
                     }
                 }
-                String url = "http://jennyk97.dothome.co.kr/NewMembership.php";
-                StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            boolean success = jsonObject.getBoolean(TAG_SUCCESS);
-                            if (success) {
-                                showToast("생성 성공!");
-                                finish();
-                            } else {
-                                showToast("membership 실패!");
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                    }
-                }) {
-                    @Override
-                    protected Map<String, String> getParams() {
-                        Map<String, String> params = new HashMap<>();
-                        params.put("memID", loginMember.getMemID());
-                        params.put("memName", loginMember.getMemName());
-                        params.put("membershipName", membership_name);
-                        params.put("membershipMoney",membership_money);
-                        params.put("membershipNotSubmit", membership_notsubmit);
-                        try {
-                            JSONArray jsonArray = new JSONArray();
-                            for (int i = 0; i < selectedMember.size(); i++) {
-                                JSONObject jsonObject = new JSONObject();
-                                jsonObject.put("memID", selectedMember.get(i).getMemID());
-                                jsonArray.put(jsonObject);
-                            }
-                            params.put("friend", jsonArray.toString());
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        return params;
-                    }
-                };
 
-                RequestQueue queue = Volley.newRequestQueue(this);
-                queue.add(stringRequest);
+                NetworkTask networkTask=new NetworkTask();
+                networkTask.setURL(urlNewMembership);
+                networkTask.setTAG("newMembership");
+
+                Map<String, String> params = new HashMap<>();
+                params.put("memID", loginMember.getMemID());
+                params.put("memName", loginMember.getMemName());
+                params.put("membershipName", membership_name);
+                params.put("membershipMoney",membership_money);
+                params.put("membershipNotSubmit", membership_notsubmit);
+                try {
+                    JSONArray jsonArray = new JSONArray();
+                    for (int i = 0; i < selectedMember.size(); i++) {
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("memID", selectedMember.get(i).getMemID());
+                        jsonArray.put(jsonObject);
+                    }
+                    params.put("friend", jsonArray.toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                networkTask.execute(params);
             }
         }
     }
 
-
     private void groupNameList(){
         groupName=new ArrayList<>();
 
-        final String url="http://jennyk97.dothome.co.kr/MembergroupInfo.php";
+        NetworkTask networkTask=new NetworkTask();
+        networkTask.setURL(urlMemberGroupInfo);
+        networkTask.setTAG("memberGroupInfo");
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+        Map<String, String> params = new HashMap<>();
+        params.put("memID",loginMember.getMemID());
+
+        networkTask.execute(params);
+    }
+
+    protected void showFriend(){
+        NetworkTask networkTask=new NetworkTask();
+        networkTask.setURL(urlShowFriend);
+        networkTask.setTAG("showFriend");
+
+        Map<String, String> params = new HashMap<>();
+        params.put("memID",loginMember.getMemID());
+
+        networkTask.execute(params);
+    }
+
+    protected void showToast(String data){
+        Toast.makeText(this, data, Toast.LENGTH_LONG).show();
+    }
+
+    public class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+        protected String url;
+        String TAG;
+
+        void setURL(String url){
+            this.url=url;
+        }
+        void setTAG(String TAG){
+            this.TAG=TAG;
+        }
+        @Override
+        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+
+            // Http 요청 준비 작업
+            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+
+            // Parameter 를 전송한다.
+            http.addAllParameters(maps[0]);
+
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
+            // 응답 본문 가져오기
+
+            return post.getBody();
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            if(TAG.equals("newMembership")){
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    boolean success = jsonObject.getBoolean(TAG_SUCCESS);
+                    if (success) {
+                        showToast("생성 성공!");
+                        finish();
+                    } else {
+                        showToast("membership 실패!");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            else if(TAG.equals("memberGroupInfo")){
                 try {
                     JSONArray jsonArray=new JSONArray(response);
                     if(jsonArray.length()==0){
@@ -161,30 +214,8 @@ public class NewMembershipActivity extends AppCompatActivity {
                     e.printStackTrace();
                     System.out.println("오류 : "+e.toString());
                 }
-
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("memID",loginMember.getMemID());
-                return params;
-            }
-        };
-        RequestQueue queue= Volley.newRequestQueue(this);
-        queue.add(stringRequest);
-    }
-
-    protected void showFriend(){
-        final String url="http://jennyk97.dothome.co.kr//ShowFriend.php";
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
+            else if(TAG.equals("showFriend")){
                 try {
                     JSONArray jsonArray=new JSONArray(response);
 
@@ -195,9 +226,7 @@ public class NewMembershipActivity extends AppCompatActivity {
 
                     friend_list = findViewById(R.id.membership_select_friend);
                     LinearLayoutManager layoutManager = new LinearLayoutManager(NewMembershipActivity.this, LinearLayoutManager.VERTICAL, false);
-
                     friend_list.setLayoutManager(layoutManager);
-
                     memberAdapter = new MemberAdapter();
 
                     for (int i=0;i<jsonArray.length();i++) {
@@ -216,24 +245,7 @@ public class NewMembershipActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("memID",loginMember.getMemID());
-                return params;
-            }
-        };
 
-        RequestQueue queue= Volley.newRequestQueue(this);
-        queue.add(stringRequest);
-    }
-
-    protected void showToast(String data){
-        Toast.makeText(this, data, Toast.LENGTH_LONG).show();
+        }
     }
 }

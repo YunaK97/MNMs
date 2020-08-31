@@ -1,7 +1,7 @@
 package com.example.teamtemplate.daily.ui.dutch;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,31 +13,28 @@ import androidx.annotation.IdRes;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.teamtemplate.Group;
+import com.example.teamtemplate.HttpClient;
 import com.example.teamtemplate.R;
 import com.example.teamtemplate.daily.DailyGroup;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.Map;
 
 
 public class DutchPayFragment extends Fragment {
-    public TextView tv_total;
-    public TextView tv_calc;
-    public RadioButton rbt_up;
-    public RadioButton rbt_round;
-    public RadioButton rbt_down;
-    public RadioGroup radioGroup;
+    private TextView tv_total;
+    private TextView tv_calc;
+    private RadioButton rbt_up;
+    private RadioButton rbt_round;
+    private RadioButton rbt_down;
+    private RadioGroup radioGroup;
+
+    private String urlDailyGroup="http://jennyk97.dothome.co.kr/DailyGroup.php";
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dutch, container, false);
@@ -66,16 +63,9 @@ public class DutchPayFragment extends Fragment {
         });
 
         Bundle bundle = getArguments();
-        if (bundle == null) {
-            System.out.println("------------NULL------------");
+        if (bundle != null) {
+            DailyGroup dailyGroup = (DailyGroup) bundle.getSerializable("dailyGroup");
 
-        }
-        else {
-            System.out.println("------------DutchPayFragment------------");
-            Group group = (Group) bundle.getSerializable("dailyGroup");
-
-            DailyGroup dailyGroup = new DailyGroup();
-            dailyGroup.setDID(group.getDid());
             dailyProcess(dailyGroup);
 
         }
@@ -84,50 +74,68 @@ public class DutchPayFragment extends Fragment {
     }
 
     protected void dailyProcess(final DailyGroup dailyGroup) {
-        final String DID = dailyGroup.getDID();
-        final String url="http://jennyk97.dothome.co.kr/DailyGroup.php";
+        String DID = dailyGroup.getDID();
+        NetworkTask networkTask=new NetworkTask();
+        networkTask.setURL(urlDailyGroup);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
+        Map<String, String> params = new HashMap<>();
+        params.put("DID", DID);
 
-                    JSONObject jsonObject = new JSONObject(response);
-
-                    DailyGroup dg = new DailyGroup();
-                    dg.setDID(jsonObject.getString("DID"));
-                    dg.setMoney(jsonObject.getInt("money"));
-                    dg.setDutchPay(jsonObject.getString("dutchPay"));
-                    dg.setGID(jsonObject.getString("GID"));
-
-                    tv_total.setText("총 사용 금액: " + String.valueOf(dg.getMoney()));
-
-                    System.out.println("----------OOO222OOO-----------");
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                System.out.println("********에러********");
-                Log.e("#####볼리에러####", error.toString());
-            }
-        }){
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("DID", DID);
-                System.out.println("========dutchPay DID========");
-                return params;
-            }
-        };
-        RequestQueue queue= Volley.newRequestQueue(getActivity());
-        queue.add(stringRequest);
+        networkTask.execute(params);
     }
 
+    public class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+        protected String url;
+        void setURL(String url){
+            this.url=url;
+        }
+        @Override
+        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+
+            // Http 요청 준비 작업
+            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+
+            // Parameter 를 전송한다.
+            http.addAllParameters(maps[0]);
+
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
+            // 응답 본문 가져오기
+
+            return post.getBody();
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            try{
+                JSONArray j = new JSONArray(response);
+                // Parse json
+                for (int i = 0; i < j.length(); i++) {
+                    try {
+
+                        JSONObject jsonObject = new JSONObject(response);
+
+                        DailyGroup dg = new DailyGroup();
+                        dg.setDID(jsonObject.getString("DID"));
+                        dg.setMoney(jsonObject.getInt("money"));
+                        dg.setGID(jsonObject.getString("GID"));
+
+                        tv_total.setText("총 사용 금액: " + String.valueOf(dg.getMoney()));
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
 
 
 }

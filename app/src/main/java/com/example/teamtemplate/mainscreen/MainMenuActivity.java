@@ -31,13 +31,17 @@ import androidx.viewpager.widget.ViewPager;
 
 
 public class MainMenuActivity extends AppCompatActivity {
-    private ActionBar actionBar;
     private Member loginMember;
     private Account loginMemberAccount;
+
+    //layouts
+    private ActionBar actionBar;
     private TextView textName,accName,textBalance;
     private ImageButton btn_transaction,btn_membership,btn_daily,btn_friendList;
-    final private int[] addType={0};
     private ViewPager pager;
+
+    //variables
+    final private int[] addType={0};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -160,15 +164,6 @@ public class MainMenuActivity extends AppCompatActivity {
                 pager.setCurrentItem(1);
             }
         });
-        //membership 탈퇴
-        btn_membership.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                //
-
-                return true;
-            }
-        });
 
         btn_daily.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,15 +173,6 @@ public class MainMenuActivity extends AppCompatActivity {
                 btn_daily.setSelected(true);
                 btn_friendList.setSelected(false);
                 pager.setCurrentItem(2);
-            }
-        });
-        //daily 탈퇴
-        btn_daily.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                //
-
-                return true;
             }
         });
 
@@ -200,15 +186,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 pager.setCurrentItem(3);
             }
         });
-        //친구 삭제
-        btn_friendList.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                //
 
-                return true;
-            }
-        });
     }
 
     @Override
@@ -253,42 +231,6 @@ public class MainMenuActivity extends AppCompatActivity {
     protected void showToast(String data){
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
-
-    protected void plusAction(){
-        final String[] select=new String[] {"회비모임","꿀잼모임"};
-
-        AlertDialog.Builder dialog=new AlertDialog.Builder(MainMenuActivity.this);
-        dialog.setTitle("추가!")
-                .setSingleChoiceItems(select, 0, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        addType[0]=which;
-                    }
-                })
-                .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if(addType[0]==0){
-                            Intent intent = new Intent(getApplicationContext(), NewMembershipActivity.class);
-                            intent.putExtra("loginMember",loginMember);
-                            startActivity(intent);
-                        }else if(addType[0]==1){
-                            Intent intent = new Intent(getApplicationContext(), NewDailyActivity.class);
-                            intent.putExtra("loginMember",loginMember);
-                            startActivity(intent);
-                        }
-                    }
-                })
-                .setNeutralButton("취소", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getApplicationContext(),"취소",Toast.LENGTH_SHORT).show();
-                    }
-                });
-        dialog.create();
-        dialog.show();
-
-}
 
     @Override
     public void onBackPressed(){

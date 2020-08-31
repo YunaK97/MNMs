@@ -6,7 +6,9 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.teamtemplate.Account;
 import com.example.teamtemplate.Group;
+import com.example.teamtemplate.Member;
 import com.example.teamtemplate.R;
 import com.google.android.material.tabs.TabLayout;
 
@@ -20,10 +22,14 @@ public class DailyActivity extends AppCompatActivity {
         setContentView(R.layout.activity_daily);
 
         Intent intent = getIntent();
-        Group group = (Group) intent.getSerializableExtra("dailyGroup");
+        DailyGroup dailyGroup = (DailyGroup) intent.getSerializableExtra("dailyGroup");
+        Member member=(Member)intent.getSerializableExtra("loginMember");
+        Account account=(Account)intent.getSerializableExtra("loginMemberAccount");
 
         Bundle bundle = new Bundle();
-        bundle.putSerializable("dailyGroup", group);
+        bundle.putSerializable("dailyGroup", dailyGroup);
+        bundle.putSerializable("loginMember",member);
+        bundle.putSerializable("loginMemberAccount",account);
 
         viewPager = findViewById(R.id.viewpager);
         DailyPagerAdapter adapter = new DailyPagerAdapter(getSupportFragmentManager(), bundle);
