@@ -39,7 +39,8 @@ public class MemberFragment extends Fragment {
     private List<Transaction> dataList;
 
     //URLs
-    private String urlDailyMemList="http://jennyk97.dothome.co.kr/DailyMemList.php";
+    //private String urlDailyMemList="http://jennyk97.dothome.co.kr/DailyMemList.php";
+    private String urlDailyMemList = "http://192.168.35.39:8080/daily/member";
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_member, container, false);

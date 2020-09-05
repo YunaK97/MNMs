@@ -35,7 +35,8 @@ public class ManageMemFragment extends Fragment {
     public TextView tv_president;
 
     //URLs
-    public String urlMembershipGroup="http://jennyk97.dothome.co.kr/MembershipGroup.php";
+    //public String urlMembershipGroup="http://jennyk97.dothome.co.kr/MembershipGroup.php";
+    public String urlMembershipGroup = "http://192.168.35.39:8080/membership/member";
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_manage_mem, container, false);

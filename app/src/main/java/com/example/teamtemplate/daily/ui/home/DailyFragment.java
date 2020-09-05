@@ -38,7 +38,8 @@ public class DailyFragment extends Fragment {
     private List<Transaction> dataList;
 
     //URLs
-    private  String urlDailyTransaction="http://jennyk97.dothome.co.kr/DailyTransaction.php";
+    //private String urlDailyTransaction="http://jennyk97.dothome.co.kr/DailyTransaction.php";
+    private String urlDailyTransaction = "http://192.168.35.39:8080/daily/";
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_daily, container, false);

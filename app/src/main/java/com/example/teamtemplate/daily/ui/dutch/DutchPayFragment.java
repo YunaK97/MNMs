@@ -34,7 +34,8 @@ public class DutchPayFragment extends Fragment {
     private RadioButton rbt_down;
     private RadioGroup radioGroup;
 
-    private String urlDailyGroup="http://jennyk97.dothome.co.kr/DailyGroup.php";
+    //private String urlDailyGroup="http://jennyk97.dothome.co.kr/DailyGroup.php";
+    private String urlDailyGroup = "http://192.168.35.39:8080/daily/dutch";
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dutch, container, false);

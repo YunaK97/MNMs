@@ -39,7 +39,8 @@ public class MainActivity extends AppCompatActivity {
     private  CheckBox autoLogin;
 
     //URLs
-    private String urlLogin="http://jennyk97.dothome.co.kr/Login.php";
+    //private String urlLogin="http://jennyk97.dothome.co.kr/Login.php";
+    private String urlLogin="http://192.168.35.39:8080/member/login";
 
     //variables
     private final static int SIGNIN=221,LOGOUT=333;
@@ -119,8 +120,8 @@ public class MainActivity extends AppCompatActivity {
     protected void loginProcess(final Member member){
         NetworkTask networkTask=new NetworkTask();
         Map<String, String> params = new HashMap<String, String>();
-        params.put("memPW", member.getMemPW());
         params.put("memID",member.getMemID());
+        params.put("memPW", member.getMemPW());
 
         networkTask.setURL(urlLogin);
 

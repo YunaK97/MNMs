@@ -41,8 +41,8 @@ public class MembershipFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
 
     //URLs
-    String urlMembershipTransaction = "http://jennyk97.dothome.co.kr/MembershipTransaction.php";
-
+    //String urlMembershipTransaction = "http://jennyk97.dothome.co.kr/MembershipTransaction.php";
+    String urlMembershipTransaction = "http://192.168.35.39:8080/membership/";
     //variables
     private List<Transaction> dataList;
 

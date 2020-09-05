@@ -51,7 +51,8 @@ public class SignInActivity extends AppCompatActivity {
     //urls
     String urlIdOverlap="http://jennyk97.dothome.co.kr/IdOverlap.php";
     String urlEmailOverlap="http://jennyk97.dothome.co.kr/EmailOverlap.php";
-    String urlRegister="http://jennyk97.dothome.co.kr/Register.php";
+    //String urlRegister="http://jennyk97.dothome.co.kr/Register.php";
+    String urlRegister="http://192.168.35.39:8080/member/join";
 
     //TAGs
     String TAG_SUCCESS="success",emailForm;

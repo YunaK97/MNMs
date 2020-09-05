@@ -41,7 +41,8 @@ public class ManageFeeFragment extends Fragment {
     public TextView tv_totalMoney;
 
     //URLs
-    public String urlMembershipGroup="http://jennyk97.dothome.co.kr/MembershipGroup.php";
+    //public String urlMembershipGroup="http://jennyk97.dothome.co.kr/MembershipGroup.php";
+    public String urlMembershipGroup = "http://192.168.35.39:8080/membership/fee";
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_manage_fee, container, false);
