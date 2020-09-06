@@ -2,17 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/add_membership"
-        android:title="membership 추가"
+    <item android:id="@+id/new_process"
+        android:title="+"
         app:showAsAction="never"/>
-    <item android:id="@+id/add_daily"
-        android:title="daily 추가"
-        app:showAsAction="never"/>
-    <item android:id="@+id/add_friend"
-        android:title="friend 추가"
-        app:showAsAction="never"/>
-    <item android:id="@+id/logout"
-        android:title="로그아웃"
+    <item android:id="@+id/settings"
+        android:title="환경설정"
         app:showAsAction="never"
         />
 </menu>

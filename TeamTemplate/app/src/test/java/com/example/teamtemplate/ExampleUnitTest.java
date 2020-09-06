@@ -1,4 +1,4 @@
-package com.example.teamtemplate;
+package com.hongik.mnms;
 
 import org.junit.Test;
 

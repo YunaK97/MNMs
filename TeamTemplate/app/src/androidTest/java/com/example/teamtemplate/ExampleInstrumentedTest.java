@@ -1,4 +1,4 @@
-package com.example.teamtemplate;
+package com.hongik.mnms;
 
 import android.content.Context;
 

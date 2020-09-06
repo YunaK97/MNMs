@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.teamtemplate.membership.MembershipActivity">
+    tools:context="com.hongik.mnms.kr.example.mnms.membership.MembershipActivity">
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
