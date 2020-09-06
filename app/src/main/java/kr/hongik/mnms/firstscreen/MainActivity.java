@@ -18,7 +18,6 @@ import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.mainscreen.MainMenuActivity;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
