@@ -3,12 +3,11 @@ package kr.hongik.mnms;
 import java.io.Serializable;
 
 public class Transaction implements Serializable {
-    String transactID; // primary key
-    String transactHistroy; // 거래 내역
+    String transactID; // primary key, 순서대로 생성
+    String transactHistroy; // 거래 내역 (회비, 밥,,,)
     String transactMoney; // 돈 (+,-)
-    String transactVersion; //회비, 데일리, 개인간 송금
     String since; //사용한 날짜
-    String accountNum; //사용한 계좌
+    String accountNum; //사용한 계좌 - 개인 계좌번호, membership계좌번호
     String MID; // MembershipGroup의 ID
     String DID; // DailyGroup의 ID
 
@@ -35,14 +34,6 @@ public class Transaction implements Serializable {
 
     public void setTransactMoney(String transactMoney) {
         this.transactMoney = transactMoney;
-    }
-
-    public String getTransactVersion() {
-        return transactVersion;
-    }
-
-    public void setTransactVersion(String transactVersion) {
-        this.transactVersion = transactVersion;
     }
 
     public String getSince() {

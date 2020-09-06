@@ -9,8 +9,16 @@ public class MembershipGroup extends Group implements Serializable {
     String president; //방장
     String payDay; //회비날
     int memberMoney; //회비
-    int totalMoney; //총액 -> 계좌내역 받아와서 계산할까?
     int notSubmit; //최대 미납횟수
+    String accountNum; //membership 계좌번호
+
+    public String getAccountNum() {
+        return accountNum;
+    }
+
+    public void setAccountNum(String accountNum) {
+        this.accountNum = accountNum;
+    }
 
     public String getMID() {
         return MID;
@@ -42,14 +50,6 @@ public class MembershipGroup extends Group implements Serializable {
 
     public void setMemberMoney(int memberMoney) {
         this.memberMoney = memberMoney;
-    }
-
-    public int getTotalMoney() {
-        return totalMoney;
-    }
-
-    public void setTotalMoney(int totalMoney) {
-        this.totalMoney = totalMoney;
     }
 
     public int getNotSubmit() {
