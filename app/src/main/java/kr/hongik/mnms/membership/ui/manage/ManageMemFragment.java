@@ -43,7 +43,7 @@ public class ManageMemFragment extends Fragment {
 
     private RecyclerView memberList;
     private FriendListAdapter memberAdapter;
-    private String president;
+    private String president; //방장
 
     private Context context;
     private ViewGroup rootView;
@@ -75,24 +75,25 @@ public class ManageMemFragment extends Fragment {
 
     protected void showGroup(MembershipGroup membershipGroup) {
         String urlShowGroup = "http://" + ip + "/membershipGroup";
+        urlShowGroup="http://jennyk97.dothome.co.kr/MembershipGroup.php";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlShowGroup);
         networkTask.setTAG("showGroup");
         Map<String, String> params = new HashMap<>();
-        params.put("MID", membershipGroup.getMID());
+        params.put("GID", membershipGroup.getGID());
 
         networkTask.execute(params);
     }
 
     protected void showMember(MembershipGroup membershipGroup) {
-        String urlShowMember = "http://" + ip + "/showMember";
+        String urlShowMember = "http://" + ip + "/membership/member";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlShowMember);
         networkTask.setTAG("showMem");
         Map<String, String> params = new HashMap<>();
-        params.put("MID", membershipGroup.getMID());
+        params.put("GID", membershipGroup.getGID());
 
         networkTask.execute(params);
     }
@@ -192,10 +193,15 @@ public class ManageMemFragment extends Fragment {
                         Member member = new Member();
                         //member.setMemName(friendName);
                         //member.setMemID(friendId);
-                        member.setMemName(i + "님");
-                        member.setMemID(i + "as" + i);
+                        member.setMemName("zname"+i);
+                        member.setMemID("zid"+i + "as" + i);
                         memberAdapter.addItem(member);
                     }
+
+                    Member member = new Member();
+                    member.setMemName("aaaa");
+                    member.setMemID("aaaa");
+                    memberAdapter.addItem(member);
 
                     Comparator<Member> noAsc = new Comparator<Member>() {
                         @Override
@@ -244,7 +250,7 @@ public class ManageMemFragment extends Fragment {
                     mg.setGID(jsonObject.getString("GID"));
 
                     president = mg.getPresident();
-
+                    president="aaaa";
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

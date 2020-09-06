@@ -84,6 +84,7 @@ public class DailyList extends Fragment {
 
     private void groupView(){
         String urlDailyGroupInfo="http://"+ip+"/dailyGroupInfo";
+        urlDailyGroupInfo="http://jennyk97.dothome.co.kr/DailygroupInfo.php";
 
         NetworkTask networkTask=new NetworkTask();
         networkTask.setURL(urlDailyGroupInfo);
@@ -97,6 +98,7 @@ public class DailyList extends Fragment {
 
     private void outGroup(final Group outGroup){
         String urlDailyOutGroup="http://"+ip+"/OutDGroup";
+        urlDailyOutGroup="http://jennyk97.dothome.co.kr/OutGroup.php";
 
         NetworkTask networkTask=new NetworkTask();
         networkTask.setURL(urlDailyOutGroup);

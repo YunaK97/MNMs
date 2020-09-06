@@ -89,6 +89,7 @@ public class TransactionList extends Fragment {
 
     private void transactionProcess(final Transaction transaction){
         String urlListTransaction="http://"+ip+"/listTransaction";
+        urlListTransaction="http://jennyk97.dothome.co.kr/ListTransaction.php";
 
         NetworkTask networkTask=new NetworkTask();
         networkTask.setURL(urlListTransaction);

@@ -93,6 +93,7 @@ public class NewDailyActivity extends AppCompatActivity {
                 }
 
                 String urlNewDaily= "http://"+ip+"/newDaily";
+                urlNewDaily="http://jennyk97.dothome.co.kr/NewDaily.php";
 
                 NetworkTask networkTask=new NetworkTask();
                 networkTask.setURL(urlNewDaily);
@@ -125,6 +126,7 @@ public class NewDailyActivity extends AppCompatActivity {
 
     private void groupNameList(){
         String urlDailyGroupInfo="http://"+ip+"/dailyGroupInfo";
+        urlDailyGroupInfo="http://jennyk97.dothome.co.kr/DailygroupInfo.php";
 
         groupName=new ArrayList<>();
 
@@ -141,6 +143,7 @@ public class NewDailyActivity extends AppCompatActivity {
 
     protected void showFriend(){
         String urlShowFriend="http://"+ip+"/showFriend";
+        urlShowFriend="http://jennyk97.dothome.co.kr/ShowFriend.php";
 
         NetworkTask networkTask=new NetworkTask();
         networkTask.setURL(urlShowFriend);

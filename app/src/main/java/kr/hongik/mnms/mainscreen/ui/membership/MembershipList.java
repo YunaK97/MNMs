@@ -85,6 +85,7 @@ public class MembershipList extends Fragment {
 
     private void groupView(){
         String urlMemberGroupInfo="http://"+ip+"/memberGroupInfo";
+        urlMemberGroupInfo="http://jennyk97.dothome.co.kr/MembergroupInfo.php";
 
         NetworkTask networkTask=new NetworkTask();
         networkTask.setURL(urlMemberGroupInfo);
@@ -110,6 +111,7 @@ public class MembershipList extends Fragment {
 
     private void outGroup(final Group outGroup){
         String urlOutMGroup="http://"+ip+"/outMGroup";
+        urlOutMGroup="http://jennyk97.dothome.co.kr/OutMGroup.php";
 
         NetworkTask networkTask=new NetworkTask();
         networkTask.setURL(urlOutMGroup);

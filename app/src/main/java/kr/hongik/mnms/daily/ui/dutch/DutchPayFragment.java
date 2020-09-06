@@ -139,6 +139,4 @@ public class DutchPayFragment extends Fragment {
 
         }
     }
-
-
 }

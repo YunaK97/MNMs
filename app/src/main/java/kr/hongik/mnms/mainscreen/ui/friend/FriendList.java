@@ -77,6 +77,8 @@ public class FriendList extends Fragment {
     }
     private void showFriend(){
         String urlShowFriend="http://"+ip+"/showFriend";
+        urlShowFriend="http://jennyk97.dothome.co.kr/ShowFriend.php";
+
         NetworkTask networkTask=new NetworkTask();
         networkTask.setURL(urlShowFriend);
         networkTask.setTAG("showFriend");
@@ -111,7 +113,8 @@ public class FriendList extends Fragment {
     }
 
     private void deleteFriend(final String delMemberId){
-        String urlDeleteFriend="http://"+ip+"/deleteFrined";
+        String urlDeleteFriend="http://"+ip+"/deleteFriend";
+        urlDeleteFriend="http://jennyk97.dothome.co.kr/DeleteFriend.php";
 
         NetworkTask networkTask=new NetworkTask();
         networkTask.setURL(urlDeleteFriend);

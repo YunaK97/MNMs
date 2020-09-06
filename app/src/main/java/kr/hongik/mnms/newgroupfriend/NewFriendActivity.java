@@ -93,6 +93,7 @@ public class NewFriendActivity extends AppCompatActivity {
 
     protected void sendRequest() {
         String urlNewFriendAdd = "http://" + ip + "/newFriendAdd";
+        urlNewFriendAdd="http://jennyk97.dothome.co.kr/NewFriendAdd.php";
 
         //내가 상대방에게 친구추가 요청
         NetworkTask networkTask = new NetworkTask();
@@ -108,6 +109,7 @@ public class NewFriendActivity extends AppCompatActivity {
 
     protected void showRequest() {
         String urlRequestedFriend = "http://" + ip + "/requestedFriend";
+        urlRequestedFriend="http://jennyk97.dothome.co.kr/RequestedFriend.php";
 
         //나에게 들어온 요청 출력
         NetworkTask networkTask = new NetworkTask();
@@ -139,6 +141,7 @@ public class NewFriendActivity extends AppCompatActivity {
 
     protected void deleteFriend(final String delMemberId) {
         String urlDeleteFriend = "http://" + ip + "/deleteFriend";
+        urlDeleteFriend="http://jennyk97.dothome.co.kr/DeleteFriend.php";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlDeleteFriend);
@@ -153,6 +156,7 @@ public class NewFriendActivity extends AppCompatActivity {
 
     protected void requestFriend(final String TAG_RESULT) {
         String urlRequestedResult = "http://" + ip + "/requestedResult";
+        urlRequestedResult="http://jennyk97.dothome.co.kr/RequestedResult.php";
 
         // 수락or거절 결과 전송
         selectedFriend = new ArrayList<>();
@@ -212,6 +216,7 @@ public class NewFriendActivity extends AppCompatActivity {
 
     protected void searchFriend(final String friend_id) {
         String urlNewFriend = "http://" + ip + "/newFriend";
+        urlNewFriend="http://jennyk97.dothome.co.kr/NewFriend.php";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlNewFriend);

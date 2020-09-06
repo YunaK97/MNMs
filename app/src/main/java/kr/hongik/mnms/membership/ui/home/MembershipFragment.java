@@ -72,6 +72,7 @@ public class MembershipFragment extends Fragment {
 
     protected void transactionProcess(final MembershipGroup membershipGroup) {
         String urlMembershipTransaction = "http://"+ip+"/membership";
+        urlMembershipTransaction="http://jennyk97.dothome.co.kr/MembershipTransaction.php";
 
         final String GID = membershipGroup.getGID();
         NetworkTask networkTask=new NetworkTask();

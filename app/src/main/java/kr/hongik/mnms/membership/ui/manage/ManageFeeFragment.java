@@ -54,6 +54,7 @@ public class ManageFeeFragment extends Fragment {
 
     protected void membershipProcess(final MembershipGroup membershipGroup) {
         String urlMembershipGroup="http://"+ip+"/fee";
+        urlMembershipGroup="http://jennyk97.dothome.co.kr/MembershipGroup.php";
 
         String MID = membershipGroup.getMID();
 

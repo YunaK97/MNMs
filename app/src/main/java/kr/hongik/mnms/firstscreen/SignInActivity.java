@@ -217,6 +217,7 @@ public class SignInActivity extends AppCompatActivity {
     protected void checkOverlap(String TAG_TYPE){
         if(TAG_TYPE.equals("id")){
             String urlIdOverlap="http://"+ip+"/idOverlap";
+            urlIdOverlap="http://jennyk97.dothome.co.kr/IdOverlap.php";
 
             NetworkTask networkTask=new NetworkTask();
             networkTask.setURL(urlIdOverlap);
@@ -228,6 +229,7 @@ public class SignInActivity extends AppCompatActivity {
             networkTask.execute(params);
         }else if(TAG_TYPE.equals("email")){
             String urlEmailOverlap="http://"+ip+"/emailOverlap";
+            urlEmailOverlap="http://jennyk97.dothome.co.kr/EmailOverlap.php";
 
             NetworkTask networkTask=new NetworkTask();
             networkTask.setURL(urlEmailOverlap);
@@ -242,6 +244,7 @@ public class SignInActivity extends AppCompatActivity {
 
     protected void registerProcess(){
         String urlRegister="http://"+ip+"/register";
+        urlRegister="http://jennyk97.dothome.co.kr/Register.php";
 
         NetworkTask networkTask=new NetworkTask();
         networkTask.setURL(urlRegister);

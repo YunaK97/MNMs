@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected void loginProcess(final Member member){
         String urlLogin="http://"+ip+"/login";
+        urlLogin="http://jennyk97.dothome.co.kr/Login.php";
 
         NetworkTask networkTask=new NetworkTask();
         Map<String, String> params = new HashMap<String, String>();
@@ -180,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
                     String email=jsonObject.getString("memEmail");
                     String accNum=jsonObject.getString("accountNum");
                     String accBalance=jsonObject.getString("accountBalance");
-                    String ssn=jsonObject.getString("memSSN");
+                    //String ssn=jsonObject.getString("memSSN");
 
                     Member loginMem=new Member();
                     loginMem.setMemName(name);
@@ -188,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
                     loginMem.setMemPW(pw);
                     loginMem.setMemEmail(email);
                     loginMem.setAccountNum(accNum);
-                    loginMem.setMemSsn(ssn);
+                    //loginMem.setMemSsn(ssn);
 
                     Account memAcc=new Account();
                     memAcc.setAccountNum(accNum);
