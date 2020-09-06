@@ -52,7 +52,7 @@ public class ManageMemFragment extends Fragment {
     public TextView tv_president;
 
     //URLs
-    String ip = "203.249.75.14";
+    String ip;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
