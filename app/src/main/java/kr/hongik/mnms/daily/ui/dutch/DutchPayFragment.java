@@ -34,7 +34,7 @@ public class DutchPayFragment extends Fragment {
     private RadioGroup radioGroup;
 
     //URLs
-    String ip;
+    private String ip;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_dutch, container, false);
@@ -85,7 +85,7 @@ public class DutchPayFragment extends Fragment {
         networkTask.execute(params);
     }
 
-    public class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
         protected String url;
 
         void setURL(String url) {
@@ -123,10 +123,8 @@ public class DutchPayFragment extends Fragment {
 
                         DailyGroup dg = new DailyGroup();
                         dg.setDID(jsonObject.getString("DID"));
-                        dg.setMoney(jsonObject.getInt("money"));
                         dg.setGID(jsonObject.getString("GID"));
 
-                        tv_total.setText("총 사용 금액: " + String.valueOf(dg.getMoney()));
 
                     } catch (JSONException e) {
                         e.printStackTrace();

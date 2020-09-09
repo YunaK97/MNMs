@@ -40,12 +40,12 @@ public class TransactionList extends Fragment {
     private List<Transaction> dataList;
 
     //URLs
-    public String ip;
-
+    private String ip;
 
     public TransactionList() {
 
     }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,16 +55,16 @@ public class TransactionList extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        context=container.getContext();
+        context = container.getContext();
 
-        rootView = (ViewGroup)inflater.inflate(R.layout.fragment_transaction_list, container, false);
+        rootView = (ViewGroup) inflater.inflate(R.layout.fragment_transaction_list, container, false);
 
         //loginMember,loginMemberAccount 가져오기
-        Bundle bundle=getArguments();
-        if(bundle!=null) {
+        Bundle bundle = getArguments();
+        if (bundle != null) {
             loginMember = (Member) bundle.getSerializable("loginMember");
             loginMemberAccount = (Account) bundle.getSerializable("loginMemberAccount");
-            ip=bundle.getString("ip");
+            ip = bundle.getString("ip");
         }
         //그룹리스트 출력
         transactionView(rootView);
@@ -72,26 +72,26 @@ public class TransactionList extends Fragment {
         return rootView;
     }
 
-    private void transactionView(ViewGroup rootView){
-        transactionList=rootView.findViewById(R.id.main_transaction_list);
-        LinearLayoutManager layoutManager=new LinearLayoutManager(rootView.getContext(),LinearLayoutManager.VERTICAL,false);
+    private void transactionView(ViewGroup rootView) {
+        transactionList = rootView.findViewById(R.id.main_transaction_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
         transactionList.setLayoutManager(layoutManager);
 
-        dataList=new ArrayList<>();
-        transactionAdapter=new TransactionAdapter(dataList);
+        dataList = new ArrayList<>();
+        transactionAdapter = new TransactionAdapter(dataList);
         transactionList.setAdapter(transactionAdapter);
 
-        Transaction transaction=new Transaction();
+        Transaction transaction = new Transaction();
         Transaction transact = new Transaction();
         transact.setAccountNum("1010");
         transactionProcess(transact);
     }
 
-    private void transactionProcess(final Transaction transaction){
-        String urlListTransaction="http://"+ip+"/listTransaction";
-        urlListTransaction="http://jennyk97.dothome.co.kr/ListTransaction.php";
+    private void transactionProcess(final Transaction transaction) {
+        String urlListTransaction = "http://" + ip + "/listTransaction";
+        urlListTransaction = "http://jennyk97.dothome.co.kr/ListTransaction.php";
 
-        NetworkTask networkTask=new NetworkTask();
+        NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlListTransaction);
         networkTask.setTAG("listTransaction");
 
@@ -101,16 +101,47 @@ public class TransactionList extends Fragment {
         networkTask.execute(params);
     }
 
-    public class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+    private void listTransactionProcess(String response){
+        try {
+            JSONArray j = new JSONArray(response);
+            // Parse json
+            for (int i = 0; i < j.length(); i++) {
+                try {
+
+                    JSONObject jsonObject = j.getJSONObject(i);
+
+                    Transaction transact = new Transaction();
+                    transact.setAccountNum(jsonObject.getString("accountNum"));
+                    transact.setTransactID(jsonObject.getString("transactID"));
+                    transact.setTransactHistroy(jsonObject.getString("transactHistory"));
+                    transact.setTransactMoney(jsonObject.getString("transactMoney"));
+                    transact.setSince(jsonObject.getString("since"));
+                    transact.setMID(jsonObject.getString("MID"));
+
+                    ((TransactionAdapter) transactionAdapter).addItem(transact);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
         protected String url;
         String TAG;
 
-        void setURL(String url){
-            this.url=url;
+        void setURL(String url) {
+            this.url = url;
         }
-        void setTAG(String TAG){
-            this.TAG=TAG;
+
+        void setTAG(String TAG) {
+            this.TAG = TAG;
         }
+
         @Override
         protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
 
@@ -132,35 +163,8 @@ public class TransactionList extends Fragment {
 
         @Override
         protected void onPostExecute(String response) {
-            if(TAG.equals("listTransaction")){
-                try{
-                    JSONArray j = new JSONArray(response);
-                    // Parse json
-                    for (int i = 0; i < j.length(); i++) {
-                        try {
-
-                            JSONObject jsonObject = j.getJSONObject(i);
-
-                            Transaction transact = new Transaction();
-                            transact.setAccountNum(jsonObject.getString("accountNum"));
-                            transact.setTransactID(jsonObject.getString("transactID"));
-                            transact.setTransactHistroy(jsonObject.getString("transactHistory"));
-                            transact.setTransactMoney(jsonObject.getString("transactMoney"));
-                            transact.setTransactVersion(jsonObject.getString("transactVersion"));
-                            transact.setSince(jsonObject.getString("since"));
-                            transact.setMID(jsonObject.getString("MID"));
-
-                            ((TransactionAdapter) transactionAdapter).addItem(transact);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
+            if (TAG.equals("listTransaction")) {
+                listTransactionProcess(response);
             }
         }
     }

@@ -5,4 +5,11 @@
         <item name="windowNoTitle">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+
+    <style name="CustomDialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:textColorPrimary">@android:color/holo_red_dark</item>
+        <item name="colorAccent">@android:color/holo_red_light</item>
+        <item name="android:buttonBarPositiveButtonStyle">@android:color/holo_red_light</item>
+    </style>
+
 </resources>

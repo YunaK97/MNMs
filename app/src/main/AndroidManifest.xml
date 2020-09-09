@@ -12,28 +12,29 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name="kr.hongik.mnms.mainscreen.ui.settings.SettingsActivity"></activity>
-        <activity android:name="kr.hongik.mnms.newgroupfriend.NewFriendActivity" />
+        <activity android:name=".membership.ui.home.PlusTransactionActivity"></activity>
+        <activity android:name=".mainscreen.ui.settings.SettingsActivity" />
+        <activity android:name=".newgroupfriend.NewFriendActivity" />
         <activity
-            android:name="kr.hongik.mnms.membership.MembershipActivity"
-            android:label="회원그룹방 거래내역"></activity>
+            android:name=".membership.MembershipActivity"
+            android:label="회원그룹방 거래내역" />
         <activity
-            android:name="kr.hongik.mnms.daily.DailyActivity"
-            android:label="일반그룹방 거래내역"></activity>
+            android:name=".daily.DailyActivity"
+            android:label="일반그룹방 거래내역" />
         <activity
-            android:name="kr.hongik.mnms.newgroupfriend.NewDailyActivity"
+            android:name=".newgroupfriend.NewDailyActivity"
             android:label="@string/app_new_daily" />
         <activity
-            android:name="kr.hongik.mnms.newgroupfriend.NewMembershipActivity"
+            android:name=".newgroupfriend.NewMembershipActivity"
             android:label="@string/app_new_membership" />
         <activity
-            android:name="kr.hongik.mnms.mainscreen.MainMenuActivity"
+            android:name=".mainscreen.MainMenuActivity"
             android:label="@string/app_mainmenu" />
         <activity
-            android:name="kr.hongik.mnms.firstscreen.SignInActivity"
+            android:name=".firstscreen.SignInActivity"
             android:label="@string/app_signin" />
         <activity
-            android:name="kr.hongik.mnms.firstscreen.MainActivity"
+            android:name=".firstscreen.MainActivity"
             android:label="MNMs">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,12 +47,12 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
-    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.CAMERA" />
 
 </manifest>

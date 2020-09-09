@@ -178,7 +178,7 @@ public class SignInActivity extends AppCompatActivity {
                     showToast("빈칸 ㄴㄴ해");
                 }else{
                     if(emailValid&&idValid&&ssnValid&&pwValid){
-                        registerProcess();
+                        registerBegin();
                     }else{
                         if(!emailValid){
                             showToast("이메일 다시 확인");
@@ -242,7 +242,7 @@ public class SignInActivity extends AppCompatActivity {
         }
     }
 
-    protected void registerProcess(){
+    protected void registerBegin(){
         String urlRegister="http://"+ip+"/register";
         urlRegister="http://jennyk97.dothome.co.kr/Register.php";
 
@@ -310,9 +310,75 @@ public class SignInActivity extends AppCompatActivity {
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
 
-    public class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
-        protected String url;
-        String TAG;
+    private void idOverlapProcess(String response){
+        try {
+            JSONObject jsonObject=new JSONObject(response);
+            boolean success=jsonObject.getBoolean(TAG_SUCCESS);
+            if(success){
+                showToast("사용가능한 아이디입니다.");
+
+                signInMember.setMemID(checkID);
+                idValid=true;
+            }
+            else{
+                showToast("사용 불가능한 아이디입니다.");
+                idValid=false;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void emailOverlapProcess(String response){
+        try {
+            JSONObject jsonObject=new JSONObject(response);
+            boolean success=jsonObject.getBoolean(TAG_SUCCESS);
+            if(success){
+                showToast("사용가능한 이메일.");
+
+                signInMember.setMemEmail(checkEmail);
+                emailValid=true;
+            }
+            else{
+                showToast("사용 불가능한 이메일.");
+                emailValid=false;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void registerProcess(String response){
+        try {
+            if(response.isEmpty()){
+                showToast("error!");
+            }
+            JSONObject jsonObject = new JSONObject( response );
+
+            boolean success = jsonObject.getBoolean( TAG_SUCCESS );
+            //회원가입 성공시
+            if(success) {
+                showToast("성공");
+
+                Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+                intent.putExtra("result", true);
+                intent.putExtra("back",0);
+                setResult(221, intent);
+
+                finish();
+            } else {
+                //회원가입 실패
+                showToast("실패");
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+        private String url;
+        private String TAG;
 
         void setURL(String url){
             this.url=url;
@@ -342,67 +408,13 @@ public class SignInActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String response) {
             if(TAG.equals("idOverlap")){
-                try {
-                    JSONObject jsonObject=new JSONObject(response);
-                    boolean success=jsonObject.getBoolean(TAG_SUCCESS);
-                    if(success){
-                        showToast("사용가능한 아이디입니다.");
-
-                        signInMember.setMemID(checkID);
-                        idValid=true;
-                    }
-                    else{
-                        showToast("사용 불가능한 아이디입니다.");
-                        idValid=false;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                idOverlapProcess(response);
             }
             else if(TAG.equals("emailOverlap")){
-                try {
-                    JSONObject jsonObject=new JSONObject(response);
-                    boolean success=jsonObject.getBoolean(TAG_SUCCESS);
-                    if(success){
-                        showToast("사용가능한 이메일.");
-
-                        signInMember.setMemEmail(checkEmail);
-                        emailValid=true;
-                    }
-                    else{
-                        showToast("사용 불가능한 이메일.");
-                        emailValid=false;
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                emailOverlapProcess(response);
             }
             else if(TAG.equals("register")){
-                try {
-                    if(response.isEmpty()){
-                        showToast("error!");
-                    }
-                    JSONObject jsonObject = new JSONObject( response );
-
-                    boolean success = jsonObject.getBoolean( TAG_SUCCESS );
-                    //회원가입 성공시
-                    if(success) {
-                        showToast("성공");
-
-                        Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                        intent.putExtra("result", true);
-                        intent.putExtra("back",0);
-                        setResult(221, intent);
-
-                        finish();
-                    } else {
-                        //회원가입 실패
-                        showToast("실패");
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                registerProcess(response);
             }
 
         }

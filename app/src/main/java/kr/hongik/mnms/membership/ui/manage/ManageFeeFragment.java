@@ -7,118 +7,129 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import kr.hongik.mnms.HttpClient;
-import kr.hongik.mnms.R;
-import kr.hongik.mnms.membership.MembershipGroup;
-
-import org.json.JSONException;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import kr.hongik.mnms.HttpClient;
+import kr.hongik.mnms.Member;
+import kr.hongik.mnms.R;
+import kr.hongik.mnms.mainscreen.ui.friend.FriendListAdapter;
+import kr.hongik.mnms.membership.MembershipGroup;
+
 
 public class ManageFeeFragment extends Fragment {
 
+    private MembershipGroup membershipGroup;
     //layouts
-    public TextView tv_payday;
-    public TextView tv_memberMoney;
-    public TextView tv_totalMoney;
+    private TextView tv_monthly_membership;
+    private TextView tv_notsubmit_cnt;
+    private TextView tv_paid_membership;
+    private TextView tv_paid_membership_cnt;
+    private RecyclerView notsubmit_members;
+
+    private ViewGroup viewGroup;
+
+    private FriendListAdapter notsubmitListAdapter;
+    private LinearLayoutManager linearLayoutManager;
 
     //URLs
-    public String ip="203.249.75.14";
+    private String ip = "203.249.75.14";
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_manage_fee, container, false);
+        viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_manage_fee, container, false);
 
-        tv_payday = v.findViewById(R.id.tv_payday);
-        tv_memberMoney = v.findViewById(R.id.tv_memberMoney);
-        tv_totalMoney = v.findViewById(R.id.tv_totalMoney);
+        tv_monthly_membership = viewGroup.findViewById(R.id.tv_monthly_membership);
+        tv_notsubmit_cnt = viewGroup.findViewById(R.id.tv_notsubmit_cnt);
+        tv_paid_membership = viewGroup.findViewById(R.id.tv_paid_membership);
+        tv_paid_membership_cnt = viewGroup.findViewById(R.id.tv_paid_membership_cnt);
+        notsubmit_members = viewGroup.findViewById(R.id.notsubmit_members);
+
 
         Bundle bundle = getArguments();
-        if (bundle != null){
-            MembershipGroup membershipGroup = (MembershipGroup) bundle.getSerializable("membershipGroup");
-            tmpmembershipProcess(membershipGroup);
+        if (bundle != null) {
+            membershipGroup = (MembershipGroup) bundle.getSerializable("membershipGroup");
+
+            //setInformation(membershipGroup);
+            tv_paid_membership_cnt.setText("10");
+            tv_paid_membership.setText("500000");
+            tv_notsubmit_cnt.setText("3");
+            tv_monthly_membership.setText("50000");
+
+            //getNotsubmitMembers();
+
         }
-        return v;
+        return viewGroup;
     }
 
-    protected void membershipProcess(final MembershipGroup membershipGroup) {
-        String urlMembershipGroup="http://"+ip+"/fee";
-        urlMembershipGroup="http://jennyk97.dothome.co.kr/MembershipGroup.php";
+    public void setInformation(MembershipGroup membershipGroup) {
+        //tv_monthly_membership.setText(membershipGroup.getMemberMoney());
+        //tv_notsubmit_cnt.setText(membershipGroup.getNotSubmit());
+        //tv_paid_membership 과 tv_paid_membership_cnt는 intent로 membershipfragment에서 해당 아이디의 transaction을 계산하여 넘겨주기
+    }
 
-        String MID = membershipGroup.getMID();
+    public void getNotsubmitMembers() {
+        //미납자 명단 출력
+        String urlNotSubmitMembers = "http://" + ip + "/notsubmitmembers";
 
-        NetworkTask networkTask=new NetworkTask();
-        networkTask.setURL(urlMembershipGroup);
+        final String GID = membershipGroup.getGID();
+        NetworkTask networkTask = new NetworkTask();
+        networkTask.setURL(urlNotSubmitMembers);
+        networkTask.setTAG("notSubmitMembers");
 
         Map<String, String> params = new HashMap<>();
-        params.put("MID", MID);
+        params.put("GID", GID);
 
         networkTask.execute(params);
     }
 
-    protected void tmpmembershipProcess(final MembershipGroup membershipGroup) {
-        final String MID = membershipGroup.getMID();
-        final String url="http://jennyk97.dothome.co.kr/MembershipGroup.php";
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                try {
-
-                    JSONObject jsonObject = new JSONObject(response);
-
-                    MembershipGroup mg = new MembershipGroup();
-                    mg.setMID(jsonObject.getString("MID"));
-                    mg.setPresident(jsonObject.getString("president"));
-                    mg.setPayDay(jsonObject.getString("payDay"));
-                    mg.setMemberMoney(jsonObject.getInt("memberMoney"));
-                    mg.setTotalMoney(jsonObject.getInt("totalMoney"));
-                    mg.setNotSubmit(jsonObject.getInt("notSubmit"));
-                    mg.setGID(jsonObject.getString("GID"));
-
-                    tv_payday.setText("회비 납입일: " + mg.getPayDay());
-                    tv_memberMoney.setText("내가 낸 회비: " + String.valueOf(mg.getMemberMoney()));
-                    tv_totalMoney.setText("총 회비: " + String.valueOf(mg.getTotalMoney()));
-
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+    private void notSubmitMembersProcess(String response){
+        try {
+            JSONArray jsonArray = new JSONArray(response);
+            if (jsonArray.length() == 0) {
+                return;
             }
 
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
+            notsubmit_members = viewGroup.findViewById(R.id.notsubmit_members);
+            linearLayoutManager = new LinearLayoutManager(viewGroup.getContext(), LinearLayoutManager.VERTICAL, false);
+            notsubmit_members.setLayoutManager(linearLayoutManager);
+
+            notsubmitListAdapter = new FriendListAdapter();
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                Member member = new Member();
+                member.setMemID(jsonObject.getString("memID"));
+                member.setMemName(jsonObject.getString("memName"));
+
+                notsubmitListAdapter.addItem(member);
             }
-        }){
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("MID", MID);
-                return params;
-            }
-        };
-        RequestQueue queue= Volley.newRequestQueue(getActivity());
-        queue.add(stringRequest);
+
+            notsubmit_members.setAdapter(notsubmitListAdapter);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
-        protected String url;
-        void setURL(String url){
-            this.url=url;
+    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+        protected String url, TAG;
+
+        void setURL(String url) {
+            this.url = url;
         }
+
+        void setTAG(String TAG) {
+            this.TAG = TAG;
+        }
+
         @Override
         protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
 
@@ -140,28 +151,9 @@ public class ManageFeeFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String response) {
-            try {
-
-                JSONObject jsonObject = new JSONObject(response);
-
-                MembershipGroup mg = new MembershipGroup();
-                mg.setMID(jsonObject.getString("MID"));
-                mg.setPresident(jsonObject.getString("president"));
-                mg.setPayDay(jsonObject.getString("payDay"));
-                mg.setMemberMoney(jsonObject.getInt("memberMoney"));
-                mg.setTotalMoney(jsonObject.getInt("totalMoney"));
-                mg.setNotSubmit(jsonObject.getInt("notSubmit"));
-                mg.setGID(jsonObject.getString("GID"));
-
-                tv_payday.setText("회비 납입일: " + mg.getPayDay());
-                tv_memberMoney.setText("내가 낸 회비: " + String.valueOf(mg.getMemberMoney()));
-                tv_totalMoney.setText("총 회비: " + String.valueOf(mg.getTotalMoney()));
-
-
-            } catch (JSONException e) {
-                e.printStackTrace();
+            if(TAG.equals("notSubmitMembers")){
+                notSubmitMembersProcess(response);
             }
-
         }
     }
 }

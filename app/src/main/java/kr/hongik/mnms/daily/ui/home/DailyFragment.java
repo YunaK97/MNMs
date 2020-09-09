@@ -43,7 +43,7 @@ public class DailyFragment extends Fragment {
     private List<Transaction> dataList;
 
     //URLs
-    String ip;
+    private String ip;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_daily, container, false);
@@ -84,7 +84,7 @@ public class DailyFragment extends Fragment {
 
     }
 
-    public class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
         protected String url;
 
         void setURL(String url) {
@@ -125,7 +125,6 @@ public class DailyFragment extends Fragment {
                         transact.setTransactID(jsonObject.getString("transactID"));
                         transact.setTransactHistroy(jsonObject.getString("transactHistory"));
                         transact.setTransactMoney(jsonObject.getString("transactMoney"));
-                        transact.setTransactVersion(jsonObject.getString("transactVersion"));
                         transact.setSince(jsonObject.getString("since"));
                         transact.setMID(jsonObject.getString("MID"));
 

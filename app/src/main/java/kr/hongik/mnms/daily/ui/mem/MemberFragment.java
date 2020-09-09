@@ -115,7 +115,6 @@ public class MemberFragment extends Fragment {
                         transact.setTransactID(jsonObject.getString("transactID"));
                         transact.setTransactHistroy(jsonObject.getString("transactHistory"));
                         transact.setTransactMoney(jsonObject.getString("transactMoney"));
-                        transact.setTransactVersion(jsonObject.getString("transactVersion"));
                         transact.setSince(jsonObject.getString("since"));
                         transact.setMID(jsonObject.getString("MID"));
 

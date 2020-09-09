@@ -1,28 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="kr.hongik.mnms.membership.ui.manage.ManageFeeFragment"
     android:orientation="vertical">
-
-    <TextView
-        android:id="@+id/tv_payday"
-        android:textSize="30sp"
+<!--
+이 톡방의 월 회비
+미납가능한 최대 횟수
+로그인 멤버가 여태 낸 회비, 횟수
+회비 안낸 사람들
+-->
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:id="@+id/tv_memberMoney"
-        android:textSize="30sp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            style="@style/CustomTextView"
+            android:layout_height="wrap_content"
+            android:text="월 회비"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/CustomTextView"
+            android:text="00원"
+            android:id="@+id/tv_monthly_membership"
+            />
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
-    <TextView
-        android:id="@+id/tv_totalMoney"
-        android:textSize="30sp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="미납가능 횟수"
+            style="@style/CustomTextView"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00번"
+            style="@style/CustomTextView"
+            android:id="@+id/tv_notsubmit_cnt"
+            />
+    </LinearLayout>
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/CustomTextView"
+            android:text="내가 낸 회비"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_paid_membership"
+            style="@style/CustomTextView"
+            android:text="00원"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/CustomTextView"
+            android:text="내가 낸 횟수"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_paid_membership_cnt"
+            android:text="00번"
+            style="@style/CustomTextView"
+            />
+    </LinearLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/notsubmit_members"
+        />
 </LinearLayout>

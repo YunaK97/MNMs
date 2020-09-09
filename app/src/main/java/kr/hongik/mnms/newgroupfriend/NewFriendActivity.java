@@ -11,10 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import kr.hongik.mnms.HttpClient;
-import kr.hongik.mnms.Member;
-import kr.hongik.mnms.MemberAdapter;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,26 +22,29 @@ import java.util.Map;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import kr.hongik.mnms.HttpClient;
+import kr.hongik.mnms.Member;
+import kr.hongik.mnms.MemberAdapter;
 import kr.hongik.mnms.R;
 
 public class NewFriendActivity extends AppCompatActivity {
-    Member loginMember;
+    private Member loginMember;
 
     //layouts
-    TextView friend_name_text, friend_id_text;
-    ImageButton id_search;
-    Button btn_addFriend, request_accept, request_reject;
-    LinearLayout linearLayout, request_friend_layout;
-    RecyclerView requestedRecyclerView;
-    MemberAdapter memberAdapter;
+    private TextView friend_name_text, friend_id_text;
+    private ImageButton id_search;
+    private Button btn_addFriend, request_accept, request_reject;
+    private LinearLayout linearLayout, request_friend_layout;
+    private RecyclerView requestedRecyclerView;
+    private MemberAdapter memberAdapter;
 
     //URLs
-    String ip = "203.249.75.14";
+    private String ip = "203.249.75.14";
 
     //variables
-    String TAG_SUCCESS = "success";
-    String friend_id;
-    ArrayList<Member> selectedFriend;
+    private String TAG_SUCCESS = "success";
+    private String friend_id;
+    private ArrayList<Member> selectedFriend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +54,7 @@ public class NewFriendActivity extends AppCompatActivity {
         //intent 받아오기
         Intent intent = getIntent();
         loginMember = (Member) intent.getSerializableExtra("loginMember");
-        ip=intent.getStringExtra("ip");
+        ip = intent.getStringExtra("ip");
 
         //findViewById
         id_search = findViewById(R.id.id_search);
@@ -91,9 +90,9 @@ public class NewFriendActivity extends AppCompatActivity {
         });
     }
 
-    protected void sendRequest() {
+    private void sendRequest() {
         String urlNewFriendAdd = "http://" + ip + "/newFriendAdd";
-        urlNewFriendAdd="http://jennyk97.dothome.co.kr/NewFriendAdd.php";
+        urlNewFriendAdd = "http://jennyk97.dothome.co.kr/NewFriendAdd.php";
 
         //내가 상대방에게 친구추가 요청
         NetworkTask networkTask = new NetworkTask();
@@ -107,9 +106,9 @@ public class NewFriendActivity extends AppCompatActivity {
         networkTask.execute(params);
     }
 
-    protected void showRequest() {
+    private void showRequest() {
         String urlRequestedFriend = "http://" + ip + "/requestedFriend";
-        urlRequestedFriend="http://jennyk97.dothome.co.kr/RequestedFriend.php";
+        urlRequestedFriend = "http://jennyk97.dothome.co.kr/RequestedFriend.php";
 
         //나에게 들어온 요청 출력
         NetworkTask networkTask = new NetworkTask();
@@ -139,9 +138,9 @@ public class NewFriendActivity extends AppCompatActivity {
         });
     }
 
-    protected void deleteFriend(final String delMemberId) {
+    private void deleteFriend(final String delMemberId) {
         String urlDeleteFriend = "http://" + ip + "/deleteFriend";
-        urlDeleteFriend="http://jennyk97.dothome.co.kr/DeleteFriend.php";
+        urlDeleteFriend = "http://jennyk97.dothome.co.kr/DeleteFriend.php";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlDeleteFriend);
@@ -154,9 +153,9 @@ public class NewFriendActivity extends AppCompatActivity {
         networkTask.execute(params);
     }
 
-    protected void requestFriend(final String TAG_RESULT) {
+    private void requestFriend(final String TAG_RESULT) {
         String urlRequestedResult = "http://" + ip + "/requestedResult";
-        urlRequestedResult="http://jennyk97.dothome.co.kr/RequestedResult.php";
+        urlRequestedResult = "http://jennyk97.dothome.co.kr/RequestedResult.php";
 
         // 수락or거절 결과 전송
         selectedFriend = new ArrayList<>();
@@ -214,9 +213,9 @@ public class NewFriendActivity extends AppCompatActivity {
         }
     }
 
-    protected void searchFriend(final String friend_id) {
+    private void searchFriend(final String friend_id) {
         String urlNewFriend = "http://" + ip + "/newFriend";
-        urlNewFriend="http://jennyk97.dothome.co.kr/NewFriend.php";
+        urlNewFriend = "http://jennyk97.dothome.co.kr/NewFriend.php";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlNewFriend);
@@ -228,11 +227,11 @@ public class NewFriendActivity extends AppCompatActivity {
         networkTask.execute(params);
     }
 
-    protected void showToast(String data) {
+    private void showToast(String data) {
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
 
-    public class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
         protected String url;
         String TAG;
 

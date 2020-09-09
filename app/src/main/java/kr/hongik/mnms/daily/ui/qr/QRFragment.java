@@ -52,7 +52,7 @@ public class QRFragment extends Fragment {
                 jsonObject.put("myAccount",loginMember.getAccountNum());
                 jsonObject.put("myName",loginMember.getMemName());
 
-                BitMatrix bitMatrix = multiFormatWriter.encode(text, BarcodeFormat.QR_CODE,200,200);
+                BitMatrix bitMatrix = multiFormatWriter.encode(jsonObject.toString(), BarcodeFormat.QR_CODE,200,200);
                 BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                 Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
                 qr_code.setImageBitmap(bitmap);

@@ -14,7 +14,7 @@
         android:layout_marginRight="30dp"
         android:layout_marginTop="10dp"
         android:layout_weight="1"
-        android:background="@drawable/sidecustom"
+        android:background="@drawable/sidecustom_round"
         android:orientation="vertical"
         android:padding="10dp">
 

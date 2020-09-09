@@ -226,7 +226,7 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     public void newProcess(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.CustomDialog);
 
         final String[] items = {"membership","daily","friend"};
         final Integer[] selected = {0};

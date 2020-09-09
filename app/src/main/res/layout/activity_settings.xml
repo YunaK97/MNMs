@@ -10,5 +10,6 @@
         android:id="@+id/btn_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/CustomButton"
         android:text="로그아웃" />
 </LinearLayout>

@@ -34,9 +34,6 @@ public class NewMembershipActivity extends AppCompatActivity {
 
     //URLs
     public String ip="203.249.75.14";
-    String urlNewMembership="http://"+ip+"/newMembership";
-    String urlShowFriend="http://"+ip+"/showFriend";
-    String urlMemberGroupInfo="http://"+ip+"/memberGroupInfo";
 
     //variables
     private String TAG_SUCCESS="success";
@@ -92,6 +89,9 @@ public class NewMembershipActivity extends AppCompatActivity {
                     }
                 }
 
+                String urlNewMembership="http://"+ip+"/newMembership";
+                urlNewMembership="http://jennyk97.dothome.co.kr/NewMembership.php";
+
                 NetworkTask networkTask=new NetworkTask();
                 networkTask.setURL(urlNewMembership);
                 networkTask.setTAG("newMembership");
@@ -120,6 +120,9 @@ public class NewMembershipActivity extends AppCompatActivity {
     }
 
     private void groupNameList(){
+        String urlMemberGroupInfo="http://"+ip+"/memberGroupInfo";
+        urlMemberGroupInfo="http://jennyk97.dothome.co.kr/MembergroupInfo.php";
+
         groupName=new ArrayList<>();
 
         NetworkTask networkTask=new NetworkTask();
@@ -133,6 +136,9 @@ public class NewMembershipActivity extends AppCompatActivity {
     }
 
     protected void showFriend(){
+        String urlShowFriend="http://"+ip+"/showFriend";
+        urlShowFriend="http://jennyk97.dothome.co.kr/ShowFriend.php";
+
         NetworkTask networkTask=new NetworkTask();
         networkTask.setURL(urlShowFriend);
         networkTask.setTAG("showFriend");

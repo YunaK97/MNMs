@@ -22,6 +22,7 @@
         <EditText
             android:id="@+id/id"
             style="@style/CustomTextView"
+            android:background="@drawable/sidecustom_round"
             android:ems="10"
             android:hint="@string/hint_id"
             android:textColorHint="@android:color/holo_red_light"
@@ -36,6 +37,7 @@
             style="@style/CustomTextView"
             android:ems="10"
             android:hint="@string/hint_pw"
+            android:background="@drawable/sidecustom_round"
             android:textColorHint="@android:color/holo_red_light"
             android:inputType="textPassword"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -70,7 +72,7 @@
             android:checked="true"
             android:text="자동로그인"
             android:paddingRight="5dp"
-            android:background="@drawable/sidecustom"
+            android:background="@drawable/sidecustom_round"
             android:buttonTint="@android:color/holo_red_light"
             />
 
