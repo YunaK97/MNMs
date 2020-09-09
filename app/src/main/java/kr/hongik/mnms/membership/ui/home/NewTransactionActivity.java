@@ -10,7 +10,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class PlusTransactionActivity extends AppCompatActivity {
+public class NewTransactionActivity extends AppCompatActivity {
     String plus_money,plus_history,plus_date;
 
     //URLs
@@ -18,19 +18,23 @@ public class PlusTransactionActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_plus_transaction);
+        setContentView(R.layout.activity_new_transaction);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.plus_trans_confirm, menu) ;
+        getMenuInflater().inflate(R.menu.new_trans_confirm, menu) ;
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId()==R.id.plus_confirm){
+        if(item.getItemId()==R.id.new_confirm){
             plusTransaction();
+            return true;
+        }
+        if(item.getItemId()==R.id.new_qr){
+            showToast("qr찍기 구현중!");
             return true;
         }
         return super.onOptionsItemSelected(item);

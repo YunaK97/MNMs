@@ -47,17 +47,17 @@ public class MembershipFragment extends Fragment {
     //variables
     private List<Transaction> dataList;
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setTransaction(membershipGroup);
+    }
+
     public View onCreateView(@NonNull final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_membership, container, false);
 
         mRecyclerView = v.findViewById(R.id.my_recycler_view);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        dataList = new ArrayList<>();
-        mAdapter = new TransactionAdapter(dataList);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -88,6 +88,13 @@ public class MembershipFragment extends Fragment {
 
     private void setTransactionProcess(String response){
         try {
+            mRecyclerView.setHasFixedSize(true);
+            mLayoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.setLayoutManager(mLayoutManager);
+
+            dataList = new ArrayList<>();
+            mAdapter = new TransactionAdapter(dataList);
+
             JSONArray j = new JSONArray(response);
             // Parse json
             transactionArrayList = new ArrayList<>();

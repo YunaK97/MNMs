@@ -12,7 +12,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".membership.ui.home.PlusTransactionActivity"></activity>
+        <activity android:name=".membership.ui.home.NewTransactionActivity"></activity>
+        <activity android:name=".membership.ui.home.NewMemberActivity"></activity>
         <activity android:name=".mainscreen.ui.settings.SettingsActivity" />
         <activity android:name=".newgroupfriend.NewFriendActivity" />
         <activity

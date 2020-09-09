@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,6 +9,7 @@
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tab_layout"
+        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -35,13 +36,60 @@
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
-        android:layout_height="450sp" />
+        android:layout_height="match_parent"
+        android:layout_alignBaseline="@+id/tab_layout"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tab_layout"
+        android:layout_marginEnd="0dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="0dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/plus_memtransaction"
+        android:id="@+id/fab_membership_member"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@color/colorAccent" />
-</LinearLayout>
+        android:layout_above="@+id/fab_membership_trans"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="20dp"
+        android:backgroundTint="#ffffff"
+        android:src="@drawable/person"
+        android:visibility="invisible"
+        app:borderWidth="0dp"
+        app:fabSize="normal"
+        android:layout_marginEnd="20dp"
+        android:layout_alignParentEnd="true" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_membership_trans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/fab_membership_main"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="20dp"
+        android:backgroundTint="#ffffff"
+        android:src="@drawable/money"
+        android:visibility="invisible"
+        app:borderWidth="0dp"
+        app:fabSize="normal"
+        android:layout_marginEnd="20dp"
+        android:layout_alignParentEnd="true" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_membership_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:backgroundTint="#009688"
+        android:src="@drawable/plus2"
+        app:borderWidth="0dp"
+        app:fabSize="normal"
+        android:layout_marginEnd="20dp"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>
