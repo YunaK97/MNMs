@@ -1,135 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/TV_signIn"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:text="@string/text_signin"
+        android:layout_margin="10sp"
         android:textColor="@android:color/holo_red_dark"
         android:textSize="30sp" />
 
     <LinearLayout
+        android:layout_below="@+id/TV_signIn"
+        android:id="@+id/LL_signIn_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/textName"
-                android:layout_width="0dp"
-                style="@style/CustomTextView"
-                android:background="@drawable/sidecustom_round"
-                android:layout_weight="1"
-                android:ems="10"
-                android:inputType="text"
-                android:hint="@string/hint_name" />
-
-            <Button
-                android:id="@+id/identify"
-                style="@style/CustomButton"
-                android:layout_gravity="center"
-                android:text="@string/btn_identify"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/textID"
-                android:layout_width="0dp"
-                style="@style/CustomTextView"
-                android:layout_weight="1"
-                android:ems="10"
-                android:background="@drawable/sidecustom_round"
-                android:inputType="text"
-                android:hint="@string/hint_id" />
-
-            <Button
-                android:id="@+id/overlap"
-                style="@style/CustomButton"
-                android:layout_gravity="center"
-                android:text="@string/btn_overlap" />
-        </LinearLayout>
+        android:layout_margin="5sp"
+        android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/textPW"
-            android:layout_width="match_parent"
+            android:id="@+id/textName"
             style="@style/CustomTextView"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:background="@drawable/sidecustom_round"
             android:ems="10"
+            android:hint="@string/hint_name"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/identify"
+            style="@style/CustomButton"
+            android:text="@string/btn_identify" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/LL_signIn_name"
+        android:id="@+id/LL_signIn_id"
+        android:layout_margin="5sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/textID"
+            style="@style/CustomTextView"
+            android:background="@drawable/sidecustom_round"
+            android:layout_weight="1"
+            android:hint="@string/hint_id"
+            android:inputType="text" />
+
+        <Button
+            android:id="@+id/overlap"
+            style="@style/CustomButton"
+            android:text="@string/btn_overlap" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/LL_signIn_id"
+        android:id="@+id/LL_signIn_pw"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5sp"
+        android:orientation="vertical">
+        <EditText
+            android:id="@+id/textPW"
+            style="@style/CustomTextView"
+            android:layout_width="match_parent"
             android:background="@drawable/sidecustom_round"
             android:hint="@string/hint_pw"
             android:inputType="textPassword" />
         <EditText
             android:id="@+id/textCheckPW"
-            android:layout_width="match_parent"
             style="@style/CustomTextView"
-            android:ems="10"
+            android:layout_width="match_parent"
             android:background="@drawable/sidecustom_round"
             android:hint="@string/hint_Checkpw"
             android:inputType="textPassword" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/textEmail"
-                android:layout_width="wrap_content"
-                style="@style/CustomTextView"
-                android:layout_weight="1"
-                android:background="@drawable/sidecustom_round"
-                android:ems="10"
-                android:hint="@string/hint_email"
-                android:inputType="text" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="\@"
-                android:textSize="25sp"
-                android:textColor="@color/colorBlack"
-                />
-
-            <Spinner
-                android:background="@drawable/sidecustom"
-                android:id="@+id/email_type"
-                android:layout_width="250dp"
-                android:layout_height="25dp"
-                android:dropDownWidth="250dp"
-                android:layout_weight="1"
-                android:layout_marginStart="2dp"
-                android:layout_marginLeft="2dp"
-                android:layout_marginEnd="2dp"
-                android:layout_marginRight="2dp"
-                />
-
-            <Button
-                android:id="@+id/emailCheck"
-                android:layout_gravity="center"
-                android:text="@string/btn_email"
-                style="@style/CustomButton"
-                />
-        </LinearLayout>
-
     </LinearLayout>
 
     <LinearLayout
+        android:layout_margin="5sp"
+        android:layout_below="@+id/LL_signIn_pw"
+        android:id="@+id/LL_signIn_email"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/textEmail"
+            style="@style/CustomTextView"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/sidecustom_round"
+            android:ems="10"
+            android:hint="@string/hint_email"
+            android:inputType="text" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="\@"
+            android:textColor="@color/colorBlack"
+            android:textSize="25sp" />
+
+        <Spinner
+            android:id="@+id/email_type"
+            android:layout_width="250dp"
+            android:layout_height="25dp"
+            android:layout_margin="2sp"
+            android:layout_weight="1"
+            android:background="@drawable/sidecustom"
+            android:dropDownWidth="250dp" />
+        <Button
+            android:id="@+id/emailCheck"
+            style="@style/CustomButton"
+            android:layout_gravity="center"
+            android:text="@string/btn_email" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_below="@+id/LL_signIn_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5sp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -137,46 +136,34 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Spinner
-                android:background="@drawable/sidecustom"
-                android:id="@+id/bank_type"
-                android:layout_width="200dp"
-                android:layout_height="25dp"
-                android:dropDownWidth="150dp"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:layout_marginStart="10dp" />
-
             <EditText
                 android:id="@+id/textAccountNum"
-                android:layout_width="match_parent"
                 style="@style/CustomTextView"
-                android:hint="@string/hint_accnum"
-                android:inputType="text"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
                 android:background="@drawable/sidecustom_round"
-                android:layout_weight="1" />
+                android:hint="@string/hint_accnum"
+                android:inputType="text" />
 
+            <Spinner
+                android:id="@+id/bank_type"
+                android:layout_width="200sp"
+                android:layout_height="wrap_content"
+                android:layout_margin="10sp"
+                android:layout_weight="1"
+                android:background="@drawable/sidecustom"
+                android:dropDownWidth="150dp" />
         </LinearLayout>
 
         <EditText
             android:id="@+id/textAccountPW"
+            style="@style/CustomTextView"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
-            android:hint="@string/hint_bankpw"
-            android:inputType="numberPassword"
-            android:background="@drawable/sidecustom_round"
-            style="@style/CustomTextView"
             android:layout_weight="1"
-             />
-
+            android:background="@drawable/sidecustom_round"
+            android:hint="@string/hint_bankpw"
+            android:inputType="numberPassword" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/signComplete"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/btn_signin"
-        style="@style/CustomButton"/>
-
-</LinearLayout>
+</RelativeLayout>

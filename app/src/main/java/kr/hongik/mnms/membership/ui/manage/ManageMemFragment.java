@@ -10,49 +10,43 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import kr.hongik.mnms.Account;
-import kr.hongik.mnms.Member;
-
 import kr.hongik.mnms.HttpClient;
-
+import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.mainscreen.ui.friend.FriendListAdapter;
 import kr.hongik.mnms.mainscreen.ui.friend.OnFriendItemClickListener;
 import kr.hongik.mnms.mainscreen.ui.friend.OnFriendItemLongClickListener;
 import kr.hongik.mnms.membership.MembershipGroup;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-
 
 public class ManageMemFragment extends Fragment {
 
     private Member loginMember;
-    private Account loginMemberAccount;
     private MembershipGroup membershipGroup;
+    private ArrayList<Member> memberArrayList;
 
+    //Layouts
     private RecyclerView memberList;
     private FriendListAdapter memberAdapter;
-    private String president; //방장
 
     private Context context;
     private ViewGroup rootView;
 
-    //layouts
-    private TextView tv_president;
-
     //URLs
     private String ip;
+
+    public ManageMemFragment() {
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -62,26 +56,40 @@ public class ManageMemFragment extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             loginMember = (Member) bundle.getSerializable("loginMember");
-            loginMemberAccount = (Account) bundle.getSerializable("loginMemberAccount");
             membershipGroup = (MembershipGroup) bundle.getSerializable("membershipGroup");
+            memberArrayList= (ArrayList<Member>) bundle.get("memberArrayList");
             ip = bundle.getString("ip");
 
-            showMember(membershipGroup);
+            //showMember();
         }
 
         return rootView;
     }
 
-    private void showMember(MembershipGroup membershipGroup) {
-        String urlShowMember = "http://" + ip + "/membership/member";
+    private void showMember( ) {
+        memberList = rootView.findViewById(R.id.member_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
+        memberList.setLayoutManager(layoutManager);
+        memberAdapter = new FriendListAdapter();
+        memberAdapter.setItems(memberArrayList);
+        memberList.setAdapter(memberAdapter);
 
-        NetworkTask networkTask = new NetworkTask();
-        networkTask.setURL(urlShowMember);
-        networkTask.setTAG("showMem");
-        Map<String, String> params = new HashMap<>();
-        params.put("GID", membershipGroup.getGID());
+        memberAdapter.setOnItemClickListener(new OnFriendItemClickListener() {
+            @Override
+            public void onItemClick(FriendListAdapter.ViewHolder holder, View view, int position) {
 
-        networkTask.execute(params);
+            }
+        });
+        memberAdapter.setOnItemLongClickListener(new OnFriendItemLongClickListener() {
+            @Override
+            public void onItemLongClick(FriendListAdapter.ViewHolder holder, View view, int position) {
+                if (loginMember.getMemName().equals(membershipGroup.getPresident())) {
+                    //selectDelMember(position);
+                } else {
+                    showToast("친구삭제는 회장만 가능합니다.");
+                }
+            }
+        });
     }
 
     private void selectDelMember(int position) {
@@ -125,6 +133,7 @@ public class ManageMemFragment extends Fragment {
         Toast.makeText(context, data, Toast.LENGTH_LONG).show();
     }
 
+
     private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
         protected String url;
         protected String TAG;
@@ -156,96 +165,10 @@ public class ManageMemFragment extends Fragment {
             return post.getBody();
         }
 
-        private void showMemberProcess(String response){
-            try {
-                //JSONArray jsonArray=new JSONArray(response);
-                //if(jsonArray.length()==0){ return; }
-
-                memberList = rootView.findViewById(R.id.member_list);
-                LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
-                memberList.setLayoutManager(layoutManager);
-                memberAdapter = new FriendListAdapter();
-
-                for (int i = 0; i < 10/*jsonArray.length()*/; i++) {
-                    //JSONObject item = jsonArray.getJSONObject(i);
-                    //String friendId = item.getString("memID");
-                    //String friendName = item.getString("memName");
-
-                    Member member = new Member();
-                    //member.setMemName(friendName);
-                    //member.setMemID(friendId);
-                    member.setMemName("zname" + i);
-                    member.setMemID("zid" + i + "as" + i);
-                    memberAdapter.addItem(member);
-                }
-
-                Member member = new Member();
-                member.setMemName("aaaa");
-                member.setMemID("aaaa");
-                memberAdapter.addItem(member);
-
-                Comparator<Member> noAsc = new Comparator<Member>() {
-                    @Override
-                    public int compare(Member item1, Member item2) {
-                        if (item1.getMemID().equals(president)) {
-                            item1.setMemName(president);
-                            return -1;
-                        }
-                        return item1.getMemName().compareTo(item2.getMemName());
-                    }
-                };
-                Collections.sort(memberAdapter.getList(), noAsc);
-                memberList.setAdapter(memberAdapter);
-
-
-                memberAdapter.setOnItemClickListener(new OnFriendItemClickListener() {
-                    @Override
-                    public void onItemClick(FriendListAdapter.ViewHolder holder, View view, int position) {
-
-                    }
-                });
-                memberAdapter.setOnItemLongClickListener(new OnFriendItemLongClickListener() {
-                    @Override
-                    public void onItemLongClick(FriendListAdapter.ViewHolder holder, View view, int position) {
-                        if (loginMember.getMemName().equals(president)) {
-                            selectDelMember(position);
-                        } else {
-                            showToast("친구 선택");
-                        }
-                    }
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        private void showGroupProcess(String response){
-            try {
-                JSONObject jsonObject = new JSONObject(response);
-
-                MembershipGroup mg = new MembershipGroup();
-                mg.setMID(jsonObject.getString("MID"));
-                mg.setPresident(jsonObject.getString("president"));
-                mg.setPayDay(jsonObject.getString("payDay"));
-                mg.setMemberMoney(jsonObject.getInt("memberMoney"));
-                mg.setNotSubmit(jsonObject.getInt("notSubmit"));
-                mg.setGID(jsonObject.getString("GID"));
-
-                president = mg.getPresident();
-                president = "aaaa";
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
         @Override
         protected void onPostExecute(String response) {
             if (TAG.equals("delMem")) {
 
-            } else if (TAG.equals("showMem")) {
-                showMemberProcess(response);
-            } else if (TAG.equals("showGroup")) {
-                showGroupProcess(response);
             }
         }
     }

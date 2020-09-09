@@ -23,7 +23,7 @@ public class NewTransactionActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.new_trans_confirm, menu) ;
+        getMenuInflater().inflate(R.menu.menu_new_trans_confirm, menu) ;
         return true;
     }
 

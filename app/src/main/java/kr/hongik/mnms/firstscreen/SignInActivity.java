@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -53,6 +55,37 @@ public class SignInActivity extends AppCompatActivity {
     boolean idValid=false,ssnValid=false,emailValid=false,pwValid=false;
     final static int TAKE_PICTURE = 1;
     String checkID,checkEmail;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_sign_in, menu) ;
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId()==R.id.signComplete){
+            if(!getUserInfo() || !getAccountInfo()){
+                showToast("빈칸 ㄴㄴ해");
+            }else{
+                if(emailValid&&idValid&&ssnValid&&pwValid){
+                    registerBegin();
+                }else{
+                    if(!emailValid){
+                        showToast("이메일 다시 확인");
+                    }else if(!ssnValid){
+                        showToast("민증 다시 확인");
+                    }else if(!idValid){
+                        showToast("아이디 다시 확인");
+                    }else if(!pwValid){
+                        showToast("비밀번호 불일치");
+                    }
+                }
+            }
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,37 +195,6 @@ public class SignInActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             }
         }
-
-        //회원가입 버튼!
-        Button signComplete= findViewById(R.id.signComplete);
-        signComplete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                //아이디 중복확인 여부
-                //주민번호 확인 여부
-                //이메일 유효성 확인 여부
-
-                //계좌정보 가져오기
-                if(!getUserInfo() || !getAccountInfo()){
-                    showToast("빈칸 ㄴㄴ해");
-                }else{
-                    if(emailValid&&idValid&&ssnValid&&pwValid){
-                        registerBegin();
-                    }else{
-                        if(!emailValid){
-                            showToast("이메일 다시 확인");
-                        }else if(!ssnValid){
-                            showToast("민증 다시 확인");
-                        }else if(!idValid){
-                            showToast("아이디 다시 확인");
-                        }else if(!pwValid){
-                            showToast("비밀번호 불일치");
-                        }
-                    }
-                }
-            }
-        });
     }
  //권한 요청
     @Override

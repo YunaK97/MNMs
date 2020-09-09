@@ -5,12 +5,7 @@
     android:layout_height="match_parent"
     tools:context="kr.hongik.mnms.membership.ui.manage.ManageFeeFragment"
     android:orientation="vertical">
-<!--
-이 톡방의 월 회비
-미납가능한 최대 횟수
-로그인 멤버가 여태 낸 회비, 횟수
-회비 안낸 사람들
--->
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

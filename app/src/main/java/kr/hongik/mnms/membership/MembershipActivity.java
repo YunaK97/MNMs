@@ -3,7 +3,6 @@ package kr.hongik.mnms.membership;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -12,6 +11,7 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,15 +23,11 @@ import java.util.Map;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
-import kr.hongik.mnms.mainscreen.ui.friend.FriendListAdapter;
-import kr.hongik.mnms.mainscreen.ui.friend.OnFriendItemClickListener;
-import kr.hongik.mnms.mainscreen.ui.friend.OnFriendItemLongClickListener;
 import kr.hongik.mnms.membership.ui.home.NewMemberActivity;
 import kr.hongik.mnms.membership.ui.home.NewTransactionActivity;
 
@@ -40,12 +36,11 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
     private Member loginMember;
     private Account loginMemberAccount;
     private MembershipGroup membershipGroup;
-    private ArrayList<String> memberArrayList;
+    private ArrayList<Member> memberArrayList;
 
     //Layouts
-    //private FloatingActionButton plus_memtransaction;
     private ViewPager viewPager;
-    private FloatingActionButton fab_membership_main, fab_membership_member, fab_membership_trans;
+    private FloatingActionButton fab_membership_main, fab_membership_member, fab_membership_trans, fab_membership_manage;
     private Animation fab_open, fab_close;
     private boolean isFabOpen = false;
 
@@ -59,14 +54,14 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
 
         fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
         fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
-
         fab_membership_main = findViewById(R.id.fab_membership_main);
         fab_membership_member = findViewById(R.id.fab_membership_member);
         fab_membership_trans = findViewById(R.id.fab_membership_trans);
-
+        fab_membership_manage = findViewById(R.id.fab_membership_manage);
         fab_membership_main.setOnClickListener(this);
         fab_membership_trans.setOnClickListener(this);
         fab_membership_member.setOnClickListener(this);
+        fab_membership_manage.setOnClickListener(this);
 
         Intent intent = getIntent();
         membershipGroup = (MembershipGroup) intent.getSerializableExtra("membershipGroup");
@@ -75,13 +70,12 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
         ip = intent.getStringExtra("ip");
 
         getMembershipGroupInfo();
-        showMember(membershipGroup);
 
         Bundle bundle = new Bundle();
         bundle.putSerializable("membershipGroup", membershipGroup);
         bundle.putSerializable("loginMember", loginMember);
         bundle.putSerializable("loginMemberAccount", loginMemberAccount);
-        bundle.putSerializable("memberArrayList",memberArrayList);
+        bundle.putSerializable("memberArrayList", memberArrayList);
         bundle.putString("ip", ip);
 
         viewPager = findViewById(R.id.viewpager);
@@ -106,13 +100,14 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
+        Intent intent;
         switch (v.getId()) {
             case R.id.fab_membership_main:
                 toggleFab();
                 break;
             case R.id.fab_membership_trans:
                 toggleFab();
-                Intent intent = new Intent(MembershipActivity.this, NewTransactionActivity.class);
+                intent = new Intent(MembershipActivity.this, NewTransactionActivity.class);
                 intent.putExtra("loginMember", loginMember);
                 intent.putExtra("loginMemberAccouont", loginMemberAccount);
                 intent.putExtra("membershipGroup", membershipGroup);
@@ -121,55 +116,17 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.fab_membership_member:
                 toggleFab();
-                Intent intent2 = new Intent(MembershipActivity.this, NewMemberActivity.class);
-                intent2.putExtra("loginMember", loginMember);
-                intent2.putExtra("loginMemberAccouont", loginMemberAccount);
-                intent2.putExtra("membershipGroup", membershipGroup);
+                intent = new Intent(MembershipActivity.this, NewMemberActivity.class);
+                intent.putExtra("loginMember", loginMember);
+                intent.putExtra("membershipGroup", membershipGroup);
+                intent.putExtra("memberArrayList", memberArrayList);
 
-                startActivityForResult(intent2, 123);
+                startActivityForResult(intent, 123);
                 break;
-        }
-    }
+            case R.id.fab_membership_manage:
+                toggleFab();
+                
 
-    private void showMember(MembershipGroup membershipGroup) {
-        String urlShowMember = "http://" + ip + "/membership/member";
-
-        NetworkTask networkTask = new NetworkTask();
-        networkTask.setURL(urlShowMember);
-        networkTask.setTAG("showMem");
-        Map<String, String> params = new HashMap<>();
-        params.put("GID", membershipGroup.getGID());
-
-        networkTask.execute(params);
-    }
-
-    private void showMemberProcess(String response){
-        memberArrayList=new ArrayList<>();
-        try {
-            //JSONArray jsonArray=new JSONArray(response);
-            //if(jsonArray.length()==0){ return; }
-
-            for (int i = 0; i < 10/*jsonArray.length()*/; i++) {
-                //JSONObject item = jsonArray.getJSONObject(i);
-                //String friendId = item.getString("memID");
-                //String friendName = item.getString("memName");
-
-                Member member = new Member();
-                //member.setMemName(friendName);
-                //member.setMemID(friendId);
-                member.setMemName("zname" + i);
-                member.setMemID("zid" + i + "as" + i);
-
-                memberArrayList.add(member.getMemID());
-            }
-
-            Member member = new Member();
-            member.setMemName("aaaa");
-            member.setMemID("aaaa");
-            memberArrayList.add(member.getMemID());
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 
@@ -197,12 +154,20 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
             fab_membership_trans.startAnimation(fab_close);
             fab_membership_trans.setClickable(false);
             fab_membership_member.setClickable(false);
+            if (membershipGroup.getPresident().equals(loginMember.getMemName())) {
+                fab_membership_manage.startAnimation(fab_close);
+                fab_membership_manage.setClickable(false);
+            }
             isFabOpen = false;
         } else {
             fab_membership_member.startAnimation(fab_open);
             fab_membership_trans.startAnimation(fab_open);
             fab_membership_trans.setClickable(true);
             fab_membership_member.setClickable(true);
+            if (membershipGroup.getPresident().equals(loginMember.getMemName())) {
+                fab_membership_manage.startAnimation(fab_open);
+                fab_membership_manage.setClickable(true);
+            }
             isFabOpen = true;
         }
     }
@@ -226,6 +191,40 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
 //                membershipGroup.setTime(jsonObject.getString("time"));
 
         } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void showMemberProcess(String response) {
+        memberArrayList = new ArrayList<>();
+        try {
+            JSONArray jsonArray = new JSONArray(response);
+            if (jsonArray.length() == 0) {
+                return;
+            }
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject item = jsonArray.getJSONObject(i);
+                String friendId = item.getString("memID");
+                String friendName = item.getString("memName");
+
+                Member member = new Member();
+                member.setMemName(friendName);
+                member.setMemID(friendId);
+                memberArrayList.add(member);
+            }
+
+            Comparator<Member> noAsc = new Comparator<Member>() {
+                @Override
+                public int compare(Member item1, Member item2) {
+                    if (item1.getMemID().equals(membershipGroup.getPresident())) {
+                        return -1;
+                    }
+                    return item1.getMemName().compareTo(item2.getMemName());
+                }
+            };
+            Collections.sort(memberArrayList, noAsc);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -264,7 +263,7 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
         protected void onPostExecute(String response) {
             if (TAG.equals("membershipGroup")) {
                 membershipGroupProcess(response);
-            }else if (TAG.equals("showMem")) {
+            } else if (TAG.equals("showMem")) {
                 showMemberProcess(response);
             }
         }

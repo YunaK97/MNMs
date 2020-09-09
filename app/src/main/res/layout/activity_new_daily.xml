@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,46 +8,54 @@
     tools:context="kr.hongik.mnms.newgroupfriend.NewMembershipActivity">
 
     <LinearLayout
+        android:id="@+id/LL_newDaily1"
+        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:textSize="20sp"
-            android:text="톡방이름" />
-
-        <EditText
-            android:id="@+id/daily_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:text="톡방이름"
+            android:textSize="20sp" />
+        <EditText
+            android:id="@+id/daily_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="ex) 아우디"
             android:inputType="text"
-            android:textSize="20sp"
-            android:hint="ex) 아우디" />
+            android:textSize="20sp" />
     </LinearLayout>
 
     <TextView
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="친구선택"
-        android:textSize="20sp"
-        />
+        android:id="@+id/select_frind_TV"
+        android:layout_below="@+id/LL_newDaily1"
+        android:textSize="25sp" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/daily_selected_friend"
+        android:layout_marginTop="10sp"
+        android:layout_below="@+id/select_frind_TV"
+        android:layout_above="@+id/btn_new_membership"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        />
+        android:layout_marginBottom="10sp"
+        android:layout_height="match_parent" />
+
     <Button
-        android:id="@+id/btn_new_daily"
         style="@style/CustomButton"
+        android:id="@+id/btn_new_daily"
+        android:layout_centerHorizontal="true"
         android:text="@string/app_new_daily"
-        android:layout_gravity="bottom|center"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="10sp"
         />
 
-</LinearLayout>
+</RelativeLayout>

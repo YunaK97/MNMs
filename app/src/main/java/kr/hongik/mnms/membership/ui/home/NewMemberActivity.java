@@ -27,7 +27,7 @@ import kr.hongik.mnms.membership.MembershipGroup;
 public class NewMemberActivity extends AppCompatActivity {
     private Member loginMember;
     private MembershipGroup membershipGroup;
-    private ArrayList<String> memberArrayList;
+    private ArrayList<Member> memberArrayList;
 
     //layouts
     private TextView memberIdText, memberNameText;
@@ -51,9 +51,11 @@ public class NewMemberActivity extends AppCompatActivity {
         Intent intent = getIntent();
         loginMember = (Member) intent.getSerializableExtra("loginMember");
         membershipGroup = (MembershipGroup) intent.getSerializableExtra("membershipGroup");
-        memberArrayList=intent.getStringArrayListExtra("memberArrayList");
+        memberArrayList= (ArrayList<Member>) intent.getSerializableExtra("memberArrayList");
 
         ip = intent.getStringExtra("ip");
+
+        showMembers(membershipGroup);
 
         //findViewById
         btnMemberSearch = findViewById(R.id.btn_member_search);
@@ -71,7 +73,7 @@ public class NewMemberActivity extends AppCompatActivity {
                 //기존 멤버 사람들과 같으면 불가능
                 boolean valid=true;
                 for(int i=0;i<memberArrayList.size();i++){
-                    if(memberId.equals(memberArrayList.get(i))){
+                    if(memberId.equals(memberArrayList.get(i).getMemID())){
                         showToast("불가능한 id 입니다.");
                         valid=false;
                         break;
@@ -89,6 +91,20 @@ public class NewMemberActivity extends AppCompatActivity {
                 sendRequest();
             }
         });
+    }
+
+    private void showMembers(MembershipGroup membershipGroup){
+        String urlSearchMembers = "http://" + ip + "/searchMembers";
+
+        //내가 상대방에게 친구추가 요청
+        NetworkTask networkTask = new NetworkTask();
+        networkTask.setURL(urlSearchMembers);
+        networkTask.setTAG("searchMembers");
+
+        Map<String, String> params = new HashMap<>();
+        params.put("GID", membershipGroup.getGID());
+
+        networkTask.execute(params);
     }
 
     private void sendRequest() {

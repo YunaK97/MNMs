@@ -3,6 +3,7 @@ package kr.hongik.mnms.membership.ui.manage;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -27,6 +28,7 @@ import kr.hongik.mnms.membership.MembershipGroup;
 public class ManageFeeFragment extends Fragment {
 
     private MembershipGroup membershipGroup;
+    private Member loginMember;
     //layouts
     private TextView tv_monthly_membership;
     private TextView tv_notsubmit_cnt;
@@ -55,6 +57,7 @@ public class ManageFeeFragment extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             membershipGroup = (MembershipGroup) bundle.getSerializable("membershipGroup");
+            loginMember=(Member)bundle.getSerializable("loginMember");
 
             //setInformation(membershipGroup);
             tv_paid_membership_cnt.setText("10");
@@ -69,8 +72,8 @@ public class ManageFeeFragment extends Fragment {
     }
 
     public void setInformation(MembershipGroup membershipGroup) {
-        //tv_monthly_membership.setText(membershipGroup.getMemberMoney());
-        //tv_notsubmit_cnt.setText(membershipGroup.getNotSubmit());
+        tv_monthly_membership.setText(membershipGroup.getMemberMoney());
+        tv_notsubmit_cnt.setText(membershipGroup.getNotSubmit());
         //tv_paid_membership 과 tv_paid_membership_cnt는 intent로 membershipfragment에서 해당 아이디의 transaction을 계산하여 넘겨주기
     }
 
