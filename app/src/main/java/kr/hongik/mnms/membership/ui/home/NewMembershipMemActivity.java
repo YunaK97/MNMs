@@ -24,7 +24,7 @@ import kr.hongik.mnms.R;
 import kr.hongik.mnms.membership.MembershipActivity;
 import kr.hongik.mnms.membership.MembershipGroup;
 
-public class NewMemberActivity extends AppCompatActivity {
+public class NewMembershipMemActivity extends AppCompatActivity {
     private Member loginMember;
     private MembershipGroup membershipGroup;
     private ArrayList<Member> memberArrayList;
@@ -35,9 +35,6 @@ public class NewMemberActivity extends AppCompatActivity {
     private Button btnAddMember;
     private LinearLayout memberLayout;
 
-    //URLs
-    private String ip = "203.249.75.14";
-
     //variables
     private String TAG_SUCCESS = "success";
     private String memberId;
@@ -45,37 +42,35 @@ public class NewMemberActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_new_member);
+        setContentView(R.layout.activity_new_membership_mem);
 
         //intent 받아오기
         Intent intent = getIntent();
         loginMember = (Member) intent.getSerializableExtra("loginMember");
         membershipGroup = (MembershipGroup) intent.getSerializableExtra("membershipGroup");
-        memberArrayList= (ArrayList<Member>) intent.getSerializableExtra("memberArrayList");
-
-        ip = intent.getStringExtra("ip");
+        memberArrayList = (ArrayList<Member>) intent.getSerializableExtra("memberArrayList");
 
         showMembers(membershipGroup);
 
         //findViewById
-        btnMemberSearch = findViewById(R.id.btn_member_search);
-        btnAddMember = findViewById(R.id.btn_addMember);
-        memberLayout = findViewById(R.id.member_layout);
-        memberIdText=findViewById(R.id.member_id_text);
-        memberNameText=findViewById(R.id.member_name_text);
+        btnMemberSearch = findViewById(R.id.btn_newMembershipMemID);
+        btnAddMember = findViewById(R.id.btn_addMembershipMem);
+        memberLayout = findViewById(R.id.layout_newMembershipMemLayout);
+        memberIdText = findViewById(R.id.tv_newMembershipMemID);
+        memberNameText = findViewById(R.id.tv_newMembershipMemName);
 
 
         btnMemberSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //친구 ID 검색
-                memberId = ((TextView) findViewById(R.id.member_id)).getText().toString();
+                memberId = ((TextView) findViewById(R.id.membership_memID)).getText().toString();
                 //기존 멤버 사람들과 같으면 불가능
-                boolean valid=true;
-                for(int i=0;i<memberArrayList.size();i++){
-                    if(memberId.equals(memberArrayList.get(i).getMemID())){
+                boolean valid = true;
+                for (int i = 0; i < memberArrayList.size(); i++) {
+                    if (memberId.equals(memberArrayList.get(i).getMemID())) {
                         showToast("불가능한 id 입니다.");
-                        valid=false;
+                        valid = false;
                         break;
                     }
                 }
@@ -93,8 +88,8 @@ public class NewMemberActivity extends AppCompatActivity {
         });
     }
 
-    private void showMembers(MembershipGroup membershipGroup){
-        String urlSearchMembers = "http://" + ip + "/searchMembers";
+    private void showMembers(MembershipGroup membershipGroup) {
+        String urlSearchMembers = "http://" + loginMember.getIp() + "/searchMembers";
 
         //내가 상대방에게 친구추가 요청
         NetworkTask networkTask = new NetworkTask();
@@ -108,7 +103,7 @@ public class NewMemberActivity extends AppCompatActivity {
     }
 
     private void sendRequest() {
-        String urlNewFriendAdd = "http://" + ip + "/newMemberAdd";
+        String urlNewFriendAdd = "http://" + loginMember.getIp() + "/newMemberAdd";
         urlNewFriendAdd = "http://jennyk97.dothome.co.kr/NewMemberAdd.php";
 
         //내가 상대방에게 친구추가 요청
@@ -124,7 +119,7 @@ public class NewMemberActivity extends AppCompatActivity {
     }
 
     private void searchFriend(String member_id) {
-        String urlNewFriend = "http://" + ip + "/newFriend";
+        String urlNewFriend = "http://" + loginMember.getIp() + "/newFriend";
         urlNewFriend = "http://jennyk97.dothome.co.kr/NewFriend.php";
 
         NetworkTask networkTask = new NetworkTask();
@@ -180,8 +175,8 @@ public class NewMemberActivity extends AppCompatActivity {
                     boolean success = jsonObject.getBoolean(TAG_SUCCESS);
                     if (success) {
                         showToast("멤버 추가 완료");
-                        Intent intent=new Intent(NewMemberActivity.this, MembershipActivity.class);
-                        setResult(123,intent);
+                        Intent intent = new Intent(NewMembershipMemActivity.this, MembershipActivity.class);
+                        setResult(123, intent);
                         finish();
                     } else {
                         showToast("멤버 추가 실패ㅠ");
@@ -196,7 +191,7 @@ public class NewMemberActivity extends AppCompatActivity {
                     boolean success = jsonObject.getBoolean(TAG_SUCCESS);
                     if (success) {
                         String member_name = jsonObject.getString("memName");
-                        String member_id=jsonObject.getString("memID");
+                        String member_id = jsonObject.getString("memID");
 
                         memberNameText.setText(member_name);
                         memberIdText.setText(member_id);

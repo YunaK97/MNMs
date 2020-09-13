@@ -7,9 +7,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.List;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.MyViewHolder> {
     private List<Transaction> mDataset;
@@ -31,7 +31,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
             TextView_transHistory = v.findViewById(R.id.trans_history);
             TextView_transMoney = v.findViewById(R.id.trans_money);
             TextView_since = v.findViewById(R.id.trans_since);
-            TextView_transLeftMoney=v.findViewById(R.id.trans_leftmoney);
+            TextView_transLeftMoney = v.findViewById(R.id.trans_leftmoney);
 
             rootView = v;
         }
@@ -59,10 +59,9 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         // - replace the contents of the view with that element
         Transaction tData = mDataset.get(position);
 
-        if(Integer.parseInt(tData.transactMoney)<0){
+        if (Integer.parseInt(tData.transactMoney) < 0) {
             holder.TextView_transMoney.setTextColor(Color.BLUE);
-        }
-        else {
+        } else {
             holder.TextView_transMoney.setTextColor(Color.RED);
         }
 
@@ -77,13 +76,14 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
     public int getItemCount() {
         return mDataset == null ? 0 : mDataset.size();
     }
+
     public Transaction getChat(int position) {
         return mDataset != null ? mDataset.get(position) : null;
     }
 
     public void addItem(Transaction tData) {
         mDataset.add(tData);
-        notifyItemInserted(mDataset.size()-1);
+        notifyItemInserted(mDataset.size() - 1);
     }
 }
 

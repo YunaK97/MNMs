@@ -79,7 +79,7 @@ public class HttpClient {
     private void setBody(HttpURLConnection connection) {
 
         String parameter = builder.getParameters();
-        if ( parameter != null && parameter.length() > 0 ) {
+        if (parameter != null && parameter.length() > 0) {
             OutputStream outputStream = null;
             try {
                 outputStream = connection.getOutputStream();
@@ -89,7 +89,7 @@ public class HttpClient {
                 e.printStackTrace();
             } finally {
                 try {
-                    if ( outputStream != null )
+                    if (outputStream != null)
                         outputStream.close();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -115,16 +115,17 @@ public class HttpClient {
         try {
             reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
             String line = null;
-            while ( (line = reader.readLine()) != null ) {
+            while ((line = reader.readLine()) != null) {
                 result += line;
             }
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
             try {
-                if(reader != null)
+                if (reader != null)
                     reader.close();
-            } catch (IOException e) {}
+            } catch (IOException e) {
+            }
         }
 
         return result;
@@ -145,7 +146,7 @@ public class HttpClient {
         }
 
         public Builder(String method, String url) {
-            if(method == null) {
+            if (method == null) {
                 method = "GET";
             }
             this.method = method;
@@ -175,15 +176,15 @@ public class HttpClient {
             Iterator<String> keys = getKeys();
 
             String key = "";
-            while ( keys.hasNext() ) {
+            while (keys.hasNext()) {
                 key = keys.next();
                 parameters.append(String.format("%s=%s", key, this.parameters.get(key)));
                 parameters.append("&");
             }
 
             String params = parameters.toString();
-            if ( params.length() > 0 ) {
-                params = params.substring( 0, params.length() - 1 );
+            if (params.length() > 0) {
+                params = params.substring(0, params.length() - 1);
             }
 
             return params;

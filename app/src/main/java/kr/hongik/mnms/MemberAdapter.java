@@ -13,58 +13,58 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder> {
-    private ArrayList<Member> items= new ArrayList<>();
+    private ArrayList<Member> items = new ArrayList<>();
 
     private OnMemberItemClickListener listener;
 
-    public void addItem(Member item){
+    public void addItem(Member item) {
         items.add(item);
     }
 
-    public void setItems(ArrayList<Member> items){
-        this.items=items;
+    public void setItems(ArrayList<Member> items) {
+        this.items = items;
     }
 
     public Member getItem(int position) {
         return items.get(position);
     }
 
-    public void setItem(int position,Member item){
-        items.set(position,item);
+    public void setItem(int position, Member item) {
+        items.set(position, item);
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView friend_name,friend_id;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView friend_name, friend_id;
         CheckBox friend_check;
 
-        ViewHolder(View itemView, final OnMemberItemClickListener listener){
+        ViewHolder(View itemView, final OnMemberItemClickListener listener) {
             super(itemView);
 
-            friend_name=itemView.findViewById(R.id.friend_name);
-            friend_id=itemView.findViewById(R.id.friend_id);
-            friend_check=itemView.findViewById(R.id.friend_check);
+            friend_name = itemView.findViewById(R.id.friend_name);
+            friend_id = itemView.findViewById(R.id.friend_id);
+            friend_check = itemView.findViewById(R.id.friend_check);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
 
-                    if(listener!=null){
+                    if (listener != null) {
                         listener.onItemClick(ViewHolder.this, v, position);
                     }
                 }
             });
         }
 
-        public void setItem(Member item){
+        public void setItem(Member item) {
             friend_name.setText(item.getMemName());
             friend_id.setText(item.getMemID());
             friend_check.setChecked(false);
         }
     }
 
-    public void setOnItemClickListener(OnMemberItemClickListener listener){
-        this.listener=listener;
+    public void setOnItemClickListener(OnMemberItemClickListener listener) {
+        this.listener = listener;
     }
 
     @NonNull
@@ -73,17 +73,17 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
         //viewholder 생성시점에 자동으로 실행 됨
 
         //inflater 참조방법
-        LayoutInflater inflater=LayoutInflater.from(parent.getContext());
-        View itemView=inflater.inflate(R.layout.layout_select_friend,parent,false);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View itemView = inflater.inflate(R.layout.layout_select_friend, parent, false);
 
-        return new ViewHolder(itemView,listener);
+        return new ViewHolder(itemView, listener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //viewholder는 재사용된다! 계속 새로 만들순 없다.
 
-        final Member item=items.get(position);
+        final Member item = items.get(position);
         holder.setItem(item);
 
         holder.friend_check.setChecked(item.isChecked());

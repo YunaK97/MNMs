@@ -1,8 +1,8 @@
 package kr.hongik.mnms.membership;
 
-import kr.hongik.mnms.Group;
-
 import java.io.Serializable;
+
+import kr.hongik.mnms.Group;
 
 public class MembershipGroup extends Group implements Serializable {
     String MID; //membership ID

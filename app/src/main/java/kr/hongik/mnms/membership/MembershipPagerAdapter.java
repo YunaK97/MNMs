@@ -2,17 +2,16 @@ package kr.hongik.mnms.membership;
 
 import android.os.Bundle;
 
+import java.util.ArrayList;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-
 import kr.hongik.mnms.membership.ui.home.MembershipFragment;
 import kr.hongik.mnms.membership.ui.manage.ManageFeeFragment;
-import kr.hongik.mnms.membership.ui.manage.ManageMemFragment;
-
-import java.util.ArrayList;
+import kr.hongik.mnms.membership.ui.manage.MembershipMemFragment;
 
 public class MembershipPagerAdapter extends FragmentPagerAdapter {
     private ArrayList<Fragment> items = new ArrayList<>();
@@ -20,7 +19,7 @@ public class MembershipPagerAdapter extends FragmentPagerAdapter {
 
     MembershipFragment membershipFragment = new MembershipFragment();
     ManageFeeFragment manageFeeFragment = new ManageFeeFragment();
-    ManageMemFragment manageMemFragment = new ManageMemFragment();
+    MembershipMemFragment manageMemFragment = new MembershipMemFragment();
 
     public MembershipPagerAdapter(@NonNull FragmentManager fm, Bundle bundle) {
         super(fm);

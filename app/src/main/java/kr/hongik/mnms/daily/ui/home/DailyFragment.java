@@ -3,8 +3,19 @@ package kr.hongik.mnms.daily.ui.home;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -16,17 +27,7 @@ import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.Transaction;
 import kr.hongik.mnms.TransactionAdapter;
-
 import kr.hongik.mnms.daily.DailyGroup;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class DailyFragment extends Fragment {
 
@@ -42,13 +43,10 @@ public class DailyFragment extends Fragment {
     //variables
     private List<Transaction> dataList;
 
-    //URLs
-    private String ip;
-
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_daily, container, false);
 
-        mRecyclerView = v.findViewById(R.id.my_recycler_view);
+        mRecyclerView = v.findViewById(R.id.recyclerView_daily);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -62,7 +60,6 @@ public class DailyFragment extends Fragment {
             dailyGroup = (DailyGroup) bundle.getSerializable("dailyGroup");
             loginMember = (Member) bundle.getSerializable("loginMember");
             loginMemberAccount = (Account) bundle.getSerializable("loginMemberAccount");
-            ip = bundle.getString("ip");
 
             transactionProcess(dailyGroup);
         }
@@ -71,7 +68,7 @@ public class DailyFragment extends Fragment {
     }
 
     private void transactionProcess(final DailyGroup dailyGroup) {
-        String urlDailyTransaction = "http://" + ip + "/dailyTransaction";
+        String urlDailyTransaction = "http://" + loginMember.getIp() + "/dailyTransaction";
 
         String GID = dailyGroup.getGID();
 

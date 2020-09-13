@@ -11,9 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import kr.hongik.mnms.HttpClient;
-import kr.hongik.mnms.Member;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,6 +21,8 @@ import java.util.Map;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import kr.hongik.mnms.HttpClient;
+import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
 
 public class FriendList extends Fragment {
@@ -36,9 +35,6 @@ public class FriendList extends Fragment {
     private RecyclerView friend_list;
     private Context context;
     private ViewGroup rootView;
-
-    //URLs
-    private String ip;
 
     //variabls
     private String TAG_SUCCESS = "success";
@@ -77,7 +73,7 @@ public class FriendList extends Fragment {
     }
 
     private void showFriend() {
-        String urlShowFriend = "http://" + ip + "/showFriend";
+        String urlShowFriend = "http://" + loginMember.getIp() + "/showFriend";
         urlShowFriend = "http://jennyk97.dothome.co.kr/ShowFriend.php";
 
         NetworkTask networkTask = new NetworkTask();
@@ -114,7 +110,7 @@ public class FriendList extends Fragment {
     }
 
     private void deleteFriend(final String delMemberId) {
-        String urlDeleteFriend = "http://" + ip + "/deleteFriend";
+        String urlDeleteFriend = "http://" + loginMember.getIp() + "/deleteFriend";
         urlDeleteFriend = "http://jennyk97.dothome.co.kr/DeleteFriend.php";
 
         NetworkTask networkTask = new NetworkTask();
@@ -132,7 +128,7 @@ public class FriendList extends Fragment {
         Toast.makeText(context, data, Toast.LENGTH_LONG).show();
     }
 
-    private void showFriendProcess(String response){
+    private void showFriendProcess(String response) {
         try {
             JSONArray jsonArray = new JSONArray(response);
 
@@ -167,7 +163,7 @@ public class FriendList extends Fragment {
         }
     }
 
-    private void deleteFriendProcess(String response){
+    private void deleteFriendProcess(String response) {
         try {
             Log.d("deleteFriend", response);
             JSONObject jsonObject = new JSONObject(response);

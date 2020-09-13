@@ -1,39 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="kr.hongik.mnms.daily.DailyActivity">
+    tools:context="kr.hongik.mnms.membership.MembershipActivity">
 
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_layout"
+        android:id="@+id/tabLayout_daily"
+        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
         <com.google.android.material.tabs.TabItem
-            android:id="@+id/item1"
+            android:id="@+id/daily_tabItem1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1번 탭" />
 
         <com.google.android.material.tabs.TabItem
-            android:id="@+id/item2"
+            android:id="@+id/membership_tabItem2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2번 탭" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/item3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3번 탭" />
-
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewpager"
+        android:id="@+id/viewpager_daily"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:layout_alignBaseline="@+id/tabLayout_daily"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tabLayout_daily"
+        android:layout_marginEnd="0dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="0dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_daily_member"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/fab_daily_trans"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="20dp"
+        android:backgroundTint="#ffffff"
+        android:src="@drawable/person"
+        android:visibility="invisible"
+        app:borderWidth="0dp"
+        app:fabSize="normal"
+        android:layout_marginEnd="20dp"
+        android:layout_alignParentEnd="true" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_daily_trans"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/fab_daily_main"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginRight="20dp"
+        android:backgroundTint="#ffffff"
+        android:src="@drawable/money"
+        android:visibility="invisible"
+        app:borderWidth="0dp"
+        app:fabSize="normal"
+        android:layout_marginEnd="20dp"
+        android:layout_alignParentEnd="true" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_daily_main"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:backgroundTint="#009688"
+        android:src="@drawable/plus2"
+        app:borderWidth="0dp"
+        app:fabSize="normal"
+        android:layout_marginEnd="20dp"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>

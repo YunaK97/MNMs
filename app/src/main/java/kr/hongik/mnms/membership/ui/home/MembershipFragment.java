@@ -41,9 +41,6 @@ public class MembershipFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    //URLs
-    private String ip = "203.149.75.14";
-
     //variables
     private List<Transaction> dataList;
 
@@ -64,7 +61,6 @@ public class MembershipFragment extends Fragment {
             membershipGroup = (MembershipGroup) bundle.getSerializable("membershipGroup");
             loginMember = (Member) bundle.getSerializable("loginMember");
             loginMemberAccount = (Account) bundle.getSerializable("loginMemberAccount");
-            ip = bundle.getString("ip");
 
             setTransaction(membershipGroup);
         }
@@ -73,7 +69,7 @@ public class MembershipFragment extends Fragment {
     }
 
     private void setTransaction(final MembershipGroup membershipGroup) {
-        String urlMembershipTransaction = "http://" + ip + "/membership";
+        String urlMembershipTransaction = "http://" + loginMember.getIp() + "/membership";
         urlMembershipTransaction = "http://jennyk97.dothome.co.kr/MembershipTransaction.php";
 
         NetworkTask networkTask = new NetworkTask();
@@ -86,7 +82,7 @@ public class MembershipFragment extends Fragment {
         networkTask.execute(params);
     }
 
-    private void setTransactionProcess(String response){
+    private void setTransactionProcess(String response) {
         try {
             mRecyclerView.setHasFixedSize(true);
             mLayoutManager = new LinearLayoutManager(getActivity());
@@ -127,13 +123,14 @@ public class MembershipFragment extends Fragment {
     }
 
     private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
-        private String url,TAG;
+        private String url, TAG;
 
         void setURL(String url) {
             this.url = url;
         }
-        void setTAG(String TAG){
-            this.TAG=TAG;
+
+        void setTAG(String TAG) {
+            this.TAG = TAG;
         }
 
         @Override
@@ -157,7 +154,7 @@ public class MembershipFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String response) {
-            if(TAG.equals("setTransaction")){
+            if (TAG.equals("setTransaction")) {
                 setTransactionProcess(response);
             }
 

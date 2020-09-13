@@ -1,9 +1,8 @@
-package kr.hongik.mnms.newgroupfriend;
+package kr.hongik.mnms.newprocesses;
 
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -33,9 +32,6 @@ public class NewDailyActivity extends AppCompatActivity {
     private ArrayList<Member> arrayList;
     private RecyclerView friend_list;
 
-    //URLs
-    public String ip;
-
     //variable
     private ArrayList<Member> selectedMember;
     private ArrayList<String> groupName;
@@ -49,7 +45,6 @@ public class NewDailyActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         loginMember = (Member) intent.getSerializableExtra("loginMember");
-        ip = intent.getStringExtra("ip");
 
         //친구 가져와서 출력
         showFriend();
@@ -90,7 +85,7 @@ public class NewDailyActivity extends AppCompatActivity {
                     }
                 }
 
-                String urlNewDaily = "http://" + ip + "/newDaily";
+                String urlNewDaily = "http://" + loginMember.getIp() + "/newDaily";
                 urlNewDaily = "http://jennyk97.dothome.co.kr/NewDaily.php";
 
                 NetworkTask networkTask = new NetworkTask();
@@ -98,8 +93,6 @@ public class NewDailyActivity extends AppCompatActivity {
                 networkTask.setTAG("newDaily");
 
                 Map<String, String> params = new HashMap<>();
-                params.put("memID", loginMember.getMemID());
-                params.put("memName", loginMember.getMemName());
                 params.put("dailyName", daily_name);
                 try {
                     JSONArray jsonArray = new JSONArray();
@@ -123,7 +116,7 @@ public class NewDailyActivity extends AppCompatActivity {
 
 
     private void groupNameList() {
-        String urlDailyGroupInfo = "http://" + ip + "/dailyGroupInfo";
+        String urlDailyGroupInfo = "http://" + loginMember.getIp() + "/dailyGroupInfo";
         urlDailyGroupInfo = "http://jennyk97.dothome.co.kr/DailygroupInfo.php";
 
         groupName = new ArrayList<>();
@@ -140,7 +133,7 @@ public class NewDailyActivity extends AppCompatActivity {
 
 
     private void showFriend() {
-        String urlShowFriend = "http://" + ip + "/showFriend";
+        String urlShowFriend = "http://" + loginMember.getIp() + "/showFriend";
         urlShowFriend = "http://jennyk97.dothome.co.kr/ShowFriend.php";
 
         NetworkTask networkTask = new NetworkTask();
@@ -157,7 +150,7 @@ public class NewDailyActivity extends AppCompatActivity {
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
 
-    private void newDailyProcess(String response){
+    private void newDailyProcess(String response) {
         try {
             JSONObject jsonObject = new JSONObject(response);
             boolean success = jsonObject.getBoolean(TAG_SUCCESS);
@@ -171,7 +164,7 @@ public class NewDailyActivity extends AppCompatActivity {
         }
     }
 
-    private void showFriendProcess(String response){
+    private void showFriendProcess(String response) {
         try {
             JSONArray jsonArray = new JSONArray(response);
 
@@ -202,7 +195,7 @@ public class NewDailyActivity extends AppCompatActivity {
         }
     }
 
-    private void dailyGroupInfoProcess(String response){
+    private void dailyGroupInfoProcess(String response) {
         try {
             JSONArray jsonArray = new JSONArray(response);
             if (jsonArray.length() == 0) {

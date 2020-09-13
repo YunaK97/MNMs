@@ -13,12 +13,6 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import kr.hongik.mnms.Account;
-import kr.hongik.mnms.HttpClient;
-import kr.hongik.mnms.Member;
-import kr.hongik.mnms.R;
-import kr.hongik.mnms.mainscreen.MainMenuActivity;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -27,13 +21,18 @@ import java.util.Map;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import kr.hongik.mnms.Account;
+import kr.hongik.mnms.HttpClient;
+import kr.hongik.mnms.Member;
+import kr.hongik.mnms.R;
+import kr.hongik.mnms.mainscreen.MainMenuActivity;
 
 public class MainActivity extends AppCompatActivity {
     //layouts
     private CheckBox autoLogin;
 
     //URLs
-    private String ip = "192.168.219.101";
+    private String curIp = "221.138.13.68:8090";
 
     //variables
     private final static int SIGNIN = 221, LOGOUT = 333;
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SignInActivity.class);
-                intent.putExtra("ip", ip);
+                intent.putExtra("curIp", curIp);
                 startActivityForResult(intent, SIGNIN);
             }
         });
@@ -113,8 +112,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loginProcess(final Member member) {
-        String urlLogin = "http://" + ip + "/login";
-        urlLogin = "http://jennyk97.dothome.co.kr/Login.php";
+        String urlLogin = "http://" + curIp + "/member/login";
+        //urlLogin = "http://jennyk97.dothome.co.kr/Login.php";
 
         NetworkTask networkTask = new NetworkTask();
         Map<String, String> params = new HashMap<String, String>();
@@ -184,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
                     String email = jsonObject.getString("memEmail");
                     String accNum = jsonObject.getString("accountNum");
                     String accBalance = jsonObject.getString("accountBalance");
-                    //String ssn=jsonObject.getString("memSSN");
+                    String ssn=jsonObject.getString("memSSN");
 
                     Member loginMem = new Member();
                     loginMem.setMemName(name);
@@ -192,7 +191,8 @@ public class MainActivity extends AppCompatActivity {
                     loginMem.setMemPW(pw);
                     loginMem.setMemEmail(email);
                     loginMem.setAccountNum(accNum);
-                    //loginMem.setMemSsn(ssn);
+                    loginMem.setIp(curIp);
+                    loginMem.setMemSsn(ssn);
 
                     Account memAcc = new Account();
                     memAcc.setAccountNum(accNum);
@@ -210,7 +210,6 @@ public class MainActivity extends AppCompatActivity {
                     Intent intent = new Intent(MainActivity.this, MainMenuActivity.class);
                     intent.putExtra("loginMember", loginMem);
                     intent.putExtra("loginMemberAccount", memAcc);
-                    intent.putExtra("ip", ip);
 
                     startActivityForResult(intent, LOGOUT);
                 } else {//로그인에 실패한 경우

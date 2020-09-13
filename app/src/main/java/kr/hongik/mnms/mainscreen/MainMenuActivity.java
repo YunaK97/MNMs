@@ -11,18 +11,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import kr.hongik.mnms.Account;
-import kr.hongik.mnms.Member;
-import kr.hongik.mnms.R;
-import kr.hongik.mnms.mainscreen.ui.daily.DailyList;
-import kr.hongik.mnms.mainscreen.ui.friend.FriendList;
-import kr.hongik.mnms.mainscreen.ui.membership.MembershipList;
-import kr.hongik.mnms.mainscreen.ui.settings.SettingsActivity;
-import kr.hongik.mnms.mainscreen.ui.transaction.TransactionList;
-import kr.hongik.mnms.newgroupfriend.NewDailyActivity;
-import kr.hongik.mnms.newgroupfriend.NewFriendActivity;
-import kr.hongik.mnms.newgroupfriend.NewMembershipActivity;
-
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
@@ -33,21 +21,31 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+import kr.hongik.mnms.Account;
+import kr.hongik.mnms.Member;
+import kr.hongik.mnms.R;
+import kr.hongik.mnms.mainscreen.ui.daily.DailyList;
+import kr.hongik.mnms.mainscreen.ui.friend.FriendList;
+import kr.hongik.mnms.mainscreen.ui.membership.MembershipList;
+import kr.hongik.mnms.mainscreen.ui.settings.SettingsActivity;
+import kr.hongik.mnms.mainscreen.ui.transaction.TransactionList;
+import kr.hongik.mnms.newprocesses.NewDailyActivity;
+import kr.hongik.mnms.newprocesses.NewFriendActivity;
+import kr.hongik.mnms.newprocesses.NewMembershipActivity;
 
 
 public class MainMenuActivity extends AppCompatActivity {
     private Member loginMember;
     private Account loginMemberAccount;
-    private String ip;
 
     //layouts
     private ActionBar actionBar;
-    private TextView textName,accName,textBalance;
-    private ImageButton btn_transaction,btn_membership,btn_daily,btn_friendList;
+    private TextView textName, accName, textBalance;
+    private ImageButton btn_transaction, btn_membership, btn_daily, btn_friendList;
     private ViewPager pager;
 
     //variables
-    final private int[] addType={0};
+    final private int[] addType = {0};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +53,14 @@ public class MainMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
 
         //id찾기
-        pager=findViewById(R.id.pager);
-        textName=findViewById(R.id.textName);
-        accName=findViewById(R.id.accName);
-        textBalance=findViewById(R.id.textBalance);
-        btn_transaction=findViewById(R.id.btn_transaction);
-        btn_membership=findViewById(R.id.btn_membership);
-        btn_daily=findViewById(R.id.btn_daily);
-        btn_friendList=findViewById(R.id.btn_friendList);
+        pager = findViewById(R.id.pager);
+        textName = findViewById(R.id.textName);
+        accName = findViewById(R.id.accName);
+        textBalance = findViewById(R.id.textBalance);
+        btn_transaction = findViewById(R.id.btn_transaction);
+        btn_membership = findViewById(R.id.btn_membership);
+        btn_daily = findViewById(R.id.btn_daily);
+        btn_friendList = findViewById(R.id.btn_friendList);
 
         //액션바
         actionBar = getSupportActionBar();
@@ -70,23 +68,22 @@ public class MainMenuActivity extends AppCompatActivity {
         //actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME|ActionBar.DISPLAY_USE_LOGO);
 
         //로그인 정보 가져오기
-        Intent intent=getIntent();
-        loginMember= (Member) intent.getSerializableExtra("loginMember");
-        loginMemberAccount=(Account)intent.getSerializableExtra("loginMemberAccount");
-        ip=intent.getStringExtra("ip");
+        Intent intent = getIntent();
+        loginMember = (Member) intent.getSerializableExtra("loginMember");
+        loginMemberAccount = (Account) intent.getSerializableExtra("loginMemberAccount");
 
         //송금내역,membership,daily pager
         pager.setOffscreenPageLimit(4);
 
-        MyPagerAdapter adapter= new MyPagerAdapter(getSupportFragmentManager());
+        MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
 
-        TransactionList transactionList=new TransactionList();
+        TransactionList transactionList = new TransactionList();
         adapter.addItem(transactionList);
-        MembershipList membershipList=new MembershipList();
+        MembershipList membershipList = new MembershipList();
         adapter.addItem(membershipList);
-        DailyList dailyList=new DailyList();
+        DailyList dailyList = new DailyList();
         adapter.addItem(dailyList);
-        FriendList friendList=new FriendList();
+        FriendList friendList = new FriendList();
         adapter.addItem(friendList);
 
         pager.setAdapter(adapter);
@@ -99,7 +96,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                switch (position){
+                switch (position) {
                     case 0:
                         btn_transaction.setSelected(true);
                         btn_membership.setSelected(false);
@@ -133,10 +130,9 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         });
 
-        Bundle bundle=new Bundle();
+        Bundle bundle = new Bundle();
         bundle.putSerializable("loginMember", loginMember);
         bundle.putSerializable("loginMemberAccount", loginMemberAccount);
-        bundle.putString("ip",ip);
 
         transactionList.setArguments(bundle);
         membershipList.setArguments(bundle);
@@ -144,11 +140,11 @@ public class MainMenuActivity extends AppCompatActivity {
         friendList.setArguments(bundle);
         //////////////////////////////
 
-        String text="이름 : "+loginMember.getMemName();
+        String text = "이름 : " + loginMember.getMemName();
         textName.setText(text);
-        text="계좌번호 : "+loginMemberAccount.getAccountNum();
+        text = "계좌번호 : " + loginMemberAccount.getAccountNum();
         accName.setText(text);
-        text="잔액 : "+loginMemberAccount.getAccountBalance();
+        text = "잔액 : " + loginMemberAccount.getAccountBalance();
         textBalance.setText(text);
 
         btn_transaction.setOnClickListener(new View.OnClickListener() {
@@ -199,7 +195,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main,menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
 
         return true;
     }
@@ -208,65 +204,60 @@ public class MainMenuActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int curId = item.getItemId();
-        if(curId==R.id.new_process){
+        if (curId == R.id.new_process) {
             newProcess();
-        }else if(curId==R.id.settings){
-            Intent intent=new Intent(MainMenuActivity.this, SettingsActivity.class);
-            intent.putExtra("loginMember",loginMember);
-            intent.putExtra("loginMemberAccount",loginMemberAccount);
-            intent.putExtra("ip",ip);
+        } else if (curId == R.id.settings) {
+            Intent intent = new Intent(MainMenuActivity.this, SettingsActivity.class);
+            intent.putExtra("loginMember", loginMember);
+            intent.putExtra("loginMemberAccount", loginMemberAccount);
             startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    protected void showToast(String data){
+    protected void showToast(String data) {
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
 
-    public void newProcess(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.CustomDialog);
+    public void newProcess() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomDialog);
 
-        final String[] items = {"membership","daily","friend"};
+        final String[] items = {"membership", "daily", "friend"};
         final Integer[] selected = {0};
 
         builder.setTitle("리스트 추가 예제");
 
-        builder.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener(){
+        builder.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int pos)
-            {
-                selected[0] =pos;
+            public void onClick(DialogInterface dialog, int pos) {
+                selected[0] = pos;
             }
         });
 
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener(){
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int pos)
-            {
-                if(selected[0] ==0){
+            public void onClick(DialogInterface dialog, int pos) {
+                if (selected[0] == 0) {
                     Intent intent = new Intent(getApplicationContext(), NewMembershipActivity.class);
-                    intent.putExtra("loginMember",loginMember);
-                    intent.putExtra("ip",ip);
+                    intent.putExtra("loginMember", loginMember);
                     startActivity(intent);
-                }else if(selected[0] ==1){
+                } else if (selected[0] == 1) {
                     Intent intent = new Intent(getApplicationContext(), NewDailyActivity.class);
-                    intent.putExtra("loginMember",loginMember);
-                    intent.putExtra("ip",ip);
+                    intent.putExtra("loginMember", loginMember);
                     startActivity(intent);
-                }else if(selected[0] ==2){
+                } else if (selected[0] == 2) {
                     Intent intent = new Intent(getApplicationContext(), NewFriendActivity.class);
-                    intent.putExtra("loginMember",loginMember);
-                    intent.putExtra("ip",ip);
+                    intent.putExtra("loginMember", loginMember);
                     startActivity(intent);
                 }
             }
         });
 
         final AlertDialog alertDialog = builder.create();
-        alertDialog.setOnShowListener( new DialogInterface.OnShowListener() {
-            @Override public void onShow(DialogInterface arg0) {
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface arg0) {
                 alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED);
                 alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED);
             }
@@ -275,8 +266,8 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onBackPressed(){
-        AlertDialog.Builder dialog=new AlertDialog.Builder(MainMenuActivity.this,R.style.CustomDialog);
+    public void onBackPressed() {
+        AlertDialog.Builder dialog = new AlertDialog.Builder(MainMenuActivity.this, R.style.CustomDialog);
 
         dialog.setTitle("종료하시겠습니까?");
         dialog.setNeutralButton("종료", new DialogInterface.OnClickListener() {
@@ -300,11 +291,11 @@ public class MainMenuActivity extends AppCompatActivity {
     static class MyPagerAdapter extends FragmentStatePagerAdapter {
         ArrayList<Fragment> items = new ArrayList<>();
 
-        MyPagerAdapter(FragmentManager fm){
+        MyPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
-        public void addItem(Fragment item){
+        public void addItem(Fragment item) {
             items.add(item);
         }
 

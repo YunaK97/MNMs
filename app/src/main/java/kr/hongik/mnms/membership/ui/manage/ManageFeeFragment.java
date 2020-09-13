@@ -3,7 +3,6 @@ package kr.hongik.mnms.membership.ui.manage;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -41,9 +40,6 @@ public class ManageFeeFragment extends Fragment {
     private FriendListAdapter notsubmitListAdapter;
     private LinearLayoutManager linearLayoutManager;
 
-    //URLs
-    private String ip = "203.249.75.14";
-
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_manage_fee, container, false);
 
@@ -57,7 +53,7 @@ public class ManageFeeFragment extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             membershipGroup = (MembershipGroup) bundle.getSerializable("membershipGroup");
-            loginMember=(Member)bundle.getSerializable("loginMember");
+            loginMember = (Member) bundle.getSerializable("loginMember");
 
             //setInformation(membershipGroup);
             tv_paid_membership_cnt.setText("10");
@@ -79,7 +75,7 @@ public class ManageFeeFragment extends Fragment {
 
     public void getNotsubmitMembers() {
         //미납자 명단 출력
-        String urlNotSubmitMembers = "http://" + ip + "/notsubmitmembers";
+        String urlNotSubmitMembers = "http://" + loginMember.getIp() + "/notsubmitmembers";
 
         final String GID = membershipGroup.getGID();
         NetworkTask networkTask = new NetworkTask();
@@ -92,7 +88,7 @@ public class ManageFeeFragment extends Fragment {
         networkTask.execute(params);
     }
 
-    private void notSubmitMembersProcess(String response){
+    private void notSubmitMembersProcess(String response) {
         try {
             JSONArray jsonArray = new JSONArray(response);
             if (jsonArray.length() == 0) {
@@ -154,7 +150,7 @@ public class ManageFeeFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String response) {
-            if(TAG.equals("notSubmitMembers")){
+            if (TAG.equals("notSubmitMembers")) {
                 notSubmitMembersProcess(response);
             }
         }

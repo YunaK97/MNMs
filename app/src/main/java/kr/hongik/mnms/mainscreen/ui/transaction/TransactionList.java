@@ -7,13 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import kr.hongik.mnms.Account;
-import kr.hongik.mnms.HttpClient;
-import kr.hongik.mnms.Member;
-import kr.hongik.mnms.R;
-import kr.hongik.mnms.Transaction;
-import kr.hongik.mnms.TransactionAdapter;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,6 +19,12 @@ import java.util.Map;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import kr.hongik.mnms.Account;
+import kr.hongik.mnms.HttpClient;
+import kr.hongik.mnms.Member;
+import kr.hongik.mnms.R;
+import kr.hongik.mnms.Transaction;
+import kr.hongik.mnms.TransactionAdapter;
 
 
 public class TransactionList extends Fragment {
@@ -38,9 +37,6 @@ public class TransactionList extends Fragment {
     private RecyclerView transactionList;
     private TransactionAdapter transactionAdapter;
     private List<Transaction> dataList;
-
-    //URLs
-    private String ip;
 
     public TransactionList() {
 
@@ -64,7 +60,6 @@ public class TransactionList extends Fragment {
         if (bundle != null) {
             loginMember = (Member) bundle.getSerializable("loginMember");
             loginMemberAccount = (Account) bundle.getSerializable("loginMemberAccount");
-            ip = bundle.getString("ip");
         }
         //그룹리스트 출력
         transactionView(rootView);
@@ -88,7 +83,7 @@ public class TransactionList extends Fragment {
     }
 
     private void transactionProcess(final Transaction transaction) {
-        String urlListTransaction = "http://" + ip + "/listTransaction";
+        String urlListTransaction = "http://" + loginMember.getIp() + "/listTransaction";
         urlListTransaction = "http://jennyk97.dothome.co.kr/ListTransaction.php";
 
         NetworkTask networkTask = new NetworkTask();
@@ -101,7 +96,7 @@ public class TransactionList extends Fragment {
         networkTask.execute(params);
     }
 
-    private void listTransactionProcess(String response){
+    private void listTransactionProcess(String response) {
         try {
             JSONArray j = new JSONArray(response);
             // Parse json

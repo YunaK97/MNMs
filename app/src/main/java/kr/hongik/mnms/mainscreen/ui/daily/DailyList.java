@@ -11,6 +11,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import kr.hongik.mnms.Account;
 import kr.hongik.mnms.Group;
 import kr.hongik.mnms.HttpClient;
@@ -22,17 +32,6 @@ import kr.hongik.mnms.mainscreen.GroupAdapter;
 import kr.hongik.mnms.mainscreen.OnGroupItemClickListener;
 import kr.hongik.mnms.mainscreen.OnGroupItemLongClickListener;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 public class DailyList extends Fragment {
     private Member loginMember;
     private Account loginMemberAccount;
@@ -41,9 +40,6 @@ public class DailyList extends Fragment {
     private GroupAdapter groupAdapter;
     private Context context;
     private ViewGroup rootView;
-
-    //URLs
-    private String ip = "";
 
     public DailyList() {
         // Required empty public constructor
@@ -67,7 +63,6 @@ public class DailyList extends Fragment {
         if (bundle != null) {
             loginMember = (Member) bundle.getSerializable("loginMember");
             loginMemberAccount = (Account) bundle.getSerializable("loginMemberAccount");
-            ip = bundle.getString("ip");
         }
 
         //그룹리스트 출력
@@ -83,7 +78,7 @@ public class DailyList extends Fragment {
     }
 
     private void groupView() {
-        String urlDailyGroupInfo = "http://" + ip + "/dailyGroupInfo";
+        String urlDailyGroupInfo = "http://" + loginMember.getIp() + "/dailyGroupInfo";
         urlDailyGroupInfo = "http://jennyk97.dothome.co.kr/DailygroupInfo.php";
 
         NetworkTask networkTask = new NetworkTask();
@@ -97,7 +92,7 @@ public class DailyList extends Fragment {
     }
 
     private void outGroup(final Group outGroup) {
-        String urlDailyOutGroup = "http://" + ip + "/OutDGroup";
+        String urlDailyOutGroup = "http://" + loginMember.getIp() + "/OutDGroup";
         urlDailyOutGroup = "http://jennyk97.dothome.co.kr/OutGroup.php";
 
         NetworkTask networkTask = new NetworkTask();

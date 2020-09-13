@@ -1,4 +1,4 @@
-package kr.hongik.mnms.newgroupfriend;
+package kr.hongik.mnms.newprocesses;
 
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -38,9 +38,6 @@ public class NewFriendActivity extends AppCompatActivity {
     private RecyclerView requestedRecyclerView;
     private MemberAdapter memberAdapter;
 
-    //URLs
-    private String ip = "203.249.75.14";
-
     //variables
     private String TAG_SUCCESS = "success";
     private String friend_id;
@@ -54,7 +51,6 @@ public class NewFriendActivity extends AppCompatActivity {
         //intent 받아오기
         Intent intent = getIntent();
         loginMember = (Member) intent.getSerializableExtra("loginMember");
-        ip = intent.getStringExtra("ip");
 
         //findViewById
         id_search = findViewById(R.id.id_search);
@@ -91,7 +87,7 @@ public class NewFriendActivity extends AppCompatActivity {
     }
 
     private void sendRequest() {
-        String urlNewFriendAdd = "http://" + ip + "/newFriendAdd";
+        String urlNewFriendAdd = "http://" + loginMember.getIp() + "/newFriendAdd";
         urlNewFriendAdd = "http://jennyk97.dothome.co.kr/NewFriendAdd.php";
 
         //내가 상대방에게 친구추가 요청
@@ -107,7 +103,7 @@ public class NewFriendActivity extends AppCompatActivity {
     }
 
     private void showRequest() {
-        String urlRequestedFriend = "http://" + ip + "/requestedFriend";
+        String urlRequestedFriend = "http://" + loginMember.getIp() + "/requestedFriend";
         urlRequestedFriend = "http://jennyk97.dothome.co.kr/RequestedFriend.php";
 
         //나에게 들어온 요청 출력
@@ -139,7 +135,7 @@ public class NewFriendActivity extends AppCompatActivity {
     }
 
     private void deleteFriend(final String delMemberId) {
-        String urlDeleteFriend = "http://" + ip + "/deleteFriend";
+        String urlDeleteFriend = "http://" + loginMember.getIp() + "/deleteFriend";
         urlDeleteFriend = "http://jennyk97.dothome.co.kr/DeleteFriend.php";
 
         NetworkTask networkTask = new NetworkTask();
@@ -154,7 +150,7 @@ public class NewFriendActivity extends AppCompatActivity {
     }
 
     private void requestFriend(final String TAG_RESULT) {
-        String urlRequestedResult = "http://" + ip + "/requestedResult";
+        String urlRequestedResult = "http://" + loginMember.getIp() + "/requestedResult";
         urlRequestedResult = "http://jennyk97.dothome.co.kr/RequestedResult.php";
 
         // 수락or거절 결과 전송
@@ -165,56 +161,34 @@ public class NewFriendActivity extends AppCompatActivity {
             }
         }
 
-        if (TAG_RESULT.equals("reject")) {
+        NetworkTask networkTask = new NetworkTask();
+        networkTask.setURL(urlRequestedResult);
+        networkTask.setTAG("requestedResult");
 
-            NetworkTask networkTask = new NetworkTask();
-            networkTask.setURL(urlRequestedResult);
-            networkTask.setTAG("requestedResult");
-
-            Map<String, String> params = new HashMap<>();
-            params.put("memID", loginMember.getMemID());
-            params.put("TAG", TAG_RESULT);
-            try {
-                JSONArray jsonArray = new JSONArray();
-                for (int i = 0; i < selectedFriend.size(); i++) {
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("memID", selectedFriend.get(i).getMemID());
-                    jsonObject.put("memName", selectedFriend.get(i).getMemName());
-                    jsonArray.put(jsonObject);
-                }
+        Map<String, String> params = new HashMap<>();
+        params.put("memID", loginMember.getMemID());
+        params.put("TAG", TAG_RESULT);
+        try {
+            JSONArray jsonArray = new JSONArray();
+            for (int i = 0; i < selectedFriend.size(); i++) {
+                JSONObject jsonObject = new JSONObject();
+                jsonObject.put("memID", selectedFriend.get(i).getMemID());
+                jsonObject.put("memName", selectedFriend.get(i).getMemName());
+                jsonArray.put(jsonObject);
+            }
+            if (TAG_RESULT.equals("reject")) {
                 params.put("reject", jsonArray.toString());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            networkTask.execute(params);
-        } else {
-            NetworkTask networkTask = new NetworkTask();
-            networkTask.setURL(urlRequestedResult);
-            networkTask.setTAG("requestedResult");
-
-            Map<String, String> params = new HashMap<>();
-            params.put("memID", loginMember.getMemID());
-            params.put("TAG", TAG_RESULT);
-            try {
-                JSONArray jsonArray = new JSONArray();
-                for (int i = 0; i < selectedFriend.size(); i++) {
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("memID", selectedFriend.get(i).getMemID());
-                    jsonObject.put("memName", selectedFriend.get(i).getMemName());
-                    jsonArray.put(jsonObject);
-                }
+            } else {
                 params.put("friend", jsonArray.toString());
-            } catch (Exception e) {
-                e.printStackTrace();
             }
-
             networkTask.execute(params);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     private void searchFriend(final String friend_id) {
-        String urlNewFriend = "http://" + ip + "/newFriend";
+        String urlNewFriend = "http://" + loginMember.getIp() + "/newFriend";
         urlNewFriend = "http://jennyk97.dothome.co.kr/NewFriend.php";
 
         NetworkTask networkTask = new NetworkTask();

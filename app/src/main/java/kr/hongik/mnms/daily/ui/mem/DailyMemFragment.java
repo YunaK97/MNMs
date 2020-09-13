@@ -6,17 +6,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import kr.hongik.mnms.R;
-import kr.hongik.mnms.Transaction;
-import kr.hongik.mnms.TransactionAdapter;
-
-import kr.hongik.mnms.HttpClient;
-import kr.hongik.mnms.daily.DailyGroup;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -26,8 +15,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import kr.hongik.mnms.HttpClient;
+import kr.hongik.mnms.Member;
+import kr.hongik.mnms.R;
+import kr.hongik.mnms.Transaction;
+import kr.hongik.mnms.TransactionAdapter;
+import kr.hongik.mnms.daily.DailyGroup;
 
-public class MemberFragment extends Fragment {
+
+public class DailyMemFragment extends Fragment {
+    DailyGroup dailyGroup;
+    Member loginMember;
 
     //layouts
     private RecyclerView mRecyclerView;
@@ -37,11 +39,8 @@ public class MemberFragment extends Fragment {
     //variables
     private List<Transaction> dataList;
 
-    //URLs
-    String ip;
-
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_member, container, false);
+        View v = inflater.inflate(R.layout.fragment_daily_mem, container, false);
 
         mRecyclerView = v.findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
@@ -54,7 +53,8 @@ public class MemberFragment extends Fragment {
 
         Bundle bundle = getArguments();
         if (bundle != null) {
-            DailyGroup dailyGroup = (DailyGroup) bundle.getSerializable("dailyGroup");
+            dailyGroup = (DailyGroup) bundle.getSerializable("dailyGroup");
+            loginMember = (Member) bundle.getSerializable("loginMember");
             dailyFriendProcess(dailyGroup);
         }
 
@@ -62,7 +62,7 @@ public class MemberFragment extends Fragment {
     }
 
     protected void dailyFriendProcess(final DailyGroup dailyGroup) {
-        String urlDailyMemList = "http://" + ip + "dailyMemList";
+        String urlDailyMemList = "http://" + loginMember.getIp() + "dailyMemList";
 
         String GID = dailyGroup.getGID();
         NetworkTask neworkTask = new NetworkTask();

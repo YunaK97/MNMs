@@ -28,8 +28,8 @@ import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
-import kr.hongik.mnms.membership.ui.home.NewMemberActivity;
-import kr.hongik.mnms.membership.ui.home.NewTransactionActivity;
+import kr.hongik.mnms.membership.ui.home.NewMembershipMemActivity;
+import kr.hongik.mnms.newprocesses.NewTransactionActivity;
 
 public class MembershipActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -43,9 +43,6 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
     private FloatingActionButton fab_membership_main, fab_membership_member, fab_membership_trans, fab_membership_manage;
     private Animation fab_open, fab_close;
     private boolean isFabOpen = false;
-
-    //URLs
-    private String ip;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +64,6 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
         membershipGroup = (MembershipGroup) intent.getSerializableExtra("membershipGroup");
         loginMember = (Member) intent.getSerializableExtra("loginMember");
         loginMemberAccount = (Account) intent.getSerializableExtra("loginMemberAccount");
-        ip = intent.getStringExtra("ip");
 
         getMembershipGroupInfo();
 
@@ -76,13 +72,12 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
         bundle.putSerializable("loginMember", loginMember);
         bundle.putSerializable("loginMemberAccount", loginMemberAccount);
         bundle.putSerializable("memberArrayList", memberArrayList);
-        bundle.putString("ip", ip);
 
-        viewPager = findViewById(R.id.viewpager);
+        viewPager = findViewById(R.id.viewpager_membership);
         MembershipPagerAdapter adapter = new MembershipPagerAdapter(getSupportFragmentManager(), bundle);
         viewPager.setAdapter(adapter);
 
-        TabLayout tabLayout = findViewById(R.id.tab_layout);
+        TabLayout tabLayout = findViewById(R.id.tabLayout_membership);
         tabLayout.setupWithViewPager(viewPager);
     }
 
@@ -111,12 +106,13 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
                 intent.putExtra("loginMember", loginMember);
                 intent.putExtra("loginMemberAccouont", loginMemberAccount);
                 intent.putExtra("membershipGroup", membershipGroup);
+                intent.putExtra("mainActivity","membership");
 
                 startActivityForResult(intent, 111);
                 break;
             case R.id.fab_membership_member:
                 toggleFab();
-                intent = new Intent(MembershipActivity.this, NewMemberActivity.class);
+                intent = new Intent(MembershipActivity.this, NewMembershipMemActivity.class);
                 intent.putExtra("loginMember", loginMember);
                 intent.putExtra("membershipGroup", membershipGroup);
                 intent.putExtra("memberArrayList", memberArrayList);
@@ -125,13 +121,11 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.fab_membership_manage:
                 toggleFab();
-                
-
         }
     }
 
     private void getMembershipGroupInfo() {
-        String urlMembershipGroup = "http://" + ip + "/fee";
+        String urlMembershipGroup = "http://" + loginMember.getIp() + "/fee";
         urlMembershipGroup = "http://jennyk97.dothome.co.kr/MembershipGroup.php";
 
         NetworkTask networkTask = new NetworkTask();

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -19,7 +18,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
@@ -29,7 +27,7 @@ import kr.hongik.mnms.mainscreen.ui.friend.OnFriendItemLongClickListener;
 import kr.hongik.mnms.membership.MembershipGroup;
 
 
-public class ManageMemFragment extends Fragment {
+public class MembershipMemFragment extends Fragment {
 
     private Member loginMember;
     private MembershipGroup membershipGroup;
@@ -42,23 +40,19 @@ public class ManageMemFragment extends Fragment {
     private Context context;
     private ViewGroup rootView;
 
-    //URLs
-    private String ip;
-
-    public ManageMemFragment() {
+    public MembershipMemFragment() {
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         context = getContext();
-        rootView = (ViewGroup) inflater.inflate(R.layout.fragment_manage_mem, container, false);
+        rootView = (ViewGroup) inflater.inflate(R.layout.fragment_membership_mem, container, false);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
             loginMember = (Member) bundle.getSerializable("loginMember");
             membershipGroup = (MembershipGroup) bundle.getSerializable("membershipGroup");
-            memberArrayList= (ArrayList<Member>) bundle.get("memberArrayList");
-            ip = bundle.getString("ip");
+            memberArrayList = (ArrayList<Member>) bundle.get("memberArrayList");
 
             //showMember();
         }
@@ -66,7 +60,7 @@ public class ManageMemFragment extends Fragment {
         return rootView;
     }
 
-    private void showMember( ) {
+    private void showMember() {
         memberList = rootView.findViewById(R.id.member_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
         memberList.setLayoutManager(layoutManager);
@@ -116,7 +110,7 @@ public class ManageMemFragment extends Fragment {
     }
 
     private void deleteMember(String delMemberId) {
-        String urlDeleteMember = "http://" + ip + "/deleteMember";
+        String urlDeleteMember = "http://" + loginMember.getIp() + "/deleteMember";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlDeleteMember);

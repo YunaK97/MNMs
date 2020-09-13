@@ -12,11 +12,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".membership.ui.manage.ManageMembershipActivity"></activity>
-        <activity android:name=".membership.ui.home.NewTransactionActivity" />
-        <activity android:name=".membership.ui.home.NewMemberActivity" />
+        <activity android:name=".daily.ui.home.DailyQRActivity"></activity>
+        <activity android:name=".membership.ui.manage.ManageMembershipActivity" />
+        <activity android:name=".daily.ui.home.NewDailyMemActivity" />
+        <activity android:name=".newprocesses.NewTransactionActivity" />
+        <activity android:name=".membership.ui.home.NewMembershipMemActivity" />
         <activity android:name=".mainscreen.ui.settings.SettingsActivity" />
-        <activity android:name=".newgroupfriend.NewFriendActivity" />
+        <activity android:name=".newprocesses.NewFriendActivity" />
         <activity
             android:name=".membership.MembershipActivity"
             android:label="회원그룹방 거래내역" />
@@ -24,10 +26,10 @@
             android:name=".daily.DailyActivity"
             android:label="일반그룹방 거래내역" />
         <activity
-            android:name=".newgroupfriend.NewDailyActivity"
+            android:name=".newprocesses.NewDailyActivity"
             android:label="@string/app_new_daily" />
         <activity
-            android:name=".newgroupfriend.NewMembershipActivity"
+            android:name=".newprocesses.NewMembershipActivity"
             android:label="@string/app_new_membership" />
         <activity
             android:name=".mainscreen.MainMenuActivity"
@@ -49,12 +51,12 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
-    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

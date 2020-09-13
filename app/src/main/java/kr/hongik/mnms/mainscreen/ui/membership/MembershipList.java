@@ -6,6 +6,17 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,19 +32,6 @@ import kr.hongik.mnms.mainscreen.OnGroupItemLongClickListener;
 import kr.hongik.mnms.membership.MembershipActivity;
 import kr.hongik.mnms.membership.MembershipGroup;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.Map;
-
 public class MembershipList extends Fragment {
     private Member loginMember;
     private Account loginMemberAccount;
@@ -43,9 +41,6 @@ public class MembershipList extends Fragment {
     private GroupAdapter groupAdapter;
     private Context context;
     private ViewGroup rootView;
-
-    //URLs
-    private String ip;
 
     public MembershipList() {
         // Required empty public constructor
@@ -68,7 +63,6 @@ public class MembershipList extends Fragment {
         if (bundle != null) {
             loginMember = (Member) bundle.getSerializable("loginMember");
             loginMemberAccount = (Account) bundle.getSerializable("loginMemberAccount");
-            ip = bundle.getString("ip");
         }
         //그룹리스트 출력
         groupView();
@@ -84,7 +78,7 @@ public class MembershipList extends Fragment {
 
 
     private void groupView() {
-        String urlMemberGroupInfo = "http://" + ip + "/memberGroupInfo";
+        String urlMemberGroupInfo = "http://" + loginMember.getIp() + "/memberGroupInfo";
         urlMemberGroupInfo = "http://jennyk97.dothome.co.kr/MembergroupInfo.php";
 
         NetworkTask networkTask = new NetworkTask();
@@ -110,7 +104,7 @@ public class MembershipList extends Fragment {
     }
 
     private void outGroup(final Group outGroup) {
-        String urlOutMGroup = "http://" + ip + "/outMGroup";
+        String urlOutMGroup = "http://" + loginMember.getIp() + "/outMGroup";
         urlOutMGroup = "http://jennyk97.dothome.co.kr/OutMGroup.php";
 
         NetworkTask networkTask = new NetworkTask();
@@ -152,7 +146,7 @@ public class MembershipList extends Fragment {
         Toast.makeText(context, data, Toast.LENGTH_LONG).show();
     }
 
-    private void memberGroupInfoProcess(String response){
+    private void memberGroupInfoProcess(String response) {
         try {
             JSONArray jsonArray = new JSONArray(response);
             if (jsonArray.length() == 0) {
@@ -204,7 +198,7 @@ public class MembershipList extends Fragment {
         }
     }
 
-    private void membershipOutGroupProcess(String response){
+    private void membershipOutGroupProcess(String response) {
         try {
             JSONObject jsonObject = new JSONObject(response);
             boolean success = jsonObject.getBoolean("success");

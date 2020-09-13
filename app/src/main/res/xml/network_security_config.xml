@@ -3,7 +3,7 @@
 <network-security-config>
     <base-config cleartextTrafficPermitted="true"/>
     <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">http://192.168.219.108/8080/mypractice</domain>
+        <domain includeSubdomains="true">http://221.138.13.68:8090</domain>
     </domain-config>
 
 </network-security-config>
