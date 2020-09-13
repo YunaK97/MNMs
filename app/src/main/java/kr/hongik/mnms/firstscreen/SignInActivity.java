@@ -256,7 +256,8 @@ public class SignInActivity extends AppCompatActivity {
         params.put("memPW", signInMember.getMemPW());
         params.put("memName", signInMember.getMemName());
         params.put("memEmail", signInMember.getMemEmail());
-        params.put("memSSN", signInMember.getMemSsn());
+        params.put("memSsn", signInMember.getMemSsn());
+        Log.d("memSSn",signInMember.getMemSsn());
 
         params.put("accountBank", signInMemberAccount.getAccountBank());
         params.put("accountBalance", signInMemberAccount.getAccountBalance() + "");

@@ -1,8 +1,6 @@
 package kr.hongik.mnms.daily;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
@@ -27,18 +25,14 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
+import kr.hongik.mnms.daily.ui.home.DailyQRActivity;
 import kr.hongik.mnms.daily.ui.home.NewDailyMemActivity;
-import kr.hongik.mnms.daily.ui.qr.QRFragment;
-import kr.hongik.mnms.newprocesses.NewDailyActivity;
-import kr.hongik.mnms.newprocesses.NewFriendActivity;
-import kr.hongik.mnms.newprocesses.NewMembershipActivity;
 import kr.hongik.mnms.newprocesses.NewTransactionActivity;
 
 public class DailyActivity extends AppCompatActivity implements View.OnClickListener {
@@ -63,7 +57,7 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.daily_QRsend){
-            Intent intent=new Intent(DailyActivity.this, QRFragment.class);
+            Intent intent=new Intent(DailyActivity.this, DailyQRActivity.class);
             intent.putExtra("loginMember", loginMember);
             intent.putExtra("loginMemberAccount", loginMemberAccount);
             intent.putExtra("dailiyGroup", dailyGroup);

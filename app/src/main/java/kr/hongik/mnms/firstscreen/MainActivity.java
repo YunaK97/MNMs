@@ -183,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
                     String email = jsonObject.getString("memEmail");
                     String accNum = jsonObject.getString("accountNum");
                     String accBalance = jsonObject.getString("accountBalance");
-                    String ssn=jsonObject.getString("memSSN");
+                    String ssn=jsonObject.getString("memSsn");
 
                     Member loginMem = new Member();
                     loginMem.setMemName(name);
