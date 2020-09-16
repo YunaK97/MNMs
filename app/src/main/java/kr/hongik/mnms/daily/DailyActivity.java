@@ -146,14 +146,14 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void getDailyGroupInfo() {
-        String urlDailyGroup = "http://" + loginMember.getIp() + "/fee";
+        String urlDailyGroup = "http://" + loginMember.getIp() + "/daily/dutch";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlDailyGroup);
         networkTask.setTAG("dailyGroup");
 
         Map<String, String> params = new HashMap<>();
-        params.put("MID", dailyGroup.getGID());
+        params.put("MID", dailyGroup.getGID()+"");
 
         networkTask.execute(params);
     }
@@ -193,10 +193,10 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
             JSONObject jsonObject = new JSONObject(response);
 
             dailyGroup = new DailyGroup();
-            dailyGroup.setGID(jsonObject.getString("GID"));
-            dailyGroup.setGID(jsonObject.getString("GID"));
+            dailyGroup.setDID(Integer.parseInt(jsonObject.getString("DID")));
+            dailyGroup.setGID(Integer.parseInt(jsonObject.getString("GID")));
             dailyGroup.setGroupName("groupName");
-            dailyGroup.setTime("2020-07-07");
+//            dailyGroup.setTime("2020-07-07");
 //                dailyGroup.setGroupName(jsonObject.getString("groupName"));
 //                dailyGroup.setTime(jsonObject.getString("time"));
 

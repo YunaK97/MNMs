@@ -74,7 +74,6 @@ public class FriendList extends Fragment {
 
     private void showFriend() {
         String urlShowFriend = "http://" + loginMember.getIp() + "/showFriend";
-        urlShowFriend = "http://jennyk97.dothome.co.kr/ShowFriend.php";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlShowFriend);

@@ -33,7 +33,7 @@ public class MembershipFragment extends Fragment {
     private Account loginMemberAccount;
     private MembershipGroup membershipGroup;
 
-    //loginMember의 회비 납입
+    //Membership계좌의 내역
     private ArrayList<Transaction> transactionArrayList;
 
     //layouts
@@ -70,14 +70,13 @@ public class MembershipFragment extends Fragment {
 
     private void setTransaction(final MembershipGroup membershipGroup) {
         String urlMembershipTransaction = "http://" + loginMember.getIp() + "/membership";
-        urlMembershipTransaction = "http://jennyk97.dothome.co.kr/MembershipTransaction.php";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlMembershipTransaction);
         networkTask.setTAG("setTransaction");
 
         Map<String, String> params = new HashMap<>();
-        params.put("GID", membershipGroup.getGID());
+        params.put("GID", membershipGroup.getGID()+"");
 
         networkTask.execute(params);
     }
@@ -101,11 +100,11 @@ public class MembershipFragment extends Fragment {
 
                     Transaction transact = new Transaction();
                     transact.setAccountNum(jsonObject.getString("accountNum"));
-                    transact.setTransactID(jsonObject.getString("transactID"));
+                    transact.setTransactID(Integer.parseInt(jsonObject.getString("transactID")));
                     transact.setTransactHistroy(jsonObject.getString("transactHistory"));
-                    transact.setTransactMoney(jsonObject.getString("transactMoney"));
+                    transact.setTransactMoney(Integer.parseInt(jsonObject.getString("transactMoney")));
                     transact.setSince(jsonObject.getString("since"));
-                    transact.setMID(jsonObject.getString("MID"));
+                    transact.setMID(Integer.parseInt(jsonObject.getString("MID")));
 
                     ((TransactionAdapter) mAdapter).addItem(transact);
                     if (transact.getAccountNum().equals(loginMember.getAccountNum())) {

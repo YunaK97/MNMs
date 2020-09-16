@@ -5,26 +5,22 @@ import java.io.Serializable;
 import kr.hongik.mnms.Group;
 
 public class MembershipGroup extends Group implements Serializable {
-    String MID; //membership ID
-    String president; //방장
-    String payDay; //회비날
-    int memberMoney; //회비
-    int notSubmit; //최대 미납횟수
-    String accountNum; //membership 계좌번호
+    private int MID; //membership ID
+    private String president; //방장
+    private int payDay; //회비날
 
-    public String getAccountNum() {
-        return accountNum;
-    }
+    //매일,매주,매월,매년
+    private String payDuration;
 
-    public void setAccountNum(String accountNum) {
-        this.accountNum = accountNum;
-    }
+    private int fee; //회비
+    private int notSubmit; //최대 미납횟수 (누적개수)
+    private String accountNum; //membership 계좌번호
 
-    public String getMID() {
+    public int getMID() {
         return MID;
     }
 
-    public void setMID(String MID) {
+    public void setMID(int MID) {
         this.MID = MID;
     }
 
@@ -36,20 +32,28 @@ public class MembershipGroup extends Group implements Serializable {
         this.president = president;
     }
 
-    public String getPayDay() {
+    public int getPayDay() {
         return payDay;
     }
 
-    public void setPayDay(String payDay) {
+    public void setPayDay(int payDay) {
         this.payDay = payDay;
     }
 
-    public int getMemberMoney() {
-        return memberMoney;
+    public String getPayDuration() {
+        return payDuration;
     }
 
-    public void setMemberMoney(int memberMoney) {
-        this.memberMoney = memberMoney;
+    public void setPayDuration(String payDuration) {
+        this.payDuration = payDuration;
+    }
+
+    public int getFee() {
+        return fee;
+    }
+
+    public void setFee(int fee) {
+        this.fee = fee;
     }
 
     public int getNotSubmit() {
@@ -60,4 +64,11 @@ public class MembershipGroup extends Group implements Serializable {
         this.notSubmit = notSubmit;
     }
 
+    public String getAccountNum() {
+        return accountNum;
+    }
+
+    public void setAccountNum(String accountNum) {
+        this.accountNum = accountNum;
+    }
 }

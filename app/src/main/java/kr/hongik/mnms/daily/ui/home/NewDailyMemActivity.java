@@ -99,7 +99,7 @@ public class NewDailyMemActivity extends AppCompatActivity {
         networkTask.setTAG("searchMembers");
 
         Map<String, String> params = new HashMap<>();
-        params.put("GID", dailyGroup.getGID());
+        params.put("GID", dailyGroup.getGID()+"");
 
         networkTask.execute(params);
     }
@@ -113,7 +113,7 @@ public class NewDailyMemActivity extends AppCompatActivity {
         networkTask.setTAG("newMemberAdd");
 
         Map<String, String> params = new HashMap<>();
-        params.put("GID", dailyGroup.getGID());
+        params.put("GID", dailyGroup.getGID()+"");
         params.put("memberID", memberId);
 
         networkTask.execute(params);

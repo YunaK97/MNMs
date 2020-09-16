@@ -44,9 +44,6 @@ public class MainMenuActivity extends AppCompatActivity {
     private ImageButton btn_transaction, btn_membership, btn_daily, btn_friendList;
     private ViewPager pager;
 
-    //variables
-    final private int[] addType = {0};
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

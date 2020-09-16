@@ -59,7 +59,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         // - replace the contents of the view with that element
         Transaction tData = mDataset.get(position);
 
-        if (Integer.parseInt(tData.transactMoney) < 0) {
+        if (tData.getTransactMoney() < 0) {
             holder.TextView_transMoney.setTextColor(Color.BLUE);
         } else {
             holder.TextView_transMoney.setTextColor(Color.RED);

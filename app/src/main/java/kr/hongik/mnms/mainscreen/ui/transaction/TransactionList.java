@@ -76,15 +76,13 @@ public class TransactionList extends Fragment {
         transactionAdapter = new TransactionAdapter(dataList);
         transactionList.setAdapter(transactionAdapter);
 
-        Transaction transaction = new Transaction();
         Transaction transact = new Transaction();
-        transact.setAccountNum("1010");
-        transactionProcess(transact);
+        transact.setAccountNum(loginMember.getAccountNum());
+        showTransaction(transact);
     }
 
-    private void transactionProcess(final Transaction transaction) {
+    private void showTransaction(Transaction transaction) {
         String urlListTransaction = "http://" + loginMember.getIp() + "/listTransaction";
-        urlListTransaction = "http://jennyk97.dothome.co.kr/ListTransaction.php";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlListTransaction);
@@ -107,13 +105,13 @@ public class TransactionList extends Fragment {
 
                     Transaction transact = new Transaction();
                     transact.setAccountNum(jsonObject.getString("accountNum"));
-                    transact.setTransactID(jsonObject.getString("transactID"));
+                    transact.setTransactID(Integer.parseInt(jsonObject.getString("transactID")));
                     transact.setTransactHistroy(jsonObject.getString("transactHistory"));
-                    transact.setTransactMoney(jsonObject.getString("transactMoney"));
+                    transact.setTransactMoney(Integer.parseInt(jsonObject.getString("transactMoney")));
                     transact.setSince(jsonObject.getString("since"));
-                    transact.setMID(jsonObject.getString("MID"));
+                    transact.setMID(Integer.parseInt(jsonObject.getString("MID")));
 
-                    ((TransactionAdapter) transactionAdapter).addItem(transact);
+                    transactionAdapter.addItem(transact);
 
                 } catch (JSONException e) {
                     e.printStackTrace();

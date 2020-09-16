@@ -29,6 +29,7 @@ import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.membership.ui.home.NewMembershipMemActivity;
+import kr.hongik.mnms.membership.ui.manage.ManageMembershipActivity;
 import kr.hongik.mnms.newprocesses.NewTransactionActivity;
 
 public class MembershipActivity extends AppCompatActivity implements View.OnClickListener {
@@ -43,6 +44,7 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
     private FloatingActionButton fab_membership_main, fab_membership_member, fab_membership_trans, fab_membership_manage;
     private Animation fab_open, fab_close;
     private boolean isFabOpen = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +97,7 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
+        int[] TAG= new int[]{111, 123, 159};
         Intent intent;
         switch (v.getId()) {
             case R.id.fab_membership_main:
@@ -108,7 +111,7 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
                 intent.putExtra("membershipGroup", membershipGroup);
                 intent.putExtra("mainActivity","membership");
 
-                startActivityForResult(intent, 111);
+                startActivityForResult(intent, TAG[0]);
                 break;
             case R.id.fab_membership_member:
                 toggleFab();
@@ -117,10 +120,17 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
                 intent.putExtra("membershipGroup", membershipGroup);
                 intent.putExtra("memberArrayList", memberArrayList);
 
-                startActivityForResult(intent, 123);
+                startActivityForResult(intent, TAG[1]);
                 break;
             case R.id.fab_membership_manage:
                 toggleFab();
+                intent =new Intent(MembershipActivity.this, ManageMembershipActivity.class);
+                intent.putExtra("loginMember", loginMember);
+                intent.putExtra("membershipGroup", membershipGroup);
+                intent.putExtra("memberArrayList", memberArrayList);
+
+                startActivityForResult(intent, TAG[2]);
+                break;
         }
     }
 
@@ -133,7 +143,7 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
         networkTask.setTAG("membershipGroup");
 
         Map<String, String> params = new HashMap<>();
-        params.put("MID", membershipGroup.getGID());
+        params.put("MID", membershipGroup.getGID()+"");
 
         networkTask.execute(params);
     }
@@ -171,15 +181,14 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
             JSONObject jsonObject = new JSONObject(response);
 
             membershipGroup = new MembershipGroup();
-            membershipGroup.setMID(jsonObject.getString("MID"));
+            membershipGroup.setMID(Integer.parseInt(jsonObject.getString("MID")));
             membershipGroup.setPresident(jsonObject.getString("president"));
-            membershipGroup.setPayDay(jsonObject.getString("payDay"));
-            membershipGroup.setMemberMoney(jsonObject.getInt("memberMoney"));
+            membershipGroup.setPayDay(Integer.parseInt(jsonObject.getString("payDay")));
+            membershipGroup.setFee(jsonObject.getInt("fee"));
             membershipGroup.setNotSubmit(jsonObject.getInt("notSubmit"));
-            membershipGroup.setGID(jsonObject.getString("GID"));
+            membershipGroup.setGID(Integer.parseInt(jsonObject.getString("GID")));
             membershipGroup.setAccountNum("12-123456789");
             membershipGroup.setGroupName("groupName");
-            membershipGroup.setTime("2020-07-07");
 //                membershipGroup.setAccountNum(jsonObject.getString("accountNum"));
 //                membershipGroup.setGroupName(jsonObject.getString("groupName"));
 //                membershipGroup.setTime(jsonObject.getString("time"));

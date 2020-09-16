@@ -70,12 +70,12 @@ public class DailyFragment extends Fragment {
     private void transactionProcess(final DailyGroup dailyGroup) {
         String urlDailyTransaction = "http://" + loginMember.getIp() + "/dailyTransaction";
 
-        String GID = dailyGroup.getGID();
+        int GID = dailyGroup.getGID();
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlDailyTransaction);
         Map<String, String> params = new HashMap<>();
-        params.put("GID", GID);
+        params.put("GID", GID+"");
 
         networkTask.execute(params);
 
@@ -119,11 +119,11 @@ public class DailyFragment extends Fragment {
 
                         Transaction transact = new Transaction();
                         transact.setAccountNum(jsonObject.getString("accountNum"));
-                        transact.setTransactID(jsonObject.getString("transactID"));
+                        transact.setTransactID(Integer.parseInt(jsonObject.getString("transactID")));
                         transact.setTransactHistroy(jsonObject.getString("transactHistory"));
-                        transact.setTransactMoney(jsonObject.getString("transactMoney"));
+                        transact.setTransactMoney(Integer.parseInt(jsonObject.getString("transactMoney")));
                         transact.setSince(jsonObject.getString("since"));
-                        transact.setMID(jsonObject.getString("MID"));
+                        transact.setMID(Integer.parseInt(jsonObject.getString("MID")));
 
                         ((TransactionAdapter) mAdapter).addItem(transact);
 

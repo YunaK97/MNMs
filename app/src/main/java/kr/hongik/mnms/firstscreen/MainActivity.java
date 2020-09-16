@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private CheckBox autoLogin;
 
     //URLs
-    private String curIp = "221.138.13.68:8090";
+    private String curIp = "172.30.1.34:8090";
 
     //variables
     private final static int SIGNIN = 221, LOGOUT = 333;

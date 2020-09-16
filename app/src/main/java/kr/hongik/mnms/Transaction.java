@@ -3,20 +3,19 @@ package kr.hongik.mnms;
 import java.io.Serializable;
 
 public class Transaction implements Serializable {
-    String transactID; // primary key, 순서대로 생성
-    String transactHistroy; // 거래 내역 (회비, 밥,,,)
-    String transactMoney; // 돈 (+,-)
-    String since; //사용한 날짜
-    String accountNum; //사용한 계좌 - 개인 계좌번호, membership계좌번호
-    String MID; // MembershipGroup의 ID
-    String DID; // DailyGroup의 ID
+    private int transactID; // primary key, 순서대로 생성
+    private String transactHistroy; // 거래 내역 (회비, 밥,,,)
+    private int transactMoney; // 돈 (+,-)
+    private String since; //사용한 날짜
+    private String accountNum; //사용한 계좌 - 개인 계좌번호, membership계좌번호
+    private int MID; // MembershipGroup의 ID
+    private int DID; // DailyGroup의 ID
 
-
-    public String getTransactID() {
+    public int getTransactID() {
         return transactID;
     }
 
-    public void setTransactID(String transactID) {
+    public void setTransactID(int transactID) {
         this.transactID = transactID;
     }
 
@@ -28,11 +27,11 @@ public class Transaction implements Serializable {
         this.transactHistroy = transactHistroy;
     }
 
-    public String getTransactMoney() {
+    public int getTransactMoney() {
         return transactMoney;
     }
 
-    public void setTransactMoney(String transactMoney) {
+    public void setTransactMoney(int transactMoney) {
         this.transactMoney = transactMoney;
     }
 
@@ -52,19 +51,19 @@ public class Transaction implements Serializable {
         this.accountNum = accountNum;
     }
 
-    public String getMID() {
+    public int getMID() {
         return MID;
     }
 
-    public void setMID(String MID) {
+    public void setMID(int MID) {
         this.MID = MID;
     }
 
-    public String getDID() {
+    public int getDID() {
         return DID;
     }
 
-    public void setDID(String DID) {
+    public void setDID(int DID) {
         this.DID = DID;
     }
 

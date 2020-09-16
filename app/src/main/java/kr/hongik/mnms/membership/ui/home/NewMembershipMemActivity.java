@@ -50,8 +50,6 @@ public class NewMembershipMemActivity extends AppCompatActivity {
         membershipGroup = (MembershipGroup) intent.getSerializableExtra("membershipGroup");
         memberArrayList = (ArrayList<Member>) intent.getSerializableExtra("memberArrayList");
 
-        showMembers(membershipGroup);
-
         //findViewById
         btnMemberSearch = findViewById(R.id.btn_newMembershipMemID);
         btnAddMember = findViewById(R.id.btn_addMembershipMem);
@@ -65,17 +63,21 @@ public class NewMembershipMemActivity extends AppCompatActivity {
             public void onClick(View v) {
                 //친구 ID 검색
                 memberId = ((TextView) findViewById(R.id.membership_memID)).getText().toString();
+                if (memberId==null || memberId.length()<4 || memberId.length()>20){
+                    showToast("불가능한 ID 입니다");
+                    return;
+                }
                 //기존 멤버 사람들과 같으면 불가능
                 boolean valid = true;
                 for (int i = 0; i < memberArrayList.size(); i++) {
                     if (memberId.equals(memberArrayList.get(i).getMemID())) {
-                        showToast("불가능한 id 입니다.");
+                        showToast("이미 있는 멤버입니다.");
                         valid = false;
                         break;
                     }
                 }
                 if (valid) {
-                    searchFriend(memberId);
+                    searchMember(memberId);
                 }
             }
         });
@@ -88,46 +90,30 @@ public class NewMembershipMemActivity extends AppCompatActivity {
         });
     }
 
-    private void showMembers(MembershipGroup membershipGroup) {
-        String urlSearchMembers = "http://" + loginMember.getIp() + "/searchMembers";
-
-        //내가 상대방에게 친구추가 요청
-        NetworkTask networkTask = new NetworkTask();
-        networkTask.setURL(urlSearchMembers);
-        networkTask.setTAG("searchMembers");
-
-        Map<String, String> params = new HashMap<>();
-        params.put("GID", membershipGroup.getGID());
-
-        networkTask.execute(params);
-    }
-
     private void sendRequest() {
-        String urlNewFriendAdd = "http://" + loginMember.getIp() + "/newMemberAdd";
-        urlNewFriendAdd = "http://jennyk97.dothome.co.kr/NewMemberAdd.php";
+        String urlNewMembershipMem = "http://" + loginMember.getIp() + "/newMemberAdd";
 
-        //내가 상대방에게 친구추가 요청
+        //멤버 추가
         NetworkTask networkTask = new NetworkTask();
-        networkTask.setURL(urlNewFriendAdd);
-        networkTask.setTAG("newMemberAdd");
+        networkTask.setURL(urlNewMembershipMem);
+        networkTask.setTAG("newMembershipMem");
 
         Map<String, String> params = new HashMap<>();
-        params.put("GID", membershipGroup.getGID());
+        params.put("GID", membershipGroup.getGID()+"");
         params.put("memberID", memberId);
 
         networkTask.execute(params);
     }
 
-    private void searchFriend(String member_id) {
-        String urlNewFriend = "http://" + loginMember.getIp() + "/newFriend";
-        urlNewFriend = "http://jennyk97.dothome.co.kr/NewFriend.php";
+    private void searchMember(String memID) {
+        String urlSearchMember = "http://" + loginMember.getIp() + "/newFriend";
 
         NetworkTask networkTask = new NetworkTask();
-        networkTask.setURL(urlNewFriend);
-        networkTask.setTAG("newMember");
+        networkTask.setURL(urlSearchMember);
+        networkTask.setTAG("searchMember");
 
         Map<String, String> params = new HashMap<>();
-        params.put("memID", member_id);
+        params.put("memID", memID);
 
         networkTask.execute(params);
     }
@@ -169,7 +155,7 @@ public class NewMembershipMemActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
-            if (TAG.equals("newMemberAdd")) {
+            if (TAG.equals("newMembershipMem")) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     boolean success = jsonObject.getBoolean(TAG_SUCCESS);
@@ -185,7 +171,7 @@ public class NewMembershipMemActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            } else if (TAG.equals("newMember")) {
+            } else if (TAG.equals("searchMember")) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     boolean success = jsonObject.getBoolean(TAG_SUCCESS);

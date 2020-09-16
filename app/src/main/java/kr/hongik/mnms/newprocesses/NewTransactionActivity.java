@@ -26,7 +26,8 @@ import kr.hongik.mnms.membership.MembershipActivity;
 import kr.hongik.mnms.membership.MembershipGroup;
 
 public class NewTransactionActivity extends AppCompatActivity {
-    private String plus_money, plus_history, plus_date, mainActivity;
+    private String plus_history, plus_date, mainActivity;
+    private int plus_money;
     private Member loginMember;
     private Account loginMemberAccount;
     private DailyGroup dailyGroup;
@@ -70,12 +71,13 @@ public class NewTransactionActivity extends AppCompatActivity {
     public void plusTransaction() {
         plus_date = ((EditText) findViewById(R.id.plus_date)).getText().toString();
         plus_history = ((EditText) findViewById(R.id.plus_history)).getText().toString();
-        plus_money = ((EditText) findViewById(R.id.plus_money)).getText().toString();
+        plus_money=0;
+        plus_money = Integer.parseInt(((EditText) findViewById(R.id.plus_money)).getText().toString());
         Transaction newTransaction=new Transaction();
         newTransaction.setSince(plus_date);
         newTransaction.setTransactHistroy(plus_history);
         newTransaction.setTransactMoney(plus_money);
-        if (plus_money.isEmpty() || plus_history.isEmpty() || plus_date.isEmpty()) {
+        if (plus_money==0 || plus_history.isEmpty() || plus_date.isEmpty()) {
             showToast("빈칸 노노");
             return;
         } else {
@@ -101,10 +103,10 @@ public class NewTransactionActivity extends AppCompatActivity {
 
         Map<String, String> params = new HashMap<>();
         params.put("accountNum",newTransaction.getAccountNum());
-        params.put("DID",newTransaction.getDID());
+        params.put("DID",newTransaction.getDID()+"");
         params.put("since",newTransaction.getSince());
-        params.put("transactionHistory",newTransaction.getTransactHistroy());
-        params.put("transactionMoney",newTransaction.getTransactMoney());
+        params.put("transactHistory",newTransaction.getTransactHistroy());
+        params.put("transactMoney",newTransaction.getTransactMoney()+"");
 
         networkTask.execute(params);
     }
@@ -117,10 +119,10 @@ public class NewTransactionActivity extends AppCompatActivity {
 
         Map<String, String> params = new HashMap<>();
         params.put("accountNum",newTransaction.getAccountNum());
-        params.put("MID",newTransaction.getMID());
+        params.put("MID",newTransaction.getMID()+"");
         params.put("since",newTransaction.getSince());
-        params.put("transactionHistory",newTransaction.getTransactHistroy());
-        params.put("transactionMoney",newTransaction.getTransactMoney());
+        params.put("transactHistory",newTransaction.getTransactHistroy());
+        params.put("transactMoney",newTransaction.getTransactMoney()+"");
 
         networkTask.execute(params);
     }

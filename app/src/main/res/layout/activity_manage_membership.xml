@@ -24,7 +24,7 @@
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/membership_name"
+            android:id="@+id/new_membership_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -52,7 +52,7 @@
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/membership_money"
+            android:id="@+id/new_membership_fee"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -79,7 +79,7 @@
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/membership_notsubmit"
+            android:id="@+id/new_membership_notsubmit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -88,5 +88,12 @@
             android:textSize="20sp" />
 
     </LinearLayout>
-
+    <Button
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10sp"
+        style="@style/CustomButton"
+        android:text="이번 회비 마감"
+        android:id="@+id/btn_feeSubmitComplete"
+        />
 </RelativeLayout>

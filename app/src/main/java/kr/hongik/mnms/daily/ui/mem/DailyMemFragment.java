@@ -64,12 +64,12 @@ public class DailyMemFragment extends Fragment {
     protected void dailyFriendProcess(final DailyGroup dailyGroup) {
         String urlDailyMemList = "http://" + loginMember.getIp() + "dailyMemList";
 
-        String GID = dailyGroup.getGID();
+        int GID = dailyGroup.getGID();
         NetworkTask neworkTask = new NetworkTask();
         neworkTask.setURL(urlDailyMemList);
 
         Map<String, String> params = new HashMap<>();
-        params.put("GID", GID);
+        params.put("GID", GID+"");
 
         neworkTask.execute(params);
     }
@@ -112,11 +112,11 @@ public class DailyMemFragment extends Fragment {
 
                         Transaction transact = new Transaction();
                         transact.setAccountNum(jsonObject.getString("accountNum"));
-                        transact.setTransactID(jsonObject.getString("transactID"));
+                        transact.setTransactID(Integer.parseInt(jsonObject.getString("transactID")));
                         transact.setTransactHistroy(jsonObject.getString("transactHistory"));
-                        transact.setTransactMoney(jsonObject.getString("transactMoney"));
+                        transact.setTransactMoney(Integer.parseInt(jsonObject.getString("transactMoney")));
                         transact.setSince(jsonObject.getString("since"));
-                        transact.setMID(jsonObject.getString("MID"));
+                        transact.setMID(Integer.parseInt(jsonObject.getString("MID")));
 
                         ((TransactionAdapter) mAdapter).addItem(transact);
 

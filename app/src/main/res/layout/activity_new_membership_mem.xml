@@ -37,13 +37,6 @@
         android:orientation="horizontal"
         android:visibility="invisible">
 
-        <Button
-            android:id="@+id/btn_addMembershipMem"
-            style="@style/CustomButton"
-            android:layout_gravity="center"
-            android:text="member 추가"
-            android:textSize="20sp" />
-
         <TextView
             android:id="@+id/tv_newMembershipMemName"
             android:layout_width="wrap_content"
@@ -64,5 +57,11 @@
             android:text="친구ID"
             android:textSize="20sp" />
 
+        <Button
+            android:id="@+id/btn_addMembershipMem"
+            style="@style/CustomButton"
+            android:layout_gravity="center"
+            android:text="member 추가"
+            android:textSize="20sp" />
     </LinearLayout>
 </RelativeLayout>

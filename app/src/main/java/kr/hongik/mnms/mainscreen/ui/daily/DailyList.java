@@ -91,7 +91,7 @@ public class DailyList extends Fragment {
         networkTask.execute(params);
     }
 
-    private void outGroup(final Group outGroup) {
+    private void outGroup(DailyGroup outGroup) {
         String urlDailyOutGroup = "http://" + loginMember.getIp() + "/OutDGroup";
         urlDailyOutGroup = "http://jennyk97.dothome.co.kr/OutGroup.php";
 
@@ -102,8 +102,8 @@ public class DailyList extends Fragment {
         Map<String, String> params = new HashMap<>();
         params.put("memID", loginMember.getMemID());
         params.put("groupName", outGroup.getGroupName());
-        params.put("groupID", outGroup.getGID());
-        params.put("DID", ((DailyGroup) outGroup).getDID());
+        params.put("GID", outGroup.getGID()+"");
+        params.put("DID", outGroup.getDID()+"");
 
         networkTask.execute(params);
     }
@@ -117,7 +117,7 @@ public class DailyList extends Fragment {
         builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                outGroup(outGroup);
+                dailyOutGroup(outGroup);
             }
         });
         builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -132,7 +132,7 @@ public class DailyList extends Fragment {
     }
 
     private void intoDaily(int position) {
-        Group item = groupAdapter.getItem(position);
+        DailyGroup item = (DailyGroup) groupAdapter.getItem(position);
         Intent intent = new Intent(rootView.getContext(), DailyActivity.class);
 
         intent.putExtra("loginMember", loginMember);
@@ -160,15 +160,11 @@ public class DailyList extends Fragment {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject item = jsonArray.getJSONObject(i);
                     String groupname = item.getString("groupName");
-                    String gid = item.getString("groupID");
-                    String did = item.getString("DID");
-                    //String groupTime=item.getString("groupTime");
+                    int gid = Integer.parseInt(item.getString("GID"));
 
                     DailyGroup group = new DailyGroup();
                     group.setGroupName(groupname);
                     group.setGID(gid);
-                    group.setDID(did);
-                    //group.setTime(groupTime);
                     groupAdapter.addItem(group);
                 }
 
@@ -195,7 +191,19 @@ public class DailyList extends Fragment {
         }
     }
 
-    private void dailyOutGroup(String response){
+    private void dailyOutGroup(Group group){
+        String urlDailyOutGroup=""+loginMember.getIp()+"";
+        NetworkTask networkTask=new NetworkTask();
+        networkTask.setTAG("dailyOutGroup");
+
+        Map<String,String> params=new HashMap<>();
+        params.put("memID",loginMember.getMemID());
+        params.put("GID",group.getGID()+"");
+
+        networkTask.execute(params);
+    }
+
+    private void dailyOutGroupProcess(String response){
         try {
             JSONObject jsonObject = new JSONObject(response);
             boolean success = jsonObject.getBoolean("success");
@@ -209,7 +217,9 @@ public class DailyList extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
     }
+
 
     private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
         protected String url;
@@ -247,7 +257,7 @@ public class DailyList extends Fragment {
             if (TAG.equals("dailyGroupInfo")) {
                 dailyGroupInfoProcess(response);
             } else if (TAG.equals("dailyOutGroup")) {
-                dailyOutGroup(response);
+                dailyOutGroupProcess(response);
             }
         }
     }

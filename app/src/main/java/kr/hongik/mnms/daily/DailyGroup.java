@@ -5,13 +5,13 @@ import java.io.Serializable;
 import kr.hongik.mnms.Group;
 
 public class DailyGroup extends Group implements Serializable {
-    String DID; //daily ID
+    private int DID; //daily ID
 
-    public String getDID() {
+    public int getDID() {
         return DID;
     }
 
-    public void setDID(String DID) {
+    public void setDID(int DID) {
         this.DID = DID;
     }
 }

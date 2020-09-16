@@ -28,6 +28,13 @@ import kr.hongik.mnms.membership.MembershipGroup;
 
 
 public class MembershipMemFragment extends Fragment {
+    /*
+    * 1.납입일 다음날~다음 납입일 이전 까지 회비 제출자는 이름 옆에 (1)로 표시 (DB에서)
+    * 2.납입 마감 버튼 클릭 시
+    * 3.미납자에 대한 정보 받기
+    * 4.회장이 알아서 미납자 보고 탈퇴 시키기 (ManagerMembership.activity)
+    *   회장만이 멤버십 카운트 조정 가능
+    * */
 
     private Member loginMember;
     private MembershipGroup membershipGroup;
@@ -118,7 +125,7 @@ public class MembershipMemFragment extends Fragment {
 
         Map<String, String> params = new HashMap<>();
         params.put("memID", delMemberId);
-        params.put("MID", membershipGroup.getMID());
+        params.put("MID", membershipGroup.getMID()+"");
 
         networkTask.execute(params);
     }

@@ -4,8 +4,7 @@ import java.io.Serializable;
 
 public class Group implements Serializable {
     private String groupName; //그룹이름
-    private String GID; //그룹 ID
-    private String time; //그룹 생성 시간
+    private int GID; //그룹 ID
 
     public String getGroupName() {
         return groupName;
@@ -15,19 +14,11 @@ public class Group implements Serializable {
         this.groupName = groupName;
     }
 
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public String getGID() {
+    public int getGID() {
         return GID;
     }
 
-    public void setGID(String GID) {
+    public void setGID(int GID) {
         this.GID = GID;
     }
 }

@@ -37,6 +37,8 @@ public class NewMembershipActivity extends AppCompatActivity {
     private ArrayList<Member> selectedMember;
     private String membership_name, membership_money, membership_notsubmit;
 
+    private String accountNum="123-45-67890";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

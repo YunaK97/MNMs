@@ -44,7 +44,7 @@ public class SignInActivity extends AppCompatActivity {
     Button cameraBtn;
 
     //urls
-    private String curIp = "221.138.13.68:8090";
+    private String curIp = "172.30.1.34:8090";
 
     //TAGs
     String TAG_SUCCESS = "success", emailForm;
@@ -150,8 +150,8 @@ public class SignInActivity extends AppCompatActivity {
                 checkID = ((TextView) findViewById(R.id.textID)).getText().toString();
                 checkID.replaceAll(" ", "");
 
-                if (checkID.length() < 4 || checkID.length() > 10) {
-                    showToast("4~10 글자 입력");
+                if (checkID.length() < 4 || checkID.length() > 20) {
+                    showToast("4~20 글자 입력");
                 } else {
                     //id만 서버로 보내서 중복확인
                     checkOverlap("id");

@@ -113,9 +113,7 @@ public class MembershipList extends Fragment {
 
         Map<String, String> params = new HashMap<>();
         params.put("memID", loginMember.getMemID());
-        params.put("groupName", outGroup.getGroupName());
-        params.put("groupID", outGroup.getGID());
-        params.put("MID", ((MembershipGroup) outGroup).getMID());
+        params.put("GID", outGroup.getGID()+"");
 
         networkTask.execute(params);
     }
@@ -161,17 +159,13 @@ public class MembershipList extends Fragment {
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject item = jsonArray.getJSONObject(i);
                     String groupname = item.getString("groupName");
-                    String gid = item.getString("groupID");
-                    String mid = item.getString("MID");
+                    int gid = Integer.parseInt(item.getString("groupID"));
                     //String notSubmit=item.getString("notSubmit");
                     //String groupTime=item.getString("groupTime");
 
                     MembershipGroup group = new MembershipGroup();
                     group.setGroupName(groupname);
                     group.setGID(gid);
-                    group.setMID(mid);
-                    //group.setNotSubmit(notSubmit);
-                    //group.setTime(groupTime);
                     groupAdapter.addItem(group);
                 }
 
