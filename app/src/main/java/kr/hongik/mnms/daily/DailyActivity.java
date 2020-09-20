@@ -48,6 +48,9 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
     private Animation fab_open, fab_close;
     private boolean isFabOpen = false;
 
+    //variables
+    private int TAG_NEW_MEM=159,TAG_NEW_TRANS=160,TAG_SUCCESS=111;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_new_trans_confirm, menu);
@@ -107,13 +110,15 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         if (data == null) return;
-        if (requestCode == 123) {
-            showToast("멤버 추가 완료");
-        } else if (requestCode == 111) {
-            showToast("내역 추가 완료");
+        if (requestCode == TAG_NEW_MEM) {
+            if(resultCode==TAG_SUCCESS)
+                showToast("멤버 추가 완료");
+        } else if (requestCode == TAG_NEW_TRANS) {
+            if(resultCode==TAG_SUCCESS)
+                showToast("내역 추가 완료");
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -131,7 +136,7 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
                 intent.putExtra("dailiyGroup", dailyGroup);
                 intent.putExtra("mainActivity","daily");
 
-                startActivityForResult(intent, 111);
+                startActivityForResult(intent, TAG_NEW_TRANS);
                 break;
             case R.id.fab_daily_member:
                 toggleFab();
@@ -140,7 +145,7 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
                 intent.putExtra("membershipGroup", dailyGroup);
                 intent.putExtra("memberArrayList", memberArrayList);
 
-                startActivityForResult(intent, 123);
+                startActivityForResult(intent, TAG_NEW_MEM);
                 break;
         }
     }
@@ -195,10 +200,7 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
             dailyGroup = new DailyGroup();
             dailyGroup.setDID(Integer.parseInt(jsonObject.getString("DID")));
             dailyGroup.setGID(Integer.parseInt(jsonObject.getString("GID")));
-            dailyGroup.setGroupName("groupName");
-//            dailyGroup.setTime("2020-07-07");
-//                dailyGroup.setGroupName(jsonObject.getString("groupName"));
-//                dailyGroup.setTime(jsonObject.getString("time"));
+            dailyGroup.setGroupName(jsonObject.getString("groupName"));
 
         } catch (JSONException e) {
             e.printStackTrace();

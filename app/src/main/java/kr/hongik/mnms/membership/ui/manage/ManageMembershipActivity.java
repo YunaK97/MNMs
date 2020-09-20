@@ -1,17 +1,24 @@
 package kr.hongik.mnms.membership.ui.manage;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import kr.hongik.mnms.HttpClient;
+import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
+import kr.hongik.mnms.membership.MembershipActivity;
+import kr.hongik.mnms.membership.MembershipGroup;
 
 public class ManageMembershipActivity extends AppCompatActivity {
     //president가 membership 수정, 관리하는 곳
@@ -19,6 +26,12 @@ public class ManageMembershipActivity extends AppCompatActivity {
     // 4.회장이 멤버 탈퇴 가능
     // 회장만이 멤버십 카운트 조정 가능
     //이달의 fee마감 버튼
+
+    private Member loginMember;
+    private MembershipGroup membershipGroup;
+
+    //Layouts
+    private EditText etNewNotSubmit,etNewName,etNewFee;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -29,7 +42,7 @@ public class ManageMembershipActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.membership_manage) {
-            changeMembershipSettings();
+            changeMembershipInfo();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -39,15 +52,40 @@ public class ManageMembershipActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_membership);
+
+        Intent intent=getIntent();
+        loginMember= (Member) intent.getSerializableExtra("loginMember");
+        membershipGroup= (MembershipGroup) intent.getSerializableExtra("membershipGroup");
+
+        etNewFee=findViewById(R.id.new_membership_fee);
+        etNewName=findViewById(R.id.new_membership_name);
+        etNewNotSubmit=findViewById(R.id.new_membership_notsubmit);
+
+        etNewFee.setText(membershipGroup.getFee());
+        etNewNotSubmit.setText(membershipGroup.getNotSubmit());
+        etNewName.setText(membershipGroup.getGroupName());
     }
 
-    protected void changeMembershipSettings(){
-        String newMoney=((EditText)findViewById(R.id.new_membership_fee)).getText().toString();
-        String newName=((EditText)findViewById(R.id.new_membership_name)).getText().toString();
-        String newNotSubmit=((EditText)findViewById(R.id.new_membership_notsubmit)).getText().toString();
+    protected void changeMembershipInfo(){
+        String urlChangeMembershipInfo=""+loginMember.getIp()+"";
+        etNewFee=findViewById(R.id.new_membership_fee);
+        etNewName=findViewById(R.id.new_membership_name);
+        etNewNotSubmit=findViewById(R.id.new_membership_notsubmit);
+
+        String newFee=(etNewFee).getText().toString();
+        String newName=(etNewName).getText().toString();
+        String newNotSubmit=(etNewNotSubmit).getText().toString();
 
         NetworkTask networkTask=new NetworkTask();
         networkTask.setTAG("changeMembershipInfo");
+        networkTask.setURL(urlChangeMembershipInfo);
+
+        Map<String,String> params=new HashMap<>();
+        params.put("fee",newFee);
+        params.put("groupName",newName);
+        params.put("notSubmit",newNotSubmit);
+
+        networkTask.execute(params);
     }
 
     private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
@@ -82,7 +120,21 @@ public class ManageMembershipActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
+            if(TAG.equals("changeMembershipInfo")){
+                try{
+                    JSONObject jsonObject=new JSONObject(response);
+                    boolean success=jsonObject.getBoolean("success");
+                    if(success){
+                        Intent intent=new Intent(ManageMembershipActivity.this, MembershipActivity.class);
+                        setResult(159,intent);
+                        finish();
+                    }else{
 
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
         }
     }
 }

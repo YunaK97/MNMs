@@ -9,4 +9,8 @@
         android:title="환경설정"
         app:showAsAction="never"
         />
+    <item android:id="@+id/logout"
+        android:title="로그아웃"
+        app:showAsAction="never"
+        />
 </menu>

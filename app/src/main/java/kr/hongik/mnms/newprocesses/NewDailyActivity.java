@@ -25,6 +25,7 @@ import kr.hongik.mnms.MemberAdapter;
 import kr.hongik.mnms.R;
 
 public class NewDailyActivity extends AppCompatActivity {
+
     private Member loginMember;
 
     //layouts
@@ -207,6 +208,7 @@ public class NewDailyActivity extends AppCompatActivity {
                     String groupname = item.getString("groupName");
                     groupName.add(groupname);
                 }
+
             }
         } catch (JSONException e) {
             e.printStackTrace();

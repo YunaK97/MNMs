@@ -67,6 +67,9 @@ public class NewMembershipActivity extends AppCompatActivity {
         membership_name = ((TextView) findViewById(R.id.membership_name)).getText().toString();
         membership_money = ((TextView) findViewById(R.id.membership_money)).getText().toString();
         membership_notsubmit = ((TextView) findViewById(R.id.membership_notsubmit)).getText().toString();
+        String membershipAccountNum;
+        int div1=((int)Math.random()*10)%5,div2=((int)Math.random()*10)%5,div3=((int)Math.random()*10)%5;
+        membershipAccountNum=(int)Math.random()*div1+"-"+(int)Math.random()*div2+"-"+(int)Math.random()*div3;
         if (membership_money == null || membership_name == null || membership_notsubmit == null) {
             showToast("이러시면 안됨니다 고갱님 정보를 쓰세욥");
         } else {
@@ -99,6 +102,8 @@ public class NewMembershipActivity extends AppCompatActivity {
                 params.put("membershipName", membership_name);
                 params.put("membershipMoney", membership_money);
                 params.put("membershipNotSubmit", membership_notsubmit);
+                params.put("membershipAccountNum",membershipAccountNum);
+
                 try {
                     JSONArray jsonArray = new JSONArray();
                     for (int i = 0; i < selectedMember.size(); i++) {

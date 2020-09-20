@@ -45,6 +45,9 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
     private Animation fab_open, fab_close;
     private boolean isFabOpen = false;
 
+    //variables
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -158,7 +161,7 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
             fab_membership_trans.startAnimation(fab_close);
             fab_membership_trans.setClickable(false);
             fab_membership_member.setClickable(false);
-            if (membershipGroup.getPresident().equals(loginMember.getMemName())) {
+            if (membershipGroup.getPresident().equals(loginMember.getMemID())) {
                 fab_membership_manage.startAnimation(fab_close);
                 fab_membership_manage.setClickable(false);
             }
@@ -168,7 +171,7 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
             fab_membership_trans.startAnimation(fab_open);
             fab_membership_trans.setClickable(true);
             fab_membership_member.setClickable(true);
-            if (membershipGroup.getPresident().equals(loginMember.getMemName())) {
+            if (membershipGroup.getPresident().equals(loginMember.getMemID())) {
                 fab_membership_manage.startAnimation(fab_open);
                 fab_membership_manage.setClickable(true);
             }

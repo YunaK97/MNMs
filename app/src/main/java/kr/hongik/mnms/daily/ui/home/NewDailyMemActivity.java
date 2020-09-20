@@ -38,8 +38,8 @@ public class NewDailyMemActivity extends AppCompatActivity {
     private LinearLayout memberLayout;
 
     //variables
-    private String TAG_SUCCESS = "success";
     private String memberId;
+    private int TAG_SUCCESS=111;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -172,11 +172,11 @@ public class NewDailyMemActivity extends AppCompatActivity {
             if (TAG.equals("newMemberAdd")) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    boolean success = jsonObject.getBoolean(TAG_SUCCESS);
+                    boolean success = jsonObject.getBoolean("success");
                     if (success) {
                         showToast("멤버 추가 완료");
                         Intent intent = new Intent(NewDailyMemActivity.this, DailyActivity.class);
-                        setResult(123, intent);
+                        setResult(TAG_SUCCESS, intent);
                         finish();
                     } else {
                         showToast("멤버 추가 실패ㅠ");
@@ -188,7 +188,7 @@ public class NewDailyMemActivity extends AppCompatActivity {
             } else if (TAG.equals("newMember")) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    boolean success = jsonObject.getBoolean(TAG_SUCCESS);
+                    boolean success = jsonObject.getBoolean("success");
                     if (success) {
                         String member_name = jsonObject.getString("memName");
                         String member_id = jsonObject.getString("memID");

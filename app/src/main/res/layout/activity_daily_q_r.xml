@@ -16,5 +16,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/btn_qrScan"
         android:text="QR스캔"/>
 </RelativeLayout>

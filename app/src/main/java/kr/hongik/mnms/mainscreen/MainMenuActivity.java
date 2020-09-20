@@ -14,6 +14,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,6 +25,7 @@ import androidx.viewpager.widget.ViewPager;
 import kr.hongik.mnms.Account;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
+import kr.hongik.mnms.firstscreen.MainActivity;
 import kr.hongik.mnms.mainscreen.ui.daily.DailyList;
 import kr.hongik.mnms.mainscreen.ui.friend.FriendList;
 import kr.hongik.mnms.mainscreen.ui.membership.MembershipList;
@@ -44,6 +46,8 @@ public class MainMenuActivity extends AppCompatActivity {
     private ImageButton btn_transaction, btn_membership, btn_daily, btn_friendList;
     private ViewPager pager;
 
+    //variables
+    private int TAG_SETTINGS=321,TAG_LOGOUT=322;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -204,13 +208,24 @@ public class MainMenuActivity extends AppCompatActivity {
         if (curId == R.id.new_process) {
             newProcess();
         } else if (curId == R.id.settings) {
+            //다이얼로그로 비밀번호 입력 후 settings 들어갈 수 있슴
             Intent intent = new Intent(MainMenuActivity.this, SettingsActivity.class);
             intent.putExtra("loginMember", loginMember);
             intent.putExtra("loginMemberAccount", loginMemberAccount);
             startActivity(intent);
+        }else if(curId==R.id.logout){
+            Intent intent = new Intent(MainMenuActivity.this, MainActivity.class);
+            setResult(TAG_LOGOUT,intent);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 
     protected void showToast(String data) {
@@ -264,7 +279,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        AlertDialog.Builder dialog = new AlertDialog.Builder(MainMenuActivity.this, R.style.CustomDialog);
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(MainMenuActivity.this, R.style.CustomDialog);
 
         dialog.setTitle("종료하시겠습니까?");
         dialog.setNeutralButton("종료", new DialogInterface.OnClickListener() {
@@ -275,15 +290,8 @@ public class MainMenuActivity extends AppCompatActivity {
                 System.exit(0);
             }
         });
-        dialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        });
         dialog.create().show();
     }
-
 
     static class MyPagerAdapter extends FragmentStatePagerAdapter {
         ArrayList<Fragment> items = new ArrayList<>();

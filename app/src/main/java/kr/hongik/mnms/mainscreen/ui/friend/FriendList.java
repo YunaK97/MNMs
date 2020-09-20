@@ -130,7 +130,6 @@ public class FriendList extends Fragment {
     private void showFriendProcess(String response) {
         try {
             JSONArray jsonArray = new JSONArray(response);
-
             if (jsonArray.length() == 0) {
                 return;
             }

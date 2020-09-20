@@ -13,8 +13,18 @@ public class Member implements Serializable {
     private String accountNum;
     private boolean isChecked;
     private String ip;
+    private String phoneNumber;
 
     //친구 그룹
+
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
     public String getIp() {
         return ip;

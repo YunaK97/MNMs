@@ -105,7 +105,6 @@ public class NewFriendActivity extends AppCompatActivity {
 
     private void showRequest() {
         String urlRequestedFriend = "http://" + loginMember.getIp() + "/requestedFriend";
-        urlRequestedFriend = "http://jennyk97.dothome.co.kr/RequestedFriend.php";
 
         //나에게 들어온 요청 출력
         NetworkTask networkTask = new NetworkTask();
@@ -121,7 +120,7 @@ public class NewFriendActivity extends AppCompatActivity {
         request_accept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                requestFriend("friend");
+                friendResult("friend");
             }
         });
 
@@ -130,7 +129,7 @@ public class NewFriendActivity extends AppCompatActivity {
         request_reject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                requestFriend("reject");
+                friendResult("reject");
             }
         });
     }
@@ -150,9 +149,8 @@ public class NewFriendActivity extends AppCompatActivity {
         networkTask.execute(params);
     }
 
-    private void requestFriend(final String TAG_RESULT) {
-        String urlRequestedResult = "http://" + loginMember.getIp() + "/requestedResult";
-        urlRequestedResult = "http://jennyk97.dothome.co.kr/RequestedResult.php";
+    private void friendResult(final String TAG_RESULT) {
+        String urlRequestedResult = "http://" + loginMember.getIp() + "/friendResult";
 
         // 수락or거절 결과 전송
         selectedFriend = new ArrayList<>();
@@ -189,8 +187,7 @@ public class NewFriendActivity extends AppCompatActivity {
     }
 
     private void searchFriend(final String friend_id) {
-        String urlNewFriend = "http://" + loginMember.getIp() + "/newFriend";
-        urlNewFriend = "http://jennyk97.dothome.co.kr/NewFriend.php";
+        String urlNewFriend = "http://" + loginMember.getIp() + "/searchFriend";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlNewFriend);

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -32,7 +33,7 @@ public class MembershipMemFragment extends Fragment {
     * 1.납입일 다음날~다음 납입일 이전 까지 회비 제출자는 이름 옆에 (1)로 표시 (DB에서)
     * 2.납입 마감 버튼 클릭 시
     * 3.미납자에 대한 정보 받기
-    * 4.회장이 알아서 미납자 보고 탈퇴 시키기 (ManagerMembership.activity)
+    * 4.미납횟수 초과시 자동 탈퇴
     *   회장만이 멤버십 카운트 조정 가능
     * */
 
@@ -84,36 +85,65 @@ public class MembershipMemFragment extends Fragment {
         memberAdapter.setOnItemLongClickListener(new OnFriendItemLongClickListener() {
             @Override
             public void onItemLongClick(FriendListAdapter.ViewHolder holder, View view, int position) {
-                if (loginMember.getMemName().equals(membershipGroup.getPresident())) {
-                    //selectDelMember(position);
+                if (loginMember.getMemID().equals(membershipGroup.getPresident())) {
+                    selectDelMember(position);
                 } else {
-                    showToast("친구삭제는 회장만 가능합니다.");
+                    showToast("(나중에 없앨거임!)친구삭제는 회장만 가능합니다.");
                 }
             }
         });
     }
 
     private void selectDelMember(int position) {
-        final Member delMember = memberAdapter.getItem(position);
-        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.CustomDialog);
+        //미납횟수 변경하능하게 하기
+        //멤버 삭제 기능
+        final EditText edittext = new EditText(rootView.getContext());
+        final Member selMember = memberAdapter.getItem(position);
 
-        builder.setTitle(delMember.getMemName()).setMessage("membership에서 삭제하시겠습니까?");
+        AlertDialog.Builder builder = new AlertDialog.Builder(rootView.getContext());
+        builder.setTitle(selMember.getMemName());
+        builder.setMessage("미납횟수 변경");
+        builder.setView(edittext);
+        builder.setPositiveButton("입력",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(rootView.getContext(),edittext.getText().toString() ,Toast.LENGTH_LONG).show();
+                    }
+                });
+        builder.setNegativeButton("취소",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
 
-        builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                deleteMember(delMember.getMemID());
-            }
-        });
-        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                showToast("삭제 취소");
-            }
-        });
+                    }
+                });
+        builder.setNeutralButton("삭제",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.CustomDialog);
 
-        final AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+                        builder.setTitle(selMember.getMemName()).setMessage("membership에서 삭제하시겠습니까?");
+
+                        builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                deleteMember(selMember.getMemID());
+                            }
+                        });
+                        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                showToast("삭제 취소");
+                            }
+                        });
+
+                        final AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
+                    }
+                });
+        builder.show();
+
+
+
     }
 
     private void deleteMember(String delMemberId) {
@@ -125,6 +155,7 @@ public class MembershipMemFragment extends Fragment {
 
         Map<String, String> params = new HashMap<>();
         params.put("memID", delMemberId);
+        params.put("GID", membershipGroup.getGID()+"");
         params.put("MID", membershipGroup.getMID()+"");
 
         networkTask.execute(params);

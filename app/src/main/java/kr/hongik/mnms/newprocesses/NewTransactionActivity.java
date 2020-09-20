@@ -5,9 +5,14 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -22,16 +27,23 @@ import kr.hongik.mnms.R;
 import kr.hongik.mnms.Transaction;
 import kr.hongik.mnms.daily.DailyActivity;
 import kr.hongik.mnms.daily.DailyGroup;
+import kr.hongik.mnms.firstscreen.MainActivity;
 import kr.hongik.mnms.membership.MembershipActivity;
 import kr.hongik.mnms.membership.MembershipGroup;
 
 public class NewTransactionActivity extends AppCompatActivity {
-    private String plus_history, plus_date, mainActivity;
-    private int plus_money;
     private Member loginMember;
     private Account loginMemberAccount;
     private DailyGroup dailyGroup;
     private MembershipGroup membershipGroup;
+
+    private String plus_history, plus_date, mainActivity;
+    private int plus_money;
+    private boolean QRSend;
+    private IntentIntegrator qrScan;
+
+    //variables
+    private int TAG_SUCCESS=111;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +75,11 @@ public class NewTransactionActivity extends AppCompatActivity {
         }
         if (item.getItemId() == R.id.new_qr) {
             showToast("qr찍기 구현중!");
+            //intializing scan object
+            qrScan = new IntentIntegrator(this);
+            qrScan.setPrompt("Scanning...");
+            //qrScan.setOrientationLocked(false);
+            qrScan.initiateScan();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -127,6 +144,36 @@ public class NewTransactionActivity extends AppCompatActivity {
         networkTask.execute(params);
     }
 
+    //Getting the scan results
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            //qrcode 가 없으면
+            if (result.getContents() == null) {
+                Toast.makeText(NewTransactionActivity.this, "취소!", Toast.LENGTH_SHORT).show();
+            } else {
+                //qrcode 결과가 있으면
+                Toast.makeText(NewTransactionActivity.this, "스캔완료!", Toast.LENGTH_SHORT).show();
+                try {
+                    //data를 json으로 변환
+                    JSONObject jsonObject = new JSONObject(result.getContents());
+                    //textViewName.setText(obj.getString("name"));
+                    //textViewAddress.setText(obj.getString("address"));
+                    //돈 사용한 곳 관련 정보 가져오기
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    //Toast.makeText(MainActivity.this, result.getContents(), Toast.LENGTH_LONG).show();
+                    //textViewResult.setText(result.getContents());
+                }
+            }
+
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+
     protected void showToast(String data) {
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
@@ -171,11 +218,11 @@ public class NewTransactionActivity extends AppCompatActivity {
                     showToast("추가 완료");
                     if(mainActivity.equals("daily")){
                         Intent intent=new Intent(NewTransactionActivity.this, DailyActivity.class);
-                        setResult(111,intent);
+                        setResult(TAG_SUCCESS,intent);
                         finish();
                     }else if(mainActivity.equals("membership")){
                         Intent intent=new Intent(NewTransactionActivity.this, MembershipActivity.class);
-                        setResult(111,intent);
+                        setResult(TAG_SUCCESS,intent);
                         finish();
                     }
                 }else {

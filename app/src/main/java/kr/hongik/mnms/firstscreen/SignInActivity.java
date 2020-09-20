@@ -10,8 +10,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -34,17 +32,17 @@ import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
 
-public class SignInActivity extends AppCompatActivity {
+public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
     Account signInMemberAccount = new Account();
     Member signInMember = new Member();
 
     //layouts
     ArrayAdapter bankTypeAdapter;
     Spinner email_type, bank_type;
-    Button cameraBtn;
+    Button cameraBtn, signInBtn;
 
     //urls
-    private String curIp = "172.30.1.34:8090";
+    private String curIp = "211.186.21.254:8090";
 
     //TAGs
     String TAG_SUCCESS = "success", emailForm;
@@ -54,37 +52,7 @@ public class SignInActivity extends AppCompatActivity {
     boolean idValid = false, ssnValid = false, emailValid = false, pwValid = false;
     final static int TAKE_PICTURE = 1;
     String checkID, checkEmail;
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_sign_in, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.signComplete) {
-            if (!getUserInfo() || !getAccountInfo()) {
-                showToast("빈칸 ㄴㄴ해");
-            } else {
-                if (emailValid && idValid && ssnValid && pwValid) {
-                    registerBegin();
-                } else {
-                    if (!emailValid) {
-                        showToast("이메일 다시 확인");
-                    } else if (!ssnValid) {
-                        showToast("민증 다시 확인");
-                    } else if (!idValid) {
-                        showToast("아이디 다시 확인");
-                    } else if (!pwValid) {
-                        showToast("비밀번호 불일치");
-                    }
-                }
-            }
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+    private int TAG_SIGNIN=221,TAG_BACK=100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,99 +62,30 @@ public class SignInActivity extends AppCompatActivity {
         Intent intent = getIntent();
         //curIp = intent.getStringExtra("curIp");
 
+        signInBtn=findViewById(R.id.btn_signIn);
+        signInBtn.setOnClickListener(this);
+
         email_type = findViewById(R.id.email_type);
         final ArrayAdapter emailTypeAdapter = ArrayAdapter.createFromResource(this, R.array.email_type, R.layout.support_simple_spinner_dropdown_item);
         emailTypeAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         email_type.setAdapter(emailTypeAdapter);
-        email_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                emailForm = null;
-                emailForm = "@" + email_type.getSelectedItem().toString();
-                emailForm.replaceAll(" ", "");
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         bank_type = findViewById(R.id.bank_type);
         bankTypeAdapter = ArrayAdapter.createFromResource(this, R.array.bank_type, R.layout.support_simple_spinner_dropdown_item);
         bankTypeAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         bank_type.setAdapter(bankTypeAdapter);
-        bank_type.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
-                    signInMemberAccount.setAccountBank("AAAA");
-                } else if (position == 1) {
-                    signInMemberAccount.setAccountBank("AAAB");
-                } else if (position == 2) {
-                    signInMemberAccount.setAccountBank("AAAC");
-                } else if (position == 3) {
-                    signInMemberAccount.setAccountBank("AAAD");
-                } else if (position == 4) {
-                    signInMemberAccount.setAccountBank("AAAE");
-                } else if (position == 5) {
-                    signInMemberAccount.setAccountBank("AAAF");
-                } else if (position == 6) {
-                    signInMemberAccount.setAccountBank("AAAG");
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         //id 중복확인
-        Button overlap = findViewById(R.id.overlap);
-        overlap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checkID = ((TextView) findViewById(R.id.textID)).getText().toString();
-                checkID.replaceAll(" ", "");
-
-                if (checkID.length() < 4 || checkID.length() > 20) {
-                    showToast("4~20 글자 입력");
-                } else {
-                    //id만 서버로 보내서 중복확인
-                    checkOverlap("id");
-                }
-            }
-        });
+        Button overlap = findViewById(R.id.btn_idOverlap);
+        overlap.setOnClickListener(this);
 
         //이메일 확인
-        Button emailCheck = findViewById(R.id.emailCheck);
-        emailCheck.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String emailID = ((TextView) findViewById(R.id.textEmail)).getText().toString();
-                if (TextUtils.isEmpty(emailID)) return;
-                checkEmail = emailID + emailForm;
-                checkOverlap("email");
-
-            }
-        });
+        Button emailCheck = findViewById(R.id.btn_emailOverlap);
+        emailCheck.setOnClickListener(this);
 
         //민증확인
         cameraBtn = findViewById(R.id.identify);
-        cameraBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (v.getId() == R.id.identify) {// 카메라 앱을 여는 소스
-                    Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(cameraIntent, TAKE_PICTURE);
-                }
-                String tmpssn = "970822-10041004";
-                showToast("민증확인! (구현중)");
-                ssnValid = true;
-                signInMember.setMemSsn(tmpssn);
-            }
-        });
+        cameraBtn.setOnClickListener(this);
         // 6.0 마쉬멜로우 이상일 경우에는 권한 체크 후 권한 요청
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
@@ -211,8 +110,7 @@ public class SignInActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-        intent.putExtra("back", 321);
-        setResult(Activity.RESULT_OK, intent);
+        setResult(TAG_BACK,intent);
         finish();
         //super.onBackPressed();
     }
@@ -257,7 +155,7 @@ public class SignInActivity extends AppCompatActivity {
         params.put("memName", signInMember.getMemName());
         params.put("memEmail", signInMember.getMemEmail());
         params.put("memSsn", signInMember.getMemSsn());
-        Log.d("memSSn",signInMember.getMemSsn());
+        params.put("phoneNumber",signInMember.getPhoneNumber());
 
         params.put("accountBank", signInMemberAccount.getAccountBank());
         params.put("accountBalance", signInMemberAccount.getAccountBalance() + "");
@@ -272,9 +170,14 @@ public class SignInActivity extends AppCompatActivity {
         name.replaceAll(" ", "");
         if (TextUtils.isEmpty(name)) return false;
         else signInMember.setMemName(name);
+
         String pw = ((TextView) findViewById(R.id.textPW)).getText().toString();
         pw.replaceAll(" ", "");
         if (TextUtils.isEmpty(pw)) return false;
+        if(pw.length()<8) {
+            showToast("비밀번호 : 8~20자");
+            return false;
+        }
         String checkPw = ((TextView) findViewById(R.id.textCheckPW)).getText().toString();
         checkPw.replaceAll(" ", "");
         if (TextUtils.isEmpty(checkPw)) return false;
@@ -282,10 +185,39 @@ public class SignInActivity extends AppCompatActivity {
             pwValid = true;
             signInMember.setMemPW(pw);
         }
+
+        String phone1,phone2,phone3,phoneNumber;
+        phone1=((TextView)findViewById(R.id.tv_signIn_phone1)).getText().toString();
+        phone2=((TextView)findViewById(R.id.tv_signIn_phone2)).getText().toString();
+        phone3=((TextView)findViewById(R.id.tv_signIn_phone3)).getText().toString();
+        if(TextUtils.isEmpty(phone1) || TextUtils.isEmpty(phone2) || TextUtils.isEmpty(phone1)) return false;
+        if(phone1.length() != 3 || phone2.length() != 4 || phone3.length() != 4 ){
+            showToast("올바르지 않은 번호입니다.");
+            return false;
+        }
+        phoneNumber=phone1+phone2+phone3;
+        signInMember.setPhoneNumber(phoneNumber);
+
         return true;
     }
 
     protected boolean getAccountInfo() {
+        if (bank_type.getSelectedItemPosition() == 0) {
+            signInMemberAccount.setAccountBank("AAAA");
+        } else if (bank_type.getSelectedItemPosition() == 1) {
+            signInMemberAccount.setAccountBank("AAAB");
+        } else if (bank_type.getSelectedItemPosition() == 2) {
+            signInMemberAccount.setAccountBank("AAAC");
+        } else if (bank_type.getSelectedItemPosition() == 3) {
+            signInMemberAccount.setAccountBank("AAAD");
+        } else if (bank_type.getSelectedItemPosition() == 4) {
+            signInMemberAccount.setAccountBank("AAAE");
+        } else if (bank_type.getSelectedItemPosition() == 5) {
+            signInMemberAccount.setAccountBank("AAAF");
+        } else if (bank_type.getSelectedItemPosition() == 6) {
+            signInMemberAccount.setAccountBank("AAAG");
+        }
+
         String accountNum = ((TextView) findViewById(R.id.textAccountNum)).getText().toString();
         accountNum.replaceAll(" ", "");
         if (TextUtils.isEmpty(accountNum)) return false;
@@ -361,9 +293,7 @@ public class SignInActivity extends AppCompatActivity {
                 showToast("성공");
 
                 Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                intent.putExtra("result", true);
-                intent.putExtra("back", 0);
-                setResult(221, intent);
+                setResult(TAG_SIGNIN, intent);
                 finish();
             } else {
                 //회원가입 실패
@@ -372,6 +302,69 @@ public class SignInActivity extends AppCompatActivity {
 
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void beforeSignInCheck(){
+        if (!getUserInfo() || !getAccountInfo()) {
+            showToast("빈칸 ㄴㄴ해");
+        } else {
+            if (emailValid && idValid && ssnValid && pwValid) {
+                registerBegin();
+            } else {
+                if (!emailValid) {
+                    showToast("이메일 다시 확인");
+                } else if (!ssnValid) {
+                    showToast("민증 다시 확인");
+                } else if (!idValid) {
+                    showToast("아이디 다시 확인");
+                } else if (!pwValid) {
+                    showToast("비밀번호 불일치");
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_signIn:
+                beforeSignInCheck();
+                break;
+            case R.id.btn_idOverlap:
+                checkID = ((TextView) findViewById(R.id.textID)).getText().toString();
+                checkID.replaceAll(" ", "");
+
+                if (checkID.length() < 4 || checkID.length() > 20) {
+                    showToast("4~20 글자 입력");
+                } else {
+                    //id만 서버로 보내서 중복확인
+                    checkOverlap("id");
+                }
+                break;
+            case R.id.btn_emailOverlap:
+                String emailID = ((TextView) findViewById(R.id.textEmail)).getText().toString();
+                if (TextUtils.isEmpty(emailID)) {
+                    showToast("빈칸 노노");
+                    return;
+                }
+                emailForm = email_type.getSelectedItem().toString();
+                if (emailForm.equals("이메일")) {
+                    showToast("이메일을 화인하세요");
+                    return;
+                }
+                emailForm = "@" + emailForm;
+                checkEmail = emailID + emailForm;
+                checkOverlap("email");
+                break;
+            case R.id.identify:
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, TAKE_PICTURE);
+                String tmpssn = "970822-10041004";
+                showToast("민증확인! (구현중)");
+                ssnValid = true;
+                signInMember.setMemSsn(tmpssn);
+                break;
         }
     }
 
@@ -408,7 +401,6 @@ public class SignInActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
-            Log.d("signInResult",response);
             if (TAG.equals("idOverlap")) {
                 idOverlapProcess(response);
             } else if (TAG.equals("emailOverlap")) {

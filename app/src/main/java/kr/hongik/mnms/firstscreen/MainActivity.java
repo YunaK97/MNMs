@@ -32,10 +32,10 @@ public class MainActivity extends AppCompatActivity {
     private CheckBox autoLogin;
 
     //URLs
-    private String curIp = "172.30.1.34:8090";
+    private String curIp = "211.186.21.254:8090";
 
     //variables
-    private final static int SIGNIN = 221, LOGOUT = 333;
+    private final static int TAG_SIGNIN = 221,TAG_LOGOUT=322;
     public static SharedPreferences preferences;
     public static SharedPreferences.Editor editor;
     private String TAG_SUCCESS = "success";
@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SignInActivity.class);
                 intent.putExtra("curIp", curIp);
-                startActivityForResult(intent, SIGNIN);
+                startActivityForResult(intent, TAG_SIGNIN);
             }
         });
     }
@@ -93,27 +93,16 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (data == null) return;
-        if (requestCode == SIGNIN) {
-            boolean result = data.getBooleanExtra("result", false);
-            int back = data.getIntExtra("back", 0);
-            if (back == 0) {
-                if (result) {
-                    showToast("회원가입 성공! -> 로그인합시다");
-                } else {
-                    showToast("쏴리,,회원가입 실패ㅠ");
-                }
+        if (requestCode == TAG_LOGOUT) {
+            if(resultCode==TAG_LOGOUT) {
+                editor.clear();
+                editor.commit();
             }
-        } else if (requestCode == LOGOUT) {
-            Log.d("love", requestCode + "");
-            editor.clear();
-            editor.commit();
         }
     }
 
     private void loginProcess(final Member member) {
         String urlLogin = "http://" + curIp + "/member/login";
-        //urlLogin = "http://jennyk97.dothome.co.kr/Login.php";
 
         NetworkTask networkTask = new NetworkTask();
         Map<String, String> params = new HashMap<String, String>();
@@ -184,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
                     String accNum = jsonObject.getString("accountNum");
                     String accBalance = jsonObject.getString("accountBalance");
                     String ssn=jsonObject.getString("memSsn");
+                    String phoneNumber=jsonObject.getString("phoneNumber");
 
                     Member loginMem = new Member();
                     loginMem.setMemName(name);
@@ -193,6 +183,7 @@ public class MainActivity extends AppCompatActivity {
                     loginMem.setAccountNum(accNum);
                     loginMem.setIp(curIp);
                     loginMem.setMemSsn(ssn);
+                    loginMem.setPhoneNumber(phoneNumber);
 
                     Account memAcc = new Account();
                     memAcc.setAccountNum(accNum);
@@ -211,7 +202,7 @@ public class MainActivity extends AppCompatActivity {
                     intent.putExtra("loginMember", loginMem);
                     intent.putExtra("loginMemberAccount", memAcc);
 
-                    startActivityForResult(intent, LOGOUT);
+                    startActivityForResult(intent, TAG_LOGOUT);
                 } else {//로그인에 실패한 경우
                     showToast("로그인에 실패했습니다.");
                 }
