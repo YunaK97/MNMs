@@ -68,8 +68,9 @@ public class NewMembershipActivity extends AppCompatActivity {
         membership_money = ((TextView) findViewById(R.id.membership_money)).getText().toString();
         membership_notsubmit = ((TextView) findViewById(R.id.membership_notsubmit)).getText().toString();
         String membershipAccountNum;
-        int div1=((int)Math.random()*10)%5,div2=((int)Math.random()*10)%5,div3=((int)Math.random()*10)%5;
-        membershipAccountNum=(int)Math.random()*div1+"-"+(int)Math.random()*div2+"-"+(int)Math.random()*div3;
+        int div1=((int) (Math.random() * 10))%5,div2=((int) (Math.random() * 10))%5,div3=((int) (Math.random() * 10))%5;
+        membershipAccountNum= (int) (Math.random() * div1) +"-"+ (int) (Math.random() * div2) +"-"+ (int) (Math.random() * div3);
+        showToast("계좌 : "+membershipAccountNum);
         if (membership_money == null || membership_name == null || membership_notsubmit == null) {
             showToast("이러시면 안됨니다 고갱님 정보를 쓰세욥");
         } else {
@@ -77,6 +78,7 @@ public class NewMembershipActivity extends AppCompatActivity {
             for (String s : groupName) {
                 if (s.equals(membership_name)) {
                     overlap = false;
+                    break;
                 }
             }
             if (!overlap) {

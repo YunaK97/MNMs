@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -27,7 +26,6 @@ import kr.hongik.mnms.R;
 import kr.hongik.mnms.Transaction;
 import kr.hongik.mnms.daily.DailyActivity;
 import kr.hongik.mnms.daily.DailyGroup;
-import kr.hongik.mnms.firstscreen.MainActivity;
 import kr.hongik.mnms.membership.MembershipActivity;
 import kr.hongik.mnms.membership.MembershipGroup;
 
@@ -96,7 +94,6 @@ public class NewTransactionActivity extends AppCompatActivity {
         newTransaction.setTransactMoney(plus_money);
         if (plus_money==0 || plus_history.isEmpty() || plus_date.isEmpty()) {
             showToast("빈칸 노노");
-            return;
         } else {
             //실시간으로 팀원들이 돈 사용을 허락해야함?!?
             showToast("아직 미구현");
