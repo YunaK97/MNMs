@@ -151,6 +151,9 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void getDailyGroupInfo() {
+        //데일리 그룹 정보를 불러오기 위함
+        //데일리 그룹의 GID,DID를 전달함
+        //성공 시, 데일리 그룹과 관련된 모든 정보를 불러옴
         String urlDailyGroup = "http://" + loginMember.getIp() + "/daily/dutch";
 
         NetworkTask networkTask = new NetworkTask();
@@ -158,7 +161,8 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
         networkTask.setTAG("dailyGroup");
 
         Map<String, String> params = new HashMap<>();
-        params.put("MID", dailyGroup.getGID()+"");
+        params.put("GID", dailyGroup.getGID()+"");
+        params.put("DID", dailyGroup.getDID()+"");
 
         networkTask.execute(params);
     }
@@ -201,14 +205,30 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
             dailyGroup.setDID(Integer.parseInt(jsonObject.getString("DID")));
             dailyGroup.setGID(Integer.parseInt(jsonObject.getString("GID")));
             dailyGroup.setGroupName(jsonObject.getString("groupName"));
-
+            showMember();
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
+    private void showMember(){
+        //해당 데일리 그룹에 가입된 멤버들을 모두 가져옴
+        //GID,DID를 보냄
+        //응답으로 멤버들의 id,name을 받아와야함
+        String urlDailyGroup = "http://" + loginMember.getIp() + "/";
+
+        NetworkTask networkTask = new NetworkTask();
+        networkTask.setURL(urlDailyGroup);
+        networkTask.setTAG("dailyGroup");
+
+        Map<String, String> params = new HashMap<>();
+        params.put("GID", dailyGroup.getGID()+"");
+        params.put("DID", dailyGroup.getDID()+"");
+
+        networkTask.execute(params);
+    }
     private void showMemberProcess(String response) {
-        memberArrayList = new ArrayList<>();
+
         try {
             JSONArray jsonArray = new JSONArray(response);
             if (jsonArray.length() == 0) {

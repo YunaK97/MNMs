@@ -113,6 +113,9 @@ public class NewTransactionActivity extends AppCompatActivity {
     }
 
     private void newDailyTransaction(Transaction newTransaction){
+        //데일리그룹과 관련된 돈사용 - 멤버계좌에서 돈 사용됨!
+        //멤버정보와 transaction 정보 보냄 - 멤버의 계좌 잔액도 변동됨!
+        //트랜잭션 생성 후 성공유무 받아야함
         String urlNewDailyTransaction="http://" + loginMember.getIp() + "/newDailyTransaction";
         NetworkTask networkTask=new NetworkTask();
         networkTask.setTAG("newDailyTransaction");
@@ -129,6 +132,9 @@ public class NewTransactionActivity extends AppCompatActivity {
     }
 
     private void newMembershipTransaction(Transaction newTransaction){
+        //멤버십과 관련된 돈사용 - 멤버십계좌에서 돈 사용됨!
+        //멤버십정보와 transaction 정보 보냄 - 멤버십계좌의 잔액이 변동됨
+        //트랜잭션 생성 후 성공유무 받아야함
         String urlNewMembershipTransaction="http://" + loginMember.getIp() + "/newMembershipTransaction";
         NetworkTask networkTask=new NetworkTask();
         networkTask.setTAG("newMembershipTransaction");
@@ -216,11 +222,11 @@ public class NewTransactionActivity extends AppCompatActivity {
                 boolean success=jsonObject.getBoolean("success");
                 if(success){
                     showToast("추가 완료");
-                    if(mainActivity.equals("daily")){
+                    if(mainActivity.equals("newDailyTransaction")){
                         Intent intent=new Intent(NewTransactionActivity.this, DailyActivity.class);
                         setResult(TAG_SUCCESS,intent);
                         finish();
-                    }else if(mainActivity.equals("membership")){
+                    }else if(mainActivity.equals("newMembershipTransaction")){
                         Intent intent=new Intent(NewTransactionActivity.this, MembershipActivity.class);
                         setResult(TAG_SUCCESS,intent);
                         finish();

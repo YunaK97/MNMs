@@ -1,10 +1,14 @@
 package kr.hongik.mnms.daily.ui.mem;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,60 +30,118 @@ import kr.hongik.mnms.R;
 import kr.hongik.mnms.Transaction;
 import kr.hongik.mnms.TransactionAdapter;
 import kr.hongik.mnms.daily.DailyGroup;
+import kr.hongik.mnms.mainscreen.ui.friend.FriendListAdapter;
+import kr.hongik.mnms.mainscreen.ui.friend.OnFriendItemClickListener;
+import kr.hongik.mnms.mainscreen.ui.friend.OnFriendItemLongClickListener;
 
 
 public class DailyMemFragment extends Fragment {
-    DailyGroup dailyGroup;
-    Member loginMember;
+    private DailyGroup dailyGroup;
+    private Member loginMember;
+    private ArrayList<Member> memberArrayList;
 
     //layouts
-    private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
-    private RecyclerView.LayoutManager mLayoutManager;
+    private RecyclerView memberList;
+    private FriendListAdapter memberAdapter;
 
-    //variables
-    private List<Transaction> dataList;
+    private Context context;
+    private ViewGroup rootView;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_daily_mem, container, false);
-
-        mRecyclerView = v.findViewById(R.id.my_recycler_view);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-
-        dataList = new ArrayList<>();
-        mAdapter = new TransactionAdapter(dataList);
-        mRecyclerView.setAdapter(mAdapter);
+        context = getContext();
+        rootView = (ViewGroup) inflater.inflate(R.layout.fragment_daily_mem, container, false);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
             dailyGroup = (DailyGroup) bundle.getSerializable("dailyGroup");
             loginMember = (Member) bundle.getSerializable("loginMember");
-            dailyFriendProcess(dailyGroup);
-        }
+            memberArrayList=(ArrayList<Member>)bundle.getSerializable("memberArrayList");
 
-        return v;
+            showMember();
+        }
+        return rootView;
     }
 
-    protected void dailyFriendProcess(final DailyGroup dailyGroup) {
-        String urlDailyMemList = "http://" + loginMember.getIp() + "dailyMemList";
+    private void showMember() {
+        memberList = rootView.findViewById(R.id.RV_daily_member_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
+        memberList.setLayoutManager(layoutManager);
+        memberAdapter = new FriendListAdapter();
+        memberAdapter.setItems(memberArrayList);
+        memberList.setAdapter(memberAdapter);
 
-        int GID = dailyGroup.getGID();
-        NetworkTask neworkTask = new NetworkTask();
-        neworkTask.setURL(urlDailyMemList);
+        memberAdapter.setOnItemClickListener(new OnFriendItemClickListener() {
+            @Override
+            public void onItemClick(FriendListAdapter.ViewHolder holder, View view, int position) {
+
+            }
+        });
+        memberAdapter.setOnItemLongClickListener(new OnFriendItemLongClickListener() {
+            @Override
+            public void onItemLongClick(FriendListAdapter.ViewHolder holder, View view, int position) {
+
+            }
+        });
+    }
+
+    private void selectDelMember(int position) {
+        final EditText edittext = new EditText(rootView.getContext());
+        final Member selMember = memberAdapter.getItem(position);
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.CustomDialog);
+
+        builder.setTitle(selMember.getMemName()).setMessage("membership에서 삭제하시겠습니까?");
+
+        builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                deleteMember(selMember.getMemID());
+            }
+        });
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                showToast("삭제 취소");
+            }
+        });
+
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void deleteMember(String delMemberId) {
+        //데일리 그룹에서 멤버 삭제할것임
+        //삭제할 멤버아이디와 GID,DID를전송함
+        //그룹에서 멤버를 삭제한 후, 성공여부를 전달받아야함
+        String urlDeleteMember = "http://" + loginMember.getIp() + "/deleteMember";
+
+        NetworkTask networkTask = new NetworkTask();
+        networkTask.setURL(urlDeleteMember);
+        networkTask.setTAG("delMem");
 
         Map<String, String> params = new HashMap<>();
-        params.put("GID", GID+"");
+        params.put("memID", delMemberId);
+        params.put("GID", dailyGroup.getGID()+"");
+        params.put("DID", dailyGroup.getDID()+"");
 
-        neworkTask.execute(params);
+        networkTask.execute(params);
     }
 
-    public class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+    private void showToast(String data) {
+        Toast.makeText(context, data, Toast.LENGTH_LONG).show();
+    }
+
+    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
         protected String url;
+        protected String TAG;
 
         void setURL(String url) {
             this.url = url;
+        }
+
+        void setTAG(String TAG) {
+            this.TAG = TAG;
         }
 
         @Override
@@ -102,34 +165,11 @@ public class DailyMemFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String response) {
-            try {
-                JSONArray j = new JSONArray(response);
-                // Parse json
-                for (int i = 0; i < j.length(); i++) {
-                    try {
+            if (TAG.equals("delMem")) {
 
-                        JSONObject jsonObject = j.getJSONObject(i);
-
-                        Transaction transact = new Transaction();
-                        transact.setAccountNum(jsonObject.getString("accountNum"));
-                        transact.setTransactID(Integer.parseInt(jsonObject.getString("transactID")));
-                        transact.setTransactHistroy(jsonObject.getString("transactHistory"));
-                        transact.setTransactMoney(Integer.parseInt(jsonObject.getString("transactMoney")));
-                        transact.setSince(jsonObject.getString("since"));
-                        transact.setMID(Integer.parseInt(jsonObject.getString("MID")));
-
-                        ((TransactionAdapter) mAdapter).addItem(transact);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
-
         }
     }
+
 
 }

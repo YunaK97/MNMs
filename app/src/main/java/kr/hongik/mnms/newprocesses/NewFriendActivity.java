@@ -88,8 +88,10 @@ public class NewFriendActivity extends AppCompatActivity {
     }
 
     private void sendRequest() {
+        //검색한 id를 친구추가 요청
+        //memID,friendID 전송
+        //스프링에서 친구요청처리 해주면 됨
         String urlNewFriendAdd = "http://" + loginMember.getIp() + "/newFriendAdd";
-        urlNewFriendAdd = "http://jennyk97.dothome.co.kr/NewFriendAdd.php";
 
         //내가 상대방에게 친구추가 요청
         NetworkTask networkTask = new NetworkTask();
@@ -104,6 +106,9 @@ public class NewFriendActivity extends AppCompatActivity {
     }
 
     private void showRequest() {
+        //내가 받은 친구요청리스트들을 출력
+        //memID를 전송
+        //friend테이블에서 request 상태인것들을 모두 출력
         String urlRequestedFriend = "http://" + loginMember.getIp() + "/requestedFriend";
 
         //나에게 들어온 요청 출력
@@ -123,7 +128,6 @@ public class NewFriendActivity extends AppCompatActivity {
                 friendResult("friend");
             }
         });
-
 
         //체크박스 -> 거절버튼 -> reject
         request_reject.setOnClickListener(new View.OnClickListener() {
@@ -150,6 +154,9 @@ public class NewFriendActivity extends AppCompatActivity {
     }
 
     private void friendResult(final String TAG_RESULT) {
+        //내가 받은 요청들에 대한 응답
+        //수락의 경우 : memID와 친구들의 friendID 배열을 전송 - 둘 사이가 친구가 되도록 하면됨
+        //거절의 경우 : memID와 친구들의 friendID 배열을 전송 - friend테이블에서 friendID에 대한 컬럼들을 삭제하면 됨
         String urlRequestedResult = "http://" + loginMember.getIp() + "/friendResult";
 
         // 수락or거절 결과 전송
@@ -187,6 +194,9 @@ public class NewFriendActivity extends AppCompatActivity {
     }
 
     private void searchFriend(final String friend_id) {
+        //친구 추가할라고 ID 검색
+        //memID가 검색하려는 ID임
+        //member테이블에 해당 멤버가 있는지 확인
         String urlNewFriend = "http://" + loginMember.getIp() + "/searchFriend";
 
         NetworkTask networkTask = new NetworkTask();

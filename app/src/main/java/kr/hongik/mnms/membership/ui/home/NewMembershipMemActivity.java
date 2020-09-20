@@ -38,6 +38,7 @@ public class NewMembershipMemActivity extends AppCompatActivity {
     //variables
     private String TAG_SUCCESS = "success";
     private String memberId;
+    private int TAG_NEW_MEM=123;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +92,9 @@ public class NewMembershipMemActivity extends AppCompatActivity {
     }
 
     private void sendRequest() {
+        //검색한 멤버를 멤버십에 가입시킬것임
+        //멤버십의 GID, 가입할 멤버ID 전송함
+        //멤버가 성공적으로 멤버십에 가입됐는지 여부를 받아야함
         String urlNewMembershipMem = "http://" + loginMember.getIp() + "/newMemberAdd";
 
         //멤버 추가
@@ -106,6 +110,8 @@ public class NewMembershipMemActivity extends AppCompatActivity {
     }
 
     private void searchMember(String memID) {
+        //가입할 id를 검색, 존재하는 멤버인지 확인
+        //id가 있는지 없는지 유무를 전달받아야함
         String urlSearchMember = "http://" + loginMember.getIp() + "/newFriend";
 
         NetworkTask networkTask = new NetworkTask();
@@ -162,7 +168,7 @@ public class NewMembershipMemActivity extends AppCompatActivity {
                     if (success) {
                         showToast("멤버 추가 완료");
                         Intent intent = new Intent(NewMembershipMemActivity.this, MembershipActivity.class);
-                        setResult(123, intent);
+                        setResult(TAG_NEW_MEM, intent);
                         finish();
                     } else {
                         showToast("멤버 추가 실패ㅠ");

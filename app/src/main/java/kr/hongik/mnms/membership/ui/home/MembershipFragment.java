@@ -69,6 +69,8 @@ public class MembershipFragment extends Fragment {
     }
 
     private void setTransaction(final MembershipGroup membershipGroup) {
+        //GID,MID,멤버십 계좌번호를 전송
+        //멤버십과 관련된 모든 거래내역을 받아와야함(회비 입금,회비 사용내역)
         String urlMembershipTransaction = "http://" + loginMember.getIp() + "/membership";
 
         NetworkTask networkTask = new NetworkTask();
@@ -77,6 +79,8 @@ public class MembershipFragment extends Fragment {
 
         Map<String, String> params = new HashMap<>();
         params.put("GID", membershipGroup.getGID()+"");
+        params.put("MID",membershipGroup.getMID()+"");
+        params.put("accountNum",membershipGroup.getAccountNum());
 
         networkTask.execute(params);
     }

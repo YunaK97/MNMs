@@ -52,8 +52,6 @@ public class NewDailyMemActivity extends AppCompatActivity {
         dailyGroup = (DailyGroup) intent.getSerializableExtra("dailyGroup");
         memberArrayList = (ArrayList<Member>) intent.getSerializableExtra("memberArrayList");
 
-        showMembers(dailyGroup);
-
         //findViewById
         btnMemberSearch = findViewById(R.id.btn_newDailyMemID);
         btnAddMember = findViewById(R.id.btn_addDailyMem);
@@ -90,24 +88,12 @@ public class NewDailyMemActivity extends AppCompatActivity {
         });
     }
 
-    private void showMembers(DailyGroup dailyGroup) {
-        String urlSearchMembers = "http://" + loginMember.getIp() + "/searchMembers";
-
-        //내가 상대방에게 친구추가 요청
-        NetworkTask networkTask = new NetworkTask();
-        networkTask.setURL(urlSearchMembers);
-        networkTask.setTAG("searchMembers");
-
-        Map<String, String> params = new HashMap<>();
-        params.put("GID", dailyGroup.getGID()+"");
-
-        networkTask.execute(params);
-    }
-
     private void sendRequest() {
+        //검색한 멤버를 데일리그룹에 추가할것임
+        //GID와 가입할 memberID를 보냄
+        //응답으로 그룹에 성공적으로 가입했는지 여부를 받아야함
         String urlNewFriendAdd = "http://" + loginMember.getIp() + "/newMemberAdd";
 
-        //내가 상대방에게 친구추가 요청
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlNewFriendAdd);
         networkTask.setTAG("newMemberAdd");
@@ -120,6 +106,8 @@ public class NewDailyMemActivity extends AppCompatActivity {
     }
 
     private void searchFriend(String member_id) {
+        //데일리 그룹에 영입하고 싶은 멤버 아이디를 검색
+        //응답으로 해당아이디가 존재하는 멤버인지 확인한 후 유/무를 전달하면 됨
         String urlNewFriend = "http://" + loginMember.getIp() + "/newFriend";
 
         NetworkTask networkTask = new NetworkTask();

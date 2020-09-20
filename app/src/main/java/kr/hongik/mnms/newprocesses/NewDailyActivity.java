@@ -86,8 +86,10 @@ public class NewDailyActivity extends AppCompatActivity {
                     }
                 }
 
+                //새 데일리 생성
+                //그룹이름전송, 가입하는 멤버들전송
+                //그룹생성 성공여부를 받아야함
                 String urlNewDaily = "http://" + loginMember.getIp() + "/newDaily";
-                urlNewDaily = "http://jennyk97.dothome.co.kr/NewDaily.php";
 
                 NetworkTask networkTask = new NetworkTask();
                 networkTask.setURL(urlNewDaily);
@@ -117,14 +119,17 @@ public class NewDailyActivity extends AppCompatActivity {
 
 
     private void groupNameList() {
-        String urlDailyGroupInfo = "http://" + loginMember.getIp() + "/dailyGroupInfo";
-        urlDailyGroupInfo = "http://jennyk97.dothome.co.kr/DailygroupInfo.php";
+        //그룹이름은 중복을 허용하지않음
+        //memID를 보내면
+        //멤버가 가입한 그룹들의 이름을 받아옴
+
+        String urlGroupNameList = "http://" + loginMember.getIp() + "/dailyGroupInfo";
 
         groupName = new ArrayList<>();
 
         NetworkTask networkTask = new NetworkTask();
-        networkTask.setURL(urlDailyGroupInfo);
-        networkTask.setTAG("dailyGroupInfo");
+        networkTask.setURL(urlGroupNameList);
+        networkTask.setTAG("groupNameList");
 
         Map<String, String> params = new HashMap<>();
         params.put("memID", loginMember.getMemID());
@@ -134,8 +139,10 @@ public class NewDailyActivity extends AppCompatActivity {
 
 
     private void showFriend() {
+        //데일리 생성시 친구일경우만 초대가능
+        //멤버의 아이디를 전송함
+        //멤버의 친구들을 받아옴
         String urlShowFriend = "http://" + loginMember.getIp() + "/showFriend";
-        urlShowFriend = "http://jennyk97.dothome.co.kr/ShowFriend.php";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlShowFriend);
@@ -196,7 +203,7 @@ public class NewDailyActivity extends AppCompatActivity {
         }
     }
 
-    private void dailyGroupInfoProcess(String response) {
+    private void dailyGroupNameProcess(String response) {
         try {
             JSONArray jsonArray = new JSONArray(response);
             if (jsonArray.length() == 0) {
@@ -251,8 +258,8 @@ public class NewDailyActivity extends AppCompatActivity {
         protected void onPostExecute(String response) {
             if (TAG.equals("newDaily")) {
                 newDailyProcess(response);
-            } else if (TAG.equals("dailyGroupInfo")) {
-                dailyGroupInfoProcess(response);
+            } else if (TAG.equals("groupNameList")) {
+                dailyGroupNameProcess(response);
             } else if (TAG.equals("showFriend")) {
                 showFriendProcess(response);
             }

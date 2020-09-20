@@ -196,6 +196,8 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
 //                membershipGroup.setGroupName(jsonObject.getString("groupName"));
 //                membershipGroup.setTime(jsonObject.getString("time"));
 
+
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

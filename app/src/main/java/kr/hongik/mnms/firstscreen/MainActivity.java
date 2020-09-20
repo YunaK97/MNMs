@@ -102,6 +102,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loginProcess(final Member member) {
+        //로그인을 위해 입력한 ID,PW를 전송
+        //결과로 ID에 해당하는 멤버전체 정보와 계좌정보(계좌번호,잔액)를 받아옴
         String urlLogin = "http://" + curIp + "/member/login";
 
         NetworkTask networkTask = new NetworkTask();

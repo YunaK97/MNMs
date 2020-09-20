@@ -62,14 +62,14 @@ public class MembershipMemFragment extends Fragment {
             membershipGroup = (MembershipGroup) bundle.getSerializable("membershipGroup");
             memberArrayList = (ArrayList<Member>) bundle.get("memberArrayList");
 
-            //showMember();
+            showMember();
         }
 
         return rootView;
     }
 
     private void showMember() {
-        memberList = rootView.findViewById(R.id.member_list);
+        memberList = rootView.findViewById(R.id.RV_membership_member_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
         memberList.setLayoutManager(layoutManager);
         memberAdapter = new FriendListAdapter();
@@ -88,7 +88,7 @@ public class MembershipMemFragment extends Fragment {
                 if (loginMember.getMemID().equals(membershipGroup.getPresident())) {
                     selectDelMember(position);
                 } else {
-                    showToast("(나중에 없앨거임!)친구삭제는 회장만 가능합니다.");
+                    showToast("(이 토스트는 나중에 없앨거임!)친구삭제는 회장만 가능합니다.");
                 }
             }
         });
@@ -147,6 +147,9 @@ public class MembershipMemFragment extends Fragment {
     }
 
     private void deleteMember(String delMemberId) {
+        //멤버십에서 회원삭제할것임
+        //MID,GID,삭제할 회원memID를 보냄
+        //삭제 성공 여부를 받아야함
         String urlDeleteMember = "http://" + loginMember.getIp() + "/deleteMember";
 
         NetworkTask networkTask = new NetworkTask();

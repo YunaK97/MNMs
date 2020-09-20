@@ -90,8 +90,10 @@ public class NewMembershipActivity extends AppCompatActivity {
                     }
                 }
 
+                //멤버십 생성할거임
+                //멤버십 관련정보 모든것과 가입할 멤버들 전송
+                //멤버십 생성 후 성공했는지 받아야함
                 String urlNewMembership = "http://" + loginMember.getIp() + "/newMembership";
-                urlNewMembership = "http://jennyk97.dothome.co.kr/NewMembership.php";
 
                 NetworkTask networkTask = new NetworkTask();
                 networkTask.setURL(urlNewMembership);
@@ -125,14 +127,17 @@ public class NewMembershipActivity extends AppCompatActivity {
     }
 
     private void groupNameList() {
-        String urlMemberGroupInfo = "http://" + loginMember.getIp() + "/memberGroupInfo";
-        urlMemberGroupInfo = "http://jennyk97.dothome.co.kr/MembergroupInfo.php";
+        //그룹이름은 중복을 허용하지않음
+        //memID를 보내면
+        //멤버가 가입한 그룹들의 이름을 받아옴
+
+        String urlGroupNameList = "http://" + loginMember.getIp() + "/memberGroupInfo";
 
         groupName = new ArrayList<>();
 
         NetworkTask networkTask = new NetworkTask();
-        networkTask.setURL(urlMemberGroupInfo);
-        networkTask.setTAG("memberGroupInfo");
+        networkTask.setURL(urlGroupNameList);
+        networkTask.setTAG("groupNameList");
 
         Map<String, String> params = new HashMap<>();
         params.put("memID", loginMember.getMemID());
@@ -141,8 +146,10 @@ public class NewMembershipActivity extends AppCompatActivity {
     }
 
     protected void showFriend() {
+        //멤버십 생성시 친구일경우만 초대가능
+        //멤버의 아이디를 전송함
+        //멤버의 친구들을 받아옴
         String urlShowFriend = "http://" + loginMember.getIp() + "/showFriend";
-        urlShowFriend = "http://jennyk97.dothome.co.kr/ShowFriend.php";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlShowFriend);
@@ -152,6 +159,37 @@ public class NewMembershipActivity extends AppCompatActivity {
         params.put("memID", loginMember.getMemID());
 
         networkTask.execute(params);
+    }
+
+    private void showFriendProcess(String response){
+        try {
+            JSONArray jsonArray = new JSONArray(response);
+
+            if (jsonArray.length() == 0) {
+                showToast("친구가 없습니다.");
+                return;
+            }
+
+            friend_list = findViewById(R.id.membership_select_friend);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(NewMembershipActivity.this, LinearLayoutManager.VERTICAL, false);
+            friend_list.setLayoutManager(layoutManager);
+            memberAdapter = new MemberAdapter();
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject item = jsonArray.getJSONObject(i);
+                String friendId = item.getString("memID");
+                String friendName = item.getString("memName");
+
+                Member member = new Member();
+                member.setMemName(friendName);
+                member.setMemID(friendId);
+                memberAdapter.addItem(member);
+            }
+
+            friend_list.setAdapter(memberAdapter);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     protected void showToast(String data) {
@@ -204,7 +242,7 @@ public class NewMembershipActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            } else if (TAG.equals("memberGroupInfo")) {
+            } else if (TAG.equals("groupNameList")) {
                 try {
                     JSONArray jsonArray = new JSONArray(response);
                     if (jsonArray.length() != 0) {
@@ -219,34 +257,7 @@ public class NewMembershipActivity extends AppCompatActivity {
                     System.out.println("오류 : " + e.toString());
                 }
             } else if (TAG.equals("showFriend")) {
-                try {
-                    JSONArray jsonArray = new JSONArray(response);
-
-                    if (jsonArray.length() == 0) {
-                        showToast("친구가 없습니다.");
-                        return;
-                    }
-
-                    friend_list = findViewById(R.id.membership_select_friend);
-                    LinearLayoutManager layoutManager = new LinearLayoutManager(NewMembershipActivity.this, LinearLayoutManager.VERTICAL, false);
-                    friend_list.setLayoutManager(layoutManager);
-                    memberAdapter = new MemberAdapter();
-
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject item = jsonArray.getJSONObject(i);
-                        String friendId = item.getString("memID");
-                        String friendName = item.getString("memName");
-
-                        Member member = new Member();
-                        member.setMemName(friendName);
-                        member.setMemID(friendId);
-                        memberAdapter.addItem(member);
-                    }
-
-                    friend_list.setAdapter(memberAdapter);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                showFriendProcess(response);
             }
 
         }

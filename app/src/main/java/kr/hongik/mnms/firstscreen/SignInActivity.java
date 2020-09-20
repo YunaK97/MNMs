@@ -117,6 +117,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
 
     protected void checkOverlap(String TAG_TYPE) {
+        //중복체크하는 부분임
+        //id 중복체크 : 작성한 id전송 - 테이블에 이미 있는 id일 경우 false를 받음
+        //email 중복체크 : 작성한 email전송 - 테이블에 이미 있는 email일 경우 false를 받음
         if (TAG_TYPE.equals("id")) {
             String urlIdOverlap = "http://" + curIp + "/member/checkID";
 
@@ -143,6 +146,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     protected void registerBegin() {
+        //회원가입을 위함
+        //가입하기 위해 작성한 member의 전체 정보,account의 전체정보 전달
+        //결과로 성공/실패 여부 전송받아야함
         String urlRegister = "http://" + curIp + "/member/join";
 
         NetworkTask networkTask = new NetworkTask();

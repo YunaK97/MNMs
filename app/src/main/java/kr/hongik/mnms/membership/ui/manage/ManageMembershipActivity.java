@@ -67,7 +67,11 @@ public class ManageMembershipActivity extends AppCompatActivity {
     }
 
     protected void changeMembershipInfo(){
+        //멤버십 관련 정보 수정
+        //MID,GID와 변경된 회비,그룹이름,미납가능횟수를 전달
+        //성공적으로 멤버십정보 수정됐는지 여부를 받아야함
         String urlChangeMembershipInfo=""+loginMember.getIp()+"";
+
         etNewFee=findViewById(R.id.new_membership_fee);
         etNewName=findViewById(R.id.new_membership_name);
         etNewNotSubmit=findViewById(R.id.new_membership_notsubmit);

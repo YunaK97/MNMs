@@ -68,6 +68,9 @@ public class DailyFragment extends Fragment {
     }
 
     private void transactionProcess(final DailyGroup dailyGroup) {
+        //데일리 그룹에서 사용한 돈을 출력
+        //GID전송함
+        //응답으로 GID와 관련된 모든 transaction들이 와야함
         String urlDailyTransaction = "http://" + loginMember.getIp() + "/dailyTransaction";
 
         int GID = dailyGroup.getGID();
