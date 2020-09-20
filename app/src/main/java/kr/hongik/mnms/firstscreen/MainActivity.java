@@ -38,10 +38,11 @@ public class MainActivity extends AppCompatActivity {
     public final static int TAG_SIGNIN = 221,TAG_LOGOUT=322,TAG_MEMBEROUT=1515;
     public static int TAG_BACK=100;
 
-    public SharedPreferences preferences;
-    public SharedPreferences.Editor editor;
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
     private String TAG_SUCCESS = "success";
     private String id, pw;
+    private String tmpId,tmpPw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,12 +53,14 @@ public class MainActivity extends AppCompatActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         editor = preferences.edit();
 
-        String tmpId = preferences.getString("loginId", "");
-        String tmpPw = preferences.getString("loginPw", "");
-        if (!tmpId.equals("") && !tmpPw.equals("")) {
+        tmpId = preferences.getString("loginId", "");
+        tmpPw = preferences.getString("loginPw", "");
+        showToast(tmpId+":"+tmpPw);
+        if (tmpId.length()>4&& tmpPw.length()>8) {
             Member member = new Member();
             member.setMemID(tmpId);
             member.setMemPW(tmpPw);
+            editor.commit();
             loginProcess(member);
         }
 
@@ -198,10 +201,12 @@ public class MainActivity extends AppCompatActivity {
                     memAcc.setAccountBalance(balance);
 
                     if (autoLogin.isChecked()) {
-                        editor.putString("loginId", loginMem.getMemID());
-                        editor.putString("loginPw", loginMem.getMemID());
+                        editor=preferences.edit();
+                        editor.putString("loginId", tmpId);
+                        editor.putString("loginPw", tmpPw);
                         editor.commit();
                     } else {
+                        editor=preferences.edit();
                         editor.clear();
                         editor.commit();
                     }
@@ -211,6 +216,8 @@ public class MainActivity extends AppCompatActivity {
 
                     startActivityForResult(intent, TAG_LOGOUT);
                 } else {//로그인에 실패한 경우
+                    editor.clear();
+                    editor.commit();
                     showToast("로그인에 실패했습니다.");
                 }
             } catch (JSONException e) {
