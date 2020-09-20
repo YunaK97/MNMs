@@ -35,6 +35,7 @@ import kr.hongik.mnms.membership.MembershipGroup;
 public class MembershipList extends Fragment {
     private Member loginMember;
     private Account loginMemberAccount;
+    private Group outGroupNum;
 
     //layout
     private RecyclerView groupMembershiplList;
@@ -78,8 +79,10 @@ public class MembershipList extends Fragment {
 
 
     private void groupView() {
-        String urlMemberGroupInfo = "http://" + loginMember.getIp() + "/memberGroupInfo";
-        urlMemberGroupInfo = "http://jennyk97.dothome.co.kr/MembergroupInfo.php";
+        //회원이 가입한 멤버십 그룹을 출력
+        //memID 전송
+        //가입한 멤버십들의 GID,groupName들을 받아옴
+        String urlMemberGroupInfo = "http://" + loginMember.getIp() + "/member/membershipGroupList";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlMemberGroupInfo);
@@ -103,30 +106,31 @@ public class MembershipList extends Fragment {
         startActivity(intent);
     }
 
-    private void outGroup(final Group outGroup) {
+    private void outGroup() {
+        //현재 멤버가 멤버십그룹의 회장이 아닌경우 멤버십을 나갈 수 있다.
+        //memID,GID를 전송하면
+        //멤버십을 나간후 성공여부를 받음
         String urlOutMGroup = "http://" + loginMember.getIp() + "/outMGroup";
-        urlOutMGroup = "http://jennyk97.dothome.co.kr/OutMGroup.php";
-
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlOutMGroup);
         networkTask.setTAG("membershipOutGroup");
 
         Map<String, String> params = new HashMap<>();
         params.put("memID", loginMember.getMemID());
-        params.put("GID", outGroup.getGID()+"");
+        params.put("GID", outGroupNum.getGID()+"");
 
         networkTask.execute(params);
     }
 
     private void selectOutGroup(int position) {
-        final Group outGroupNum = groupAdapter.getItem(position);
+        outGroupNum = groupAdapter.getItem(position);
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.CustomDialog);
 
-        builder.setTitle(outGroupNum.getGroupName()).setMessage("친구목록에서 삭제하시겠습니까?");
+        builder.setTitle(outGroupNum.getGroupName()).setMessage("그룹목록에서 삭제하시겠습니까?");
         builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                outGroup(outGroupNum);
+                checkPresident(outGroupNum);
             }
         });
         builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -140,26 +144,41 @@ public class MembershipList extends Fragment {
         alertDialog.show();
     }
 
+    private void checkPresident(Group group){
+        //멤버십 회장은 멤버십을 나갈수없다
+        //GID과 멤버ID 보내면
+        //해당 GID의 president가 memID라면 false를 받아야함
+        String urlCheckPresident=""+loginMember.getIp()+"";
+
+        NetworkTask networkTask=new NetworkTask();
+        networkTask.setTAG("checkPresident");
+        networkTask.setURL(urlCheckPresident);
+
+        Map<String,String> params=new HashMap<>();
+        params.put("memID",loginMember.getMemID());
+        params.put("GID",group.getGID()+"");
+
+        networkTask.execute(params);
+
+    }
+
     private void showToast(String data) {
         Toast.makeText(context, data, Toast.LENGTH_LONG).show();
     }
 
     private void memberGroupInfoProcess(String response) {
         try {
-            JSONArray jsonArray = new JSONArray(response);
-            if (jsonArray.length() == 0) {
-                showToast("그룹이 없습니다.");
-
-            } else {
+            JSONObject jsonObject=new JSONObject(response);
+            int membershipGroupSize=Integer.parseInt(jsonObject.getString("membershipGroupSize"));
+            if (membershipGroupSize == 0) return;
                 groupMembershiplList = rootView.findViewById(R.id.main_membership_list);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
                 groupMembershiplList.setLayoutManager(layoutManager);
 
                 groupAdapter = new GroupAdapter();
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject item = jsonArray.getJSONObject(i);
-                    String groupname = item.getString("groupName");
-                    int gid = Integer.parseInt(item.getString("groupID"));
+                for (int i = 0; i < membershipGroupSize; i++) {
+                    String groupname = jsonObject.getString("groupName"+i);
+                    int gid = Integer.parseInt(jsonObject.getString("GID"+i));
                     //String notSubmit=item.getString("notSubmit");
                     //String groupTime=item.getString("groupTime");
 
@@ -185,7 +204,7 @@ public class MembershipList extends Fragment {
                         groupView();
                     }
                 });
-            }
+
         } catch (JSONException e) {
             e.printStackTrace();
             System.out.println("오류 : " + e.toString());
@@ -245,6 +264,18 @@ public class MembershipList extends Fragment {
                 memberGroupInfoProcess(response);
             } else if (TAG.equals("membershipOutGroup")) {
                 membershipOutGroupProcess(response);
+            }else if(TAG.equals("checkPresident")){
+                try {
+                    JSONObject jsonObject=new JSONObject(response);
+                    boolean success=jsonObject.getBoolean("success");
+                    if(success){
+                        showToast("회장은 나갈 수 없습니다.");
+                    }else{
+                        outGroup();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

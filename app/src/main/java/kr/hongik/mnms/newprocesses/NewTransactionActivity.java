@@ -41,7 +41,7 @@ public class NewTransactionActivity extends AppCompatActivity {
     private IntentIntegrator qrScan;
 
     //variables
-    private int TAG_SUCCESS=111;
+    public int TAG_TRANS_SUCCESS=111;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -221,11 +221,11 @@ public class NewTransactionActivity extends AppCompatActivity {
                     showToast("추가 완료");
                     if(mainActivity.equals("newDailyTransaction")){
                         Intent intent=new Intent(NewTransactionActivity.this, DailyActivity.class);
-                        setResult(TAG_SUCCESS,intent);
+                        setResult(TAG_TRANS_SUCCESS,intent);
                         finish();
                     }else if(mainActivity.equals("newMembershipTransaction")){
                         Intent intent=new Intent(NewTransactionActivity.this, MembershipActivity.class);
-                        setResult(TAG_SUCCESS,intent);
+                        setResult(TAG_TRANS_SUCCESS,intent);
                         finish();
                     }
                 }else {

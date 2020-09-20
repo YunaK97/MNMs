@@ -47,7 +47,8 @@ public class MainMenuActivity extends AppCompatActivity {
     private ViewPager pager;
 
     //variables
-    private int TAG_SETTINGS=321,TAG_LOGOUT=322;
+    public int TAG_LOGOUT=322;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,8 +79,8 @@ public class MainMenuActivity extends AppCompatActivity {
 
         MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
 
-        TransactionList transactionList = new TransactionList();
-        adapter.addItem(transactionList);
+        //TransactionList transactionList = new TransactionList();
+        //adapter.addItem(transactionList);
         MembershipList membershipList = new MembershipList();
         adapter.addItem(membershipList);
         DailyList dailyList = new DailyList();
@@ -135,7 +136,7 @@ public class MainMenuActivity extends AppCompatActivity {
         bundle.putSerializable("loginMember", loginMember);
         bundle.putSerializable("loginMemberAccount", loginMemberAccount);
 
-        transactionList.setArguments(bundle);
+        //transactionList.setArguments(bundle);
         membershipList.setArguments(bundle);
         dailyList.setArguments(bundle);
         friendList.setArguments(bundle);

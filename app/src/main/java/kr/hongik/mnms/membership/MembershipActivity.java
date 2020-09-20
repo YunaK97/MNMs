@@ -46,7 +46,7 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
     private boolean isFabOpen = false;
 
     //variables
-
+    public static int TAG_TRANS = 111, TAG_MEM = 123, TAG_MANAGE = 159;
 
 
     @Override
@@ -90,9 +90,9 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (data == null) return;
-        if (requestCode == 123) {
+        if (requestCode == TAG_MEM) {
             showToast("멤버 추가 완료");
-        } else if (requestCode == 111) {
+        } else if (requestCode == TAG_TRANS) {
             showToast("내역 추가 완료");
         }
     }
@@ -100,7 +100,6 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        int[] TAG= new int[]{111, 123, 159};
         Intent intent;
         switch (v.getId()) {
             case R.id.fab_membership_main:
@@ -112,9 +111,9 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
                 intent.putExtra("loginMember", loginMember);
                 intent.putExtra("loginMemberAccouont", loginMemberAccount);
                 intent.putExtra("membershipGroup", membershipGroup);
-                intent.putExtra("mainActivity","membership");
+                intent.putExtra("mainActivity", "membership");
 
-                startActivityForResult(intent, TAG[0]);
+                startActivityForResult(intent, TAG_TRANS);
                 break;
             case R.id.fab_membership_member:
                 toggleFab();
@@ -123,16 +122,16 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
                 intent.putExtra("membershipGroup", membershipGroup);
                 intent.putExtra("memberArrayList", memberArrayList);
 
-                startActivityForResult(intent, TAG[1]);
+                startActivityForResult(intent, TAG_MEM);
                 break;
             case R.id.fab_membership_manage:
                 toggleFab();
-                intent =new Intent(MembershipActivity.this, ManageMembershipActivity.class);
+                intent = new Intent(MembershipActivity.this, ManageMembershipActivity.class);
                 intent.putExtra("loginMember", loginMember);
                 intent.putExtra("membershipGroup", membershipGroup);
                 intent.putExtra("memberArrayList", memberArrayList);
 
-                startActivityForResult(intent, TAG[2]);
+                startActivityForResult(intent, TAG_MANAGE);
                 break;
         }
     }
@@ -146,7 +145,7 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
         networkTask.setTAG("membershipGroup");
 
         Map<String, String> params = new HashMap<>();
-        params.put("MID", membershipGroup.getGID()+"");
+        params.put("MID", membershipGroup.getGID() + "");
 
         networkTask.execute(params);
     }
@@ -195,7 +194,6 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
 //                membershipGroup.setAccountNum(jsonObject.getString("accountNum"));
 //                membershipGroup.setGroupName(jsonObject.getString("groupName"));
 //                membershipGroup.setTime(jsonObject.getString("time"));
-
 
 
         } catch (JSONException e) {

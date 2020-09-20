@@ -164,7 +164,7 @@ public class NewDailyMemActivity extends AppCompatActivity {
                     if (success) {
                         showToast("멤버 추가 완료");
                         Intent intent = new Intent(NewDailyMemActivity.this, DailyActivity.class);
-                        setResult(TAG_SUCCESS, intent);
+                        setResult(DailyActivity.TAG_SUCCESS, intent);
                         finish();
                     } else {
                         showToast("멤버 추가 실패ㅠ");

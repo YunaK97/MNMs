@@ -36,6 +36,7 @@ public class DailyList extends Fragment {
     private Member loginMember;
     private Account loginMemberAccount;
 
+    //layouts
     private RecyclerView groupMembershiplList;
     private GroupAdapter groupAdapter;
     private Context context;
@@ -78,8 +79,7 @@ public class DailyList extends Fragment {
     }
 
     private void groupView() {
-        String urlDailyGroupInfo = "http://" + loginMember.getIp() + "/dailyGroupInfo";
-        urlDailyGroupInfo = "http://jennyk97.dothome.co.kr/DailygroupInfo.php";
+        String urlDailyGroupInfo = "http://" + loginMember.getIp() + "/member/dailyGroupList";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlDailyGroupInfo);
@@ -93,7 +93,6 @@ public class DailyList extends Fragment {
 
     private void outGroup(DailyGroup outGroup) {
         String urlDailyOutGroup = "http://" + loginMember.getIp() + "/OutDGroup";
-        urlDailyOutGroup = "http://jennyk97.dothome.co.kr/OutGroup.php";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlDailyOutGroup);
@@ -147,20 +146,17 @@ public class DailyList extends Fragment {
 
     private void dailyGroupInfoProcess(String response){
         try {
-            JSONArray jsonArray = new JSONArray(response);
-            if (jsonArray.length() == 0) {
-                showToast("그룹이 없습니다.");
-
-            } else {
+            JSONObject jsonObject=new JSONObject(response);
+            int dailyGroupSize=Integer.parseInt(jsonObject.getString("dailyGroupSize"));
+            if (dailyGroupSize == 0) return;
                 groupMembershiplList = rootView.findViewById(R.id.main_daily_list);
                 LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
                 groupMembershiplList.setLayoutManager(layoutManager);
 
                 groupAdapter = new GroupAdapter();
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject item = jsonArray.getJSONObject(i);
-                    String groupname = item.getString("groupName");
-                    int gid = Integer.parseInt(item.getString("GID"));
+                for (int i = 0; i < dailyGroupSize; i++) {
+                    String groupname = jsonObject.getString("groupName"+i);
+                    int gid = Integer.parseInt(jsonObject.getString("GID"+i));
 
                     DailyGroup group = new DailyGroup();
                     group.setGroupName(groupname);
@@ -184,7 +180,6 @@ public class DailyList extends Fragment {
                         groupView();
                     }
                 });
-            }
         } catch (JSONException e) {
             e.printStackTrace();
             System.out.println("오류 : " + e.toString());
@@ -195,6 +190,7 @@ public class DailyList extends Fragment {
         String urlDailyOutGroup=""+loginMember.getIp()+"";
         NetworkTask networkTask=new NetworkTask();
         networkTask.setTAG("dailyOutGroup");
+        networkTask.setURL(urlDailyOutGroup);
 
         Map<String,String> params=new HashMap<>();
         params.put("memID",loginMember.getMemID());

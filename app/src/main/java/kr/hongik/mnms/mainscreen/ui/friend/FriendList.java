@@ -73,7 +73,7 @@ public class FriendList extends Fragment {
     }
 
     private void showFriend() {
-        String urlShowFriend = "http://" + loginMember.getIp() + "/showFriend";
+        String urlShowFriend = "http://" + loginMember.getIp() + "/member/showFriend";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlShowFriend);
@@ -129,20 +129,18 @@ public class FriendList extends Fragment {
 
     private void showFriendProcess(String response) {
         try {
-            JSONArray jsonArray = new JSONArray(response);
-            if (jsonArray.length() == 0) {
-                return;
-            }
+            JSONObject jsonObject=new JSONObject(response);
+            int showFriendSize=Integer.parseInt(jsonObject.getString("showFriendSize"));
+            if (showFriendSize==0) return;
 
             friend_list = rootView.findViewById(R.id.main_friend_list);
             LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
             friend_list.setLayoutManager(layoutManager);
             friendListAdapter = new FriendListAdapter();
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject item = jsonArray.getJSONObject(i);
-                String friendId = item.getString("memID");
-                String friendName = item.getString("memName");
+            for (int i = 0; i < showFriendSize; i++) {
+                String friendId = jsonObject.getString("memID"+i);
+                String friendName = jsonObject.getString("memName"+i);
 
                 Member member = new Member();
                 member.setMemName(friendName);

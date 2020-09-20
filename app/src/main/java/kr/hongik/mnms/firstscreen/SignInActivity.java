@@ -33,26 +33,25 @@ import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
-    Account signInMemberAccount = new Account();
-    Member signInMember = new Member();
+    private Account signInMemberAccount = new Account();
+    private Member signInMember = new Member();
 
     //layouts
-    ArrayAdapter bankTypeAdapter;
-    Spinner email_type, bank_type;
-    Button cameraBtn, signInBtn;
+    private ArrayAdapter bankTypeAdapter;
+    private Spinner email_type, bank_type;
+    private Button cameraBtn, signInBtn;
 
     //urls
     private String curIp = "211.186.21.254:8090";
 
     //TAGs
-    String TAG_SUCCESS = "success", emailForm;
-    final String TAG = getClass().getSimpleName();
+    public String TAG_SUCCESS = "success", emailForm;
+    public final String TAG = getClass().getSimpleName();
 
     //Variables
-    boolean idValid = false, ssnValid = false, emailValid = false, pwValid = false;
-    final static int TAKE_PICTURE = 1;
-    String checkID, checkEmail;
-    private int TAG_SIGNIN=221,TAG_BACK=100;
+    private boolean idValid = false, ssnValid = false, emailValid = false, pwValid = false;
+    private final static int TAKE_PICTURE = 1;
+    private String checkID, checkEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +109,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-        setResult(TAG_BACK,intent);
+        setResult(MainActivity.TAG_BACK,intent);
         finish();
         //super.onBackPressed();
     }
@@ -299,7 +298,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 showToast("성공");
 
                 Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                setResult(TAG_SIGNIN, intent);
+                setResult(MainActivity.TAG_SIGNIN, intent);
                 finish();
             } else {
                 //회원가입 실패

@@ -49,7 +49,7 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
     private boolean isFabOpen = false;
 
     //variables
-    private int TAG_NEW_MEM=159,TAG_NEW_TRANS=160,TAG_SUCCESS=111;
+    public static int TAG_NEW_MEM=159,TAG_NEW_TRANS=160,TAG_SUCCESS=111;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -38,8 +38,6 @@ public class NewMembershipMemActivity extends AppCompatActivity {
     //variables
     private String TAG_SUCCESS = "success";
     private String memberId;
-    private int TAG_NEW_MEM=123;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -168,7 +166,7 @@ public class NewMembershipMemActivity extends AppCompatActivity {
                     if (success) {
                         showToast("멤버 추가 완료");
                         Intent intent = new Intent(NewMembershipMemActivity.this, MembershipActivity.class);
-                        setResult(TAG_NEW_MEM, intent);
+                        setResult(MembershipActivity.TAG_MEM, intent);
                         finish();
                     } else {
                         showToast("멤버 추가 실패ㅠ");

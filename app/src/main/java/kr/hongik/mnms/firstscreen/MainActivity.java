@@ -35,9 +35,11 @@ public class MainActivity extends AppCompatActivity {
     private String curIp = "211.186.21.254:8090";
 
     //variables
-    private final static int TAG_SIGNIN = 221,TAG_LOGOUT=322;
-    public static SharedPreferences preferences;
-    public static SharedPreferences.Editor editor;
+    public final static int TAG_SIGNIN = 221,TAG_LOGOUT=322,TAG_MEMBEROUT=1515;
+    public static int TAG_BACK=100;
+
+    public SharedPreferences preferences;
+    public SharedPreferences.Editor editor;
     private String TAG_SUCCESS = "success";
     private String id, pw;
 
@@ -93,6 +95,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==TAG_MEMBEROUT){
+            showToast("멤버탈퇴! 처음으로 돌아갑니다.");
+        }
         if (requestCode == TAG_LOGOUT) {
             if(resultCode==TAG_LOGOUT) {
                 editor.clear();

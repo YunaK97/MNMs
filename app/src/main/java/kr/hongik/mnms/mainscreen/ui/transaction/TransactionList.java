@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -96,26 +95,22 @@ public class TransactionList extends Fragment {
 
     private void listTransactionProcess(String response) {
         try {
-            JSONArray j = new JSONArray(response);
-            // Parse json
-            for (int i = 0; i < j.length(); i++) {
-                try {
+            JSONObject jsonObject = new JSONObject(response);
+            int transactionSize = Integer.parseInt(jsonObject.getString("transactionSize"));
+            if (transactionSize == 0) return;
 
-                    JSONObject jsonObject = j.getJSONObject(i);
+            for (int i=0;i<transactionSize;i++) {
+                Transaction transact = new Transaction();
+                transact.setAccountNum(jsonObject.getString("accountNum" + i));
+                transact.setTransactID(Integer.parseInt(jsonObject.getString("transactID"+i)));
+                transact.setTransactHistroy(jsonObject.getString("transactHistory"+i));
+                transact.setTransactMoney(Integer.parseInt(jsonObject.getString("transactMoney"+i)));
+                transact.setSince(jsonObject.getString("since"+i));
+                transact.setMID(Integer.parseInt(jsonObject.getString("MID"+i)));
 
-                    Transaction transact = new Transaction();
-                    transact.setAccountNum(jsonObject.getString("accountNum"));
-                    transact.setTransactID(Integer.parseInt(jsonObject.getString("transactID")));
-                    transact.setTransactHistroy(jsonObject.getString("transactHistory"));
-                    transact.setTransactMoney(Integer.parseInt(jsonObject.getString("transactMoney")));
-                    transact.setSince(jsonObject.getString("since"));
-                    transact.setMID(Integer.parseInt(jsonObject.getString("MID")));
+                transactionAdapter.addItem(transact);
 
-                    transactionAdapter.addItem(transact);
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                transactionList.setAdapter(transactionAdapter);
             }
 
         } catch (JSONException e) {
