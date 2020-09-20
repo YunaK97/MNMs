@@ -42,7 +42,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
     //layouts
     private ActionBar actionBar;
-    private TextView textName, accName, textBalance;
+    private TextView textName, accName;
     private ImageButton btn_transaction, btn_membership, btn_daily, btn_friendList;
     private ViewPager pager;
 
@@ -58,7 +58,6 @@ public class MainMenuActivity extends AppCompatActivity {
         pager = findViewById(R.id.pager);
         textName = findViewById(R.id.textName);
         accName = findViewById(R.id.accName);
-        textBalance = findViewById(R.id.textBalance);
         btn_transaction = findViewById(R.id.btn_transaction);
         btn_membership = findViewById(R.id.btn_membership);
         btn_daily = findViewById(R.id.btn_daily);
@@ -79,8 +78,8 @@ public class MainMenuActivity extends AppCompatActivity {
 
         MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
 
-        //TransactionList transactionList = new TransactionList();
-        //adapter.addItem(transactionList);
+        TransactionList transactionList = new TransactionList();
+        adapter.addItem(transactionList);
         MembershipList membershipList = new MembershipList();
         adapter.addItem(membershipList);
         DailyList dailyList = new DailyList();
@@ -136,7 +135,7 @@ public class MainMenuActivity extends AppCompatActivity {
         bundle.putSerializable("loginMember", loginMember);
         bundle.putSerializable("loginMemberAccount", loginMemberAccount);
 
-        //transactionList.setArguments(bundle);
+        transactionList.setArguments(bundle);
         membershipList.setArguments(bundle);
         dailyList.setArguments(bundle);
         friendList.setArguments(bundle);
@@ -146,8 +145,6 @@ public class MainMenuActivity extends AppCompatActivity {
         textName.setText(text);
         text = "계좌번호 : " + loginMemberAccount.getAccountNum();
         accName.setText(text);
-        text = "잔액 : " + loginMemberAccount.getAccountBalance();
-        textBalance.setText(text);
 
         btn_transaction.setOnClickListener(new View.OnClickListener() {
             @Override

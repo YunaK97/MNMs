@@ -138,7 +138,6 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
 
     private void getMembershipGroupInfo() {
         String urlMembershipGroup = "http://" + loginMember.getIp() + "/fee";
-        urlMembershipGroup = "http://jennyk97.dothome.co.kr/MembershipGroup.php";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlMembershipGroup);

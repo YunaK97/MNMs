@@ -26,10 +26,17 @@
         android:layout_alignParentRight="true"
         android:textSize="20sp"
         />
+    <TextView
+        style="@style/CustomTextView"
+        android:layout_below="@+id/TV_transList_trans"
+        android:id="@+id/TV_accountBalance"
+        android:text="ex)1000원"
+        android:layout_alignParentRight="true"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/main_transaction_list"
-        android:layout_below="@+id/TV_transList_trans"
+        android:layout_below="@+id/TV_accountBalance"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

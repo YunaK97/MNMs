@@ -178,7 +178,6 @@ public class MainActivity extends AppCompatActivity {
                 if (success) {
                     String name = jsonObject.getString("memName");
                     String id = jsonObject.getString("memID");
-                    String pw = jsonObject.getString("memPW");
                     String email = jsonObject.getString("memEmail");
                     String accNum = jsonObject.getString("accountNum");
                     String accBalance = jsonObject.getString("accountBalance");
@@ -188,7 +187,6 @@ public class MainActivity extends AppCompatActivity {
                     Member loginMem = new Member();
                     loginMem.setMemName(name);
                     loginMem.setMemID(id);
-                    loginMem.setMemPW(pw);
                     loginMem.setMemEmail(email);
                     loginMem.setAccountNum(accNum);
                     loginMem.setIp(curIp);

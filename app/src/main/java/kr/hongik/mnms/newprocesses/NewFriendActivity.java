@@ -140,7 +140,6 @@ public class NewFriendActivity extends AppCompatActivity {
 
     private void deleteFriend(final String delMemberId) {
         String urlDeleteFriend = "http://" + loginMember.getIp() + "/deleteFriend";
-        urlDeleteFriend = "http://jennyk97.dothome.co.kr/DeleteFriend.php";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlDeleteFriend);

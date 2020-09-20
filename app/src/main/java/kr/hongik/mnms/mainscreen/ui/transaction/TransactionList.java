@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -81,7 +82,7 @@ public class TransactionList extends Fragment {
     }
 
     private void showTransaction(Transaction transaction) {
-        String urlListTransaction = "http://" + loginMember.getIp() + "/listTransaction";
+        String urlListTransaction = "http://" + loginMember.getIp() + "/member/listTransaction";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlListTransaction);
@@ -96,10 +97,12 @@ public class TransactionList extends Fragment {
     private void listTransactionProcess(String response) {
         try {
             JSONObject jsonObject = new JSONObject(response);
-            int transactionSize = Integer.parseInt(jsonObject.getString("transactionSize"));
-            if (transactionSize == 0) return;
-
-            for (int i=0;i<transactionSize;i++) {
+            loginMemberAccount.setAccountBalance(Integer.parseInt(jsonObject.getString("accountBalance")));
+            TextView TV_accountBalance=rootView.findViewById(R.id.TV_accountBalance);
+            TV_accountBalance.setText(jsonObject.getString("accountBalance"));
+            int listTransactionSize = Integer.parseInt(jsonObject.getString("listTransactionSize"));
+            if (listTransactionSize == 0) return;
+            for (int i=0;i<listTransactionSize;i++) {
                 Transaction transact = new Transaction();
                 transact.setAccountNum(jsonObject.getString("accountNum" + i));
                 transact.setTransactID(Integer.parseInt(jsonObject.getString("transactID"+i)));
@@ -107,6 +110,7 @@ public class TransactionList extends Fragment {
                 transact.setTransactMoney(Integer.parseInt(jsonObject.getString("transactMoney"+i)));
                 transact.setSince(jsonObject.getString("since"+i));
                 transact.setMID(Integer.parseInt(jsonObject.getString("MID"+i)));
+                transact.setDID(Integer.parseInt(jsonObject.getString("DID"+i)));
 
                 transactionAdapter.addItem(transact);
 

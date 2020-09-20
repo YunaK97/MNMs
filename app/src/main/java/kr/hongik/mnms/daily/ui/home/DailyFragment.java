@@ -3,12 +3,9 @@ package kr.hongik.mnms.daily.ui.home;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,12 +38,13 @@ public class DailyFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
 
     //variables
+    private ViewGroup rootView;
     private List<Transaction> dataList;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_daily, container, false);
+        rootView = (ViewGroup) inflater.inflate(R.layout.fragment_daily, container, false);
 
-        mRecyclerView = v.findViewById(R.id.recyclerView_daily);
+        mRecyclerView = rootView.findViewById(R.id.recyclerView_daily);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -64,21 +62,21 @@ public class DailyFragment extends Fragment {
             transactionProcess(dailyGroup);
         }
 
-        return v;
+        return rootView;
     }
 
     private void transactionProcess(final DailyGroup dailyGroup) {
         //데일리 그룹에서 사용한 돈을 출력
         //GID전송함
         //응답으로 GID와 관련된 모든 transaction들이 와야함
-        String urlDailyTransaction = "http://" + loginMember.getIp() + "/dailyTransaction";
+        String urlDailyTransaction = "http://" + loginMember.getIp() + "/daily";
 
         int GID = dailyGroup.getGID();
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlDailyTransaction);
         Map<String, String> params = new HashMap<>();
-        params.put("GID", GID+"");
+        params.put("GID", GID + "");
 
         networkTask.execute(params);
 
@@ -112,27 +110,29 @@ public class DailyFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String response) {
+            mRecyclerView = rootView.findViewById(R.id.recyclerView_daily);
+            mRecyclerView.setHasFixedSize(true);
+            mLayoutManager = new LinearLayoutManager(getActivity());
+            mRecyclerView.setLayoutManager(mLayoutManager);
+
+            dataList = new ArrayList<>();
+            mAdapter = new TransactionAdapter(dataList);
+            mRecyclerView.setAdapter(mAdapter);
+
             try {
-                JSONArray j = new JSONArray(response);
-                // Parse json
-                for (int i = 0; i < j.length(); i++) {
-                    try {
+                JSONObject jsonObject = new JSONObject(response);
+                int dailyTransactionSize = Integer.parseInt(jsonObject.getString("dailyTransactionSize"));
+                for (int i = 0; i < dailyTransactionSize; i++) {
 
-                        JSONObject jsonObject = j.getJSONObject(i);
+                    Transaction transact = new Transaction();
+                    transact.setAccountNum(jsonObject.getString("accountNum"+i));
+                    transact.setTransactID(Integer.parseInt(jsonObject.getString("transactID"+i)));
+                    transact.setTransactHistroy(jsonObject.getString("transactHistory"+i));
+                    transact.setTransactMoney(Integer.parseInt(jsonObject.getString("transactMoney"+i)));
+                    transact.setSince(jsonObject.getString("since"+i));
+                    transact.setMID(Integer.parseInt(jsonObject.getString("DID"+i)));
 
-                        Transaction transact = new Transaction();
-                        transact.setAccountNum(jsonObject.getString("accountNum"));
-                        transact.setTransactID(Integer.parseInt(jsonObject.getString("transactID")));
-                        transact.setTransactHistroy(jsonObject.getString("transactHistory"));
-                        transact.setTransactMoney(Integer.parseInt(jsonObject.getString("transactMoney")));
-                        transact.setSince(jsonObject.getString("since"));
-                        transact.setMID(Integer.parseInt(jsonObject.getString("MID")));
-
-                        ((TransactionAdapter) mAdapter).addItem(transact);
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+                    ((TransactionAdapter) mAdapter).addItem(transact);
                 }
 
             } catch (JSONException e) {
