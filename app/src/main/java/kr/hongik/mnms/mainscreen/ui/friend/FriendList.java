@@ -109,7 +109,7 @@ public class FriendList extends Fragment {
     }
 
     private void deleteFriend(final String delMemberId) {
-        String urlDeleteFriend = "http://" + loginMember.getIp() + "/deleteFriend";
+        String urlDeleteFriend = "http://" + loginMember.getIp() + "/member/deleteFriend";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlDeleteFriend);

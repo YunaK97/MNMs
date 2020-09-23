@@ -3,6 +3,7 @@ package kr.hongik.mnms.newprocesses;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -66,7 +67,7 @@ public class NewDailyActivity extends AppCompatActivity {
     private void NewDaily() {
         selectedMember = new ArrayList<>();
         daily_name = ((TextView) findViewById(R.id.daily_name)).getText().toString();
-        if (daily_name == null) {
+        if (TextUtils.isEmpty(daily_name)) {
             showToast("이러시면 안됨니다 고갱님 정보를 쓰세욥");
         } else {
             boolean overlap = true;
@@ -89,7 +90,7 @@ public class NewDailyActivity extends AppCompatActivity {
                 //새 데일리 생성
                 //그룹이름전송, 가입하는 멤버들전송
                 //그룹생성 성공여부를 받아야함
-                String urlNewDaily = "http://" + loginMember.getIp() + "/newDaily";
+                String urlNewDaily = "http://" + loginMember.getIp() + "/daily/new";
 
                 NetworkTask networkTask = new NetworkTask();
                 networkTask.setURL(urlNewDaily);
@@ -97,6 +98,7 @@ public class NewDailyActivity extends AppCompatActivity {
 
                 Map<String, String> params = new HashMap<>();
                 params.put("dailyName", daily_name);
+                params.put("memID",loginMember.getMemID());
                 try {
                     JSONArray jsonArray = new JSONArray();
                     for (int i = 0; i < selectedMember.size(); i++) {
@@ -107,7 +109,8 @@ public class NewDailyActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject();
                     jsonObject.put("memID", loginMember.getMemID());
                     jsonArray.put(jsonObject);
-                    params.put("friend", jsonArray.toString());
+
+                    params.put("memList", jsonArray.toString());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -123,7 +126,7 @@ public class NewDailyActivity extends AppCompatActivity {
         //memID를 보내면
         //멤버가 가입한 그룹들의 이름을 받아옴
 
-        String urlGroupNameList = "http://" + loginMember.getIp() + "/dailyGroupInfo";
+        String urlGroupNameList = "http://" + loginMember.getIp() + "/member/dailyGroupList";
 
         groupName = new ArrayList<>();
 
@@ -142,7 +145,7 @@ public class NewDailyActivity extends AppCompatActivity {
         //데일리 생성시 친구일경우만 초대가능
         //멤버의 아이디를 전송함
         //멤버의 친구들을 받아옴
-        String urlShowFriend = "http://" + loginMember.getIp() + "/showFriend";
+        String urlShowFriend = "http://" + loginMember.getIp() + "/member/showFriend";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlShowFriend);
@@ -163,6 +166,7 @@ public class NewDailyActivity extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(response);
             boolean success = jsonObject.getBoolean(TAG_SUCCESS);
             if (success) {
+
                 finish();
             } else {
                 showToast("daily생성 실패!");
@@ -174,22 +178,17 @@ public class NewDailyActivity extends AppCompatActivity {
 
     private void showFriendProcess(String response) {
         try {
-            JSONArray jsonArray = new JSONArray(response);
-
-            if (jsonArray.length() == 0) {
-                showToast("친구가 없습니다.");
-                return;
-            }
+            JSONObject jsonObject = new JSONObject(response);
+            int showFriendSize = Integer.parseInt(jsonObject.getString("showFriendSize"));
 
             friend_list = findViewById(R.id.daily_selected_friend);
             LinearLayoutManager layoutManager = new LinearLayoutManager(NewDailyActivity.this, LinearLayoutManager.VERTICAL, false);
             friend_list.setLayoutManager(layoutManager);
             memberAdapter = new MemberAdapter();
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject item = jsonArray.getJSONObject(i);
-                String friendId = item.getString("memID");
-                String friendName = item.getString("memName");
+            for (int i = 0; i < showFriendSize; i++) {
+                String friendId = jsonObject.getString("memID"+i);
+                String friendName = jsonObject.getString("memName"+i);
 
                 Member member = new Member();
                 member.setMemName(friendName);
@@ -205,18 +204,14 @@ public class NewDailyActivity extends AppCompatActivity {
 
     private void dailyGroupNameProcess(String response) {
         try {
-            JSONArray jsonArray = new JSONArray(response);
-            if (jsonArray.length() == 0) {
-                showToast("그룹이 없습니다.");
-
-            } else {
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject item = jsonArray.getJSONObject(i);
-                    String groupname = item.getString("groupName");
-                    groupName.add(groupname);
-                }
-
+            JSONObject jsonObject=new JSONObject(response);
+            int dailyGroupSize=jsonObject.getInt("dailyGroupSize");
+            for (int i = 0; i < dailyGroupSize; i++) {
+                String groupname = jsonObject.getString("groupName"+i);
+                groupName.add(groupname);
             }
+
+
         } catch (JSONException e) {
             e.printStackTrace();
             System.out.println("오류 : " + e.toString());

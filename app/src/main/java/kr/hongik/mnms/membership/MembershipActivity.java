@@ -137,14 +137,14 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void getMembershipGroupInfo() {
-        String urlMembershipGroup = "http://" + loginMember.getIp() + "/fee";
+        String urlMembershipGroup = "http://" + loginMember.getIp() + "/membership/info";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlMembershipGroup);
         networkTask.setTAG("membershipGroup");
 
         Map<String, String> params = new HashMap<>();
-        params.put("MID", membershipGroup.getGID() + "");
+        params.put("GID", membershipGroup.getGID() + "");
 
         networkTask.execute(params);
     }
@@ -188,30 +188,38 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
             membershipGroup.setFee(jsonObject.getInt("fee"));
             membershipGroup.setNotSubmit(jsonObject.getInt("notSubmit"));
             membershipGroup.setGID(Integer.parseInt(jsonObject.getString("GID")));
-            membershipGroup.setAccountNum("12-123456789");
-            membershipGroup.setGroupName("groupName");
-//                membershipGroup.setAccountNum(jsonObject.getString("accountNum"));
-//                membershipGroup.setGroupName(jsonObject.getString("groupName"));
-//                membershipGroup.setTime(jsonObject.getString("time"));
+            membershipGroup.setAccountNum(jsonObject.getString("accountNum"));
+            membershipGroup.setGroupName(jsonObject.getString("groupName"));
 
+            showMembershipMem();
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
+    private void showMembershipMem(){
+        String urlShowMembershipMem="http://"+loginMember.getIp()+"/membership/member";
+
+        NetworkTask networkTask=new NetworkTask();
+        networkTask.setTAG("showMembershipMem");
+        networkTask.setURL(urlShowMembershipMem);
+
+        Map<String,String> params=new HashMap<>();
+        params.put("GID",membershipGroup.getGID()+"");
+
+        networkTask.execute(params);
+    }
+
     private void showMemberProcess(String response) {
         memberArrayList = new ArrayList<>();
         try {
-            JSONArray jsonArray = new JSONArray(response);
-            if (jsonArray.length() == 0) {
-                return;
-            }
+            JSONObject jsonObject=new JSONObject(response);
+            int membershipMemberSize = Integer.parseInt(jsonObject.getString("membershipMemberSize"));
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject item = jsonArray.getJSONObject(i);
-                String friendId = item.getString("memID");
-                String friendName = item.getString("memName");
+            for (int i = 0; i < membershipMemberSize; i++) {
+                String friendId = jsonObject.getString("memID");
+                String friendName = jsonObject.getString("memName");
 
                 Member member = new Member();
                 member.setMemName(friendName);
@@ -268,7 +276,7 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
         protected void onPostExecute(String response) {
             if (TAG.equals("membershipGroup")) {
                 membershipGroupProcess(response);
-            } else if (TAG.equals("showMem")) {
+            } else if (TAG.equals("showMembershipMem")) {
                 showMemberProcess(response);
             }
         }

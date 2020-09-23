@@ -34,6 +34,7 @@ import kr.hongik.mnms.mainscreen.ui.transaction.TransactionList;
 import kr.hongik.mnms.newprocesses.NewDailyActivity;
 import kr.hongik.mnms.newprocesses.NewFriendActivity;
 import kr.hongik.mnms.newprocesses.NewMembershipActivity;
+import kr.hongik.mnms.newprocesses.NewTransactionActivity;
 
 
 public class MainMenuActivity extends AppCompatActivity {
@@ -214,7 +215,8 @@ public class MainMenuActivity extends AppCompatActivity {
         }else if(curId==R.id.logout){
             Intent intent = new Intent(MainMenuActivity.this, MainActivity.class);
             setResult(TAG_LOGOUT,intent);
-            startActivity(intent);
+            finish();
+            //startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -233,10 +235,10 @@ public class MainMenuActivity extends AppCompatActivity {
     public void newProcess() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomDialog);
 
-        final String[] items = {"membership", "daily", "friend"};
+        final String[] items = {"membership", "daily", "friend","transaction"};
         final Integer[] selected = {0};
 
-        builder.setTitle("리스트 추가 예제");
+        builder.setTitle("추가 하실 것은?");
 
         builder.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
             @Override
@@ -252,14 +254,50 @@ public class MainMenuActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), NewMembershipActivity.class);
                     intent.putExtra("loginMember", loginMember);
                     startActivity(intent);
+                    pager.setCurrentItem(1);
                 } else if (selected[0] == 1) {
                     Intent intent = new Intent(getApplicationContext(), NewDailyActivity.class);
                     intent.putExtra("loginMember", loginMember);
                     startActivity(intent);
+                    pager.setCurrentItem(2);
                 } else if (selected[0] == 2) {
                     Intent intent = new Intent(getApplicationContext(), NewFriendActivity.class);
                     intent.putExtra("loginMember", loginMember);
                     startActivity(intent);
+                    pager.setCurrentItem(3);
+                }else if(selected[0]==3){
+                    AlertDialog.Builder builder2 = new AlertDialog.Builder(MainMenuActivity.this, R.style.CustomDialog);
+
+                    final String[] items = {"membership", "daily"};
+                    final Integer[] selected = {0};
+
+                    builder2.setTitle("종류");
+
+                    builder2.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos) {
+                            selected[0] = pos;
+                        }
+                    });
+
+                    builder2.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int pos) {
+                            Intent intent = new Intent(getApplicationContext(), NewTransactionActivity.class);
+                            if (selected[0] == 0) {
+                                intent.putExtra("loginMember", loginMember);
+                                intent.putExtra("loginMemberAccount",loginMemberAccount);
+                                intent.putExtra("mainActivity","membership");
+                                startActivity(intent);
+                            } else if (selected[0] == 1) {
+                                intent.putExtra("loginMember", loginMember);
+                                intent.putExtra("loginMember",loginMemberAccount);
+
+                                startActivity(intent);
+                            }
+                        }
+                    });
+
                 }
             }
         });

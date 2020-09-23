@@ -45,29 +45,28 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     private String TAG_SUCCESS = "success";
-    private String id, pw;
-    private String tmpId,tmpPw;
+    private String loginID,loginPW;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Button login, signin;
-
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        preferences = getSharedPreferences("mnms",MODE_PRIVATE);
         editor = preferences.edit();
 
-        tmpId=""; tmpPw="";
+        loginID=""; loginPW="";
 
-        tmpId = preferences.getString("loginId", "1");
-        tmpPw = preferences.getString("loginPw", "1");
-        showToast(tmpId+":"+tmpPw);
-        if (!tmpId.equals("1")) {
+        loginID = preferences.getString("loginId", "1");
+        loginPW = preferences.getString("loginPw", "1");
+        //showToast(loginID+ ":"+loginPW);
+        if (!loginID.equals("1")  && !loginPW.equals("1")) {
             Member member = new Member();
-            member.setMemID(tmpId);
-            member.setMemPW(tmpPw);
+            member.setMemID(loginID);
+            member.setMemPW(loginPW);
+
             loginProcess(member);
         }
+
+        Button login, signin;
 
         setContentView(R.layout.activity_main);
         login = findViewById(R.id.login);
@@ -76,15 +75,14 @@ public class MainActivity extends AppCompatActivity {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                autoLogin = findViewById(R.id.autoLogin);
-                id = ((TextView) findViewById(R.id.id)).getText().toString();
-                pw = ((TextView) findViewById(R.id.pw)).getText().toString();
-                if (TextUtils.isEmpty(id) || TextUtils.isEmpty(pw)) {
+                loginID = ((TextView) findViewById(R.id.id)).getText().toString();
+                loginPW = ((TextView) findViewById(R.id.pw)).getText().toString();
+                if (TextUtils.isEmpty(loginID) || TextUtils.isEmpty(loginPW)) {
                     showToast("빈칸 노노!");
                 } else {
                     Member member = new Member();
-                    member.setMemID(id);
-                    member.setMemPW(pw);
+                    member.setMemID(loginID);
+                    member.setMemPW(loginPW);
                     loginProcess(member);
                 }
             }
@@ -99,39 +97,22 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void tmpset(){
-        tmpMember.setPhoneNumber("01012345678");
-        tmpMember.setAccountNum("12-235-4568-789");
-        tmpMember.setMemName("김아무개");
-        tmpMember.setMemID("tmpKim1");
-        tmpMember.setIp("localhost:8090");
-        tmpMember.setMemEmail("tmpemail1@naver.com");
-        tmpMember.setMemSsn("970909-1234567");
-
-        tmpMemberAccount.setAccountBalance(123456789);
-        tmpMemberAccount.setAccountBank("AAAC");
-        tmpMemberAccount.setAccountNum("12-235-4568-789");
-
-        Intent intent=new Intent(MainActivity.this,MainMenuActivity.class);
-        intent.putExtra("tmpMember",tmpMember);
-        intent.putExtra("tmpMemberAccount",tmpMemberAccount);
-
-        startActivityForResult(intent, TAG_LOGOUT);
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==TAG_MEMBEROUT){
             showToast("멤버탈퇴! 처음으로 돌아갑니다.");
         }
         if (requestCode == TAG_LOGOUT) {
             if(resultCode==TAG_LOGOUT) {
+                preferences = getSharedPreferences("mnms",MODE_PRIVATE);
                 editor.clear();
+                loginID="";loginPW="";
+
                 editor.commit();
             }
         }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void loginProcess(final Member member) {
@@ -218,12 +199,16 @@ public class MainActivity extends AppCompatActivity {
                     Account memAcc = new Account();
                     memAcc.setAccountNum(accNum);
 
+                    autoLogin = findViewById(R.id.autoLogin);
+
                     if (autoLogin.isChecked()) {
-                        editor.putString("loginId", tmpId);
-                        editor.putString("loginPw", tmpPw);
+                        editor.putString("loginId", loginID);
+                        editor.putString("loginPw", loginPW);
                         editor.commit();
                     } else {
+                        preferences = getSharedPreferences("mnms",MODE_PRIVATE);
                         editor.clear();
+                        loginID="";loginPW="";
                         editor.commit();
                     }
                     Intent intent = new Intent(MainActivity.this, MainMenuActivity.class);
@@ -232,7 +217,9 @@ public class MainActivity extends AppCompatActivity {
 
                     startActivityForResult(intent, TAG_LOGOUT);
                 } else {//로그인에 실패한 경우
+                    preferences = getSharedPreferences("mnms",MODE_PRIVATE);
                     editor.clear();
+                    loginID="";loginPW="";
                     editor.commit();
                     showToast("로그인에 실패했습니다.");
                 }

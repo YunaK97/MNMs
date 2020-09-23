@@ -110,7 +110,8 @@ public class MembershipList extends Fragment {
         //현재 멤버가 멤버십그룹의 회장이 아닌경우 멤버십을 나갈 수 있다.
         //memID,GID를 전송하면
         //멤버십을 나간후 성공여부를 받음
-        String urlOutMGroup = "http://" + loginMember.getIp() + "/outMGroup";
+        String urlOutMGroup = "http://" + loginMember.getIp() + "/membership/deleteMembershipgroup";
+        showToast(urlOutMGroup);
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlOutMGroup);
         networkTask.setTAG("membershipOutGroup");
@@ -130,7 +131,8 @@ public class MembershipList extends Fragment {
         builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                checkPresident(outGroupNum);
+                //checkPresident(outGroupNum);
+                outGroup();
             }
         });
         builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -148,7 +150,7 @@ public class MembershipList extends Fragment {
         //멤버십 회장은 멤버십을 나갈수없다
         //GID과 멤버ID 보내면
         //해당 GID의 president가 memID라면 false를 받아야함
-        String urlCheckPresident=""+loginMember.getIp()+"";
+        String urlCheckPresident="http://"+loginMember.getIp()+"";
 
         NetworkTask networkTask=new NetworkTask();
         networkTask.setTAG("checkPresident");

@@ -91,23 +91,6 @@ public class DailyList extends Fragment {
         networkTask.execute(params);
     }
 
-    private void outGroup(DailyGroup outGroup) {
-        String urlDailyOutGroup = "http://" + loginMember.getIp() + "/OutDGroup";
-
-        NetworkTask networkTask = new NetworkTask();
-        networkTask.setURL(urlDailyOutGroup);
-        networkTask.setTAG("dailyOutGroup");
-
-        Map<String, String> params = new HashMap<>();
-        params.put("memID", loginMember.getMemID());
-        params.put("groupName", outGroup.getGroupName());
-        params.put("GID", outGroup.getGID()+"");
-        params.put("DID", outGroup.getDID()+"");
-
-        networkTask.execute(params);
-    }
-
-
     private void selectOutGroup(int position) {
         final Group outGroup = groupAdapter.getItem(position);
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.CustomDialog);
@@ -187,7 +170,7 @@ public class DailyList extends Fragment {
     }
 
     private void dailyOutGroup(Group group){
-        String urlDailyOutGroup=""+loginMember.getIp()+"";
+        String urlDailyOutGroup = "http://" + loginMember.getIp() + "/daily/deleteDailygroup";
         NetworkTask networkTask=new NetworkTask();
         networkTask.setTAG("dailyOutGroup");
         networkTask.setURL(urlDailyOutGroup);
