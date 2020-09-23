@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
 
         loginID = preferences.getString("loginId", "1");
         loginPW = preferences.getString("loginPw", "1");
-        //showToast(loginID+ ":"+loginPW);
         if (!loginID.equals("1")  && !loginPW.equals("1")) {
             Member member = new Member();
             member.setMemID(loginID);
