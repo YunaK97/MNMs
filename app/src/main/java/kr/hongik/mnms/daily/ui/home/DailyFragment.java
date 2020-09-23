@@ -27,6 +27,35 @@ import kr.hongik.mnms.TransactionAdapter;
 import kr.hongik.mnms.daily.DailyGroup;
 
 public class DailyFragment extends Fragment {
+    /*
+    * 더치페이
+    * mon1. 내가 쓴돈
+    * mon2. 남이 쓴돈
+    * 총합 : monAll=mon1+mon2
+    * 인당 : monOne=monAll/n;
+    * if(mon1>monOne){
+    *   내가 받을 돈 : mon1-monOne
+    * }else if(mon1<monOne){
+    *   내가 줄 돈 : monOne-mon1
+    * }else (mon1==monOne){
+    *   0
+    * }
+    *
+    * 여러명일땐?
+    * - 올림,내림,반올림 단위 설정(10원~10000원)
+    * - 리셋버튼 필요 (이전까지의 기록 없애고 지금부터 더치페이 계산)
+    * 각자 쓴돈 합치기
+    * mon1~monN
+    * 총 사용한돈 monAll=mon1+...+monN;
+    * 인당 : monOne=monAll/n;
+    * mon1~monN까지 줄세우기 오름차순
+    * mon1이 monN에게 돈 주기 (monOne-mon1 만큼)
+    * monOne과 본인이 쓴 돈 차이가 0이 될때까지 돈 주기
+    * monOne보다 많이 쓴사람도 돈 차이가 0이 될때까지 돈 받기
+    *
+    *
+    *
+    * */
 
     private DailyGroup dailyGroup;
     private Member loginMember;

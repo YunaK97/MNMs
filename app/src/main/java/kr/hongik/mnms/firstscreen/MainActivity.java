@@ -28,6 +28,10 @@ import kr.hongik.mnms.R;
 import kr.hongik.mnms.mainscreen.MainMenuActivity;
 
 public class MainActivity extends AppCompatActivity {
+    //tmp data
+    private Member tmpMember;
+    private Account tmpMemberAccount;
+
     //layouts
     private CheckBox autoLogin;
 
@@ -53,25 +57,26 @@ public class MainActivity extends AppCompatActivity {
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
         editor = preferences.edit();
 
-        tmpId = preferences.getString("loginId", "");
-        tmpPw = preferences.getString("loginPw", "");
+        tmpId=""; tmpPw="";
+
+        tmpId = preferences.getString("loginId", "1");
+        tmpPw = preferences.getString("loginPw", "1");
         showToast(tmpId+":"+tmpPw);
-        if (tmpId.length()>4&& tmpPw.length()>8) {
+        if (!tmpId.equals("1")) {
             Member member = new Member();
             member.setMemID(tmpId);
             member.setMemPW(tmpPw);
-            editor.commit();
             loginProcess(member);
         }
 
         setContentView(R.layout.activity_main);
         login = findViewById(R.id.login);
         signin = findViewById(R.id.signin);
-        autoLogin = findViewById(R.id.autoLogin);
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                autoLogin = findViewById(R.id.autoLogin);
                 id = ((TextView) findViewById(R.id.id)).getText().toString();
                 pw = ((TextView) findViewById(R.id.pw)).getText().toString();
                 if (TextUtils.isEmpty(id) || TextUtils.isEmpty(pw)) {
@@ -93,6 +98,26 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, TAG_SIGNIN);
             }
         });
+    }
+
+    private void tmpset(){
+        tmpMember.setPhoneNumber("01012345678");
+        tmpMember.setAccountNum("12-235-4568-789");
+        tmpMember.setMemName("김아무개");
+        tmpMember.setMemID("tmpKim1");
+        tmpMember.setIp("localhost:8090");
+        tmpMember.setMemEmail("tmpemail1@naver.com");
+        tmpMember.setMemSsn("970909-1234567");
+
+        tmpMemberAccount.setAccountBalance(123456789);
+        tmpMemberAccount.setAccountBank("AAAC");
+        tmpMemberAccount.setAccountNum("12-235-4568-789");
+
+        Intent intent=new Intent(MainActivity.this,MainMenuActivity.class);
+        intent.putExtra("tmpMember",tmpMember);
+        intent.putExtra("tmpMemberAccount",tmpMemberAccount);
+
+        startActivityForResult(intent, TAG_LOGOUT);
     }
 
     @Override
@@ -180,8 +205,6 @@ public class MainActivity extends AppCompatActivity {
                     String id = jsonObject.getString("memID");
                     String email = jsonObject.getString("memEmail");
                     String accNum = jsonObject.getString("accountNum");
-                    String accBalance = jsonObject.getString("accountBalance");
-                    String ssn=jsonObject.getString("memSsn");
                     String phoneNumber=jsonObject.getString("phoneNumber");
 
                     Member loginMem = new Member();
@@ -190,21 +213,16 @@ public class MainActivity extends AppCompatActivity {
                     loginMem.setMemEmail(email);
                     loginMem.setAccountNum(accNum);
                     loginMem.setIp(curIp);
-                    loginMem.setMemSsn(ssn);
                     loginMem.setPhoneNumber(phoneNumber);
 
                     Account memAcc = new Account();
                     memAcc.setAccountNum(accNum);
-                    int balance = Integer.parseInt(accBalance);
-                    memAcc.setAccountBalance(balance);
 
                     if (autoLogin.isChecked()) {
-                        editor=preferences.edit();
                         editor.putString("loginId", tmpId);
                         editor.putString("loginPw", tmpPw);
                         editor.commit();
                     } else {
-                        editor=preferences.edit();
                         editor.clear();
                         editor.commit();
                     }
