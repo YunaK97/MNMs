@@ -236,7 +236,7 @@ public class MainMenuActivity extends AppCompatActivity {
     public void newProcess() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomDialog);
 
-        final String[] items = {"membership", "daily", "friend","transaction"};
+        final String[] items = {"membership", "daily", "friend"};
         final Integer[] selected = {0};
 
         builder.setTitle("추가 하실 것은?");
@@ -266,48 +266,6 @@ public class MainMenuActivity extends AppCompatActivity {
                     intent.putExtra("loginMember", loginMember);
                     startActivity(intent);
                     pager.setCurrentItem(3);
-                }else if(selected[0]==3){
-                    AlertDialog.Builder builder2 = new AlertDialog.Builder(MainMenuActivity.this, R.style.CustomDialog);
-
-                    final String[] items = {"회비내기", "내가내는데일리"};
-                    final Integer[] selected = {0};
-
-                    builder2.setTitle("종류");
-
-                    builder2.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int pos) {
-                            selected[0] = pos;
-                        }
-                    });
-
-                    builder2.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int pos) {
-                            Intent intent = new Intent(getApplicationContext(), NewTransactionActivity.class);
-                            if (selected[0] == 0) {
-                                intent.putExtra("loginMember", loginMember);
-                                intent.putExtra("loginMemberAccount",loginMemberAccount);
-                                startActivity(intent);
-                            } else if (selected[0] == 1) {
-                                intent.putExtra("loginMember", loginMember);
-                                intent.putExtra("loginMember",loginMemberAccount);
-
-                                startActivity(intent);
-                            }
-                        }
-                    });
-
-                    final AlertDialog alertDialog2 = builder2.create();
-                    alertDialog2.setOnShowListener(new DialogInterface.OnShowListener() {
-                        @Override
-                        public void onShow(DialogInterface arg0) {
-                            alertDialog2.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED);
-                            alertDialog2.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED);
-                        }
-                    });
-                    alertDialog2.show();
-
                 }
             }
         });

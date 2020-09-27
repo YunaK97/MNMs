@@ -175,18 +175,12 @@ public class NewFriendActivity extends AppCompatActivity {
         params.put("memID", loginMember.getMemID());
         params.put("TAG", TAG_RESULT);
         params.put("friendSize",selectedFriend.size()+"");
-        try {
-            JSONArray jsonArray = new JSONArray();
-            for (int i = 0; i < selectedFriend.size(); i++) {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("memID"+i, selectedFriend.get(i).getMemID());
-                jsonArray.put(jsonObject);
-            }
-            params.put("members", jsonArray.toString());
-            networkTask.execute(params);
-        } catch (Exception e) {
-            e.printStackTrace();
+
+        for (int i = 0; i < selectedFriend.size(); i++) {
+            params.put("memID" + i, selectedFriend.get(i).getMemID());
         }
+
+        networkTask.execute(params);
     }
 
     private void searchFriend(final String friend_id) {
