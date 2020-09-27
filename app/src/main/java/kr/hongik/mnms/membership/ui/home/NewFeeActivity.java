@@ -10,5 +10,6 @@ public class NewFeeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_fee);
+
     }
 }
