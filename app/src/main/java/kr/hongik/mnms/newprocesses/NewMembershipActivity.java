@@ -147,7 +147,7 @@ public class NewMembershipActivity extends AppCompatActivity {
         //멤버십 생성시 친구일경우만 초대가능
         //멤버의 아이디를 전송함
         //멤버의 친구들을 받아옴
-        String urlShowFriend = "http://" + loginMember.getIp() + "/showFriend";
+        String urlShowFriend = "http://" + loginMember.getIp() + "/member/showFriend";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlShowFriend);

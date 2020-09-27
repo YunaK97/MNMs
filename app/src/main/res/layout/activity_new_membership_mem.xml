@@ -12,15 +12,15 @@
         android:id="@+id/TV_membershipFriend"
         android:layout_alignParentLeft="true"
         android:textSize="30sp"
+        android:gravity="top"
         />
     <androidx.recyclerview.widget.RecyclerView
+        android:scrollbars="vertical"
         android:layout_below="@+id/TV_membershipFriend"
+        android:layout_above="@+id/btn_newMembershipMem"
         android:id="@+id/RV_newMembershipMem"
-        android:layout_alignParentTop="true"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
-
+        android:layout_height="match_parent" />
     <Button
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"

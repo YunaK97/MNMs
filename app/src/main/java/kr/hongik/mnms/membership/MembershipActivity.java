@@ -1,6 +1,8 @@
 package kr.hongik.mnms.membership;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 import kr.hongik.mnms.Account;
@@ -30,6 +33,9 @@ import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.membership.ui.home.NewMembershipMemActivity;
 import kr.hongik.mnms.membership.ui.manage.ManageMembershipActivity;
+import kr.hongik.mnms.newprocesses.NewDailyActivity;
+import kr.hongik.mnms.newprocesses.NewFriendActivity;
+import kr.hongik.mnms.newprocesses.NewMembershipActivity;
 import kr.hongik.mnms.newprocesses.NewTransactionActivity;
 
 public class MembershipActivity extends AppCompatActivity implements View.OnClickListener {
@@ -107,13 +113,13 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.fab_membership_trans:
                 toggleFab();
-                intent = new Intent(MembershipActivity.this, NewTransactionActivity.class);
-                intent.putExtra("loginMember", loginMember);
-                intent.putExtra("loginMemberAccouont", loginMemberAccount);
-                intent.putExtra("membershipGroup", membershipGroup);
-                intent.putExtra("mainActivity", "membership");
+                if(membershipGroup.getPresident().equals(loginMember.getMemName())){
+                    //돈사용 or 회비납입 중 선택
+                    selectTransType();
+                }else{
+                    //회비납입만 가능
+                }
 
-                startActivityForResult(intent, TAG_TRANS);
                 break;
             case R.id.fab_membership_member:
                 toggleFab();
@@ -134,6 +140,52 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
                 startActivityForResult(intent, TAG_MANAGE);
                 break;
         }
+    }
+
+    private void selectTransType(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomDialog);
+
+        final String[] items = {"회비내기", "돈사용"};
+        final Integer[] selected = {0};
+
+        builder.setTitle("추가 하실 것은?");
+
+        builder.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int pos) {
+                selected[0] = pos;
+            }
+        });
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int pos) {
+                if (selected[0] == 0) {
+                    //돈사용
+                    Intent intent = new Intent(MembershipActivity.this, NewTransactionActivity.class);
+                    intent.putExtra("loginMember", loginMember);
+                    intent.putExtra("loginMemberAccouont", loginMemberAccount);
+                    intent.putExtra("membershipGroup", membershipGroup);
+                    intent.putExtra("mainActivity", "membership");
+
+                    startActivityForResult(intent, TAG_TRANS);
+
+                } else if (selected[0] == 1) {
+                    //회비납입
+
+                }
+            }
+        });
+
+        final AlertDialog alertDialog = builder.create();
+        alertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface arg0) {
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED);
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED);
+            }
+        });
+        alertDialog.show();
     }
 
     private void getMembershipGroupInfo() {
