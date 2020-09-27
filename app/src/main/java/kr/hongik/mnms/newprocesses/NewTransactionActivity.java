@@ -30,6 +30,16 @@ import kr.hongik.mnms.membership.MembershipActivity;
 import kr.hongik.mnms.membership.MembershipGroup;
 
 public class NewTransactionActivity extends AppCompatActivity {
+    /*
+    * 사용한 날짜 (캘린더), 시간, 사용한 돈, 사용한 곳, 뭐 관련사용(MID,GID) - 그룹 이름들 불러오기
+    *
+    *
+    *
+    *
+    *
+    *
+    * */
+
     private Member loginMember;
     private Account loginMemberAccount;
     private DailyGroup dailyGroup;

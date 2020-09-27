@@ -90,7 +90,31 @@
             android:padding="1dp"
             android:text="ex) 베스킨 라빈스"
             android:textSize="20sp" />
-
     </LinearLayout>
+    <LinearLayout
+        android:layout_centerHorizontal="true"
+        android:paddingRight="10sp"
+        android:paddingLeft="10sp"
+        android:layout_below="@id/LL_newTrans3"
+        android:id="@+id/LL_newTrans4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="1dp"
+            android:text="종류"
+            android:textSize="20sp" />
+
+        <Spinner
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+    </LinearLayout>
+
 
 </RelativeLayout>

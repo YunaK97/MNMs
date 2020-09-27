@@ -91,7 +91,8 @@ public class NewFriendActivity extends AppCompatActivity {
         //검색한 id를 친구추가 요청
         //memID,friendID 전송
         //스프링에서 친구요청처리 해주면 됨
-        String urlNewFriendAdd = "http://" + loginMember.getIp() + "/newFriendAdd";
+        //이미 친구사이인경우 처리해주기
+        String urlNewFriendAdd = "http://" + loginMember.getIp() + "/member/friendAdd";
 
         //내가 상대방에게 친구추가 요청
         NetworkTask networkTask = new NetworkTask();
@@ -109,7 +110,7 @@ public class NewFriendActivity extends AppCompatActivity {
         //내가 받은 친구요청리스트들을 출력
         //memID를 전송
         //friend테이블에서 request 상태인것들을 모두 출력
-        String urlRequestedFriend = "http://" + loginMember.getIp() + "/requestedFriend";
+        String urlRequestedFriend = "http://" + loginMember.getIp() + "/member/requestedFriend";
 
         //나에게 들어온 요청 출력
         NetworkTask networkTask = new NetworkTask();
@@ -156,7 +157,7 @@ public class NewFriendActivity extends AppCompatActivity {
         //내가 받은 요청들에 대한 응답
         //수락의 경우 : memID와 친구들의 friendID 배열을 전송 - 둘 사이가 친구가 되도록 하면됨
         //거절의 경우 : memID와 친구들의 friendID 배열을 전송 - friend테이블에서 friendID에 대한 컬럼들을 삭제하면 됨
-        String urlRequestedResult = "http://" + loginMember.getIp() + "/friendResult";
+        String urlRequestedResult = "http://" + loginMember.getIp() + "/member/friendResult";
 
         // 수락or거절 결과 전송
         selectedFriend = new ArrayList<>();
@@ -173,19 +174,15 @@ public class NewFriendActivity extends AppCompatActivity {
         Map<String, String> params = new HashMap<>();
         params.put("memID", loginMember.getMemID());
         params.put("TAG", TAG_RESULT);
+        params.put("friendSize",selectedFriend.size()+"");
         try {
             JSONArray jsonArray = new JSONArray();
             for (int i = 0; i < selectedFriend.size(); i++) {
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("memID", selectedFriend.get(i).getMemID());
-                jsonObject.put("memName", selectedFriend.get(i).getMemName());
+                jsonObject.put("memID"+i, selectedFriend.get(i).getMemID());
                 jsonArray.put(jsonObject);
             }
-            if (TAG_RESULT.equals("reject")) {
-                params.put("reject", jsonArray.toString());
-            } else {
-                params.put("friend", jsonArray.toString());
-            }
+            params.put("members", jsonArray.toString());
             networkTask.execute(params);
         } catch (Exception e) {
             e.printStackTrace();
@@ -196,7 +193,7 @@ public class NewFriendActivity extends AppCompatActivity {
         //친구 추가할라고 ID 검색
         //memID가 검색하려는 ID임
         //member테이블에 해당 멤버가 있는지 확인
-        String urlNewFriend = "http://" + loginMember.getIp() + "/searchFriend";
+        String urlNewFriend = "http://" + loginMember.getIp() + "/member/newFriend";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlNewFriend);
@@ -265,24 +262,18 @@ public class NewFriendActivity extends AppCompatActivity {
                 }
             } else if (TAG.equals("requestedFriend")) {
                 try {
-                    JSONArray jsonArray = new JSONArray(response);
-                    if (jsonArray.length() == 0) {
-                        request_friend_layout.setVisibility(View.GONE);
-                        return;
-                    }
+                    JSONObject jsonObject=new JSONObject(response);
 
                     linearLayout.setVisibility(View.GONE);
-
                     requestedRecyclerView = findViewById(R.id.request_friend);
                     LinearLayoutManager layoutManager = new LinearLayoutManager(NewFriendActivity.this, LinearLayoutManager.VERTICAL, false);
                     requestedRecyclerView.setLayoutManager(layoutManager);
                     memberAdapter = new MemberAdapter();
 
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-                        String friendName = jsonObject.getString("memName");
-                        String friendID = jsonObject.getString("memID");
+                    int showFriendSize=jsonObject.getInt("showFriendSize");
+                    for (int i = 0; i < showFriendSize; i++) {
+                        String friendName = jsonObject.getString("memName"+i);
+                        String friendID = jsonObject.getString("memID"+i);
 
                         Member member = new Member();
                         member.setMemName(friendName);

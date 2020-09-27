@@ -46,6 +46,15 @@
         android:layout_gravity="center"
         android:dropDownWidth="250dp" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView_daily_members"
+        android:background="@drawable/sidecustom"
+        android:scrollbars="vertical"
+        android:layout_below="@id/btn_dailyQR"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
     <TextView
         android:id="@+id/tv_send"
         android:layout_width="match_parent"

@@ -19,7 +19,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/tv_settings"
         android:id="@+id/RL_settings_info"
-        android:visibility="visible"
+        android:visibility="gone"
         >
         <LinearLayout
             android:layout_alignParentTop="true"
@@ -59,6 +59,7 @@
             <EditText
                 style="@style/CustomTextView"
                 android:id="@+id/tv_pw"
+                android:inputType="textPassword"
                 android:layout_weight="1"
                 android:layout_width="match_parent"
                 android:background="@drawable/sidecustom_round"
@@ -82,16 +83,75 @@
                 style="@style/CustomTextView"
                 android:id="@+id/tv_pw_check"
                 android:layout_width="match_parent"
+                android:inputType="textPassword"
                 android:layout_weight="1"
                 android:background="@drawable/sidecustom_round"
                 />
         </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/LL_settings_phone"
+            android:gravity="center"
+            android:layout_below="@id/LL_settings_pw_check"
+            >
+            <TextView
+                style="@style/CustomTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:text="핸드폰 번호" />
+
+            <EditText
+                android:background="@drawable/sidecustom_round"
+                style="@style/CustomTextView"
+                android:id="@+id/tv_signIn_phone1"
+                android:layout_width="match_parent"
+                android:inputType="number"
+                android:layout_weight="1"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:textSize="30sp"
+                android:layout_marginLeft="3sp"
+                android:layout_marginRight="3sp"
+                />
+            <EditText
+                style="@style/CustomTextView"
+                android:id="@+id/tv_signIn_phone2"
+                android:layout_weight="1"
+                android:inputType="number"
+                android:layout_width="match_parent"
+                android:background="@drawable/sidecustom_round"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:layout_marginLeft="3sp"
+                android:layout_marginRight="3sp"
+                android:textSize="30sp"
+                />
+            <EditText
+                style="@style/CustomTextView"
+                android:id="@+id/tv_signIn_phone3"
+                android:layout_weight="1"
+                android:inputType="number"
+                android:layout_width="match_parent"
+                android:background="@drawable/sidecustom_round"
+                />
+        </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:id="@+id/LL_settings_email"
-            android:layout_below="@id/LL_settings_pw_check"
+            android:layout_below="@id/LL_settings_phone"
             >
             <TextView
                 style="@style/CustomTextView"
@@ -133,7 +193,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:id="@+id/LL_settings_first"
-        android:visibility="gone"
+        android:visibility="visible"
         >
         <TextView
             style="@style/CustomTextView"
@@ -144,9 +204,16 @@
         <EditText
             style="@style/CustomTextView"
             android:id="@+id/tv_first_pw"
+            android:inputType="textPassword"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:background="@drawable/sidecustom_round"
+            />
+        <Button
+            android:id="@+id/btn_settings_pw"
+            style="@style/CustomButton"
+            android:text="비밀번호 확인"
+            android:textSize="15sp"
             />
     </LinearLayout>
 

@@ -105,18 +105,16 @@ public class NewMembershipActivity extends AppCompatActivity {
                 params.put("membershipMoney", membership_money);
                 params.put("membershipNotSubmit", membership_notsubmit);
                 params.put("membershipAccountNum",membershipAccountNum);
+                params.put("membersSize",selectedMember.size()+"");
 
                 try {
                     JSONArray jsonArray = new JSONArray();
                     for (int i = 0; i < selectedMember.size(); i++) {
                         JSONObject jsonObject = new JSONObject();
-                        jsonObject.put("memID", selectedMember.get(i).getMemID());
+                        jsonObject.put("memID"+i, selectedMember.get(i).getMemID());
                         jsonArray.put(jsonObject);
                     }
-                    JSONObject jsonObject=new JSONObject();
-                    jsonObject.put("memID",loginMember.getMemID());
-                    jsonArray.put(jsonObject);
-                    params.put("friend", jsonArray.toString());
+                    params.put("members", jsonArray.toString());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -161,24 +159,19 @@ public class NewMembershipActivity extends AppCompatActivity {
         networkTask.execute(params);
     }
 
-    private void showFriendProcess(String response){
+    private void showFriendProcess(String response) {
         try {
-            JSONArray jsonArray = new JSONArray(response);
-
-            if (jsonArray.length() == 0) {
-                showToast("친구가 없습니다.");
-                return;
-            }
+            JSONObject jsonObject = new JSONObject(response);
+            int showFriendSize = Integer.parseInt(jsonObject.getString("showFriendSize"));
 
             friend_list = findViewById(R.id.membership_select_friend);
             LinearLayoutManager layoutManager = new LinearLayoutManager(NewMembershipActivity.this, LinearLayoutManager.VERTICAL, false);
             friend_list.setLayoutManager(layoutManager);
             memberAdapter = new MemberAdapter();
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject item = jsonArray.getJSONObject(i);
-                String friendId = item.getString("memID");
-                String friendName = item.getString("memName");
+            for (int i = 0; i < showFriendSize; i++) {
+                String friendId = jsonObject.getString("memID"+i);
+                String friendName = jsonObject.getString("memName"+i);
 
                 Member member = new Member();
                 member.setMemName(friendName);
@@ -189,6 +182,21 @@ public class NewMembershipActivity extends AppCompatActivity {
             friend_list.setAdapter(memberAdapter);
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void dailyGroupNameProcess(String response) {
+        try {
+            JSONObject jsonObject=new JSONObject(response);
+            int dailyGroupSize=jsonObject.getInt("dailyGroupSize");
+            for (int i = 0; i < dailyGroupSize; i++) {
+                String groupname = jsonObject.getString("groupName"+i);
+                groupName.add(groupname);
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            System.out.println("오류 : " + e.toString());
         }
     }
 
@@ -243,19 +251,7 @@ public class NewMembershipActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             } else if (TAG.equals("groupNameList")) {
-                try {
-                    JSONArray jsonArray = new JSONArray(response);
-                    if (jsonArray.length() != 0) {
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject item = jsonArray.getJSONObject(i);
-                            String groupname = item.getString("groupName");
-                            groupName.add(groupname);
-                        }
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    System.out.println("오류 : " + e.toString());
-                }
+               dailyGroupNameProcess(response);
             } else if (TAG.equals("showFriend")) {
                 showFriendProcess(response);
             }
