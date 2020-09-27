@@ -129,7 +129,7 @@ public class NewMembershipActivity extends AppCompatActivity {
         //memID를 보내면
         //멤버가 가입한 그룹들의 이름을 받아옴
 
-        String urlGroupNameList = "http://" + loginMember.getIp() + "/memberGroupInfo";
+        String urlGroupNameList = "http://" + loginMember.getIp() + "/member/membershipGroupList";
 
         groupName = new ArrayList<>();
 
@@ -185,11 +185,11 @@ public class NewMembershipActivity extends AppCompatActivity {
         }
     }
 
-    private void dailyGroupNameProcess(String response) {
+    private void membershipGroupNameProcess(String response) {
         try {
             JSONObject jsonObject=new JSONObject(response);
-            int dailyGroupSize=jsonObject.getInt("dailyGroupSize");
-            for (int i = 0; i < dailyGroupSize; i++) {
+            int membershipGroupsize=jsonObject.getInt("membershipGroupsize");
+            for (int i = 0; i < membershipGroupsize; i++) {
                 String groupname = jsonObject.getString("groupName"+i);
                 groupName.add(groupname);
             }
@@ -251,7 +251,7 @@ public class NewMembershipActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             } else if (TAG.equals("groupNameList")) {
-               dailyGroupNameProcess(response);
+                membershipGroupNameProcess(response);
             } else if (TAG.equals("showFriend")) {
                 showFriendProcess(response);
             }
