@@ -269,7 +269,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 }else if(selected[0]==3){
                     AlertDialog.Builder builder2 = new AlertDialog.Builder(MainMenuActivity.this, R.style.CustomDialog);
 
-                    final String[] items = {"membership", "daily"};
+                    final String[] items = {"회비내기", "내가내는데일리"};
                     final Integer[] selected = {0};
 
                     builder2.setTitle("종류");
@@ -288,7 +288,6 @@ public class MainMenuActivity extends AppCompatActivity {
                             if (selected[0] == 0) {
                                 intent.putExtra("loginMember", loginMember);
                                 intent.putExtra("loginMemberAccount",loginMemberAccount);
-                                intent.putExtra("mainActivity","membership");
                                 startActivity(intent);
                             } else if (selected[0] == 1) {
                                 intent.putExtra("loginMember", loginMember);
@@ -298,6 +297,16 @@ public class MainMenuActivity extends AppCompatActivity {
                             }
                         }
                     });
+
+                    final AlertDialog alertDialog2 = builder2.create();
+                    alertDialog2.setOnShowListener(new DialogInterface.OnShowListener() {
+                        @Override
+                        public void onShow(DialogInterface arg0) {
+                            alertDialog2.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED);
+                            alertDialog2.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED);
+                        }
+                    });
+                    alertDialog2.show();
 
                 }
             }

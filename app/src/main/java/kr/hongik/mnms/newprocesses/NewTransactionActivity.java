@@ -31,7 +31,11 @@ import kr.hongik.mnms.membership.MembershipGroup;
 
 public class NewTransactionActivity extends AppCompatActivity {
     /*
-    * 사용한 날짜 (캘린더), 시간, 사용한 돈, 사용한 곳, 뭐 관련사용(MID,GID) - 그룹 이름들 불러오기
+    * 사용한 돈, 사용한 곳, 그룹들 불러오기
+    * 멤버십 사용 - 회장만 가능
+    * 데일리 사용 - 외부 사용 적어두기 (외부 : 임시 QR 발급(임시 계좌번호로 송금하는 형태))
+    * 데일리 - 더치페이 -> 상대방 이름 선택
+    *
     *
     *
     *
@@ -45,7 +49,7 @@ public class NewTransactionActivity extends AppCompatActivity {
     private DailyGroup dailyGroup;
     private MembershipGroup membershipGroup;
 
-    private String plus_history, plus_date, mainActivity;
+    private String plus_history, mainActivity;
     private int plus_money;
     private boolean QRSend;
     private IntentIntegrator qrScan;
@@ -94,15 +98,13 @@ public class NewTransactionActivity extends AppCompatActivity {
     }
 
     public void plusTransaction() {
-        plus_date = ((EditText) findViewById(R.id.plus_date)).getText().toString();
         plus_history = ((EditText) findViewById(R.id.plus_history)).getText().toString();
         plus_money=0;
         plus_money = Integer.parseInt(((EditText) findViewById(R.id.plus_money)).getText().toString());
         Transaction newTransaction=new Transaction();
-        newTransaction.setSince(plus_date);
         newTransaction.setTransactHistroy(plus_history);
         newTransaction.setTransactMoney(plus_money);
-        if (plus_money==0 || plus_history.isEmpty() || plus_date.isEmpty()) {
+        if (plus_money==0 || plus_history.isEmpty()) {
             showToast("빈칸 노노");
         } else {
             //실시간으로 팀원들이 돈 사용을 허락해야함?!?

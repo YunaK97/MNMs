@@ -7,40 +7,10 @@
     tools:context=".newprocesses.NewTransactionActivity">
 
     <LinearLayout
-        android:layout_centerHorizontal="true"
-        android:layout_above="@id/LL_newTrans2"
         android:id="@+id/LL_newTrans1"
-        android:layout_width="match_parent"
         android:paddingRight="10sp"
         android:paddingLeft="10sp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="1dp"
-            android:text="사용 날짜"
-            android:textSize="20sp" />
-
-        <EditText
-            android:id="@+id/plus_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:padding="1dp"
-            android:text="ex) 2020.08.25"
-            android:textSize="20sp" />
-
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_centerInParent="true"
-        android:id="@+id/LL_newTrans2"
-        android:paddingRight="10sp"
-        android:paddingLeft="10sp"
+        android:layout_above="@+id/LL_newTrans2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -59,17 +29,17 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="1dp"
-            android:text="ex) 21000"
+            android:hint="ex) 21000"
             android:textSize="20sp" />
 
     </LinearLayout>
 
     <LinearLayout
+        android:layout_centerInParent="true"
         android:layout_centerHorizontal="true"
         android:paddingRight="10sp"
         android:paddingLeft="10sp"
-        android:layout_below="@id/LL_newTrans2"
-        android:id="@+id/LL_newTrans3"
+        android:id="@+id/LL_newTrans2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -88,17 +58,18 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="1dp"
-            android:text="ex) 베스킨 라빈스"
+            android:hint="ex) 베스킨 라빈스"
             android:textSize="20sp" />
     </LinearLayout>
     <LinearLayout
         android:layout_centerHorizontal="true"
         android:paddingRight="10sp"
         android:paddingLeft="10sp"
-        android:layout_below="@id/LL_newTrans3"
-        android:id="@+id/LL_newTrans4"
+        android:layout_below="@id/LL_newTrans2"
+        android:id="@+id/LL_newTrans3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:orientation="horizontal">
 
         <TextView
@@ -106,7 +77,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="1dp"
-            android:text="종류"
+            android:text="데일리 선택"
             android:textSize="20sp" />
 
         <Spinner
