@@ -22,6 +22,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".membership.ui.home.NewFeeActivity"></activity>
         <activity android:name=".daily.ui.home.DailyQRActivity" />
         <activity android:name=".membership.ui.manage.ManageMembershipActivity" />
         <activity android:name=".daily.ui.home.NewDailyMemActivity" />

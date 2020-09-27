@@ -8,16 +8,16 @@
 
     <LinearLayout
         android:id="@+id/LL_newTrans1"
-        android:paddingRight="10sp"
-        android:paddingLeft="10sp"
-        android:layout_above="@+id/LL_newTrans2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_above="@+id/LL_newTrans2"
+        android:orientation="horizontal"
+        android:paddingLeft="10sp"
+        android:paddingRight="10sp">
 
         <TextView
+            style="@style/CustomTextView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="1dp"
             android:text="사용금액"
@@ -25,28 +25,27 @@
 
         <EditText
             android:id="@+id/plus_money"
+            style="@style/CustomTextView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="1dp"
             android:hint="ex) 21000"
+            android:padding="1dp"
             android:textSize="20sp" />
 
     </LinearLayout>
 
     <LinearLayout
-        android:layout_centerInParent="true"
-        android:layout_centerHorizontal="true"
-        android:paddingRight="10sp"
-        android:paddingLeft="10sp"
         android:id="@+id/LL_newTrans2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_above="@+id/LL_newTrans3"
+        android:orientation="horizontal"
+        android:paddingLeft="10sp"
+        android:paddingRight="10sp">
 
         <TextView
+            style="@style/CustomTextView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="1dp"
             android:text="내용"
@@ -54,37 +53,97 @@
 
         <EditText
             android:id="@+id/plus_history"
+            style="@style/CustomTextView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:padding="1dp"
             android:hint="ex) 베스킨 라빈스"
+            android:padding="1dp"
             android:textSize="20sp" />
     </LinearLayout>
+
     <LinearLayout
-        android:layout_centerHorizontal="true"
-        android:paddingRight="10sp"
-        android:paddingLeft="10sp"
-        android:layout_below="@id/LL_newTrans2"
         android:id="@+id/LL_newTrans3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:orientation="horizontal">
+        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:paddingLeft="10sp"
+        android:paddingRight="10sp">
 
         <TextView
+            style="@style/CustomTextView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:padding="1dp"
-            android:text="데일리 선택"
+            android:text="매장 계좌번호"
             android:textSize="20sp" />
 
-        <Spinner
-            android:layout_weight="1"
+        <EditText
+            android:id="@+id/plus_accountNum"
+            style="@style/CustomTextView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
+            android:layout_weight="1"
+            android:hint="ex) 12-234"
+            android:padding="1dp"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LL_newTrans_membership"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/LL_newTrans3"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:paddingLeft="10sp"
+        android:paddingRight="10sp"
+        android:visibility="gone">
+
+        <TextView
+            style="@style/CustomTextView"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:padding="1dp"
+            android:text="멤버십 이름"
+            android:textSize="20sp" />
+
+        <TextView
+            style="@style/CustomTextView"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:padding="1dp"
+            android:text="ex)audi"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LL_newTrans_daily"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/LL_newTrans3"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:paddingLeft="10sp"
+        android:paddingRight="10sp"
+        android:visibility="visible">
+
+        <TextView
+            style="@style/CustomTextView"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:padding="1dp"
+            android:text="데일리 이름"
+            android:textSize="20sp" />
+
+        <TextView
+            style="@style/CustomTextView"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:padding="1dp"
+            android:text="ex)audi"
+            android:textSize="20sp" />
+
     </LinearLayout>
 
 

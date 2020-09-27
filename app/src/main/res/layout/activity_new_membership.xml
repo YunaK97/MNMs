@@ -78,6 +78,52 @@
             android:inputType="number"
             android:textSize="20sp" />
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/LL_newMembership4"
+        android:layout_below="@+id/LL_newMembership3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="계좌번호"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/TV_newMembership_accountNum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="ex) 1234-12-1234"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LL_newMembership5"
+        android:layout_below="@+id/LL_newMembership4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="계좌비밀번호"
+            android:textSize="20sp" />
+
+        <EditText
+            android:id="@+id/TV_newMembership_pw"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="ex) 1234"
+            android:inputType="numberPassword"
+            android:textSize="20sp" />
+    </LinearLayout>
 
     <TextView
         android:layout_width="wrap_content"
@@ -86,7 +132,7 @@
         android:layout_marginTop="20dp"
         android:text="친구선택"
         android:id="@+id/select_frind_TV"
-        android:layout_below="@+id/LL_newMembership3"
+        android:layout_below="@+id/LL_newMembership5"
         android:textSize="25sp" />
 
     <androidx.recyclerview.widget.RecyclerView

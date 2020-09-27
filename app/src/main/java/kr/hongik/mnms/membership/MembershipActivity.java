@@ -31,6 +31,7 @@ import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
+import kr.hongik.mnms.membership.ui.home.NewFeeActivity;
 import kr.hongik.mnms.membership.ui.home.NewMembershipMemActivity;
 import kr.hongik.mnms.membership.ui.manage.ManageMembershipActivity;
 import kr.hongik.mnms.newprocesses.NewDailyActivity;
@@ -118,6 +119,11 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
                     selectTransType();
                 }else{
                     //회비납입만 가능
+                    intent=new Intent(MembershipActivity.this, NewFeeActivity.class);
+                    intent.putExtra("loginMember",loginMember);
+                    intent.putExtra("loginMemberAccount",loginMemberAccount);
+                    intent.putExtra("membershipGroup",membershipGroup);
+                    startActivity(intent);
                 }
 
                 break;
@@ -172,7 +178,11 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
 
                 } else if (selected[0] == 1) {
                     //회비납입
-
+                    Intent intent=new Intent(MembershipActivity.this, NewFeeActivity.class);
+                    intent.putExtra("loginMember",loginMember);
+                    intent.putExtra("loginMemberAccount",loginMemberAccount);
+                    intent.putExtra("membershipGroup",membershipGroup);
+                    startActivity(intent);
                 }
             }
         });

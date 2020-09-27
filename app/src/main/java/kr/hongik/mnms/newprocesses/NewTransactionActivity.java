@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -54,6 +55,9 @@ public class NewTransactionActivity extends AppCompatActivity {
     private boolean QRSend;
     private IntentIntegrator qrScan;
 
+    //layouts
+    private LinearLayout LL_newTrans_daily,LL_newTrans_membership;
+
     //variables
     public int TAG_TRANS_SUCCESS=111;
 
@@ -66,7 +70,11 @@ public class NewTransactionActivity extends AppCompatActivity {
         loginMember= (Member) intent.getSerializableExtra("loginMember");
         loginMemberAccount=(Account)intent.getSerializableExtra("loginMemberAccount");
         mainActivity=intent.getStringExtra("mainActivity");
+
+        LL_newTrans_daily=findViewById(R.id.LL_newTrans_daily);
+        LL_newTrans_membership=findViewById(R.id.LL_newTrans_membership);
         if(mainActivity.equals("daily")){
+
             dailyGroup=(DailyGroup)intent.getSerializableExtra("dailyGroup");
         }else if(mainActivity.equals("membership")){
             membershipGroup=(MembershipGroup)intent.getSerializableExtra("membershipGroup");
