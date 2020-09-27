@@ -34,11 +34,11 @@ import kr.hongik.mnms.membership.MembershipGroup;
 
 public class NewMembershipMemActivity extends AppCompatActivity {
     /*
-    * 내 친구들 다부름
-    * -> 멤버십에 가입된 애들은 제외
-    *
-    * 내가 여러명의 멤버들을 선택해서 전송함, GID
-    * */
+     * 내 친구들 다부름
+     * -> 멤버십에 가입된 애들은 제외
+     *
+     * 내가 여러명의 멤버들을 선택해서 전송함, GID
+     * */
     private Member loginMember;
     private MembershipGroup membershipGroup;
     private ArrayList<Member> memberArrayList,friendArrayList;

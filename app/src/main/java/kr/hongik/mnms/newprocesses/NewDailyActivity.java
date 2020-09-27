@@ -99,20 +99,9 @@ public class NewDailyActivity extends AppCompatActivity {
                 Map<String, String> params = new HashMap<>();
                 params.put("dailyName", daily_name);
                 params.put("memID",loginMember.getMemID());
-                try {
-                    JSONArray jsonArray = new JSONArray();
-                    for (int i = 0; i < selectedMember.size(); i++) {
-                        JSONObject jsonObject = new JSONObject();
-                        jsonObject.put("memID", selectedMember.get(i).getMemID());
-                        jsonArray.put(jsonObject);
-                    }
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("memID", loginMember.getMemID());
-                    jsonArray.put(jsonObject);
-
-                    params.put("memList", jsonArray.toString());
-                } catch (Exception e) {
-                    e.printStackTrace();
+                params.put("memberSize",selectedMember.size()+"");
+                for (int i = 0; i < selectedMember.size(); i++) {
+                    params.put("memID"+i, selectedMember.get(i).getMemID());
                 }
 
                 networkTask.execute(params);
@@ -166,7 +155,6 @@ public class NewDailyActivity extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(response);
             boolean success = jsonObject.getBoolean(TAG_SUCCESS);
             if (success) {
-
                 finish();
             } else {
                 showToast("daily생성 실패!");

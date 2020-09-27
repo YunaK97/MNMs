@@ -37,7 +37,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private Member signInMember = new Member();
 
     //layouts
-    private ArrayAdapter bankTypeAdapter;
+    private ArrayAdapter bankTypeAdapter,emailTypeAdapter;
     private Spinner email_type, bank_type;
     private Button cameraBtn, signInBtn;
 
@@ -65,7 +65,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         signInBtn.setOnClickListener(this);
 
         email_type = findViewById(R.id.email_type);
-        final ArrayAdapter emailTypeAdapter = ArrayAdapter.createFromResource(this, R.array.email_type, R.layout.support_simple_spinner_dropdown_item);
+        emailTypeAdapter = ArrayAdapter.createFromResource(this, R.array.email_type, R.layout.support_simple_spinner_dropdown_item);
         emailTypeAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         email_type.setAdapter(emailTypeAdapter);
 
@@ -113,7 +113,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         finish();
         //super.onBackPressed();
     }
-
 
     protected void checkOverlap(String TAG_TYPE) {
         //중복체크하는 부분임
@@ -245,6 +244,26 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         return true;
     }
 
+    private void beforeSignInCheck(){
+        if (!getUserInfo() || !getAccountInfo()) {
+            showToast("빈칸 ㄴㄴ해");
+        } else {
+            if (emailValid && idValid && ssnValid && pwValid) {
+                registerBegin();
+            } else {
+                if (!emailValid) {
+                    showToast("이메일 다시 확인");
+                } else if (!ssnValid) {
+                    showToast("민증 다시 확인");
+                } else if (!idValid) {
+                    showToast("아이디 다시 확인");
+                } else if (!pwValid) {
+                    showToast("비밀번호 불일치");
+                }
+            }
+        }
+    }
+
     protected void showToast(String data) {
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
@@ -307,26 +326,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-    }
-
-    private void beforeSignInCheck(){
-        if (!getUserInfo() || !getAccountInfo()) {
-            showToast("빈칸 ㄴㄴ해");
-        } else {
-            if (emailValid && idValid && ssnValid && pwValid) {
-                registerBegin();
-            } else {
-                if (!emailValid) {
-                    showToast("이메일 다시 확인");
-                } else if (!ssnValid) {
-                    showToast("민증 다시 확인");
-                } else if (!idValid) {
-                    showToast("아이디 다시 확인");
-                } else if (!pwValid) {
-                    showToast("비밀번호 불일치");
-                }
-            }
         }
     }
 

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -132,37 +133,37 @@ public class DailyList extends Fragment {
             JSONObject jsonObject=new JSONObject(response);
             int dailyGroupSize=Integer.parseInt(jsonObject.getString("dailyGroupSize"));
             if (dailyGroupSize == 0) return;
-                groupMembershiplList = rootView.findViewById(R.id.main_daily_list);
-                LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
-                groupMembershiplList.setLayoutManager(layoutManager);
+            groupMembershiplList = rootView.findViewById(R.id.main_daily_list);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
+            groupMembershiplList.setLayoutManager(layoutManager);
 
-                groupAdapter = new GroupAdapter();
-                for (int i = 0; i < dailyGroupSize; i++) {
-                    String groupname = jsonObject.getString("groupName"+i);
-                    int gid = Integer.parseInt(jsonObject.getString("GID"+i));
+            groupAdapter = new GroupAdapter();
+            for (int i = 0; i < dailyGroupSize; i++) {
+                String groupname = jsonObject.getString("groupName"+i);
+                int gid = Integer.parseInt(jsonObject.getString("GID"+i));
 
-                    DailyGroup group = new DailyGroup();
-                    group.setGroupName(groupname);
-                    group.setGID(gid);
-                    groupAdapter.addItem(group);
+                DailyGroup group = new DailyGroup();
+                group.setGroupName(groupname);
+                group.setGID(gid);
+                groupAdapter.addItem(group);
+            }
+
+            groupMembershiplList.setAdapter(groupAdapter);
+
+            groupAdapter.setOnItemClickListener(new OnGroupItemClickListener() {
+                @Override
+                public void onItemClick(GroupAdapter.ViewHolder holder, View view, int position) {
+                    intoDaily(position);
                 }
+            });
 
-                groupMembershiplList.setAdapter(groupAdapter);
-
-                groupAdapter.setOnItemClickListener(new OnGroupItemClickListener() {
-                    @Override
-                    public void onItemClick(GroupAdapter.ViewHolder holder, View view, int position) {
-                        intoDaily(position);
-                    }
-                });
-
-                groupAdapter.setOnItemLongClickListener(new OnGroupItemLongClickListener() {
-                    @Override
-                    public void onItemLongClick(GroupAdapter.ViewHolder holder, View view, int position) {
-                        selectOutGroup(position);
-                        groupView();
-                    }
-                });
+            groupAdapter.setOnItemLongClickListener(new OnGroupItemLongClickListener() {
+                @Override
+                public void onItemLongClick(GroupAdapter.ViewHolder holder, View view, int position) {
+                    selectOutGroup(position);
+                    groupView();
+                }
+            });
         } catch (JSONException e) {
             e.printStackTrace();
             System.out.println("오류 : " + e.toString());
@@ -233,6 +234,7 @@ public class DailyList extends Fragment {
 
         @Override
         protected void onPostExecute(String response) {
+            Log.d("dailySuccess",response);
             if (TAG.equals("dailyGroupInfo")) {
                 dailyGroupInfoProcess(response);
             } else if (TAG.equals("dailyOutGroup")) {

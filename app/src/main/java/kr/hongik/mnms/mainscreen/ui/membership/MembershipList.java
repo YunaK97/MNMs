@@ -173,39 +173,39 @@ public class MembershipList extends Fragment {
             JSONObject jsonObject=new JSONObject(response);
             int membershipGroupSize=Integer.parseInt(jsonObject.getString("membershipGroupSize"));
             if (membershipGroupSize == 0) return;
-                groupMembershiplList = rootView.findViewById(R.id.main_membership_list);
-                LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
-                groupMembershiplList.setLayoutManager(layoutManager);
+            groupMembershiplList = rootView.findViewById(R.id.main_membership_list);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
+            groupMembershiplList.setLayoutManager(layoutManager);
 
-                groupAdapter = new GroupAdapter();
-                for (int i = 0; i < membershipGroupSize; i++) {
-                    String groupname = jsonObject.getString("groupName"+i);
-                    int gid = Integer.parseInt(jsonObject.getString("GID"+i));
-                    //String notSubmit=item.getString("notSubmit");
-                    //String groupTime=item.getString("groupTime");
+            groupAdapter = new GroupAdapter();
+            for (int i = 0; i < membershipGroupSize; i++) {
+                String groupname = jsonObject.getString("groupName"+i);
+                int gid = Integer.parseInt(jsonObject.getString("GID"+i));
+                //String notSubmit=item.getString("notSubmit");
+                //String groupTime=item.getString("groupTime");
 
-                    MembershipGroup group = new MembershipGroup();
-                    group.setGroupName(groupname);
-                    group.setGID(gid);
-                    groupAdapter.addItem(group);
+                MembershipGroup group = new MembershipGroup();
+                group.setGroupName(groupname);
+                group.setGID(gid);
+                groupAdapter.addItem(group);
+            }
+
+            groupMembershiplList.setAdapter(groupAdapter);
+
+            groupAdapter.setOnItemClickListener(new OnGroupItemClickListener() {
+                @Override
+                public void onItemClick(GroupAdapter.ViewHolder holder, View view, int position) {
+                    intoMembership(position);
                 }
+            });
 
-                groupMembershiplList.setAdapter(groupAdapter);
-
-                groupAdapter.setOnItemClickListener(new OnGroupItemClickListener() {
-                    @Override
-                    public void onItemClick(GroupAdapter.ViewHolder holder, View view, int position) {
-                        intoMembership(position);
-                    }
-                });
-
-                groupAdapter.setOnItemLongClickListener(new OnGroupItemLongClickListener() {
-                    @Override
-                    public void onItemLongClick(GroupAdapter.ViewHolder holder, View view, int position) {
-                        selectOutGroup(position);
-                        groupView();
-                    }
-                });
+            groupAdapter.setOnItemLongClickListener(new OnGroupItemLongClickListener() {
+                @Override
+                public void onItemLongClick(GroupAdapter.ViewHolder holder, View view, int position) {
+                    selectOutGroup(position);
+                    groupView();
+                }
+            });
 
         } catch (JSONException e) {
             e.printStackTrace();

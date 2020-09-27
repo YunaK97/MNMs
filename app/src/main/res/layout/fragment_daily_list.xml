@@ -7,31 +7,31 @@
     android:orientation="vertical"
     tools:context="kr.hongik.mnms.mainscreen.ui.daily.DailyList">
 
-        <TextView
-            android:layout_alignParentLeft="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:text="\u003cmembership"
-            android:textSize="20sp" />
+    <TextView
+        android:layout_alignParentLeft="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:text="\u003cmembership"
+        android:textSize="20sp" />
 
-        <TextView
-            android:id="@+id/TV_dailyList_daily"
-            android:layout_centerHorizontal="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="daily"
-            android:textColor="@android:color/holo_red_dark"
-            android:textSize="30sp" />
+    <TextView
+        android:id="@+id/TV_dailyList_daily"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="daily"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="30sp" />
 
-        <TextView
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="left"
-            android:text="friend\u003e"
-            android:textSize="20sp" />
+    <TextView
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:text="friend\u003e"
+        android:textSize="20sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/main_daily_list"

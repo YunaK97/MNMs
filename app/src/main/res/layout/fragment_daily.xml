@@ -10,7 +10,7 @@
     <RadioGroup
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/radioGroup"
+        android:id="@+id/dutch_radioGroup"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
@@ -37,23 +37,34 @@
             android:layout_height="wrap_content" />
     </RadioGroup>
 
+    <Spinner
+        android:layout_toRightOf="@id/dutch_radioGroup"
+        android:id="@+id/dutch_type"
+        android:layout_width="30sp"
+        android:layout_height="25sp"
+        android:layout_margin="2sp"
+        android:layout_gravity="center"
+        android:dropDownWidth="250dp" />
+
     <TextView
         android:id="@+id/tv_send"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/radioGroup"
+        android:layout_below="@+id/dutch_radioGroup"
         android:text="누가누구에게 보낼지 작성하기"
         />
 
     <Button
         android:id="@+id/btn_dailyQR"
         android:text="QR코드로 송금"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/tv_send"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView_daily"
+        android:background="@drawable/sidecustom"
         android:scrollbars="vertical"
         android:layout_below="@id/btn_dailyQR"
         android:layout_alignParentBottom="true"

@@ -1,5 +1,6 @@
 package kr.hongik.mnms.mainscreen;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -326,6 +327,13 @@ public class MainMenuActivity extends AppCompatActivity {
                 System.exit(0);
             }
         });
+        dialog.setPositiveButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+
         dialog.create().show();
     }
 

@@ -87,7 +87,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             LL_settings_first.setVisibility(View.GONE);
             RL_settings_info.setVisibility(View.VISIBLE);
         }else{
-           showToast("비밀번호가 틀렸습니다.");
+            showToast("비밀번호가 틀렸습니다.");
         }
     }
 
