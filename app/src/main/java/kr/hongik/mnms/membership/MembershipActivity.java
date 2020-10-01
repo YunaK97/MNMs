@@ -237,7 +237,7 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
             membershipGroup = new MembershipGroup();
             membershipGroup.setMID(jsonObject.getInt("MID"));
             membershipGroup.setPresident(jsonObject.getString("president"));
-            membershipGroup.setPayDay(jsonObject.getInt("payDay"));
+            membershipGroup.setPayDay(jsonObject.getString("payDay"));
             membershipGroup.setFee(jsonObject.getInt("fee"));
             membershipGroup.setNotSubmit(jsonObject.getInt("notSubmit"));
             membershipGroup.setGID(jsonObject.getInt("GID"));

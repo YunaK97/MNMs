@@ -7,7 +7,7 @@ import kr.hongik.mnms.Group;
 public class MembershipGroup extends Group implements Serializable {
     private int MID; //membership ID
     private String president; //방장
-    private int payDay; //회비날
+    private String payDay; //회비날
 
     //매일,매주,매월,매년
     private String payDuration;
@@ -32,11 +32,11 @@ public class MembershipGroup extends Group implements Serializable {
         this.president = president;
     }
 
-    public int getPayDay() {
+    public String getPayDay() {
         return payDay;
     }
 
-    public void setPayDay(int payDay) {
+    public void setPayDay(String payDay) {
         this.payDay = payDay;
     }
 
