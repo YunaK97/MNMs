@@ -94,18 +94,6 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
 
         getDailyGroupInfo();
 
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("dailyGroup", dailyGroup);
-        bundle.putSerializable("loginMember", loginMember);
-        bundle.putSerializable("loginMemberAccount", loginMemberAccount);
-        bundle.putSerializable("memberArrayList", memberArrayList);
-
-        viewPager = findViewById(R.id.viewpager_daily);
-        DailyPagerAdapter adapter = new DailyPagerAdapter(getSupportFragmentManager(), bundle);
-        viewPager.setAdapter(adapter);
-
-        TabLayout tabLayout = findViewById(R.id.tabLayout_membership);
-        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
@@ -230,15 +218,12 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
     private void showMemberProcess(String response) {
 
         try {
-            JSONArray jsonArray = new JSONArray(response);
-            if (jsonArray.length() == 0) {
-                return;
-            }
+            JSONObject jsonObject=new JSONObject(response);
+            int size=jsonObject.getInt("size");
 
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject item = jsonArray.getJSONObject(i);
-                String friendId = item.getString("memID");
-                String friendName = item.getString("memName");
+            for (int i = 0; i < size; i++) {
+                String friendId = jsonObject.getString("memID");
+                String friendName = jsonObject.getString("memName");
 
                 Member member = new Member();
                 member.setMemName(friendName);
@@ -256,6 +241,19 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("dailyGroup", dailyGroup);
+        bundle.putSerializable("loginMember", loginMember);
+        bundle.putSerializable("loginMemberAccount", loginMemberAccount);
+        bundle.putSerializable("memberArrayList", memberArrayList);
+
+        viewPager = findViewById(R.id.viewpager_daily);
+        DailyPagerAdapter adapter = new DailyPagerAdapter(getSupportFragmentManager(), bundle);
+        viewPager.setAdapter(adapter);
+
+        TabLayout tabLayout = findViewById(R.id.tabLayout_membership);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {

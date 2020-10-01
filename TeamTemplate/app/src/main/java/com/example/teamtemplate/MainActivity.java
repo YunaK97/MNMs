@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         Response.Listener<String> responseListener=new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
+                Log.d("loginLog",response);
                 try {
                     JSONObject jsonObject=new JSONObject(response);
                     boolean success=jsonObject.getBoolean("success");

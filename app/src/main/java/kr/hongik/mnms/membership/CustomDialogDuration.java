@@ -33,8 +33,7 @@ public class CustomDialogDuration {
         dialog.show();
 
         // 커스텀 다이얼로그의 각 위젯들을 정의한다.
-        final TextView tv_customDay,tv_customWeek,tv_customMon,tv_customYear;
-        tv_customDay=dialog.findViewById(R.id.tv_customDay);
+        final TextView tv_customWeek,tv_customMon,tv_customYear;
         tv_customMon=dialog.findViewById(R.id.tv_customMon);
         tv_customWeek=dialog.findViewById(R.id.tv_customWeek);
         tv_customYear=dialog.findViewById(R.id.tv_customYear);
