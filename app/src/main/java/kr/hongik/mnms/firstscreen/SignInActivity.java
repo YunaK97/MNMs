@@ -344,7 +344,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         //Toast.makeText(getApplicationContext(),"예를 선택했습니다.",Toast.LENGTH_LONG).show();
-                        if(input.equals(number.toString())) {
+                        if(!input.equals(number.toString())) {
                             Toast.makeText(getApplicationContext(),"인증번호가 일치하지 않습니다.",Toast.LENGTH_LONG).show();
                         } else {
                             Toast.makeText(getApplicationContext(),"인증 성공",Toast.LENGTH_LONG).show();
