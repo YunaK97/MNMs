@@ -3,6 +3,7 @@ package kr.hongik.mnms.daily;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -142,7 +143,7 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
         //데일리 그룹 정보를 불러오기 위함
         //데일리 그룹의 GID,DID를 전달함
         //성공 시, 데일리 그룹과 관련된 모든 정보를 불러옴
-        String urlDailyGroup = "http://" + loginMember.getIp() + "/daily/dutch";
+        String urlDailyGroup = "http://" + loginMember.getIp() + "/daily/info";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlDailyGroup);
@@ -150,7 +151,6 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
 
         Map<String, String> params = new HashMap<>();
         params.put("GID", dailyGroup.getGID()+"");
-        params.put("DID", dailyGroup.getDID()+"");
 
         networkTask.execute(params);
     }
@@ -186,14 +186,15 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void dailyGroupProcess(String response) {
+        Log.d("dailyGroup",response);
         try {
             JSONObject jsonObject = new JSONObject(response);
 
             dailyGroup = new DailyGroup();
-            dailyGroup.setDID(Integer.parseInt(jsonObject.getString("DID")));
-            dailyGroup.setGID(Integer.parseInt(jsonObject.getString("GID")));
+            dailyGroup.setDID(jsonObject.getInt("DID"));
+            dailyGroup.setGID(jsonObject.getInt("GID"));
             dailyGroup.setGroupName(jsonObject.getString("groupName"));
-            showMember();
+            //showMember();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -203,11 +204,11 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
         //해당 데일리 그룹에 가입된 멤버들을 모두 가져옴
         //GID,DID를 보냄
         //응답으로 멤버들의 id,name을 받아와야함
-        String urlDailyGroup = "http://" + loginMember.getIp() + "/";
+        String urlDailyGroup = "http://" + loginMember.getIp() + "/daily/member";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlDailyGroup);
-        networkTask.setTAG("dailyGroup");
+        networkTask.setTAG("showMem");
 
         Map<String, String> params = new HashMap<>();
         params.put("GID", dailyGroup.getGID()+"");
@@ -216,14 +217,14 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
         networkTask.execute(params);
     }
     private void showMemberProcess(String response) {
-
+        memberArrayList=new ArrayList<>();
         try {
             JSONObject jsonObject=new JSONObject(response);
-            int size=jsonObject.getInt("size");
+            int dailyMemberSize=jsonObject.getInt("dailyMemberSize");
 
-            for (int i = 0; i < size; i++) {
-                String friendId = jsonObject.getString("memID");
-                String friendName = jsonObject.getString("memName");
+            for (int i = 0; i < dailyMemberSize; i++) {
+                String friendId = jsonObject.getString("memID"+i);
+                String friendName = jsonObject.getString("memName"+i);
 
                 Member member = new Member();
                 member.setMemName(friendName);

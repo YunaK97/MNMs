@@ -295,6 +295,7 @@ public class NewFriendActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                request_friend_layout.setVisibility(View.GONE);
             } else if (TAG.equals("deleteFriend")) {
                 try {
                     Log.d("deleteFriend", response);
