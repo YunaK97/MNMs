@@ -343,11 +343,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         builder.setPositiveButton("OK",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        //Toast.makeText(getApplicationContext(),"예를 선택했습니다.",Toast.LENGTH_LONG).show();
-                        if(!input.equals(number.toString())) {
-                            Toast.makeText(getApplicationContext(),"인증번호가 일치하지 않습니다.",Toast.LENGTH_LONG).show();
-                        } else {
+                        if((input.getText().toString()).equals(number)) {
                             Toast.makeText(getApplicationContext(),"인증 성공",Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(),"인증번호가 일치하지 않습니다.",Toast.LENGTH_LONG).show();
                         }
 
                     }
@@ -411,7 +410,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 }
                 emailForm = email_type.getSelectedItem().toString();
                 if (emailForm.equals("이메일")) {
-                    showToast("이메일을 화인하세요");
+                    showToast("이메일을 확인하세요");
                     return;
                 }
                 emailForm = "@" + emailForm;
@@ -474,6 +473,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             } else if (TAG.equals("register")) {
                 registerProcess(response);
             } else if (TAG.equals("emailAuth")) {
+                Log.d("email",response);
                 try {
                     emailAuthProcess(response);
                 } catch (JSONException e) {
