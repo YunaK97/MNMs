@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -34,6 +35,7 @@ import kr.hongik.mnms.R;
 import kr.hongik.mnms.membership.ui.home.NewFeeActivity;
 import kr.hongik.mnms.membership.ui.home.NewMembershipMemActivity;
 import kr.hongik.mnms.membership.ui.manage.ManageMembershipActivity;
+import kr.hongik.mnms.membership.ui.manage.MembershipMemFragment;
 import kr.hongik.mnms.newprocesses.NewDailyActivity;
 import kr.hongik.mnms.newprocesses.NewFriendActivity;
 import kr.hongik.mnms.newprocesses.NewMembershipActivity;
@@ -79,18 +81,6 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
 
         getMembershipGroupInfo();
 
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("membershipGroup", membershipGroup);
-        bundle.putSerializable("loginMember", loginMember);
-        bundle.putSerializable("loginMemberAccount", loginMemberAccount);
-        bundle.putSerializable("memberArrayList", memberArrayList);
-
-        viewPager = findViewById(R.id.viewpager_membership);
-        MembershipPagerAdapter adapter = new MembershipPagerAdapter(getSupportFragmentManager(), bundle);
-        viewPager.setAdapter(adapter);
-
-        TabLayout tabLayout = findViewById(R.id.tabLayout_membership);
-        tabLayout.setupWithViewPager(viewPager);
     }
 
     @Override
@@ -123,6 +113,7 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
                     intent.putExtra("loginMember",loginMember);
                     intent.putExtra("loginMemberAccount",loginMemberAccount);
                     intent.putExtra("membershipGroup",membershipGroup);
+
                     startActivity(intent);
                 }
 
@@ -244,14 +235,15 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
             JSONObject jsonObject = new JSONObject(response);
 
             membershipGroup = new MembershipGroup();
-            membershipGroup.setMID(Integer.parseInt(jsonObject.getString("MID")));
+            membershipGroup.setMID(jsonObject.getInt("MID"));
             membershipGroup.setPresident(jsonObject.getString("president"));
-            membershipGroup.setPayDay(Integer.parseInt(jsonObject.getString("payDay")));
+            membershipGroup.setPayDay(jsonObject.getInt("payDay"));
             membershipGroup.setFee(jsonObject.getInt("fee"));
             membershipGroup.setNotSubmit(jsonObject.getInt("notSubmit"));
-            membershipGroup.setGID(Integer.parseInt(jsonObject.getString("GID")));
+            membershipGroup.setGID(jsonObject.getInt("GID"));
             membershipGroup.setAccountNum(jsonObject.getString("accountNum"));
             membershipGroup.setGroupName(jsonObject.getString("groupName"));
+            membershipGroup.setPayDuration(jsonObject.getString("payDuration"));
 
             showMembershipMem();
 
@@ -280,8 +272,8 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
             int membershipMemberSize = Integer.parseInt(jsonObject.getString("membershipMemberSize"));
 
             for (int i = 0; i < membershipMemberSize; i++) {
-                String friendId = jsonObject.getString("memID");
-                String friendName = jsonObject.getString("memName");
+                String friendId = jsonObject.getString("memID"+i);
+                String friendName = jsonObject.getString("memName"+i);
 
                 Member member = new Member();
                 member.setMemName(friendName);
@@ -302,6 +294,21 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("membershipGroup", membershipGroup);
+        bundle.putSerializable("loginMember", loginMember);
+        bundle.putSerializable("loginMemberAccount", loginMemberAccount);
+        bundle.putSerializable("memberArrayList", memberArrayList);
+
+        showToast(membershipGroup.getPayDuration());
+
+        viewPager = findViewById(R.id.viewpager_membership);
+        MembershipPagerAdapter adapter = new MembershipPagerAdapter(getSupportFragmentManager(), bundle);
+        viewPager.setAdapter(adapter);
+
+        TabLayout tabLayout = findViewById(R.id.tabLayout_membership);
+        tabLayout.setupWithViewPager(viewPager);
     }
 
     private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
@@ -336,6 +343,7 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
 
         @Override
         protected void onPostExecute(String response) {
+            Log.d("loglog",response);
             if (TAG.equals("membershipGroup")) {
                 membershipGroupProcess(response);
             } else if (TAG.equals("showMembershipMem")) {

@@ -3,6 +3,7 @@ package kr.hongik.mnms.membership.ui.home;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -88,7 +89,7 @@ public class NewMembershipMemActivity extends AppCompatActivity {
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlAddmembershipMem);
-        networkTask.setTAG("addmembershipMem");
+        networkTask.setTAG("addMembershipMem");
 
         Map<String, String> params = new HashMap<>();
         params.put("memID", loginMember.getMemID());
@@ -129,7 +130,9 @@ public class NewMembershipMemActivity extends AppCompatActivity {
             LinearLayoutManager layoutManager = new LinearLayoutManager(NewMembershipMemActivity.this, LinearLayoutManager.VERTICAL, false);
             friend_list.setLayoutManager(layoutManager);
             memberAdapter = new MemberAdapter();
+            friendArrayList=new ArrayList<>();
 
+            Log.d("Eldyd",showFriendSize+"");
             for (int i = 0; i < showFriendSize; i++) {
                 String friendId = jsonObject.getString("memID"+i);
                 String friendName = jsonObject.getString("memName"+i);
@@ -138,7 +141,7 @@ public class NewMembershipMemActivity extends AppCompatActivity {
                 member.setMemName(friendName);
                 member.setMemID(friendId);
 
-                Boolean valid=true;
+                boolean valid=true;
                 for(int j=0;j<memberArrayList.size();j++){
                     if(memberArrayList.get(j).getMemID().equals(friendId)){
                         valid=false;
@@ -148,6 +151,7 @@ public class NewMembershipMemActivity extends AppCompatActivity {
                 if(valid)
                     friendArrayList.add(member);
             }
+
             Comparator<Member> noAsc = new Comparator<Member>() {
                 @Override
                 public int compare(Member item1, Member item2) {

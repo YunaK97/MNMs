@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -80,7 +81,7 @@ public class NewFeeActivity extends AppCompatActivity {
         TV_newFee_groupName=findViewById(R.id.TV_newFee_groupName);
         TV_newFee_fee=findViewById(R.id.TV_newFee_fee);
 
-        TV_newFee_fee.setText(membershipGroup.getFee());
+        TV_newFee_fee.setText(membershipGroup.getFee()+"");
         TV_newFee_groupName.setText(membershipGroup.getGroupName());
     }
 

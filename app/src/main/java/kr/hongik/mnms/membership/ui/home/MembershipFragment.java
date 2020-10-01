@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
@@ -71,16 +72,16 @@ public class MembershipFragment extends Fragment {
     private void setTransaction(final MembershipGroup membershipGroup) {
         //GID,MID,멤버십 계좌번호를 전송
         //멤버십과 관련된 모든 거래내역을 받아와야함(회비 입금,회비 사용내역)
-        String urlMembershipTransaction = "http://" + loginMember.getIp() + "/membership";
+        String urlMembershipTransaction = "http://" + loginMember.getIp() + "/membership/";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlMembershipTransaction);
         networkTask.setTAG("setTransaction");
 
         Map<String, String> params = new HashMap<>();
-        params.put("GID", membershipGroup.getGID()+"");
-        params.put("MID",membershipGroup.getMID()+"");
-        params.put("accountNum",membershipGroup.getAccountNum());
+        params.put("GID", membershipGroup.getGID() + "");
+        params.put("MID", membershipGroup.getMID() + "");
+        params.put("accountNum", membershipGroup.getAccountNum());
 
         networkTask.execute(params);
     }
@@ -94,28 +95,23 @@ public class MembershipFragment extends Fragment {
             dataList = new ArrayList<>();
             mAdapter = new TransactionAdapter(dataList);
 
-            JSONArray j = new JSONArray(response);
+            JSONObject jsonObject = new JSONObject(response);
             // Parse json
             transactionArrayList = new ArrayList<>();
-            for (int i = 0; i < j.length(); i++) {
-                try {
+            int membershipTransactionSize = jsonObject.getInt("membershipTransactionSize");
+            for (int i = 0; i < membershipTransactionSize; i++) {
 
-                    JSONObject jsonObject = j.getJSONObject(i);
+                Transaction transact = new Transaction();
+                transact.setAccountNum(jsonObject.getString("accountNum" + i));
+                transact.setTransactID(Integer.parseInt(jsonObject.getString("transactID" + i)));
+                transact.setTransactHistroy(jsonObject.getString("transactHistory" + i));
+                transact.setTransactMoney(Integer.parseInt(jsonObject.getString("transactMoney" + i)));
+                transact.setSince(jsonObject.getString("since" + i));
+                transact.setMID(Integer.parseInt(jsonObject.getString("MID" + i)));
 
-                    Transaction transact = new Transaction();
-                    transact.setAccountNum(jsonObject.getString("accountNum"));
-                    transact.setTransactID(Integer.parseInt(jsonObject.getString("transactID")));
-                    transact.setTransactHistroy(jsonObject.getString("transactHistory"));
-                    transact.setTransactMoney(Integer.parseInt(jsonObject.getString("transactMoney")));
-                    transact.setSince(jsonObject.getString("since"));
-                    transact.setMID(Integer.parseInt(jsonObject.getString("MID")));
-
-                    ((TransactionAdapter) mAdapter).addItem(transact);
-                    if (transact.getAccountNum().equals(loginMember.getAccountNum())) {
-                        transactionArrayList.add(transact);
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                ((TransactionAdapter) mAdapter).addItem(transact);
+                if (transact.getAccountNum().equals(loginMember.getAccountNum())) {
+                    transactionArrayList.add(transact);
                 }
             }
             mRecyclerView.setAdapter(mAdapter);

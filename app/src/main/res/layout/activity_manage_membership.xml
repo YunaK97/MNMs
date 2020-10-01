@@ -75,7 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="미납횟수(단위:회)"
+            android:text="미납가능횟수(/회)"
             android:textSize="20sp" />
 
         <EditText
@@ -88,6 +88,32 @@
             android:textSize="20sp" />
 
     </LinearLayout>
+    <LinearLayout
+        android:padding="10sp"
+        android:id="@+id/linearLayout4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_below="@+id/linearLayout3"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="회비 주기"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/new_membership_payDuration"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="ex) 3"
+            android:inputType="number"
+            android:textSize="20sp" />
+    </LinearLayout>
+
     <Button
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"

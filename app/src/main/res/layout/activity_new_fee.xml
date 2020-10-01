@@ -64,7 +64,6 @@
             android:inputType="numberPassword"
             android:layout_width="match_parent"
             style="@style/CustomTextView"
-            android:text="ex)50000"
             />
     </LinearLayout>
 

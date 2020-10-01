@@ -5,7 +5,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.json.JSONObject;
 
@@ -13,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
@@ -32,6 +35,7 @@ public class ManageMembershipActivity extends AppCompatActivity {
 
     //Layouts
     private EditText etNewNotSubmit,etNewName,etNewFee;
+    private TextView tvPayDuration;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -53,17 +57,26 @@ public class ManageMembershipActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_membership);
 
-        Intent intent=getIntent();
+        final Intent intent=getIntent();
         loginMember= (Member) intent.getSerializableExtra("loginMember");
         membershipGroup= (MembershipGroup) intent.getSerializableExtra("membershipGroup");
 
         etNewFee=findViewById(R.id.new_membership_fee);
         etNewName=findViewById(R.id.new_membership_name);
         etNewNotSubmit=findViewById(R.id.new_membership_notsubmit);
+        tvPayDuration=findViewById(R.id.new_membership_payDuration);
 
-        etNewFee.setText(membershipGroup.getFee());
-        etNewNotSubmit.setText(membershipGroup.getNotSubmit());
+        etNewFee.setText(membershipGroup.getFee()+"");
+        etNewNotSubmit.setText(membershipGroup.getNotSubmit()+"");
         etNewName.setText(membershipGroup.getGroupName());
+
+        tvPayDuration.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+            }
+        });
     }
 
     protected void changeMembershipInfo(){

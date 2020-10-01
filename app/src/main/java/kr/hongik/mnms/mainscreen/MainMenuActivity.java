@@ -141,7 +141,6 @@ public class MainMenuActivity extends AppCompatActivity {
         membershipList.setArguments(bundle);
         dailyList.setArguments(bundle);
         friendList.setArguments(bundle);
-        //////////////////////////////
 
         String text = "이름 : " + loginMember.getMemName();
         textName.setText(text);
