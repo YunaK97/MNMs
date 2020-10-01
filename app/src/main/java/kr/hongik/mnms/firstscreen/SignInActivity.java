@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -42,7 +43,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     //layouts
     private ArrayAdapter bankTypeAdapter,emailTypeAdapter;
     private Spinner email_type, bank_type;
-    private Button cameraBtn, signInBtn;
+    private Button cameraBtn, signInBtn,emailAuth,emailCheck;
 
     //urls
     private String curIp = "211.186.21.254:8090";
@@ -82,11 +83,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         overlap.setOnClickListener(this);
 
         //이메일 확인
-        Button emailCheck = findViewById(R.id.btn_emailOverlap);
+        emailCheck = findViewById(R.id.btn_emailOverlap);
         emailCheck.setOnClickListener(this);
 
         //이메일 인증
-        Button emailAuth = findViewById(R.id.btn_emailAuth);
+        emailAuth = findViewById(R.id.btn_emailAuth);
         emailAuth.setOnClickListener(this);
 
         //민증확인
@@ -315,6 +316,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
                 signInMember.setMemEmail(checkEmail);
                 emailValid = true;
+                emailAuth.setVisibility(View.VISIBLE);
+                emailCheck.setVisibility(View.GONE);
+
             } else {
                 showToast("사용 불가능한 이메일.");
                 emailValid = false;
@@ -328,11 +332,12 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         JSONObject jsonObject = new JSONObject(response);
         final String number = jsonObject.getString("number");
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.CustomDialog);
         builder.setTitle("인증");
         builder.setMessage("인증번호를 입력하세요");
 
         final EditText input = new EditText(this);
+        input.setInputType(InputType.TYPE_CLASS_NUMBER);
         builder.setView(input);
 
         builder.setPositiveButton("OK",
@@ -414,18 +419,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 checkOverlap("email");
                 break;
             case R.id.btn_emailAuth:
-                String eID = ((TextView) findViewById(R.id.textEmail)).getText().toString();
-                if (TextUtils.isEmpty(eID)) {
-                    showToast("빈칸 노노");
-                    return;
-                }
-                emailForm = email_type.getSelectedItem().toString();
-                if (emailForm.equals("이메일")) {
-                    showToast("이메일을 화인하세요");
-                    return;
-                }
-                emailForm = "@" + emailForm;
-                authEmail = eID + emailForm;
+                authEmail = checkEmail;
                 checkOverlap("auth");
                 break;
             case R.id.identify:
@@ -479,7 +473,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 emailOverlapProcess(response);
             } else if (TAG.equals("register")) {
                 registerProcess(response);
-            } else if (TAG.equals("auth")) {
+            } else if (TAG.equals("emailAuth")) {
                 try {
                     emailAuthProcess(response);
                 } catch (JSONException e) {

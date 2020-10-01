@@ -181,6 +181,7 @@
         <Button
             android:id="@+id/btn_emailAuth"
             style="@style/CustomButton"
+            android:visibility="gone"
             android:text="Email 인증" />
 
     </LinearLayout>
