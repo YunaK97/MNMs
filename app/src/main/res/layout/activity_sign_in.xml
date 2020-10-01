@@ -178,6 +178,11 @@
             android:id="@+id/btn_emailOverlap"
             style="@style/CustomButton"
             android:text="@string/btn_email" />
+        <Button
+            android:id="@+id/btn_emailAuth"
+            style="@style/CustomButton"
+            android:text="Email 인증" />
+
     </LinearLayout>
 
     <LinearLayout

@@ -2,6 +2,8 @@ package kr.hongik.mnms.firstscreen;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -51,7 +54,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     //Variables
     private boolean idValid = false, ssnValid = false, emailValid = false, pwValid = false;
     private final static int TAKE_PICTURE = 1;
-    private String checkID, checkEmail;
+    private String checkID, checkEmail, authEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +84,10 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         //이메일 확인
         Button emailCheck = findViewById(R.id.btn_emailOverlap);
         emailCheck.setOnClickListener(this);
+
+        //이메일 인증
+        Button emailAuth = findViewById(R.id.btn_emailAuth);
+        emailAuth.setOnClickListener(this);
 
         //민증확인
         cameraBtn = findViewById(R.id.identify);
@@ -141,6 +148,19 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
             networkTask.execute(params);
         }
+        else if (TAG_TYPE.equals("auth")) {
+            String urlEmailAuth = "http://" + curIp + "/member/mail";
+
+            NetworkTask networkTask = new NetworkTask();
+            networkTask.setURL(urlEmailAuth);
+            networkTask.setTAG("emailAuth");
+
+            Map<String, String> params = new HashMap<String, String>();
+            params.put("memEmail", authEmail);
+
+            networkTask.execute(params);
+        }
+
     }
 
     protected void registerBegin() {
@@ -304,6 +324,38 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
+    private void emailAuthProcess(String response) throws JSONException {
+        JSONObject jsonObject = new JSONObject(response);
+        final String number = jsonObject.getString("number");
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("인증");
+        builder.setMessage("인증번호를 입력하세요");
+
+        final EditText input = new EditText(this);
+        builder.setView(input);
+
+        builder.setPositiveButton("OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        //Toast.makeText(getApplicationContext(),"예를 선택했습니다.",Toast.LENGTH_LONG).show();
+                        if(input.equals(number.toString())) {
+                            Toast.makeText(getApplicationContext(),"인증번호가 일치하지 않습니다.",Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(),"인증 성공",Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                });
+        builder.setNegativeButton("CANCEL",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(getApplicationContext(),"인증 취소",Toast.LENGTH_LONG).show();
+                    }
+                });
+        builder.show();
+    }
+
     private void registerProcess(String response) {
         try {
             if (response.isEmpty()) {
@@ -361,6 +413,21 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 checkEmail = emailID + emailForm;
                 checkOverlap("email");
                 break;
+            case R.id.btn_emailAuth:
+                String eID = ((TextView) findViewById(R.id.textEmail)).getText().toString();
+                if (TextUtils.isEmpty(eID)) {
+                    showToast("빈칸 노노");
+                    return;
+                }
+                emailForm = email_type.getSelectedItem().toString();
+                if (emailForm.equals("이메일")) {
+                    showToast("이메일을 화인하세요");
+                    return;
+                }
+                emailForm = "@" + emailForm;
+                authEmail = eID + emailForm;
+                checkOverlap("auth");
+                break;
             case R.id.identify:
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, TAKE_PICTURE);
@@ -369,6 +436,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 ssnValid = true;
                 signInMember.setMemSsn(tmpssn);
                 break;
+
         }
     }
 
@@ -411,8 +479,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 emailOverlapProcess(response);
             } else if (TAG.equals("register")) {
                 registerProcess(response);
+            } else if (TAG.equals("auth")) {
+                try {
+                    emailAuthProcess(response);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-
         }
+
     }
 }
