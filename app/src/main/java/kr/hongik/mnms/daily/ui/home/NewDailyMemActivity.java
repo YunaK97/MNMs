@@ -5,41 +5,42 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-import androidx.appcompat.app.AppCompatActivity;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
+import kr.hongik.mnms.MemberAdapter;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.daily.DailyActivity;
 import kr.hongik.mnms.daily.DailyGroup;
-import kr.hongik.mnms.membership.MembershipActivity;
-import kr.hongik.mnms.membership.MembershipGroup;
 
 public class NewDailyMemActivity extends AppCompatActivity {
     private Member loginMember;
     private DailyGroup dailyGroup;
-    private ArrayList<Member> memberArrayList;
+    private ArrayList<Member> memberArrayList,friendArrayList;
 
     //layouts
-    private TextView memberIdText, memberNameText;
-    private ImageButton btnMemberSearch;
-    private Button btnAddMember;
-    private LinearLayout memberLayout;
+    private MemberAdapter memberAdapter;
+    private RecyclerView friend_list;
+    private Button btn_newDailyMem;
 
     //variables
+    private String TAG_SUCCESS = "success";
     private String memberId;
-    private int TAG_SUCCESS=111;
+    private ArrayList<Member> selectedFriend;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,72 +53,99 @@ public class NewDailyMemActivity extends AppCompatActivity {
         dailyGroup = (DailyGroup) intent.getSerializableExtra("dailyGroup");
         memberArrayList = (ArrayList<Member>) intent.getSerializableExtra("memberArrayList");
 
-        //findViewById
-        btnMemberSearch = findViewById(R.id.btn_newDailyMemID);
-        btnAddMember = findViewById(R.id.btn_addDailyMem);
-        memberLayout = findViewById(R.id.layout_newDailyMemLayout);
-        memberIdText = findViewById(R.id.tv_newDailyMemID);
-        memberNameText = findViewById(R.id.tv_newDailyMemName);
-
-
-        btnMemberSearch.setOnClickListener(new View.OnClickListener() {
+        btn_newDailyMem = findViewById(R.id.btn_newDailyMem);
+        btn_newDailyMem.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                //친구 ID 검색
-                memberId = ((TextView) findViewById(R.id.daily_memID)).getText().toString();
-                //기존 멤버 사람들과 같으면 불가능
+            public void onClick(View view) {
+                requestAddMem();
+            }
+        });
+        showFriend();
+
+    }
+
+    private void requestAddMem() {
+        String urlAddDailyMem = "http://" + loginMember.getIp() + "/daily/add";
+
+        // 수락or거절 결과 전송
+        selectedFriend = new ArrayList<>();
+        for (int i = 0; i < memberAdapter.getItemCount(); i++) {
+            if (memberAdapter.getItem(i).isChecked()) {
+                selectedFriend.add(memberAdapter.getItem(i));
+            }
+        }
+
+        NetworkTask networkTask = new NetworkTask();
+        networkTask.setURL(urlAddDailyMem);
+        networkTask.setTAG("addDailyMem");
+
+        Map<String, String> params = new HashMap<>();
+        params.put("GID",dailyGroup.getGID()+"");
+        params.put("friendSize",selectedFriend.size()+"");
+        for (int i = 0; i < selectedFriend.size(); i++) {
+            params.put("memID"+i, selectedFriend.get(i).getMemID());
+        }
+        networkTask.execute(params);
+    }
+
+    private void showFriend() {
+        String urlShowFriend = "http://" + loginMember.getIp() + "/member/showFriend";
+
+        NetworkTask networkTask = new NetworkTask();
+        networkTask.setURL(urlShowFriend);
+        networkTask.setTAG("showFriend");
+
+        Map<String, String> params = new HashMap<>();
+        params.put("memID", loginMember.getMemID());
+
+        networkTask.execute(params);
+    }
+
+    private void showFriendProcess(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            int showFriendSize = Integer.parseInt(jsonObject.getString("showFriendSize"));
+            if (showFriendSize == 0) return;
+
+            friend_list = findViewById(R.id.RV_newDailyMem);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(NewDailyMemActivity.this, LinearLayoutManager.VERTICAL, false);
+            friend_list.setLayoutManager(layoutManager);
+            memberAdapter = new MemberAdapter();
+            friendArrayList = new ArrayList<>();
+
+            for (int i = 0; i < showFriendSize; i++) {
+                String friendId = jsonObject.getString("memID" + i);
+                String friendName = jsonObject.getString("memName" + i);
+
+                Member member = new Member();
+                member.setMemName(friendName);
+                member.setMemID(friendId);
+
                 boolean valid = true;
-                for (int i = 0; i < memberArrayList.size(); i++) {
-                    if (memberId.equals(memberArrayList.get(i).getMemID())) {
-                        showToast("불가능한 id 입니다.");
+                for (int j = 0; j < memberArrayList.size(); j++) {
+                    if (memberArrayList.get(j).getMemID().equals(friendId)) {
                         valid = false;
                         break;
                     }
                 }
-                if (valid) {
-                    searchFriend(memberId);
+                if (valid)
+                    friendArrayList.add(member);
+            }
+
+            Comparator<Member> noAsc = new Comparator<Member>() {
+                @Override
+                public int compare(Member item1, Member item2) {
+                    return item1.getMemName().compareTo(item2.getMemName());
                 }
-            }
-        });
+            };
 
-        btnAddMember.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendRequest();
-            }
-        });
-    }
+            Collections.sort(friendArrayList, noAsc);
 
-    private void sendRequest() {
-        //검색한 멤버를 데일리그룹에 추가할것임
-        //GID와 가입할 memberID를 보냄
-        //응답으로 그룹에 성공적으로 가입했는지 여부를 받아야함
-        String urlNewFriendAdd = "http://" + loginMember.getIp() + "/newMemberAdd";
-
-        NetworkTask networkTask = new NetworkTask();
-        networkTask.setURL(urlNewFriendAdd);
-        networkTask.setTAG("newMemberAdd");
-
-        Map<String, String> params = new HashMap<>();
-        params.put("GID", dailyGroup.getGID()+"");
-        params.put("memberID", memberId);
-
-        networkTask.execute(params);
-    }
-
-    private void searchFriend(String member_id) {
-        //데일리 그룹에 영입하고 싶은 멤버 아이디를 검색
-        //응답으로 해당아이디가 존재하는 멤버인지 확인한 후 유/무를 전달하면 됨
-        String urlNewFriend = "http://" + loginMember.getIp() + "/newFriend";
-
-        NetworkTask networkTask = new NetworkTask();
-        networkTask.setURL(urlNewFriend);
-        networkTask.setTAG("newMember");
-
-        Map<String, String> params = new HashMap<>();
-        params.put("memID", member_id);
-
-        networkTask.execute(params);
+            memberAdapter.setItems(friendArrayList);
+            friend_list.setAdapter(memberAdapter);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showToast(String data) {
@@ -157,14 +185,14 @@ public class NewDailyMemActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
-            if (TAG.equals("newMemberAdd")) {
+            if (TAG.equals("addDailyMem")) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
-                    boolean success = jsonObject.getBoolean("success");
+                    boolean success = jsonObject.getBoolean(TAG_SUCCESS);
                     if (success) {
                         showToast("멤버 추가 완료");
                         Intent intent = new Intent(NewDailyMemActivity.this, DailyActivity.class);
-                        setResult(DailyActivity.TAG_SUCCESS, intent);
+                        setResult(DailyActivity.TAG_NEW_MEM, intent);
                         finish();
                     } else {
                         showToast("멤버 추가 실패ㅠ");
@@ -173,24 +201,8 @@ public class NewDailyMemActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            } else if (TAG.equals("newMember")) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    boolean success = jsonObject.getBoolean("success");
-                    if (success) {
-                        String member_name = jsonObject.getString("memName");
-                        String member_id = jsonObject.getString("memID");
-
-                        memberNameText.setText(member_name);
-                        memberIdText.setText(member_id);
-
-                        memberLayout.setVisibility(View.VISIBLE);
-                    } else {
-                        showToast("ID 검색 실패");
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            } else if (TAG.equals("showFriend")) {
+                showFriendProcess(response);
             }
         }
     }

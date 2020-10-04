@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+    android:layout_width="300sp"
     android:layout_height="match_parent"
     android:background="#ffffff"
     android:orientation="vertical">
@@ -20,7 +20,9 @@
 
         <TextView
             android:id="@+id/tv_customWeek"
+            android:background="@android:color/holo_red_light"
             style="@style/CustomTextView"
+            android:textColor="#ffffff"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_weight="1"
@@ -48,7 +50,7 @@
 
 
     <LinearLayout
-        android:visibility="gone"
+        android:visibility="visible"
         android:id="@+id/LL_dialog_week"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -62,6 +64,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="월"
+            android:textColor="#ffffff"
+            android:background="@android:color/holo_red_light"
             android:textSize="17sp" />
 
         <TextView
@@ -128,18 +132,17 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:visibility="visible"
+        android:visibility="gone"
         android:id="@+id/LL_dialog_month"
         android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/et_dialog_day"
-            style="@style/CustomTextView"
+        <Spinner
+            android:id="@+id/mon_spinner"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:gravity="center"
-            android:hint="1~30"
-            android:inputType="number" />
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center"
+             />
     </LinearLayout>
 
     <LinearLayout
@@ -149,51 +152,33 @@
         android:layout_height="60dp"
         android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/et_dialog_year_year"
-            style="@style/CustomTextView"
+        <Spinner
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="match_parent"
+            android:id="@+id/year_monSpinner"
             android:layout_weight="1"
-            android:gravity="center"
-            android:hint="1~30"
-            android:inputType="number" />
+            android:gravity="center_horizontal"
+            android:layout_gravity="center"
+            />
 
         <TextView
             style="@style/CustomTextView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
+            android:layout_gravity="center_horizontal"
             android:gravity="center"
-            android:text="\u00AD" />
+            android:textColor="#000000"
+            android:text="-" />
 
-        <EditText
-            android:id="@+id/et_dialog_year_mon"
-            style="@style/CustomTextView"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:hint="1~30"
-            android:inputType="number" />
-
-        <TextView
-            style="@style/CustomTextView"
+        <Spinner
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:id="@+id/year_daySpinner"
+            android:gravity="center_horizontal"
+            android:layout_gravity="center"
             android:layout_weight="1"
-            android:gravity="center"
-            android:text="\u00AD" />
-
-        <EditText
-            android:id="@+id/et_dialog_year_day"
-            style="@style/CustomTextView"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:hint="1~30"
-            android:inputType="number" />
+            />
     </LinearLayout>
 
     <LinearLayout
@@ -210,7 +195,7 @@
             android:gravity="center"
             android:text="확인"
             android:textColor="@android:color/holo_red_dark"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
         <Button
             android:id="@+id/btn_cancel"
@@ -221,6 +206,6 @@
             android:gravity="center"
             android:text="취소"
             android:textColor="@android:color/holo_red_dark"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
     </LinearLayout>
 </LinearLayout>

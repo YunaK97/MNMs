@@ -70,19 +70,6 @@ public class DailyMemFragment extends Fragment {
         memberAdapter = new FriendListAdapter();
         memberAdapter.setItems(memberArrayList);
         memberList.setAdapter(memberAdapter);
-
-        memberAdapter.setOnItemClickListener(new OnFriendItemClickListener() {
-            @Override
-            public void onItemClick(FriendListAdapter.ViewHolder holder, View view, int position) {
-
-            }
-        });
-        memberAdapter.setOnItemLongClickListener(new OnFriendItemLongClickListener() {
-            @Override
-            public void onItemLongClick(FriendListAdapter.ViewHolder holder, View view, int position) {
-
-            }
-        });
     }
 
     private void selectDelMember(int position) {

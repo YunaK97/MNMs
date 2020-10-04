@@ -4,20 +4,25 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,6 +36,7 @@ import kr.hongik.mnms.mainscreen.OnGroupItemClickListener;
 import kr.hongik.mnms.mainscreen.OnGroupItemLongClickListener;
 import kr.hongik.mnms.membership.MembershipActivity;
 import kr.hongik.mnms.membership.MembershipGroup;
+import kr.hongik.mnms.membership.ui.home.NewFeeActivity;
 
 public class MembershipList extends Fragment {
     private Member loginMember;
@@ -42,6 +48,9 @@ public class MembershipList extends Fragment {
     private GroupAdapter groupAdapter;
     private Context context;
     private ViewGroup rootView;
+
+    //variables
+    private ArrayList<Integer> GIDArray;
 
     public MembershipList() {
         // Required empty public constructor
@@ -131,8 +140,7 @@ public class MembershipList extends Fragment {
         builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                //checkPresident(outGroupNum);
-                outGroup();
+                checkPresident(outGroupNum);
             }
         });
         builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -150,7 +158,7 @@ public class MembershipList extends Fragment {
         //멤버십 회장은 멤버십을 나갈수없다
         //GID과 멤버ID 보내면
         //해당 GID의 president가 memID라면 false를 받아야함
-        String urlCheckPresident="http://"+loginMember.getIp()+"";
+        String urlCheckPresident="http://"+loginMember.getIp()+"/membership/checkPresident";
 
         NetworkTask networkTask=new NetworkTask();
         networkTask.setTAG("checkPresident");
@@ -161,8 +169,26 @@ public class MembershipList extends Fragment {
         params.put("GID",group.getGID()+"");
 
         networkTask.execute(params);
-
     }
+
+    private void checkMembershipSubmit(){
+        String urlCheckSubmit="http://"+loginMember.getIp()+"/membership/check";
+
+        NetworkTask networkTask=new NetworkTask();
+        networkTask.setTAG("checkSubmit");
+        networkTask.setURL(urlCheckSubmit);
+
+        Map<String,String> params=new HashMap<>();
+        params.put("memID",loginMember.getMemID());
+        params.put("GIDsize",GIDArray.size()+"");
+
+        for(int i=0;i<GIDArray.size();i++){
+            params.put("GID"+i,GIDArray.get(i)+"");
+        }
+
+        networkTask.execute(params);
+    }
+
 
     private void showToast(String data) {
         Toast.makeText(context, data, Toast.LENGTH_LONG).show();
@@ -178,6 +204,7 @@ public class MembershipList extends Fragment {
             groupMembershiplList.setLayoutManager(layoutManager);
 
             groupAdapter = new GroupAdapter();
+            GIDArray=new ArrayList<>();
             for (int i = 0; i < membershipGroupSize; i++) {
                 String groupname = jsonObject.getString("groupName"+i);
                 int gid = Integer.parseInt(jsonObject.getString("GID"+i));
@@ -187,6 +214,7 @@ public class MembershipList extends Fragment {
                 MembershipGroup group = new MembershipGroup();
                 group.setGroupName(groupname);
                 group.setGID(gid);
+                GIDArray.add(gid);
                 groupAdapter.addItem(group);
             }
 
@@ -211,6 +239,8 @@ public class MembershipList extends Fragment {
             e.printStackTrace();
             System.out.println("오류 : " + e.toString());
         }
+
+        checkMembershipSubmit();
     }
 
     private void membershipOutGroupProcess(String response) {
@@ -228,6 +258,27 @@ public class MembershipList extends Fragment {
             e.printStackTrace();
         }
     }
+
+    private void checkMembershipSubmitProcess(String response){
+        Log.d("checkFee",response);
+//        try {
+//            JSONObject jsonObject=new JSONObject(response);
+//            int size=jsonObject.getInt("size");
+//            for(int i=0;i<size;i++){
+//                int GID=jsonObject.getInt("GID"+i);
+//                for(int j=0;j<groupAdapter.getItemCount();j++){
+//                    if(GID==groupAdapter.getItem(j).getGID()){
+//
+//                        TextView textView=rootView.findViewById(R.id.group_name);
+//                        textView.setTextColor(Color.RED);
+//                    }
+//                }
+//            }
+//        }catch (Exception e){
+//
+//        }
+    }
+
 
     private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
         protected String url;
@@ -270,7 +321,7 @@ public class MembershipList extends Fragment {
                 try {
                     JSONObject jsonObject=new JSONObject(response);
                     boolean success=jsonObject.getBoolean("success");
-                    if(success){
+                    if(!success){
                         showToast("회장은 나갈 수 없습니다.");
                     }else{
                         outGroup();
@@ -278,6 +329,8 @@ public class MembershipList extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+            }else if(TAG.equals("checkSubmit")){
+                checkMembershipSubmitProcess(response);
             }
         }
     }

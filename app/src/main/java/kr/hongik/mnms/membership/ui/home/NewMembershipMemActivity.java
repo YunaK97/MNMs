@@ -6,10 +6,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -21,15 +22,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.MemberAdapter;
 import kr.hongik.mnms.R;
-import kr.hongik.mnms.mainscreen.ui.friend.FriendListAdapter;
-import kr.hongik.mnms.mainscreen.ui.friend.OnFriendItemLongClickListener;
 import kr.hongik.mnms.membership.MembershipActivity;
 import kr.hongik.mnms.membership.MembershipGroup;
 
@@ -42,7 +38,7 @@ public class NewMembershipMemActivity extends AppCompatActivity {
      * */
     private Member loginMember;
     private MembershipGroup membershipGroup;
-    private ArrayList<Member> memberArrayList,friendArrayList;
+    private ArrayList<Member> memberArrayList, friendArrayList;
 
     //layouts
     private MemberAdapter memberAdapter;
@@ -65,7 +61,7 @@ public class NewMembershipMemActivity extends AppCompatActivity {
         membershipGroup = (MembershipGroup) intent.getSerializableExtra("membershipGroup");
         memberArrayList = (ArrayList<Member>) intent.getSerializableExtra("memberArrayList");
 
-        btn_newMembershipMem=findViewById(R.id.btn_newMembershipMem);
+        btn_newMembershipMem = findViewById(R.id.btn_newMembershipMem);
         btn_newMembershipMem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -76,7 +72,7 @@ public class NewMembershipMemActivity extends AppCompatActivity {
 
     }
 
-    private void requestAddMem(){
+    private void requestAddMem() {
         String urlAddmembershipMem = "http://" + loginMember.getIp() + "/membership/add";
 
         // 수락or거절 결과 전송
@@ -92,19 +88,12 @@ public class NewMembershipMemActivity extends AppCompatActivity {
         networkTask.setTAG("addMembershipMem");
 
         Map<String, String> params = new HashMap<>();
-        params.put("memID", loginMember.getMemID());
-        try {
-            JSONArray jsonArray = new JSONArray();
-            for (int i = 0; i < selectedFriend.size(); i++) {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("memID", selectedFriend.get(i).getMemID());
-                jsonObject.put("memName", selectedFriend.get(i).getMemName());
-                jsonArray.put(jsonObject);
-            }
-            networkTask.execute(params);
-        } catch (Exception e) {
-            e.printStackTrace();
+        params.put("GID",membershipGroup.getGID()+"");
+        params.put("friendSize",selectedFriend.size()+"");
+        for (int i = 0; i < selectedFriend.size(); i++) {
+            params.put("memID"+i, selectedFriend.get(i).getMemID());
         }
+        networkTask.execute(params);
     }
 
     private void showFriend() {
@@ -120,35 +109,34 @@ public class NewMembershipMemActivity extends AppCompatActivity {
         networkTask.execute(params);
     }
 
-    private void showFriendProcess(String response){
+    private void showFriendProcess(String response) {
         try {
-            JSONObject jsonObject=new JSONObject(response);
-            int showFriendSize=Integer.parseInt(jsonObject.getString("showFriendSize"));
-            if (showFriendSize==0) return;
+            JSONObject jsonObject = new JSONObject(response);
+            int showFriendSize = Integer.parseInt(jsonObject.getString("showFriendSize"));
+            if (showFriendSize == 0) return;
 
             friend_list = findViewById(R.id.RV_newMembershipMem);
             LinearLayoutManager layoutManager = new LinearLayoutManager(NewMembershipMemActivity.this, LinearLayoutManager.VERTICAL, false);
             friend_list.setLayoutManager(layoutManager);
             memberAdapter = new MemberAdapter();
-            friendArrayList=new ArrayList<>();
+            friendArrayList = new ArrayList<>();
 
-            Log.d("Eldyd",showFriendSize+"");
             for (int i = 0; i < showFriendSize; i++) {
-                String friendId = jsonObject.getString("memID"+i);
-                String friendName = jsonObject.getString("memName"+i);
+                String friendId = jsonObject.getString("memID" + i);
+                String friendName = jsonObject.getString("memName" + i);
 
                 Member member = new Member();
                 member.setMemName(friendName);
                 member.setMemID(friendId);
 
-                boolean valid=true;
-                for(int j=0;j<memberArrayList.size();j++){
-                    if(memberArrayList.get(j).getMemID().equals(friendId)){
-                        valid=false;
+                boolean valid = true;
+                for (int j = 0; j < memberArrayList.size(); j++) {
+                    if (memberArrayList.get(j).getMemID().equals(friendId)) {
+                        valid = false;
                         break;
                     }
                 }
-                if(valid)
+                if (valid)
                     friendArrayList.add(member);
             }
 
@@ -205,7 +193,7 @@ public class NewMembershipMemActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
-            if (TAG.equals("addmembershipMem")) {
+            if (TAG.equals("addMembershipMem")) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     boolean success = jsonObject.getBoolean(TAG_SUCCESS);

@@ -46,17 +46,12 @@ public class ManageFeeFragment extends Fragment {
         tv_paid_membership_cnt = viewGroup.findViewById(R.id.tv_paid_membership_cnt);
         tv_my_notSubmit=viewGroup.findViewById(R.id.tv_my_notSubmit);
 
-
         Bundle bundle = getArguments();
         if (bundle != null) {
             membershipGroup = (MembershipGroup) bundle.getSerializable("membershipGroup");
             loginMember = (Member) bundle.getSerializable("loginMember");
 
-            //setInformation(membershipGroup);
-            tv_paid_membership_cnt.setText("10");
-            tv_paid_membership.setText("500000");
-            tv_notsubmit_cnt.setText("3");
-            tv_monthly_membership.setText("50000");
+            setInformation(membershipGroup);
 
             //getNotsubmitMembers();
 
@@ -65,8 +60,16 @@ public class ManageFeeFragment extends Fragment {
     }
 
     public void setInformation(MembershipGroup membershipGroup) {
-        tv_monthly_membership.setText(membershipGroup.getFee());
-        tv_notsubmit_cnt.setText(membershipGroup.getNotSubmit());
+        //내가 낸 회비 횟수
+        tv_paid_membership_cnt.setText("10");
+        //내가 총 낸 회비
+        tv_paid_membership.setText("500000");
+        //내 미납횟수
+        tv_my_notSubmit.setText("1");
+        //멤버십의 회비
+        tv_monthly_membership.setText(membershipGroup.getFee()+"");
+        //멤버십의 미납가는횟수
+        tv_notsubmit_cnt.setText(membershipGroup.getNotSubmit()+"");
         //tv_paid_membership 과 tv_paid_membership_cnt는 intent로 membershipfragment에서 해당 아이디의 transaction을 계산하여 넘겨주기
     }
 

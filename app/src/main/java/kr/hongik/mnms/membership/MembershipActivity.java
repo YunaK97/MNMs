@@ -161,7 +161,7 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
                     //돈사용
                     Intent intent = new Intent(MembershipActivity.this, NewTransactionActivity.class);
                     intent.putExtra("loginMember", loginMember);
-                    intent.putExtra("loginMemberAccouont", loginMemberAccount);
+                    intent.putExtra("loginMemberAccount", loginMemberAccount);
                     intent.putExtra("membershipGroup", membershipGroup);
                     intent.putExtra("mainActivity", "membership");
 

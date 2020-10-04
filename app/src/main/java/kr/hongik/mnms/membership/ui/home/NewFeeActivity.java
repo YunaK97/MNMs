@@ -98,6 +98,7 @@ public class NewFeeActivity extends AppCompatActivity {
         params.put("fee",membershipGroup.getFee()+"");
         params.put("accountPW",accountPW+"");
         params.put("MID",membershipGroup.getMID()+"");
+        params.put("GID",membershipGroup.getGID()+"");
         params.put("membershipAccountNum",membershipGroup.getAccountNum());
 
         networkTask.execute(params);

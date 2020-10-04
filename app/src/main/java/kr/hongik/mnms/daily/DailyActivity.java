@@ -54,7 +54,7 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_new_trans_confirm, menu);
+        getMenuInflater().inflate(R.menu.menu_dailyqr, menu);
         return true;
     }
 
@@ -102,10 +102,10 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
         if (data == null) return;
         if (requestCode == TAG_NEW_MEM) {
             if(resultCode==TAG_SUCCESS)
-                showToast("멤버 추가 완료");
+                showToast("멤버 추가 완료 - 멤버십 업데이트 필요");
         } else if (requestCode == TAG_NEW_TRANS) {
             if(resultCode==TAG_SUCCESS)
-                showToast("내역 추가 완료");
+                showToast("내역 추가 완료 - 트랜잭션 업데이트 필요");
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -131,7 +131,7 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
                 toggleFab();
                 intent = new Intent(DailyActivity.this, NewDailyMemActivity.class);
                 intent.putExtra("loginMember", loginMember);
-                intent.putExtra("membershipGroup", dailyGroup);
+                intent.putExtra("dailyGroup", dailyGroup);
                 intent.putExtra("memberArrayList", memberArrayList);
 
                 startActivityForResult(intent, TAG_NEW_MEM);
@@ -194,7 +194,7 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
             dailyGroup.setDID(jsonObject.getInt("DID"));
             dailyGroup.setGID(jsonObject.getInt("GID"));
             dailyGroup.setGroupName(jsonObject.getString("groupName"));
-            //showMember();
+            showMember();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -253,7 +253,7 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
         DailyPagerAdapter adapter = new DailyPagerAdapter(getSupportFragmentManager(), bundle);
         viewPager.setAdapter(adapter);
 
-        TabLayout tabLayout = findViewById(R.id.tabLayout_membership);
+        TabLayout tabLayout = findViewById(R.id.tabLayout_daily);
         tabLayout.setupWithViewPager(viewPager);
     }
 

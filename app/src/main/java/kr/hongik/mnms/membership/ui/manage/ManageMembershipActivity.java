@@ -2,11 +2,13 @@ package kr.hongik.mnms.membership.ui.manage;
 
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.json.JSONObject;
@@ -15,11 +17,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
+import kr.hongik.mnms.membership.CustomDialogDuration;
 import kr.hongik.mnms.membership.MembershipActivity;
 import kr.hongik.mnms.membership.MembershipGroup;
 
@@ -35,7 +39,7 @@ public class ManageMembershipActivity extends AppCompatActivity {
 
     //Layouts
     private EditText etNewNotSubmit,etNewName,etNewFee;
-    private TextView tvPayDuration;
+    private TextView new_membership_payType,new_membership_payTypeNum;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -64,17 +68,27 @@ public class ManageMembershipActivity extends AppCompatActivity {
         etNewFee=findViewById(R.id.new_membership_fee);
         etNewName=findViewById(R.id.new_membership_name);
         etNewNotSubmit=findViewById(R.id.new_membership_notsubmit);
-        tvPayDuration=findViewById(R.id.new_membership_payDuration);
 
         etNewFee.setText(membershipGroup.getFee()+"");
         etNewNotSubmit.setText(membershipGroup.getNotSubmit()+"");
         etNewName.setText(membershipGroup.getGroupName());
 
-        tvPayDuration.setOnClickListener(new View.OnClickListener() {
+        new_membership_payType=findViewById(R.id.new_membership_payType);
+        new_membership_payTypeNum=findViewById(R.id.new_membership_payTypeNum);
+        new_membership_payType.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-
-
+                CustomDialogDuration customDialogDuration=new CustomDialogDuration(ManageMembershipActivity.this);
+                customDialogDuration.callFunction(new_membership_payType,new_membership_payTypeNum);
+            }
+        });
+        new_membership_payTypeNum.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onClick(View v) {
+                CustomDialogDuration customDialogDuration=new CustomDialogDuration(ManageMembershipActivity.this);
+                customDialogDuration.callFunction(new_membership_payType,new_membership_payTypeNum);
             }
         });
     }
@@ -101,6 +115,9 @@ public class ManageMembershipActivity extends AppCompatActivity {
         params.put("fee",newFee);
         params.put("groupName",newName);
         params.put("notSubmit",newNotSubmit);
+        params.put("payDuration",new_membership_payType+""); //
+        params.put("payDuration",new_membership_payTypeNum+""); //
+
 
         networkTask.execute(params);
     }

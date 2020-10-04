@@ -61,7 +61,6 @@ public class DailyQRActivity extends AppCompatActivity {
         });
         Intent intent=getIntent();
         if (intent != null) {
-            urlTransaction=""+loginMember.getIp()+"";
             dailyGroup = (DailyGroup) intent.getSerializableExtra("dailyGroup");
             loginMember = (Member) intent.getSerializableExtra("loginMember");
             loginMemberAccount = (Account) intent.getSerializableExtra("loginMemberAccount");
