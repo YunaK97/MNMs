@@ -2,6 +2,7 @@ package kr.hongik.mnms.membership.ui.manage;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -98,12 +100,14 @@ public class MembershipMemFragment extends Fragment {
         //미납횟수 변경하능하게 하기
         //멤버 삭제 기능
         final EditText edittext = new EditText(rootView.getContext());
+        edittext.setBackground(ContextCompat.getDrawable(context,R.drawable.sidecustom_round));
         final Member selMember = memberAdapter.getItem(position);
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(rootView.getContext());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(rootView.getContext(),R.style.CustomDialog);
         builder.setTitle(selMember.getMemName());
         builder.setMessage("미납횟수 변경");
         builder.setView(edittext);
+        final AlertDialog alertDialog=builder.create();
         builder.setPositiveButton("입력",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -113,36 +117,34 @@ public class MembershipMemFragment extends Fragment {
         builder.setNegativeButton("취소",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-
+                        alertDialog.dismiss();
                     }
                 });
         builder.setNeutralButton("삭제",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.CustomDialog);
+                        AlertDialog.Builder builder2 = new AlertDialog.Builder(context, R.style.CustomDialog);
 
-                        builder.setTitle(selMember.getMemName()).setMessage("membership에서 삭제하시겠습니까?");
+                        builder2.setTitle(selMember.getMemName()).setMessage("membership에서 삭제하시겠습니까?");
 
-                        builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+                        final AlertDialog alertDialog2 = builder2.create();
+                        alertDialog2.show();
+
+                        builder2.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
                                 deleteMember(selMember.getMemID());
                             }
                         });
-                        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                        builder2.setNegativeButton("취소", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                showToast("삭제 취소");
+                                alertDialog2.dismiss();
                             }
                         });
 
-                        final AlertDialog alertDialog = builder.create();
-                        alertDialog.show();
                     }
                 });
-        builder.show();
-
-
 
     }
 
@@ -150,7 +152,7 @@ public class MembershipMemFragment extends Fragment {
         //멤버십에서 회원삭제할것임
         //MID,GID,삭제할 회원memID를 보냄
         //삭제 성공 여부를 받아야함
-        String urlDeleteMember = "http://" + loginMember.getIp() + "/deleteMember";
+        String urlDeleteMember = "http://" + loginMember.getIp() + "/membership/deleteMember";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlDeleteMember);

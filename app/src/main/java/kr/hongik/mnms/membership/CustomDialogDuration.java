@@ -56,16 +56,19 @@ public class CustomDialogDuration implements View.OnClickListener {
         monType=ArrayAdapter.createFromResource(dialog.getContext(),R.array.date_month,R.layout.support_simple_spinner_dropdown_item);
         monType.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         monSpinner.setAdapter(monType);
+        monSpinner.setSelection(0);
 
         yearMonSpinner=dialog.findViewById(R.id.year_monSpinner);
         year_monType=ArrayAdapter.createFromResource(dialog.getContext(),R.array.date_month,R.layout.support_simple_spinner_dropdown_item);
         year_monType.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         yearMonSpinner.setAdapter(year_monType);
+        yearMonSpinner.setSelection(0);
 
         yearDaySpinner=dialog.findViewById(R.id.year_daySpinner);
         year_dayType=ArrayAdapter.createFromResource(dialog.getContext(),R.array.date_day,R.layout.support_simple_spinner_dropdown_item);
         year_dayType.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         yearDaySpinner.setAdapter(year_dayType);
+        yearDaySpinner.setSelection(0);
 
         //id 찾기
         tv_customMon=dialog.findViewById(R.id.tv_customMon);

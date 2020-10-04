@@ -72,11 +72,13 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         emailTypeAdapter = ArrayAdapter.createFromResource(this, R.array.email_type, R.layout.support_simple_spinner_dropdown_item);
         emailTypeAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         email_type.setAdapter(emailTypeAdapter);
+        email_type.setSelection(0);
 
         bank_type = findViewById(R.id.bank_type);
         bankTypeAdapter = ArrayAdapter.createFromResource(this, R.array.bank_type, R.layout.support_simple_spinner_dropdown_item);
         bankTypeAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         bank_type.setAdapter(bankTypeAdapter);
+        bank_type.setSelection(0);
 
         //id 중복확인
         Button overlap = findViewById(R.id.btn_idOverlap);
@@ -199,7 +201,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         String pw = ((TextView) findViewById(R.id.textPW)).getText().toString();
         pw.replaceAll(" ", "");
         if (TextUtils.isEmpty(pw)) return false;
-        if(pw.length()<8) {
+        if(pw.length()<8 || pw.length()>20) {
             showToast("비밀번호 : 8~20자");
             return false;
         }

@@ -82,6 +82,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             networkTask.setTAG("pwCheck");
 
             Map<String, String> params = new HashMap<>();
+            params.put("memID",loginMember.getMemID());
             params.put("memPW", pw);
 
             networkTask.execute(params);
@@ -119,6 +120,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 //비밀번호 바꾸고 성공여부 받아야함
                 String pw1 = ((TextView) findViewById(R.id.tv_pw)).getText().toString();
                 String pw2 = ((TextView) findViewById(R.id.tv_pw_check)).getText().toString();
+                if(pw1.length()<8 || pw1.length()>20) {
+                    showToast("비밀번호 : 8~20자");
+                    return;
+                }
                 if (pw1.equals(pw2)) {
                     pwChange(pw1);
                 } else {

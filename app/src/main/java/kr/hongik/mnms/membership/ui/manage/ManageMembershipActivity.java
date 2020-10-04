@@ -72,6 +72,8 @@ public class ManageMembershipActivity extends AppCompatActivity {
         etNewFee.setText(membershipGroup.getFee()+"");
         etNewNotSubmit.setText(membershipGroup.getNotSubmit()+"");
         etNewName.setText(membershipGroup.getGroupName());
+        //new_membership_payType.setText(membershipGroup.getPayDuration()+"");
+        //new_membership_payTypeNum.setText(membershipGroup.getPayDay()+"");
 
         new_membership_payType=findViewById(R.id.new_membership_payType);
         new_membership_payTypeNum=findViewById(R.id.new_membership_payTypeNum);
