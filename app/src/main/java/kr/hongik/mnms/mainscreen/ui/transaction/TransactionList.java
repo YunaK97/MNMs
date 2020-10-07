@@ -127,7 +127,6 @@ public class TransactionList extends Fragment {
             transactionAdapter.setItems(transactionArrayList);
             transactionList.setAdapter(transactionAdapter);
 
-
         } catch (JSONException e) {
             e.printStackTrace();
         }

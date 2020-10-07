@@ -95,10 +95,10 @@ public class DailyQRActivity extends AppCompatActivity {
         if (result != null) {
             //qrcode 가 없으면
             if (result.getContents() == null) {
-                //Toast.makeText(DailyQRActivity.this, "취소!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DailyQRActivity.this, "취소!", Toast.LENGTH_SHORT).show();
             } else {
                 //qrcode 결과가 있으면
-                //Toast.makeText(DailyQRActivity.this, "스캔완료!"+result.getContents(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(DailyQRActivity.this, "스캔완료!"+result.getContents(), Toast.LENGTH_SHORT).show();
                 try {
                     //data를 json으로 변환
                     JSONObject jsonObject = new JSONObject(result.getContents());

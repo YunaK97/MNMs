@@ -1,53 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="10sp"
-    android:paddingRight="10sp"
     android:background="@drawable/sidecustom"
-    android:orientation="horizontal">
-    <LinearLayout
-        android:layout_weight="1"
-        android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:paddingLeft="10sp"
+    android:paddingRight="10sp">
+    <TextView
+        android:id="@+id/trans_history"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="left"
-        android:orientation="vertical">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/trans_history"
-            android:text="ex)지지고 컵밥"
-            android:textSize="20sp"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/trans_since"
-            android:text="ex)2020.09.06 13:55"
-            android:textSize="15sp"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:gravity="right"
-        android:layout_weight="1"
-        android:layout_width="match_parent"
+        android:text="ex)지지고 컵밥"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:textSize="20sp" />
+    <TextView
+        android:id="@+id/trans_since"
+        android:layout_below="@+id/trans_history"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/trans_money"
-            android:text="-50000"
-            android:textSize="20sp"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/trans_leftmoney"
-            android:textSize="15sp"
-            android:text="잔액:10000원"
-            />
+        android:text="ex)2020.09.06 13:55"
+        android:layout_alignParentLeft="true"
+        android:textSize="15sp" />
 
-    </LinearLayout>
-</LinearLayout>
+    <TextView
+        android:id="@+id/trans_money"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-50000"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:textSize="20sp" />
+    <TextView
+        android:id="@+id/trans_leftmoney"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="잔액:10000원"
+        android:layout_below="@+id/trans_money"
+        android:layout_alignParentRight="true"
+        android:textSize="15sp" />
+</RelativeLayout>
