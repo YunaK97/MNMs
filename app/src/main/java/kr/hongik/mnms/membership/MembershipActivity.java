@@ -14,7 +14,6 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -32,13 +31,9 @@ import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
-import kr.hongik.mnms.membership.ui.home.NewFeeActivity;
+import kr.hongik.mnms.newprocesses.NewFeeActivity;
 import kr.hongik.mnms.membership.ui.home.NewMembershipMemActivity;
 import kr.hongik.mnms.membership.ui.manage.ManageMembershipActivity;
-import kr.hongik.mnms.membership.ui.manage.MembershipMemFragment;
-import kr.hongik.mnms.newprocesses.NewDailyActivity;
-import kr.hongik.mnms.newprocesses.NewFriendActivity;
-import kr.hongik.mnms.newprocesses.NewMembershipActivity;
 import kr.hongik.mnms.newprocesses.NewTransactionActivity;
 
 public class MembershipActivity extends AppCompatActivity implements View.OnClickListener {

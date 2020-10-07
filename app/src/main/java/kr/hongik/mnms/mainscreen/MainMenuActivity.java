@@ -1,10 +1,16 @@
 package kr.hongik.mnms.mainscreen;
 
-import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,17 +19,24 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
+
+import org.json.JSONObject;
+
 import kr.hongik.mnms.Account;
+import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.firstscreen.MainActivity;
@@ -32,10 +45,11 @@ import kr.hongik.mnms.mainscreen.ui.friend.FriendList;
 import kr.hongik.mnms.mainscreen.ui.membership.MembershipList;
 import kr.hongik.mnms.mainscreen.ui.settings.SettingsActivity;
 import kr.hongik.mnms.mainscreen.ui.transaction.TransactionList;
+import kr.hongik.mnms.membership.MembershipGroup;
+import kr.hongik.mnms.newprocesses.NewFeeActivity;
 import kr.hongik.mnms.newprocesses.NewDailyActivity;
 import kr.hongik.mnms.newprocesses.NewFriendActivity;
 import kr.hongik.mnms.newprocesses.NewMembershipActivity;
-import kr.hongik.mnms.newprocesses.NewTransactionActivity;
 
 
 public class MainMenuActivity extends AppCompatActivity {
@@ -47,9 +61,14 @@ public class MainMenuActivity extends AppCompatActivity {
     private TextView textName, accName;
     private ImageButton btn_transaction, btn_membership, btn_daily, btn_friendList;
     private ViewPager pager;
+    private NotificationManager notiManager;
+    private NotificationCompat.Builder notiBuilder;
+    public MyPagerAdapter adapter;
+
 
     //variables
-    public int TAG_LOGOUT=322;
+    public int TAG_LOGOUT = 322;
+    private static String CHANNEL_ID = "channel1", CHANEL_NAME = "Channel1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +97,7 @@ public class MainMenuActivity extends AppCompatActivity {
         //송금내역,membership,daily pager
         pager.setOffscreenPageLimit(4);
 
-        MyPagerAdapter adapter = new MyPagerAdapter(getSupportFragmentManager());
+         adapter = new MyPagerAdapter(getSupportFragmentManager());
 
         TransactionList transactionList = new TransactionList();
         adapter.addItem(transactionList);
@@ -191,6 +210,74 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         });
 
+        checkMembershipSubmit();
+    }
+
+    private void checkMembershipSubmit() {
+        String urlCheckSubmit = "http://" + loginMember.getIp() + "/membership/check";
+
+        NetworkTask networkTask = new NetworkTask();
+        networkTask.setTAG("checkSubmit");
+        networkTask.setURL(urlCheckSubmit);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("memID", loginMember.getMemID());
+
+        networkTask.execute(params);
+    }
+
+    public void showNoti(int GID,String groupName) {
+        notiBuilder = null;
+        notiManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        //버전 오레오 이상일 경우
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notiManager.createNotificationChannel(
+                    new NotificationChannel(GID+"", CHANEL_NAME, NotificationManager.IMPORTANCE_DEFAULT));
+            notiBuilder = new NotificationCompat.Builder(this, CHANNEL_ID);
+
+            //하위 버전일 경우
+        } else {
+            notiBuilder = new NotificationCompat.Builder(this);
+        }
+        Intent intent = new Intent(this, NewFeeActivity.class);
+        MembershipGroup membershipGroup=new MembershipGroup();
+        membershipGroup.setGID(GID);
+        membershipGroup.setGroupName(groupName);
+        intent.putExtra("membershipGroup",membershipGroup);
+        intent.putExtra("loginMember",loginMember);
+        intent.putExtra("loginMemberAccount",loginMemberAccount);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, GID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        //알림창 제목
+        notiBuilder.setContentTitle("MnMs");
+        //알림창 메시지
+        notiBuilder.setContentText(groupName+"의 회비내는날! ");
+        //알림창 아이콘
+        notiBuilder.setSmallIcon(R.drawable.ic_menu_camera);
+        //알림창 터치시 상단 알림상태창에서 알림이 자동으로 삭제되게 합니다.
+        notiBuilder.setAutoCancel(true);
+
+        //pendingIntent를 builder에 설정 해줍니다.
+        // 알림창 터치시 인텐트가 전달할 수 있도록 해줍니다.
+        notiBuilder.setContentIntent(pendingIntent);
+        Notification notification = notiBuilder.build();
+
+        //알림창 실행
+        notiManager.notify(GID, notification);
+    }
+
+    private void checkMembershipSubmitProcess(String response){
+        Log.d("checkFee",response);
+        try {
+            JSONObject jsonObject=new JSONObject(response);
+            int GIDsize=jsonObject.getInt("GIDsize");
+            for(int i=0;i<GIDsize;i++){
+                int GID=jsonObject.getInt("GID"+i);
+                String groupName=jsonObject.getString("groupName"+i);
+                showNoti(GID,groupName);
+            }
+        }catch (Exception e){
+
+        }
     }
 
     @Override
@@ -212,14 +299,18 @@ public class MainMenuActivity extends AppCompatActivity {
             intent.putExtra("loginMember", loginMember);
             intent.putExtra("loginMemberAccount", loginMemberAccount);
             startActivity(intent);
-        }else if(curId==R.id.logout){
+        } else if (curId == R.id.logout) {
             Intent intent = new Intent(MainMenuActivity.this, MainActivity.class);
-            setResult(TAG_LOGOUT,intent);
+            setResult(TAG_LOGOUT, intent);
             finish();
             //startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void refresh(){
+        adapter.notifyDataSetChanged();
     }
 
     @Override
@@ -323,6 +414,45 @@ public class MainMenuActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             return items.size();
+        }
+    }
+
+    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+        protected String url;
+        String TAG;
+
+        void setURL(String url) {
+            this.url = url;
+        }
+
+        void setTAG(String TAG) {
+            this.TAG = TAG;
+        }
+
+        @Override
+        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+
+            // Http 요청 준비 작업
+            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+
+            // Parameter 를 전송한다.
+            http.addAllParameters(maps[0]);
+
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
+            // 응답 본문 가져오기
+
+            return post.getBody();
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            if (TAG.equals("checkSubmit")) {
+                checkMembershipSubmitProcess(response);
+            }
         }
     }
 }

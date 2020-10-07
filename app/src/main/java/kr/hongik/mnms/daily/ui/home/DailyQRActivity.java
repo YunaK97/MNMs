@@ -98,7 +98,7 @@ public class DailyQRActivity extends AppCompatActivity {
                 //Toast.makeText(DailyQRActivity.this, "취소!", Toast.LENGTH_SHORT).show();
             } else {
                 //qrcode 결과가 있으면
-                Toast.makeText(DailyQRActivity.this, "스캔완료!", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(DailyQRActivity.this, "스캔완료!"+result.getContents(), Toast.LENGTH_SHORT).show();
                 try {
                     //data를 json으로 변환
                     JSONObject jsonObject = new JSONObject(result.getContents());
@@ -109,6 +109,7 @@ public class DailyQRActivity extends AppCompatActivity {
                     friendMember.setMemID(jsonObject.getString("myID"));
                     friendMember.setMemName(jsonObject.getString("myName"));
                     friendMember.setAccountNum(jsonObject.getString("myAccount"));
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                     //Toast.makeText(MainActivity.this, result.getContents(), Toast.LENGTH_LONG).show();

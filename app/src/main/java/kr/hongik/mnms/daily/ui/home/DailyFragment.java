@@ -75,7 +75,6 @@ public class DailyFragment extends Fragment {
     //variables
     private ArrayAdapter dutchRangeAdapter;
     private ViewGroup rootView;
-    private List<Transaction> dataList;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_daily, container, false);
@@ -90,8 +89,7 @@ public class DailyFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        dataList = new ArrayList<>();
-        mAdapter = new TransactionAdapter(dataList);
+        mAdapter = new TransactionAdapter();
         mRecyclerView.setAdapter(mAdapter);
 
         dutchType = rootView.findViewById(R.id.dutch_radioGroup);
@@ -148,9 +146,7 @@ public class DailyFragment extends Fragment {
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        dataList = new ArrayList<>();
-        mAdapter = new TransactionAdapter(dataList);
-
+        mAdapter = new TransactionAdapter();
 
         try {
             JSONObject jsonObject = new JSONObject(response);

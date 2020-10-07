@@ -12,6 +12,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,7 +38,6 @@ public class TransactionList extends Fragment {
     private ViewGroup rootView;
     private RecyclerView transactionList;
     private TransactionAdapter transactionAdapter;
-    private List<Transaction> dataList;
 
     public TransactionList() {
 
@@ -46,6 +47,12 @@ public class TransactionList extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        showTransaction();
     }
 
     @Override
@@ -62,26 +69,12 @@ public class TransactionList extends Fragment {
             loginMemberAccount = (Account) bundle.getSerializable("loginMemberAccount");
         }
         //그룹리스트 출력
-        transactionView(rootView);
+        showTransaction();
 
         return rootView;
     }
 
-    private void transactionView(ViewGroup rootView) {
-        transactionList = rootView.findViewById(R.id.main_transaction_list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
-        transactionList.setLayoutManager(layoutManager);
-
-        dataList = new ArrayList<>();
-        transactionAdapter = new TransactionAdapter(dataList);
-        transactionList.setAdapter(transactionAdapter);
-
-        Transaction transact = new Transaction();
-        transact.setAccountNum(loginMember.getAccountNum());
-        showTransaction(transact);
-    }
-
-    private void showTransaction(Transaction transaction) {
+    private void showTransaction() {
         String urlListTransaction = "http://" + loginMember.getIp() + "/member/listTransaction";
 
         NetworkTask networkTask = new NetworkTask();
@@ -89,7 +82,7 @@ public class TransactionList extends Fragment {
         networkTask.setTAG("listTransaction");
 
         Map<String, String> params = new HashMap<>();
-        params.put("accountNum", transaction.getAccountNum());
+        params.put("accountNum", loginMember.getAccountNum());
 
         networkTask.execute(params);
     }
@@ -98,6 +91,14 @@ public class TransactionList extends Fragment {
         try {
             JSONObject jsonObject = new JSONObject(response);
             loginMemberAccount.setAccountBalance(Integer.parseInt(jsonObject.getString("accountBalance")));
+
+            transactionList = rootView.findViewById(R.id.main_transaction_list);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
+            transactionList.setLayoutManager(layoutManager);
+            transactionAdapter=new TransactionAdapter();
+
+            ArrayList<Transaction> transactionArrayList=new ArrayList<>();
+
             TextView TV_accountBalance=rootView.findViewById(R.id.TV_accountBalance);
             TV_accountBalance.setText(jsonObject.getString("accountBalance"));
             int listTransactionSize = Integer.parseInt(jsonObject.getString("listTransactionSize"));
@@ -112,10 +113,20 @@ public class TransactionList extends Fragment {
                 transact.setMID(Integer.parseInt(jsonObject.getString("MID"+i)));
                 transact.setDID(Integer.parseInt(jsonObject.getString("DID"+i)));
 
-                transactionAdapter.addItem(transact);
-
-                transactionList.setAdapter(transactionAdapter);
+                transactionArrayList.add(transact);
             }
+
+            Comparator<Transaction> noAsc = new Comparator<Transaction>() {
+                @Override
+                public int compare(Transaction item1, Transaction item2) {
+                    return item1.getSince().compareTo(item2.getSince());
+                }
+            };
+            Collections.sort(transactionArrayList, noAsc);
+
+            transactionAdapter.setItems(transactionArrayList);
+            transactionList.setAdapter(transactionAdapter);
+
 
         } catch (JSONException e) {
             e.printStackTrace();

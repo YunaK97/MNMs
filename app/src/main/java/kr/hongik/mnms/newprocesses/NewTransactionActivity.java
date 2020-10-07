@@ -33,9 +33,10 @@ import kr.hongik.mnms.membership.MembershipGroup;
 public class NewTransactionActivity extends AppCompatActivity {
     /*
     * 사용한 돈, 사용한 곳, 그룹들 불러오기
-    * 멤버십 사용 - 회장만 가능
-    * 데일리 사용 - 외부 사용 적어두기 (외부 : 임시 QR 발급(임시 계좌번호로 송금하는 형태))
-    * 데일리 - 더치페이 -> 상대방 이름 선택
+    * 멤버십 사용 - 회장만 가능 - newTransaction
+    * 회비 내기 - 회장,부원 - newFee
+    * 데일리 사용 - 외부 사용 적어두기 (외부 : 임시 QR 발급(임시 계좌번호로 송금하는 형태)) - newTransaction
+    * 데일리 - 더치페이 -> 상대방 이름 선택 -newMoneyTOFriend
     *
     *
     *
@@ -74,7 +75,6 @@ public class NewTransactionActivity extends AppCompatActivity {
         LL_newTrans_daily=findViewById(R.id.LL_newTrans_daily);
         LL_newTrans_membership=findViewById(R.id.LL_newTrans_membership);
         if(mainActivity.equals("daily")){
-
             dailyGroup=(DailyGroup)intent.getSerializableExtra("dailyGroup");
         }else if(mainActivity.equals("membership")){
             membershipGroup=(MembershipGroup)intent.getSerializableExtra("membershipGroup");
@@ -83,7 +83,7 @@ public class NewTransactionActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_new_trans_confirm, menu);
+        getMenuInflater().inflate(R.menu.menu_confirm, menu);
         return true;
     }
 
@@ -93,22 +93,12 @@ public class NewTransactionActivity extends AppCompatActivity {
             plusTransaction();
             return true;
         }
-        if (item.getItemId() == R.id.new_qr) {
-            showToast("qr찍기 구현중!");
-            //intializing scan object
-            qrScan = new IntentIntegrator(this);
-            qrScan.setPrompt("Scanning...");
-            //qrScan.setOrientationLocked(false);
-            qrScan.initiateScan();
-            return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
     public void plusTransaction() {
         plus_history = ((EditText) findViewById(R.id.plus_history)).getText().toString();
-        plus_money=0;
-        plus_money = Integer.parseInt(((EditText) findViewById(R.id.plus_money)).getText().toString());
+        plus_money=Integer.parseInt(((EditText)findViewById(R.id.plus_money)).getText().toString());
         Transaction newTransaction=new Transaction();
         newTransaction.setTransactHistroy(plus_history);
         newTransaction.setTransactMoney(plus_money);

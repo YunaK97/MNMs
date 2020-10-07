@@ -30,6 +30,7 @@
             android:layout_weight="1"
             android:hint="ex) 21000"
             android:padding="1dp"
+            android:inputType="number"
             android:textSize="20sp" />
 
     </LinearLayout>
@@ -56,6 +57,7 @@
             style="@style/CustomTextView"
             android:layout_width="match_parent"
             android:layout_weight="1"
+            android:inputType="text"
             android:hint="ex) 베스킨 라빈스"
             android:padding="1dp"
             android:textSize="20sp" />
@@ -76,7 +78,7 @@
             android:layout_width="match_parent"
             android:layout_weight="1"
             android:padding="1dp"
-            android:text="매장 계좌번호"
+            android:text="매장 이름"
             android:textSize="20sp" />
 
         <EditText
@@ -84,7 +86,8 @@
             style="@style/CustomTextView"
             android:layout_width="match_parent"
             android:layout_weight="1"
-            android:hint="ex) 12-234"
+            android:hint="베스킨 라빈스 의정부점"
+            android:inputType="text"
             android:padding="1dp"
             android:textSize="20sp" />
     </LinearLayout>
@@ -95,26 +98,51 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/LL_newTrans3"
         android:layout_centerHorizontal="true"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:paddingLeft="10sp"
         android:paddingRight="10sp"
         android:visibility="gone">
-
-        <TextView
-            style="@style/CustomTextView"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:padding="1dp"
-            android:text="멤버십 이름"
-            android:textSize="20sp" />
+            android:orientation="horizontal"
+            android:layout_height="match_parent">
+            <TextView
+                style="@style/CustomTextView"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:padding="1dp"
+                android:text="멤버십 이름"
+                android:textSize="20sp" />
 
-        <TextView
-            style="@style/CustomTextView"
+            <TextView
+                style="@style/CustomTextView"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:padding="1dp"
+                android:text="아우디"
+                android:id="@+id/newTrans_membership_name"
+                android:textSize="20sp" />
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:padding="1dp"
-            android:text="ex)audi"
-            android:textSize="20sp" />
+            android:layout_height="match_parent">
+            <TextView
+                style="@style/CustomTextView"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:padding="1dp"
+                android:text="멤버십 계좌 비밀번호"
+                android:textSize="20sp" />
+
+            <EditText
+                style="@style/CustomTextView"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:padding="1dp"
+                android:id="@+id/newTrans_membership_pw"
+                android:inputType="numberPassword"
+                android:textSize="20sp" />
+        </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
@@ -123,27 +151,52 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/LL_newTrans3"
         android:layout_centerHorizontal="true"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:paddingLeft="10sp"
         android:paddingRight="10sp"
         android:visibility="visible">
 
-        <TextView
-            style="@style/CustomTextView"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:padding="1dp"
-            android:text="데일리 이름"
-            android:textSize="20sp" />
+            android:orientation="horizontal"
+            android:layout_height="match_parent">
+            <TextView
+                style="@style/CustomTextView"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:padding="1dp"
+                android:text="데일리 이름"
+                android:textSize="20sp" />
 
-        <TextView
-            style="@style/CustomTextView"
+            <TextView
+                style="@style/CustomTextView"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:padding="1dp"
+                android:text="running맨"
+                android:id="@+id/newTrans_daily_name"
+                android:textSize="20sp" />
+        </LinearLayout>
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:padding="1dp"
-            android:text="ex)audi"
-            android:textSize="20sp" />
+            android:layout_height="match_parent">
+            <TextView
+                style="@style/CustomTextView"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:padding="1dp"
+                android:text="계좌 비밀번호"
+                android:textSize="20sp" />
 
+            <EditText
+                style="@style/CustomTextView"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:padding="1dp"
+                android:id="@+id/newTrans_daily_pw"
+                android:inputType="numberPassword"
+                android:textSize="20sp" />
+        </LinearLayout>
     </LinearLayout>
 
 

@@ -7,12 +7,13 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
 
 public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.MyViewHolder> {
-    private List<Transaction> mDataset;
+    private ArrayList<Transaction> mDataset = new ArrayList<>();
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
@@ -37,10 +38,11 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         }
     }
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public TransactionAdapter(List<Transaction> myDataset) {
-        mDataset = myDataset;
+    public void setItems(ArrayList<Transaction> mDataset) {
+        this.mDataset = mDataset;
     }
+
+    // Provide a suitable constructor (depends on the kind of dataset)
 
     // Create new views (invoked by the layout manager)
     @Override
@@ -66,7 +68,7 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         }
 
         holder.TextView_transHistory.setText(tData.getTransactHistroy());
-        holder.TextView_transMoney.setText(tData.getTransactMoney());
+        holder.TextView_transMoney.setText(tData.getTransactMoney()+"");
         holder.TextView_since.setText(tData.getSince());
 
     }

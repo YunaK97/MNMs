@@ -30,10 +30,13 @@ import kr.hongik.mnms.R;
 import kr.hongik.mnms.daily.DailyActivity;
 import kr.hongik.mnms.daily.DailyGroup;
 import kr.hongik.mnms.mainscreen.GroupAdapter;
+import kr.hongik.mnms.mainscreen.MainMenuActivity;
 import kr.hongik.mnms.mainscreen.OnGroupItemClickListener;
 import kr.hongik.mnms.mainscreen.OnGroupItemLongClickListener;
 
 public class DailyList extends Fragment {
+    //돈 정산 안끝났으면 데일리 못나감!
+
     private Member loginMember;
     private Account loginMemberAccount;
 
@@ -160,8 +163,8 @@ public class DailyList extends Fragment {
             groupAdapter.setOnItemLongClickListener(new OnGroupItemLongClickListener() {
                 @Override
                 public void onItemLongClick(GroupAdapter.ViewHolder holder, View view, int position) {
-                    selectOutGroup(position);
-                    groupView();
+                    showToast("아직 구현중");
+                    //selectOutGroup(position);
                 }
             });
         } catch (JSONException e) {
@@ -189,7 +192,7 @@ public class DailyList extends Fragment {
             boolean success = jsonObject.getBoolean("success");
             if (success) {
                 //삭제 성공여부 확인
-                groupView();
+                ((MainMenuActivity)getActivity()).refresh();
             } else {
                 showToast("그룹 나가기 실패");
             }

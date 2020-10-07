@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
+import kr.hongik.mnms.mainscreen.MainMenuActivity;
 
 public class FriendList extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
@@ -166,7 +167,7 @@ public class FriendList extends Fragment {
             if (success) {
                 //삭제 성공여부 확인
                 showToast("친구 삭제 성공");
-                showFriend();
+                ((MainMenuActivity)getActivity()).refresh();
             } else {
                 showToast("친구 삭제 실패");
             }

@@ -4,17 +4,17 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import org.json.JSONArray;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -22,21 +22,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import kr.hongik.mnms.Account;
 import kr.hongik.mnms.Group;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.mainscreen.GroupAdapter;
+import kr.hongik.mnms.mainscreen.MainMenuActivity;
 import kr.hongik.mnms.mainscreen.OnGroupItemClickListener;
 import kr.hongik.mnms.mainscreen.OnGroupItemLongClickListener;
 import kr.hongik.mnms.membership.MembershipActivity;
 import kr.hongik.mnms.membership.MembershipGroup;
-import kr.hongik.mnms.membership.ui.home.NewFeeActivity;
 
 public class MembershipList extends Fragment {
     private Member loginMember;
@@ -48,9 +44,6 @@ public class MembershipList extends Fragment {
     private GroupAdapter groupAdapter;
     private Context context;
     private ViewGroup rootView;
-
-    //variables
-    private ArrayList<Integer> GIDArray;
 
     public MembershipList() {
         // Required empty public constructor
@@ -171,24 +164,6 @@ public class MembershipList extends Fragment {
         networkTask.execute(params);
     }
 
-    private void checkMembershipSubmit(){
-        String urlCheckSubmit="http://"+loginMember.getIp()+"/membership/check";
-
-        NetworkTask networkTask=new NetworkTask();
-        networkTask.setTAG("checkSubmit");
-        networkTask.setURL(urlCheckSubmit);
-
-        Map<String,String> params=new HashMap<>();
-        params.put("memID",loginMember.getMemID());
-        params.put("GIDsize",GIDArray.size()+"");
-
-        for(int i=0;i<GIDArray.size();i++){
-            params.put("GID"+i,GIDArray.get(i)+"");
-        }
-
-        networkTask.execute(params);
-    }
-
 
     private void showToast(String data) {
         Toast.makeText(context, data, Toast.LENGTH_LONG).show();
@@ -204,17 +179,13 @@ public class MembershipList extends Fragment {
             groupMembershiplList.setLayoutManager(layoutManager);
 
             groupAdapter = new GroupAdapter();
-            GIDArray=new ArrayList<>();
             for (int i = 0; i < membershipGroupSize; i++) {
                 String groupname = jsonObject.getString("groupName"+i);
                 int gid = Integer.parseInt(jsonObject.getString("GID"+i));
-                //String notSubmit=item.getString("notSubmit");
-                //String groupTime=item.getString("groupTime");
 
                 MembershipGroup group = new MembershipGroup();
                 group.setGroupName(groupname);
                 group.setGID(gid);
-                GIDArray.add(gid);
                 groupAdapter.addItem(group);
             }
 
@@ -231,7 +202,7 @@ public class MembershipList extends Fragment {
                 @Override
                 public void onItemLongClick(GroupAdapter.ViewHolder holder, View view, int position) {
                     selectOutGroup(position);
-                    groupView();
+                    ((MainMenuActivity)getActivity()).refresh();
                 }
             });
 
@@ -239,8 +210,6 @@ public class MembershipList extends Fragment {
             e.printStackTrace();
             System.out.println("오류 : " + e.toString());
         }
-
-        checkMembershipSubmit();
     }
 
     private void membershipOutGroupProcess(String response) {
@@ -249,7 +218,7 @@ public class MembershipList extends Fragment {
             boolean success = jsonObject.getBoolean("success");
             if (success) {
                 //삭제 성공여부 확인
-                groupView();
+                ((MainMenuActivity)getActivity()).refresh();
             } else {
                 showToast("그룹 나가기 실패");
             }
@@ -257,26 +226,6 @@ public class MembershipList extends Fragment {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    private void checkMembershipSubmitProcess(String response){
-        Log.d("checkFee",response);
-//        try {
-//            JSONObject jsonObject=new JSONObject(response);
-//            int size=jsonObject.getInt("size");
-//            for(int i=0;i<size;i++){
-//                int GID=jsonObject.getInt("GID"+i);
-//                for(int j=0;j<groupAdapter.getItemCount();j++){
-//                    if(GID==groupAdapter.getItem(j).getGID()){
-//
-//                        TextView textView=rootView.findViewById(R.id.group_name);
-//                        textView.setTextColor(Color.RED);
-//                    }
-//                }
-//            }
-//        }catch (Exception e){
-//
-//        }
     }
 
 
@@ -329,8 +278,6 @@ public class MembershipList extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            }else if(TAG.equals("checkSubmit")){
-                checkMembershipSubmitProcess(response);
             }
         }
     }

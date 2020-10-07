@@ -42,9 +42,6 @@ public class MembershipFragment extends Fragment {
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
-    //variables
-    private List<Transaction> dataList;
-
     @Override
     public void onResume() {
         super.onResume();
@@ -92,8 +89,7 @@ public class MembershipFragment extends Fragment {
             mLayoutManager = new LinearLayoutManager(getActivity());
             mRecyclerView.setLayoutManager(mLayoutManager);
 
-            dataList = new ArrayList<>();
-            mAdapter = new TransactionAdapter(dataList);
+            mAdapter = new TransactionAdapter();
 
             JSONObject jsonObject = new JSONObject(response);
             // Parse json
