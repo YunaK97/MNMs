@@ -22,7 +22,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".newprocesses.NewFeeActivity"></activity>
+        <activity android:name=".newprocesses.NewMoneyToFriendActivity"></activity>
+        <activity android:name=".newprocesses.NewFeeActivity" />
         <activity android:name=".daily.ui.home.DailyQRActivity" />
         <activity android:name=".membership.ui.manage.ManageMembershipActivity" />
         <activity android:name=".daily.ui.home.NewDailyMemActivity" />

@@ -75,7 +75,6 @@ public class DailyQRActivity extends AppCompatActivity {
                 jsonObject.put("myID", loginMember.getMemID());
                 jsonObject.put("myAccount", loginMember.getAccountNum());
                 jsonObject.put("myName", loginMember.getMemName());
-                jsonObject.put("urlTransaction",urlTransaction);
 
                 BitMatrix bitMatrix = multiFormatWriter.encode(jsonObject.toString(), BarcodeFormat.QR_CODE, 200, 200);
                 BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
@@ -116,7 +115,6 @@ public class DailyQRActivity extends AppCompatActivity {
                     //textViewResult.setText(result.getContents());
                 }
             }
-
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }

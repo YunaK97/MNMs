@@ -24,6 +24,7 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -226,6 +227,7 @@ public class MainMenuActivity extends AppCompatActivity {
         networkTask.execute(params);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     public void showNoti(int GID,String groupName) {
         notiBuilder = null;
         notiManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
