@@ -53,7 +53,7 @@ public class CustomDialogDuration implements View.OnClickListener {
         colorBackPink=dialog.getContext().getColor(R.color.colorContent);
 
         monSpinner=dialog.findViewById(R.id.mon_spinner);
-        monType=ArrayAdapter.createFromResource(dialog.getContext(),R.array.date_month,R.layout.support_simple_spinner_dropdown_item);
+        monType=ArrayAdapter.createFromResource(dialog.getContext(),R.array.date_day,R.layout.support_simple_spinner_dropdown_item);
         monType.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         monSpinner.setAdapter(monType);
         monSpinner.setSelection(0);
@@ -221,7 +221,7 @@ public class CustomDialogDuration implements View.OnClickListener {
             case R.id.tv_custom_mon:
                 tv_custom_mon.setTextColor(colorWhite);
                 tv_custom_mon.setBackgroundColor(colorBackPink);
-                type1=1;
+                type1=2;
 
                 tv_custom_tue.setBackgroundColor(colorWhite);
                 tv_custom_tue.setTextColor(colorTextPink);
@@ -239,7 +239,7 @@ public class CustomDialogDuration implements View.OnClickListener {
             case R.id.tv_custom_tue:
                 tv_custom_tue.setTextColor(colorWhite);
                 tv_custom_tue.setBackgroundColor(colorBackPink);
-                type1=2;
+                type1=3;
 
                 tv_custom_mon.setBackgroundColor(colorWhite);
                 tv_custom_mon.setTextColor(colorTextPink);
@@ -258,7 +258,7 @@ public class CustomDialogDuration implements View.OnClickListener {
             case R.id.tv_custom_wed:
                 tv_custom_wed.setTextColor(colorWhite);
                 tv_custom_wed.setBackgroundColor(colorBackPink);
-                type1=3;
+                type1=4;
 
                 tv_custom_mon.setBackgroundColor(colorWhite);
                 tv_custom_mon.setTextColor(colorTextPink);
@@ -277,7 +277,7 @@ public class CustomDialogDuration implements View.OnClickListener {
             case R.id.tv_custom_thu:
                 tv_custom_thu.setTextColor(colorWhite);
                 tv_custom_thu.setBackgroundColor(colorBackPink);
-                type1=4;
+                type1=5;
 
                 tv_custom_mon.setBackgroundColor(colorWhite);
                 tv_custom_mon.setTextColor(colorTextPink);
@@ -296,7 +296,7 @@ public class CustomDialogDuration implements View.OnClickListener {
             case R.id.tv_custom_fri:
                 tv_custom_fri.setTextColor(colorWhite);
                 tv_custom_fri.setBackgroundColor(colorBackPink);
-                type1=5;
+                type1=6;
 
                 tv_custom_mon.setBackgroundColor(colorWhite);
                 tv_custom_mon.setTextColor(colorTextPink);
@@ -315,7 +315,7 @@ public class CustomDialogDuration implements View.OnClickListener {
             case R.id.tv_custom_sat:
                 tv_custom_sat.setTextColor(colorWhite);
                 tv_custom_sat.setBackgroundColor(colorBackPink);
-                type1=6;
+                type1=7;
 
                 tv_custom_mon.setBackgroundColor(colorWhite);
                 tv_custom_mon.setTextColor(colorTextPink);
@@ -334,7 +334,7 @@ public class CustomDialogDuration implements View.OnClickListener {
             case R.id.tv_custom_sun:
                 tv_custom_sun.setTextColor(colorWhite);
                 tv_custom_sun.setBackgroundColor(colorBackPink);
-                type1=7;
+                type1=1;
 
                 tv_custom_mon.setBackgroundColor(colorWhite);
                 tv_custom_mon.setTextColor(colorTextPink);
