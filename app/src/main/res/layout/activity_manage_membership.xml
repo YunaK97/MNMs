@@ -136,7 +136,9 @@
         android:layout_alignParentRight="true"
         android:layout_margin="10sp"
         style="@style/CustomButton"
-        android:text="이번 회비 마감"
+        android:text="회비 마감"
+        android:visibility="invisible"
+        android:clickable="false"
         android:id="@+id/btn_feeSubmitComplete"
         />
 </RelativeLayout>

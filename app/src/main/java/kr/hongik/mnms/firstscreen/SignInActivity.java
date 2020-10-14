@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -64,6 +65,18 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         Intent intent = getIntent();
         //curIp = intent.getStringExtra("curIp");
+
+        Random random=new Random();
+        random.setSeed(System.currentTimeMillis());
+        int div1 = random.nextInt(100)+1000;
+        int div2 = random.nextInt(100)+10000;
+        int div3 = random.nextInt(100)+100;
+        String accountNum = (int) (Math.random() * div1) + "-" + (int) (Math.random() * div2) + "-" + (int) (Math.random() * div3);
+
+        signInMemberAccount.setAccountNum(accountNum);
+
+        TextView tv_accountNum=findViewById(R.id.textAccountNum);
+        tv_accountNum.setText(accountNum);
 
         signInBtn=findViewById(R.id.btn_signIn);
         signInBtn.setOnClickListener(this);
@@ -244,11 +257,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         } else if (bank_type.getSelectedItemPosition() == 6) {
             signInMemberAccount.setAccountBank("AAAG");
         }
-
-        String accountNum = ((TextView) findViewById(R.id.textAccountNum)).getText().toString();
-        accountNum.replaceAll(" ", "");
-        if (TextUtils.isEmpty(accountNum)) return false;
-        else signInMemberAccount.setAccountNum(accountNum);
 
         String accountBalance = "1000000";
         if (TextUtils.isEmpty(accountBalance)) return false;

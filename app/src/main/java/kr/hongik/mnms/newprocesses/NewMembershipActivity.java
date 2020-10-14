@@ -88,7 +88,13 @@ public class NewMembershipActivity extends AppCompatActivity {
         } else {
             if (membership_pw.length() != 4) {
                 showToast("비밀번호는 4자리 입니다.");
-            } else {
+            } else if(Integer.parseInt(membership_notsubmit)<1 || Integer.parseInt(membership_notsubmit)>365) {
+                showToast("미납횟수는 1~365입니다.");
+            }else if(Integer.parseInt(membership_money)<1 || Integer.parseInt(membership_money)>2100000000){
+                showToast("불가능한 회비입니다.");
+            }
+            else
+             {
                 boolean overlap = true;
                 for (String s : groupName) {
                     if (s.equals(membership_name)) {

@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,9 +35,8 @@ public class MembershipMemFragment extends Fragment {
     /*
      * 1.납입일 다음날~다음 납입일 이전 까지 회비 제출자는 이름 옆에 (1)로 표시 (DB에서)
      * 2.납입 마감 버튼 클릭 시
-     * 3.미납자에 대한 정보 받기
-     * 4.미납횟수 초과시 자동 탈퇴
-     *   회장만이 멤버십 카운트 조정 가능
+     * 3.미납횟수 초과시 자동 탈퇴
+     *   회장만이 멤버십 카운트 조정 가능 - 멤버별 미납횟수 받아오기
      * */
 
     private Member loginMember;
@@ -81,7 +81,7 @@ public class MembershipMemFragment extends Fragment {
         memberAdapter.setOnItemClickListener(new OnFriendItemClickListener() {
             @Override
             public void onItemClick(FriendListAdapter.ViewHolder holder, View view, int position) {
-
+                showToast("클릭!");
             }
         });
         memberAdapter.setOnItemLongClickListener(new OnFriendItemLongClickListener() {
@@ -96,10 +96,11 @@ public class MembershipMemFragment extends Fragment {
         });
     }
 
-    private void selectDelMember(int position) {
+    private void selectDelMember(final int position) {
         //미납횟수 변경하능하게 하기
         //멤버 삭제 기능
         final EditText edittext = new EditText(rootView.getContext());
+        edittext.setInputType(InputType.TYPE_CLASS_NUMBER);
         edittext.setBackground(ContextCompat.getDrawable(context,R.drawable.sidecustom_round));
         final Member selMember = memberAdapter.getItem(position);
 
@@ -111,7 +112,19 @@ public class MembershipMemFragment extends Fragment {
         builder.setPositiveButton("입력",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(rootView.getContext(),edittext.getText().toString() ,Toast.LENGTH_LONG).show();
+                        //개인적으로 회비 냄
+                        //회비 낸 사람 이름, (미납 횟수 - 바꾼 미납 횟수)*회비 = 회장에게 준 회비 라고 가정
+                        //미납횟수가 증가하는 방향이면 트랜잭션은 어케 되나?
+                        int newcnt = Integer.parseInt(edittext.getText().toString());
+                        if(newcnt<0/*미납횟수*/) {
+                            showToast("잘못된 숫자입니다.");
+
+                        }else {
+                            showToast(newcnt + "");
+
+                            int submitFee = membershipGroup.getFee() * (/*미납횟수*/-newcnt);
+                            submitLateFee(selMember);
+                        }
                     }
                 });
         builder.setNegativeButton("취소",
@@ -125,7 +138,7 @@ public class MembershipMemFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(context, R.style.CustomDialog);
 
-                        builder2.setTitle(selMember.getMemName()).setMessage("membership에서 삭제하시겠습니까?");
+                        builder2.setTitle(selMember.getMemName()).setMessage(selMember.getMemName()+"삭제하시겠습니까?");
 
                         final AlertDialog alertDialog2 = builder2.create();
                         alertDialog2.show();
@@ -145,7 +158,19 @@ public class MembershipMemFragment extends Fragment {
 
                     }
                 });
+        builder.show();
+    }
 
+    private void submitLateFee(Member member){
+        String urlSubmitLateFee=""+loginMember.getIp()+"";
+
+        NetworkTask networkTask =new NetworkTask();
+        networkTask.setTAG("submitLateFee");
+        networkTask.setURL(urlSubmitLateFee);
+
+        Map<String,String> params=new HashMap<>();
+        params.put("memID",member.getMemID());
+        params.put("MID",membershipGroup.getMID()+"");
     }
 
     private void deleteMember(String delMemberId) {

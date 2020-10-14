@@ -1,15 +1,21 @@
 package kr.hongik.mnms.daily.ui.home;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import kr.hongik.mnms.Account;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.daily.DailyGroup;
 import kr.hongik.mnms.firstscreen.MainActivity;
+import kr.hongik.mnms.newprocesses.NewDailyActivity;
+import kr.hongik.mnms.newprocesses.NewFriendActivity;
+import kr.hongik.mnms.newprocesses.NewMembershipActivity;
 import kr.hongik.mnms.newprocesses.NewTransactionActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +36,8 @@ import java.util.ArrayList;
 
 public class DailyQRActivity extends AppCompatActivity {
 
+    //1.친구 사이에서의 QR 인식
+    //2.결제 시 QR인식 - url로 결제 창 들어가야함!
     private Member loginMember;
     private Account loginMemberAccount;
     private DailyGroup dailyGroup;
@@ -98,25 +106,31 @@ public class DailyQRActivity extends AppCompatActivity {
             } else {
                 //qrcode 결과가 있으면
                 Toast.makeText(DailyQRActivity.this, "스캔완료!"+result.getContents(), Toast.LENGTH_SHORT).show();
-                try {
-                    //data를 json으로 변환
-                    JSONObject jsonObject = new JSONObject(result.getContents());
-                    //textViewName.setText(obj.getString("name"));
-                    //textViewAddress.setText(obj.getString("address"));
-                    //이때 상대방의 ID,이름,계좌번호, 내가 보낼 돈 정보 가져오기
-                    Member friendMember=new Member();
-                    friendMember.setMemID(jsonObject.getString("myID"));
-                    friendMember.setMemName(jsonObject.getString("myName"));
-                    friendMember.setAccountNum(jsonObject.getString("myAccount"));
 
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    //Toast.makeText(MainActivity.this, result.getContents(), Toast.LENGTH_LONG).show();
-                    //textViewResult.setText(result.getContents());
-                }
+                floatDialog(result);
+
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    private void floatDialog(IntentResult result){
+        Member friendMember=new Member();
+        try {
+            //data를 json으로 변환
+            JSONObject jsonObject = new JSONObject(result.getContents());
+            //이때 상대방의 ID,이름,계좌번호, 내가 보낼 돈 정보 가져오기
+
+            friendMember.setMemID(jsonObject.getString("myID"));
+            friendMember.setMemName(jsonObject.getString("myName"));
+            friendMember.setAccountNum(jsonObject.getString("myAccount"));
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        AlertDialog.Builder builder=new AlertDialog.Builder(DailyQRActivity.this);
+        builder.setTitle("");
     }
 }

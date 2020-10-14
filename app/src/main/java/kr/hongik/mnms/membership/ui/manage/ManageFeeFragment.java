@@ -2,6 +2,7 @@ package kr.hongik.mnms.membership.ui.manage;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,19 +32,18 @@ public class ManageFeeFragment extends Fragment {
     //layouts
     private TextView tv_monthly_membership;
     private TextView tv_notsubmit_cnt;
-    private TextView tv_paid_membership;
-    private TextView tv_paid_membership_cnt;
     private TextView tv_my_notSubmit;
 
     private ViewGroup viewGroup;
+
+    public ManageFeeFragment() {
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_manage_fee, container, false);
 
         tv_monthly_membership = viewGroup.findViewById(R.id.tv_monthly_membership);
         tv_notsubmit_cnt = viewGroup.findViewById(R.id.tv_notsubmit_cnt);
-        tv_paid_membership = viewGroup.findViewById(R.id.tv_paid_membership);
-        tv_paid_membership_cnt = viewGroup.findViewById(R.id.tv_paid_membership_cnt);
         tv_my_notSubmit=viewGroup.findViewById(R.id.tv_my_notSubmit);
 
         Bundle bundle = getArguments();
@@ -52,25 +52,55 @@ public class ManageFeeFragment extends Fragment {
             loginMember = (Member) bundle.getSerializable("loginMember");
 
             setInformation(membershipGroup);
-
-            //getNotsubmitMembers();
-
         }
         return viewGroup;
     }
 
-    public void setInformation(MembershipGroup membershipGroup) {
-        //내가 낸 회비 횟수
-        tv_paid_membership_cnt.setText("10");
-        //내가 총 낸 회비
-        tv_paid_membership.setText("500000");
-        //내 미납횟수
-        tv_my_notSubmit.setText("1");
+    private void setInformation(MembershipGroup membershipGroup){
+        String urlSetInfo="http://"+loginMember.getIp()+"/membership/notSubmit";
+
+        NetworkTask networkTask=new NetworkTask();
+        networkTask.setTAG("setInfo");
+        networkTask.setURL(urlSetInfo);
+
+        Map<String,String> params=new HashMap<>();
+        params.put("memID",loginMember.getMemID());
+        params.put("MID",membershipGroup.getMID()+"");
+        params.put("GID",membershipGroup.getGID()+"");
+
         //멤버십의 회비
         tv_monthly_membership.setText(membershipGroup.getFee()+"");
-        //멤버십의 미납가는횟수
+        //멤버십의 미납가능횟수
         tv_notsubmit_cnt.setText(membershipGroup.getNotSubmit()+"");
-        //tv_paid_membership 과 tv_paid_membership_cnt는 intent로 membershipfragment에서 해당 아이디의 transaction을 계산하여 넘겨주기
+
+        networkTask.execute(params);
+    }
+    public void setInformationProcess(String response) {
+        //내 미납횟수
+        tv_my_notSubmit.setText("1");
+
+        if(loginMember.getMemID().equals(membershipGroup.getPresident())){
+            try {
+                JSONObject jsonObject=new JSONObject(response);
+                int notSubmitSize=jsonObject.getInt("MemberSize");
+                for(int i=0;i<notSubmitSize;i++){
+                    String memID=jsonObject.getString("memID"+i);
+                    if(memID.equals(loginMember.getMemID())){
+                        tv_my_notSubmit.setText(jsonObject.getString("count"+i));
+                        break;
+                    }
+                }
+            }catch (Exception e){
+
+            }
+        }else {
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                tv_my_notSubmit.setText(jsonObject.getString("notSubmit"));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
@@ -105,7 +135,10 @@ public class ManageFeeFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String response) {
-
+            Log.d("fee관련",response);
+            if(TAG.equals("setInfo")){
+                setInformationProcess(response);
+            }
         }
     }
 }
