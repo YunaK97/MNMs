@@ -98,7 +98,7 @@ public class MainMenuActivity extends AppCompatActivity {
         //송금내역,membership,daily pager
         pager.setOffscreenPageLimit(4);
 
-         adapter = new MyPagerAdapter(getSupportFragmentManager());
+        adapter = new MyPagerAdapter(getSupportFragmentManager());
 
         TransactionList transactionList = new TransactionList();
         adapter.addItem(transactionList);
@@ -119,32 +119,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-                switch (position) {
-                    case 0:
-                        btn_transaction.setSelected(true);
-                        btn_membership.setSelected(false);
-                        btn_daily.setSelected(false);
-                        btn_friendList.setSelected(false);
-                        break;
-                    case 1:
-                        btn_transaction.setSelected(false);
-                        btn_membership.setSelected(true);
-                        btn_daily.setSelected(false);
-                        btn_friendList.setSelected(false);
-                        break;
-                    case 2:
-                        btn_transaction.setSelected(false);
-                        btn_membership.setSelected(false);
-                        btn_daily.setSelected(true);
-                        btn_friendList.setSelected(false);
-                        break;
-                    case 3:
-                        btn_transaction.setSelected(false);
-                        btn_membership.setSelected(false);
-                        btn_daily.setSelected(false);
-                        btn_friendList.setSelected(true);
-                        break;
-                }
+                switchPage(position);
             }
 
             @Override
@@ -162,10 +137,7 @@ public class MainMenuActivity extends AppCompatActivity {
         dailyList.setArguments(bundle);
         friendList.setArguments(bundle);
 
-        String text = "이름 : " + loginMember.getMemName();
-        textName.setText(text);
-        text = "계좌번호 : " + loginMemberAccount.getAccountNum();
-        accName.setText(text);
+        showInfo();
 
         btn_transaction.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -214,74 +186,6 @@ public class MainMenuActivity extends AppCompatActivity {
         checkMembershipSubmit();
     }
 
-    private void checkMembershipSubmit() {
-        String urlCheckSubmit = "http://" + loginMember.getIp() + "/membership/check";
-
-        NetworkTask networkTask = new NetworkTask();
-        networkTask.setTAG("checkSubmit");
-        networkTask.setURL(urlCheckSubmit);
-
-        Map<String, String> params = new HashMap<>();
-        params.put("memID", loginMember.getMemID());
-
-        networkTask.execute(params);
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    public void showNoti(int GID,String groupName) {
-        notiBuilder = null;
-        notiManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        //버전 오레오 이상일 경우
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notiManager.createNotificationChannel(
-                    new NotificationChannel(GID+"", CHANEL_NAME, NotificationManager.IMPORTANCE_DEFAULT));
-            notiBuilder = new NotificationCompat.Builder(this, CHANNEL_ID);
-
-            //하위 버전일 경우
-        } else {
-            notiBuilder = new NotificationCompat.Builder(this);
-        }
-        Intent intent = new Intent(this, NewFeeActivity.class);
-        MembershipGroup membershipGroup=new MembershipGroup();
-        membershipGroup.setGID(GID);
-        membershipGroup.setGroupName(groupName);
-        intent.putExtra("membershipGroup",membershipGroup);
-        intent.putExtra("loginMember",loginMember);
-        intent.putExtra("loginMemberAccount",loginMemberAccount);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, GID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        //알림창 제목
-        notiBuilder.setContentTitle("MnMs");
-        //알림창 메시지
-        notiBuilder.setContentText(groupName+"의 회비내는날! ");
-        //알림창 아이콘
-        notiBuilder.setSmallIcon(R.drawable.ic_menu_camera);
-        //알림창 터치시 상단 알림상태창에서 알림이 자동으로 삭제되게 합니다.
-        notiBuilder.setAutoCancel(true);
-
-        //pendingIntent를 builder에 설정 해줍니다.
-        // 알림창 터치시 인텐트가 전달할 수 있도록 해줍니다.
-        notiBuilder.setContentIntent(pendingIntent);
-        Notification notification = notiBuilder.build();
-
-        //알림창 실행
-        notiManager.notify(GID, notification);
-    }
-
-    private void checkMembershipSubmitProcess(String response){
-        Log.d("checkFee",response);
-        try {
-            JSONObject jsonObject=new JSONObject(response);
-            int GIDsize=jsonObject.getInt("GIDsize");
-            for(int i=0;i<GIDsize;i++){
-                int GID=jsonObject.getInt("GID"+i);
-                String groupName=jsonObject.getString("groupName"+i);
-                showNoti(GID,groupName);
-            }
-        }catch (Exception e){
-
-        }
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
@@ -289,7 +193,6 @@ public class MainMenuActivity extends AppCompatActivity {
         return true;
     }
 
-    //상단 우측의 추가 버튼 클릭
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int curId = item.getItemId();
@@ -311,15 +214,149 @@ public class MainMenuActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void refresh(){
-        adapter.notifyDataSetChanged();
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
     }
+
+    @Override
+    public void onBackPressed() {
+        final AlertDialog.Builder dialog = new AlertDialog.Builder(MainMenuActivity.this, R.style.CustomDialog);
+
+        dialog.setTitle("종료하시겠습니까?");
+        dialog.setNeutralButton("종료", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                finishAffinity();
+                System.runFinalization();
+                System.exit(0);
+            }
+        });
+        dialog.setPositiveButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+
+        dialog.create().show();
+    }
+
+
+    private void showInfo() {
+        String text = "이름 : " + loginMember.getMemName();
+        textName.setText(text);
+        text = "계좌번호 : " + loginMemberAccount.getAccountNum();
+        accName.setText(text);
+    }
+
+    private void switchPage(int position) {
+        switch (position) {
+            case 0:
+                btn_transaction.setSelected(true);
+                btn_membership.setSelected(false);
+                btn_daily.setSelected(false);
+                btn_friendList.setSelected(false);
+                break;
+            case 1:
+                btn_transaction.setSelected(false);
+                btn_membership.setSelected(true);
+                btn_daily.setSelected(false);
+                btn_friendList.setSelected(false);
+                break;
+            case 2:
+                btn_transaction.setSelected(false);
+                btn_membership.setSelected(false);
+                btn_daily.setSelected(true);
+                btn_friendList.setSelected(false);
+                break;
+            case 3:
+                btn_transaction.setSelected(false);
+                btn_membership.setSelected(false);
+                btn_daily.setSelected(false);
+                btn_friendList.setSelected(true);
+                break;
+        }
+    }
+
+    private void checkMembershipSubmit() {
+        String urlCheckSubmit = "http://" + loginMember.getIp() + "/membership/check";
+
+        NetworkTask networkTask = new NetworkTask();
+        networkTask.setTAG("checkSubmit");
+        networkTask.setURL(urlCheckSubmit);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("memID", loginMember.getMemID());
+
+        networkTask.execute(params);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void showNoti(int GID, String groupName) {
+        notiBuilder = null;
+        notiManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        //버전 오레오 이상일 경우
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notiManager.createNotificationChannel(
+                    new NotificationChannel(GID + "", CHANEL_NAME, NotificationManager.IMPORTANCE_DEFAULT));
+            notiBuilder = new NotificationCompat.Builder(this, CHANNEL_ID);
+
+            //하위 버전일 경우
+        } else {
+            notiBuilder = new NotificationCompat.Builder(this);
+        }
+
+        Intent intent = new Intent(this, NewFeeActivity.class);
+        MembershipGroup membershipGroup = new MembershipGroup();
+        membershipGroup.setGID(GID);
+        membershipGroup.setGroupName(groupName);
+        intent.putExtra("membershipGroup", membershipGroup);
+        intent.putExtra("loginMember", loginMember);
+        intent.putExtra("loginMemberAccount", loginMemberAccount);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, GID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        //알림창 제목
+        notiBuilder.setContentTitle("MnMs");
+        //알림창 메시지
+        notiBuilder.setContentText(groupName + "의 회비내는날! ");
+        //알림창 아이콘
+        notiBuilder.setSmallIcon(R.drawable.ic_menu_camera);
+        //알림창 터치시 상단 알림상태창에서 알림이 자동으로 삭제되게 합니다.
+        notiBuilder.setAutoCancel(true);
+
+        //pendingIntent를 builder에 설정 해줍니다.
+        // 알림창 터치시 인텐트가 전달할 수 있도록 해줍니다.
+        notiBuilder.setContentIntent(pendingIntent);
+        Notification notification = notiBuilder.build();
+
+        //알림창 실행
+        notiManager.notify(GID, notification);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void checkMembershipSubmitProcess(String response) {
+        Log.d("checkFee", response);
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            int GIDsize = jsonObject.getInt("GIDsize");
+            for (int i = 0; i < GIDsize; i++) {
+                int GID = jsonObject.getInt("GID" + i);
+                String groupName = jsonObject.getString("groupName" + i);
+                showNoti(GID, groupName);
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
+    //상단 우측의 추가 버튼 클릭
+
+
+    public void refresh() {
+        adapter.notifyDataSetChanged();
+    }
+
 
     protected void showToast(String data) {
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
@@ -371,29 +408,6 @@ public class MainMenuActivity extends AppCompatActivity {
             }
         });
         alertDialog.show();
-    }
-
-    @Override
-    public void onBackPressed() {
-        final AlertDialog.Builder dialog = new AlertDialog.Builder(MainMenuActivity.this, R.style.CustomDialog);
-
-        dialog.setTitle("종료하시겠습니까?");
-        dialog.setNeutralButton("종료", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                finishAffinity();
-                System.runFinalization();
-                System.exit(0);
-            }
-        });
-        dialog.setPositiveButton("취소", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-
-            }
-        });
-
-        dialog.create().show();
     }
 
     static class MyPagerAdapter extends FragmentStatePagerAdapter {

@@ -218,8 +218,17 @@
         android:layout_below="@+id/LL_signIn_account"
         style="@style/CustomTextView"
         android:background="@drawable/sidecustom_round"
-        android:layout_alignParentRight="true"
+        android:layout_toLeftOf="@id/textAccountPWCheck"
         android:hint="@string/hint_bankpw"
+        android:inputType="numberPassword" />
+    <EditText
+        android:id="@+id/textAccountPWCheck"
+        android:layout_below="@+id/LL_signIn_account"
+        style="@style/CustomTextView"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/sidecustom_round"
+
+        android:hint="계좌비밀번호 확인"
         android:inputType="numberPassword" />
 
     <Button

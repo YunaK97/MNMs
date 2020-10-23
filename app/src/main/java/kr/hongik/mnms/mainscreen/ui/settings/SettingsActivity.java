@@ -57,6 +57,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         btn_newPW = findViewById(R.id.btn_newPW);
         btn_settings_pw = findViewById(R.id.btn_settings_pw);
 
+        //회원정보 출력
         showInfo();
 
         btn_newPW.setOnClickListener(this);

@@ -93,6 +93,53 @@ public class ManageMembershipActivity extends AppCompatActivity {
         new_membership_payType = findViewById(R.id.new_membership_payType);
         new_membership_payTypeNum = findViewById(R.id.new_membership_payTypeNum);
 
+        setPayDay();
+        checkEndDay();
+
+        new_membership_payType.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onClick(View v) {
+                CustomDialogDuration customDialogDuration = new CustomDialogDuration(ManageMembershipActivity.this);
+                customDialogDuration.callFunction(new_membership_payType, new_membership_payTypeNum);
+            }
+        });
+        new_membership_payTypeNum.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onClick(View v) {
+                CustomDialogDuration customDialogDuration = new CustomDialogDuration(ManageMembershipActivity.this);
+                customDialogDuration.callFunction(new_membership_payType, new_membership_payTypeNum);
+            }
+        });
+
+        btn_feeSubmitComplete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ManageMembershipActivity.this, R.style.CustomDialog);
+
+                builder.setTitle("회비를 마감하시겠습니까?");
+                builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        completeFee();
+                    }
+                });
+
+                builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+                builder.show();
+            }
+        });
+
+    }
+
+    private void setPayDay(){
         if (membershipGroup.getPayDuration().equals("week")) {
             new_membership_payType.setText("매주");
 
@@ -129,7 +176,7 @@ public class ManageMembershipActivity extends AppCompatActivity {
                         break;
                 }
             } catch (ParseException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
 
         } else if (membershipGroup.getPayDuration().equals("month")) {
@@ -144,7 +191,7 @@ public class ManageMembershipActivity extends AppCompatActivity {
                 int monNum = cal.get(Calendar.MONTH) + 1;
                 new_membership_payTypeNum.setText(monNum + "");
             } catch (ParseException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
 
         } else if (membershipGroup.getPayDuration().equals("year")) {
@@ -160,52 +207,9 @@ public class ManageMembershipActivity extends AppCompatActivity {
                 int dayNum = cal.get(Calendar.DATE);
                 new_membership_payTypeNum.setText(monNum + "-" + dayNum);
             } catch (ParseException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
-        new_membership_payType.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onClick(View v) {
-                CustomDialogDuration customDialogDuration = new CustomDialogDuration(ManageMembershipActivity.this);
-                customDialogDuration.callFunction(new_membership_payType, new_membership_payTypeNum);
-            }
-        });
-        new_membership_payTypeNum.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.O)
-            @Override
-            public void onClick(View v) {
-                CustomDialogDuration customDialogDuration = new CustomDialogDuration(ManageMembershipActivity.this);
-                customDialogDuration.callFunction(new_membership_payType, new_membership_payTypeNum);
-            }
-        });
-
-        checkEndDay();
-
-        btn_feeSubmitComplete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(ManageMembershipActivity.this, R.style.CustomDialog);
-
-                builder.setTitle("회비를 마감하시겠습니까?");
-                builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        completeFee();
-                    }
-                });
-
-                builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-
-                builder.show();
-            }
-        });
-
     }
 
     private void checkEndDay() {
@@ -229,10 +233,10 @@ public class ManageMembershipActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        if(curDate.compareTo(payDate) >= 0){
+        if (curDate.compareTo(payDate) >= 0) {
             btn_feeSubmitComplete.setVisibility(View.VISIBLE);
             btn_feeSubmitComplete.setClickable(true);
-        }else{
+        } else {
             btn_feeSubmitComplete.setVisibility(View.INVISIBLE);
             btn_feeSubmitComplete.setClickable(false);
         }
@@ -250,82 +254,6 @@ public class ManageMembershipActivity extends AppCompatActivity {
         params.put("NotSubmit", membershipGroup.getNotSubmit() + "");
         params.put("GID", membershipGroup.getGID() + "");
         params.put("Duration", membershipGroup.getPayDuration());
-
-        networkTask.execute(params);
-    }
-
-    private void changeNotSubmit() {
-        String urlChangeNotSubmit = "http://" + loginMember.getIp() + "/membership/updateNotSubmit";
-
-        NetworkTask networkTask = new NetworkTask();
-        networkTask.setTAG("changeNotSubmit");
-        networkTask.setURL(urlChangeNotSubmit);
-        etNewNotSubmit = findViewById(R.id.new_membership_notsubmit);
-        String newNotSubmit = (etNewNotSubmit).getText().toString();
-
-        Map<String, String> params = new HashMap<>();
-        params.put("NotSubmit", newNotSubmit);
-        params.put("MID", membershipGroup.getMID() + "");
-
-        networkTask.execute(params);
-
-    }
-
-    private void changeMembershipName() {
-        String urlChangeMembershipName = "http://" + loginMember.getIp() + "/membership/updatename";
-
-        NetworkTask networkTask = new NetworkTask();
-        networkTask.setTAG("changeMembershipName");
-        networkTask.setURL(urlChangeMembershipName);
-
-        etNewName = findViewById(R.id.new_membership_name);
-        String newName = (etNewName).getText().toString();
-
-        Map<String, String> params = new HashMap<>();
-        params.put("name", newName);
-        params.put("GID", membershipGroup.getGID() + "");
-
-        networkTask.execute(params);
-    }
-
-    private void changeDate() {
-        String urlChangeDate = "http://" + loginMember.getIp() + "/membership/date";
-
-        String payType = ((TextView) findViewById(R.id.new_membership_payType)).getText().toString();
-
-        NetworkTask networkTask = new NetworkTask();
-        networkTask.setTAG("changeDate");
-        networkTask.setURL(urlChangeDate);
-
-        findStartDay();
-
-        Map<String, String> params = new HashMap<>();
-        params.put("MID", membershipGroup.getMID() + "");
-        params.put("date", todayFormat.format(calendar.getTime()));
-        if (payType.equals("매월")) {
-            params.put("Duration", "MONTH");
-        } else if (payType.equals("매주")) {
-            params.put("Duration", "WEEK");
-        } else if (payType.equals("매년")) {
-            params.put("Duration", "YEAR");
-        }
-
-        networkTask.execute(params);
-    }
-
-    private void changeUpdatePay() {
-        String urlChangeUpdatePay = "http://" + loginMember.getIp() + "/membership/updatepay";
-
-        NetworkTask networkTask = new NetworkTask();
-        networkTask.setTAG("changeUpdatePay");
-        networkTask.setURL(urlChangeUpdatePay);
-
-        etNewFee = findViewById(R.id.new_membership_fee);
-        String newFee = (etNewFee).getText().toString();
-
-        Map<String, String> params = new HashMap<>();
-        params.put("pay", newFee);
-        params.put("MID", membershipGroup.getMID() + "");
 
         networkTask.execute(params);
     }
@@ -385,6 +313,83 @@ public class ManageMembershipActivity extends AppCompatActivity {
         }
     }
 
+    private void changeDate() {
+        String urlChangeDate = "http://" + loginMember.getIp() + "/membership/date";
+
+        String payType = ((TextView) findViewById(R.id.new_membership_payType)).getText().toString();
+
+        NetworkTask networkTask = new NetworkTask();
+        networkTask.setTAG("changeDate");
+        networkTask.setURL(urlChangeDate);
+
+        findStartDay();
+
+        Map<String, String> params = new HashMap<>();
+        params.put("MID", membershipGroup.getMID() + "");
+        params.put("date", todayFormat.format(calendar.getTime()));
+        if (payType.equals("매월")) {
+            params.put("Duration", "MONTH");
+        } else if (payType.equals("매주")) {
+            params.put("Duration", "WEEK");
+        } else if (payType.equals("매년")) {
+            params.put("Duration", "YEAR");
+        }
+
+        networkTask.execute(params);
+    }
+
+    private void changeUpdatePay() {
+        String urlChangeUpdatePay = "http://" + loginMember.getIp() + "/membership/updatepay";
+
+        NetworkTask networkTask = new NetworkTask();
+        networkTask.setTAG("changeUpdatePay");
+        networkTask.setURL(urlChangeUpdatePay);
+
+        etNewFee = findViewById(R.id.new_membership_fee);
+        String newFee = (etNewFee).getText().toString();
+
+        Map<String, String> params = new HashMap<>();
+        params.put("pay", newFee);
+        params.put("MID", membershipGroup.getMID() + "");
+
+        networkTask.execute(params);
+    }
+
+    private void changeMembershipName() {
+        String urlChangeMembershipName = "http://" + loginMember.getIp() + "/membership/updatename";
+
+        NetworkTask networkTask = new NetworkTask();
+        networkTask.setTAG("changeMembershipName");
+        networkTask.setURL(urlChangeMembershipName);
+
+        etNewName = findViewById(R.id.new_membership_name);
+        String newName = (etNewName).getText().toString();
+
+        Map<String, String> params = new HashMap<>();
+        params.put("name", newName);
+        params.put("GID", membershipGroup.getGID() + "");
+
+        networkTask.execute(params);
+    }
+
+    private void changeNotSubmit() {
+        String urlChangeNotSubmit = "http://" + loginMember.getIp() + "/membership/updateNotSubmit";
+
+        NetworkTask networkTask = new NetworkTask();
+        networkTask.setTAG("changeNotSubmit");
+        networkTask.setURL(urlChangeNotSubmit);
+        etNewNotSubmit = findViewById(R.id.new_membership_notsubmit);
+        String newNotSubmit = (etNewNotSubmit).getText().toString();
+
+        Map<String, String> params = new HashMap<>();
+        params.put("NotSubmit", newNotSubmit);
+        params.put("MID", membershipGroup.getMID() + "");
+
+        networkTask.execute(params);
+
+    }
+
+
     protected void showToast(String data) {
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
@@ -424,7 +429,6 @@ public class ManageMembershipActivity extends AppCompatActivity {
         protected void onPostExecute(String response) {
             Log.d(TAG, response);
             if (TAG.equals("completeFee")) {
-                Log.d("completeFee", response);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     boolean success = jsonObject.getBoolean("success");

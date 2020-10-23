@@ -96,6 +96,7 @@ public class DailyList extends Fragment {
     }
 
     private void selectOutGroup(int position) {
+        //돈정산 끝나야 나갈 수 있음
         final Group outGroup = groupAdapter.getItem(position);
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.CustomDialog);
 
@@ -127,8 +128,17 @@ public class DailyList extends Fragment {
         startActivity(intent);
     }
 
-    private void showToast(String data) {
-        Toast.makeText(context, data, Toast.LENGTH_LONG).show();
+    private void dailyOutGroup(Group group){
+        String urlDailyOutGroup = "http://" + loginMember.getIp() + "/daily/deleteDailygroup";
+        NetworkTask networkTask=new NetworkTask();
+        networkTask.setTAG("dailyOutGroup");
+        networkTask.setURL(urlDailyOutGroup);
+
+        Map<String,String> params=new HashMap<>();
+        params.put("memID",loginMember.getMemID());
+        params.put("GID",group.getGID()+"");
+
+        networkTask.execute(params);
     }
 
     private void dailyGroupInfoProcess(String response){
@@ -173,19 +183,6 @@ public class DailyList extends Fragment {
         }
     }
 
-    private void dailyOutGroup(Group group){
-        String urlDailyOutGroup = "http://" + loginMember.getIp() + "/daily/deleteDailygroup";
-        NetworkTask networkTask=new NetworkTask();
-        networkTask.setTAG("dailyOutGroup");
-        networkTask.setURL(urlDailyOutGroup);
-
-        Map<String,String> params=new HashMap<>();
-        params.put("memID",loginMember.getMemID());
-        params.put("GID",group.getGID()+"");
-
-        networkTask.execute(params);
-    }
-
     private void dailyOutGroupProcess(String response){
         try {
             JSONObject jsonObject = new JSONObject(response);
@@ -203,6 +200,9 @@ public class DailyList extends Fragment {
 
     }
 
+    private void showToast(String data) {
+        Toast.makeText(context, data, Toast.LENGTH_LONG).show();
+    }
 
     private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
         protected String url;
@@ -237,7 +237,7 @@ public class DailyList extends Fragment {
 
         @Override
         protected void onPostExecute(String response) {
-            Log.d("dailySuccess",response);
+            Log.d(TAG,response);
             if (TAG.equals("dailyGroupInfo")) {
                 dailyGroupInfoProcess(response);
             } else if (TAG.equals("dailyOutGroup")) {

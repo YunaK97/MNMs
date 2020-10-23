@@ -2,19 +2,15 @@ package kr.hongik.mnms.membership.ui.manage;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -22,6 +18,15 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
@@ -32,6 +37,7 @@ import kr.hongik.mnms.membership.MembershipGroup;
 
 
 public class MembershipMemFragment extends Fragment {
+    //회원내역 보는 곳
     /*
      * 1.납입일 다음날~다음 납입일 이전 까지 회비 제출자는 이름 옆에 (1)로 표시 (DB에서)
      * 2.납입 마감 버튼 클릭 시
@@ -45,7 +51,8 @@ public class MembershipMemFragment extends Fragment {
 
     //Layouts
     private RecyclerView memberList;
-    private FriendListAdapter memberAdapter;
+    private MemberListAdapter presidentMemberAdapter;
+    private FriendListAdapter normalMemberAdapter;
 
     private Context context;
     private ViewGroup rootView;
@@ -64,7 +71,12 @@ public class MembershipMemFragment extends Fragment {
             membershipGroup = (MembershipGroup) bundle.getSerializable("membershipGroup");
             memberArrayList = (ArrayList<Member>) bundle.get("memberArrayList");
 
-            showMember();
+            if (loginMember.getMemID().equals(membershipGroup.getPresident())) {
+                submitLateFee();
+            } else {
+                showMember();
+            }
+
         }
 
         return rootView;
@@ -74,26 +86,9 @@ public class MembershipMemFragment extends Fragment {
         memberList = rootView.findViewById(R.id.RV_membership_member_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
         memberList.setLayoutManager(layoutManager);
-        memberAdapter = new FriendListAdapter();
-        memberAdapter.setItems(memberArrayList);
-        memberList.setAdapter(memberAdapter);
-
-        memberAdapter.setOnItemClickListener(new OnFriendItemClickListener() {
-            @Override
-            public void onItemClick(FriendListAdapter.ViewHolder holder, View view, int position) {
-                showToast("클릭!");
-            }
-        });
-        memberAdapter.setOnItemLongClickListener(new OnFriendItemLongClickListener() {
-            @Override
-            public void onItemLongClick(FriendListAdapter.ViewHolder holder, View view, int position) {
-                if (loginMember.getMemID().equals(membershipGroup.getPresident())) {
-                    selectDelMember(position);
-                } else {
-                    showToast("(이 토스트는 나중에 없앨거임!)친구삭제는 회장만 가능합니다.");
-                }
-            }
-        });
+        normalMemberAdapter = new FriendListAdapter();
+        normalMemberAdapter.setItems(memberArrayList);
+        memberList.setAdapter(normalMemberAdapter);
     }
 
     private void selectDelMember(final int position) {
@@ -101,14 +96,14 @@ public class MembershipMemFragment extends Fragment {
         //멤버 삭제 기능
         final EditText edittext = new EditText(rootView.getContext());
         edittext.setInputType(InputType.TYPE_CLASS_NUMBER);
-        edittext.setBackground(ContextCompat.getDrawable(context,R.drawable.sidecustom_round));
-        final Member selMember = memberAdapter.getItem(position);
+        edittext.setBackground(ContextCompat.getDrawable(context, R.drawable.sidecustom_round));
+        final Member selMember = presidentMemberAdapter.getItem(position);
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(rootView.getContext(),R.style.CustomDialog);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(rootView.getContext(), R.style.CustomDialog);
         builder.setTitle(selMember.getMemName());
         builder.setMessage("미납횟수 변경");
         builder.setView(edittext);
-        final AlertDialog alertDialog=builder.create();
+        final AlertDialog alertDialog = builder.create();
         builder.setPositiveButton("입력",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
@@ -116,14 +111,13 @@ public class MembershipMemFragment extends Fragment {
                         //회비 낸 사람 이름, (미납 횟수 - 바꾼 미납 횟수)*회비 = 회장에게 준 회비 라고 가정
                         //미납횟수가 증가하는 방향이면 트랜잭션은 어케 되나?
                         int newcnt = Integer.parseInt(edittext.getText().toString());
-                        if(newcnt<0/*미납횟수*/) {
+                        if (newcnt < 0/*미납횟수*/) {
                             showToast("잘못된 숫자입니다.");
 
-                        }else {
+                        } else {
                             showToast(newcnt + "");
 
                             int submitFee = membershipGroup.getFee() * (/*미납횟수*/-newcnt);
-                            submitLateFee(selMember);
                         }
                     }
                 });
@@ -138,7 +132,7 @@ public class MembershipMemFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(context, R.style.CustomDialog);
 
-                        builder2.setTitle(selMember.getMemName()).setMessage(selMember.getMemName()+"삭제하시겠습니까?");
+                        builder2.setTitle(selMember.getMemName()).setMessage(selMember.getMemName() + "삭제하시겠습니까?");
 
                         final AlertDialog alertDialog2 = builder2.create();
                         alertDialog2.show();
@@ -161,16 +155,52 @@ public class MembershipMemFragment extends Fragment {
         builder.show();
     }
 
-    private void submitLateFee(Member member){
-        String urlSubmitLateFee=""+loginMember.getIp()+"";
+    private void submitLateFee() {
+        String urlFeeLateMember = "http://" + loginMember.getIp() + "/membership/notSubmit";
 
-        NetworkTask networkTask =new NetworkTask();
+        NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("submitLateFee");
-        networkTask.setURL(urlSubmitLateFee);
+        networkTask.setURL(urlFeeLateMember);
 
-        Map<String,String> params=new HashMap<>();
-        params.put("memID",member.getMemID());
-        params.put("MID",membershipGroup.getMID()+"");
+        Map<String, String> params = new HashMap<>();
+        params.put("memID", loginMember.getMemID());
+        params.put("MID", membershipGroup.getMID() + "");
+        params.put("GID", membershipGroup.getGID() + "");
+
+        networkTask.execute(params);
+    }
+
+    private void submitLateFeeProcess(String response) {
+        //회장만 미납자 볼수있게해야함
+        memberList = rootView.findViewById(R.id.RV_membership_member_list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
+        memberList.setLayoutManager(layoutManager);
+        presidentMemberAdapter = new MemberListAdapter();
+
+        Map<String, String> submitList = new HashMap<>();
+
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            int membershipMemberSize = Integer.parseInt(jsonObject.getString("membershipMemberSize"));
+
+            for (int i = 0; i < membershipMemberSize; i++) {
+                String memberID = jsonObject.getString("memID" + i);
+                String notSubmit = jsonObject.getString("notsubmit" + i);
+
+                submitList.put(memberID, notSubmit);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        for (int i = 0; i < presidentMemberAdapter.getItemCount(); i++) {
+            MembershipMember membershipMember=presidentMemberAdapter.getItem(i);
+            String notsubmit = submitList.get(membershipMember.getMemID());
+            membershipMember.setNotSubmit(Integer.parseInt(notsubmit));
+            presidentMemberAdapter.setItem(i,membershipMember);
+        }
+
+        memberList.setAdapter(presidentMemberAdapter);
     }
 
     private void deleteMember(String delMemberId) {
@@ -185,8 +215,8 @@ public class MembershipMemFragment extends Fragment {
 
         Map<String, String> params = new HashMap<>();
         params.put("memID", delMemberId);
-        params.put("GID", membershipGroup.getGID()+"");
-        params.put("MID", membershipGroup.getMID()+"");
+        params.put("GID", membershipGroup.getGID() + "");
+        params.put("MID", membershipGroup.getMID() + "");
 
         networkTask.execute(params);
     }
@@ -229,9 +259,24 @@ public class MembershipMemFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String response) {
+            Log.d(TAG, response);
             if (TAG.equals("delMem")) {
 
+            } else if (TAG.equals("submitLateFee")) {
+                submitLateFeeProcess(response);
             }
+        }
+    }
+
+    public class MembershipMember extends Member {
+        private int notSubmit;
+
+        public int getNotSubmit() {
+            return notSubmit;
+        }
+
+        public void setNotSubmit(int notSubmit) {
+            this.notSubmit = notSubmit;
         }
     }
 

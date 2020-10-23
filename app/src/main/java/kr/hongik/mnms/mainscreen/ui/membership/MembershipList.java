@@ -164,7 +164,6 @@ public class MembershipList extends Fragment {
         networkTask.execute(params);
     }
 
-
     private void showToast(String data) {
         Toast.makeText(context, data, Toast.LENGTH_LONG).show();
     }

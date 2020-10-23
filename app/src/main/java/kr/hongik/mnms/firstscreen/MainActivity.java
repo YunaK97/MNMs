@@ -4,14 +4,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,8 +20,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
@@ -28,9 +27,6 @@ import kr.hongik.mnms.R;
 import kr.hongik.mnms.mainscreen.MainMenuActivity;
 
 public class MainActivity extends AppCompatActivity {
-    //tmp data
-    private Member tmpMember;
-    private Account tmpMemberAccount;
 
     //layouts
     private CheckBox autoLogin;
@@ -39,25 +35,26 @@ public class MainActivity extends AppCompatActivity {
     private String curIp = "211.186.21.254:8090";
 
     //variables
-    public final static int TAG_SIGNIN = 221,TAG_LOGOUT=322,TAG_MEMBEROUT=1515;
-    public static int TAG_BACK=100;
+    public final static int TAG_SIGNIN = 221, TAG_LOGOUT = 322, TAG_MEMBEROUT = 1515;
+    public static int TAG_BACK = 100;
 
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
     private String TAG_SUCCESS = "success";
-    private String loginID,loginPW;
+    private String loginID, loginPW;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        preferences = getSharedPreferences("mnms",MODE_PRIVATE);
+        preferences = getSharedPreferences("mnms", MODE_PRIVATE);
         editor = preferences.edit();
 
-        loginID=""; loginPW="";
+        loginID = "";
+        loginPW = "";
 
         loginID = preferences.getString("loginId", "1");
         loginPW = preferences.getString("loginPw", "1");
-        if (!loginID.equals("1")  && !loginPW.equals("1")) {
+        if (!loginID.equals("1") && !loginPW.equals("1")) {
             Member member = new Member();
             member.setMemID(loginID);
             member.setMemPW(loginPW);
@@ -65,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
             loginProcess(member);
         }
 
-        Button login, signin;
+        final Button login, signin;
 
         setContentView(R.layout.activity_main);
         login = findViewById(R.id.login);
@@ -78,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
                 loginPW = ((TextView) findViewById(R.id.pw)).getText().toString();
                 if (TextUtils.isEmpty(loginID) || TextUtils.isEmpty(loginPW)) {
                     showToast("빈칸 노노!");
+                } else if (loginID.length() < 4 || loginID.length() > 20 || loginPW.length()<8|| loginPW.length()>20) {
+                    showToast("올바르지 않은 ID이거나 PW입니다.");
                 } else {
                     Member member = new Member();
                     member.setMemID(loginID);
@@ -96,16 +95,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if(resultCode==TAG_MEMBEROUT){
+        if (resultCode == TAG_MEMBEROUT) {
             showToast("멤버탈퇴! 처음으로 돌아갑니다.");
         }
         if (requestCode == TAG_LOGOUT) {
-            if(resultCode==TAG_LOGOUT) {
-                preferences = getSharedPreferences("mnms",MODE_PRIVATE);
+            if (resultCode == TAG_LOGOUT) {
+                preferences = getSharedPreferences("mnms", MODE_PRIVATE);
                 editor.clear();
-                loginID="";loginPW="";
+                loginID = "";
+                loginPW = "";
 
                 editor.commit();
             }
@@ -185,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
                     String id = jsonObject.getString("memID");
                     String email = jsonObject.getString("memEmail");
                     String accNum = jsonObject.getString("accountNum");
-                    String phoneNumber=jsonObject.getString("phoneNumber");
+                    String phoneNumber = jsonObject.getString("phoneNumber");
 
                     Member loginMem = new Member();
                     loginMem.setMemName(name);
@@ -205,9 +206,10 @@ public class MainActivity extends AppCompatActivity {
                         editor.putString("loginPw", loginPW);
                         editor.commit();
                     } else {
-                        preferences = getSharedPreferences("mnms",MODE_PRIVATE);
+                        preferences = getSharedPreferences("mnms", MODE_PRIVATE);
                         editor.clear();
-                        loginID="";loginPW="";
+                        loginID = "";
+                        loginPW = "";
                         editor.commit();
                     }
                     Intent intent = new Intent(MainActivity.this, MainMenuActivity.class);
@@ -216,11 +218,12 @@ public class MainActivity extends AppCompatActivity {
 
                     startActivityForResult(intent, TAG_LOGOUT);
                 } else {//로그인에 실패한 경우
-                    preferences = getSharedPreferences("mnms",MODE_PRIVATE);
+                    preferences = getSharedPreferences("mnms", MODE_PRIVATE);
                     editor.clear();
-                    loginID="";loginPW="";
+                    loginID = "";
+                    loginPW = "";
                     editor.commit();
-                    showToast("로그인에 실패했습니다.");
+                    showToast("잘못된 ID이거나 PW입니다.");
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

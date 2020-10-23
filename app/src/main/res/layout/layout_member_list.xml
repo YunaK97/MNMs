@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:background="@drawable/sidecustom"
+        android:id="@+id/membership_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="20sp"
+        android:padding="5dp"
+        android:text="친구이름" />
+
+    <TextView
+        android:padding="5dp"
+        android:id="@+id/membership_id"
+        android:background="@drawable/sidecustom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:textSize="20sp"
+        android:text="친구ID" />
+    <TextView
+        android:padding="5dp"
+        android:id="@+id/membership_cnt"
+        android:background="@drawable/sidecustom"
+        android:layout_width="50sp"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:text="100" />
+</LinearLayout>

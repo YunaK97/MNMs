@@ -1,7 +1,6 @@
 package kr.hongik.mnms.firstscreen;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,13 +13,16 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -29,9 +31,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
@@ -42,9 +41,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private Member signInMember = new Member();
 
     //layouts
-    private ArrayAdapter bankTypeAdapter,emailTypeAdapter;
+    private ArrayAdapter bankTypeAdapter, emailTypeAdapter;
     private Spinner email_type, bank_type;
-    private Button cameraBtn, signInBtn,emailAuth,emailCheck;
+    private Button cameraBtn, signInBtn, emailAuth, emailCheck;
 
     //urls
     private String curIp = "211.186.21.254:8090";
@@ -63,30 +62,20 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
-        Intent intent = getIntent();
-        //curIp = intent.getStringExtra("curIp");
+        setAccountNum();
 
-        Random random=new Random();
-        random.setSeed(System.currentTimeMillis());
-        int div1 = random.nextInt(100)+1000;
-        int div2 = random.nextInt(100)+10000;
-        int div3 = random.nextInt(100)+100;
-        String accountNum = (int) (Math.random() * div1) + "-" + (int) (Math.random() * div2) + "-" + (int) (Math.random() * div3);
-
-        signInMemberAccount.setAccountNum(accountNum);
-
-        TextView tv_accountNum=findViewById(R.id.textAccountNum);
-        tv_accountNum.setText(accountNum);
-
-        signInBtn=findViewById(R.id.btn_signIn);
+        //회원가입 버튼
+        signInBtn = findViewById(R.id.btn_signIn);
         signInBtn.setOnClickListener(this);
 
+        //이메일 종류 선택
         email_type = findViewById(R.id.email_type);
         emailTypeAdapter = ArrayAdapter.createFromResource(this, R.array.email_type, R.layout.support_simple_spinner_dropdown_item);
         emailTypeAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
         email_type.setAdapter(emailTypeAdapter);
         email_type.setSelection(0);
 
+        //은행 종류 선택
         bank_type = findViewById(R.id.bank_type);
         bankTypeAdapter = ArrayAdapter.createFromResource(this, R.array.bank_type, R.layout.support_simple_spinner_dropdown_item);
         bankTypeAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
@@ -132,9 +121,71 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-        setResult(MainActivity.TAG_BACK,intent);
+        setResult(MainActivity.TAG_BACK, intent);
         finish();
         //super.onBackPressed();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_signIn:
+                beforeSignInCheck();
+                break;
+            case R.id.btn_idOverlap:
+                checkID = ((TextView) findViewById(R.id.textID)).getText().toString();
+                checkID=checkID.trim();
+
+                if (checkID.length() < 4 || checkID.length() > 20) {
+                    showToast("4~20 글자 입력");
+                } else {
+                    //id만 서버로 보내서 중복확인
+                    checkOverlap("id");
+                }
+                break;
+            case R.id.btn_emailOverlap:
+                String emailID = ((TextView) findViewById(R.id.textEmail)).getText().toString();
+                if (TextUtils.isEmpty(emailID)) {
+                    showToast("빈칸 노노");
+                    return;
+                }
+                emailForm = email_type.getSelectedItem().toString();
+                if (emailForm.equals("이메일")) {
+                    showToast("이메일을 확인하세요");
+                    return;
+                }
+                emailForm = "@" + emailForm;
+                checkEmail = emailID + emailForm;
+                checkOverlap("email");
+                break;
+            case R.id.btn_emailAuth:
+                authEmail = checkEmail;
+                checkOverlap("auth");
+                break;
+            case R.id.identify:
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, TAKE_PICTURE);
+                String tmpssn = "970822-10041004";
+                showToast("민증확인! (구현중)");
+                ssnValid = true;
+                signInMember.setMemSsn(tmpssn);
+                break;
+
+        }
+    }
+
+    private void setAccountNum() {
+        Random random = new Random();
+        random.setSeed(System.currentTimeMillis());
+        int div1 = random.nextInt(100) + 1000;
+        int div2 = random.nextInt(100) + 10000;
+        int div3 = random.nextInt(100) + 100;
+        String accountNum = (int) (Math.random() * div1) + "-" + (int) (Math.random() * div2) + "-" + (int) (Math.random() * div3);
+
+        signInMemberAccount.setAccountNum(accountNum);
+
+        TextView tv_accountNum = findViewById(R.id.textAccountNum);
+        tv_accountNum.setText(accountNum);
     }
 
     protected void checkOverlap(String TAG_TYPE) {
@@ -163,8 +214,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             params.put("memEmail", checkEmail);
 
             networkTask.execute(params);
-        }
-        else if (TAG_TYPE.equals("auth")) {
+        } else if (TAG_TYPE.equals("auth")) {
             String urlEmailAuth = "http://" + curIp + "/member/mail";
 
             NetworkTask networkTask = new NetworkTask();
@@ -179,69 +229,69 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     }
 
-    protected void registerBegin() {
-        //회원가입을 위함
-        //가입하기 위해 작성한 member의 전체 정보,account의 전체정보 전달
-        //결과로 성공/실패 여부 전송받아야함
-        String urlRegister = "http://" + curIp + "/member/join";
-
-        NetworkTask networkTask = new NetworkTask();
-        networkTask.setURL(urlRegister);
-        networkTask.setTAG("register");
-
-        Map<String, String> params = new HashMap<>();
-        params.put("memID", signInMember.getMemID());
-        params.put("memPW", signInMember.getMemPW());
-        params.put("memName", signInMember.getMemName());
-        params.put("memEmail", signInMember.getMemEmail());
-        params.put("memSsn", signInMember.getMemSsn());
-        params.put("phoneNumber",signInMember.getPhoneNumber());
-
-        params.put("accountBank", signInMemberAccount.getAccountBank());
-        params.put("accountBalance", signInMemberAccount.getAccountBalance() + "");
-        params.put("accountNum", signInMemberAccount.getAccountNum());
-        params.put("accountPassword", signInMemberAccount.getAccountPassword());
-
-        networkTask.execute(params);
+    private void beforeSignInCheck() {
+        //빈칸 체크
+        if (!getUserInfo() || !getAccountInfo()) {
+            showToast("빈칸 ㄴㄴ해");
+        } else {
+            if (emailValid && idValid && ssnValid && pwValid) {
+                registerBegin();
+            } else {
+                if (!emailValid) {
+                    showToast("이메일 다시 확인");
+                } else if (!ssnValid) {
+                    showToast("민증 다시 확인");
+                } else if (!idValid) {
+                    showToast("아이디 다시 확인");
+                } else if (!pwValid) {
+                    showToast("비밀번호 불일치");
+                }
+            }
+        }
     }
 
-    protected boolean getUserInfo() {
+    private boolean getUserInfo() {
         String name = ((TextView) findViewById(R.id.textName)).getText().toString();
-        name.replaceAll(" ", "");
+        name = name.trim();
         if (TextUtils.isEmpty(name)) return false;
         else signInMember.setMemName(name);
 
         String pw = ((TextView) findViewById(R.id.textPW)).getText().toString();
-        pw.replaceAll(" ", "");
+        pw = pw.trim();
         if (TextUtils.isEmpty(pw)) return false;
-        if(pw.length()<8 || pw.length()>20) {
+        if (pw.length() < 8 || pw.length() > 20) {
             showToast("비밀번호 : 8~20자");
             return false;
         }
         String checkPw = ((TextView) findViewById(R.id.textCheckPW)).getText().toString();
-        checkPw.replaceAll(" ", "");
+        checkPw = checkPw.trim();
         if (TextUtils.isEmpty(checkPw)) return false;
         if (pw.equals(checkPw)) {
             pwValid = true;
             signInMember.setMemPW(pw);
+        } else {
+            showToast("비밀번호가 일치하지 않습니다.");
+            pwValid=false;
+            return false;
         }
 
-        String phone1,phone2,phone3,phoneNumber;
-        phone1=((TextView)findViewById(R.id.tv_signIn_phone1)).getText().toString();
-        phone2=((TextView)findViewById(R.id.tv_signIn_phone2)).getText().toString();
-        phone3=((TextView)findViewById(R.id.tv_signIn_phone3)).getText().toString();
-        if(TextUtils.isEmpty(phone1) || TextUtils.isEmpty(phone2) || TextUtils.isEmpty(phone1)) return false;
-        if(phone1.length() != 3 || phone2.length() != 4 || phone3.length() != 4 ){
+        String phone1, phone2, phone3, phoneNumber;
+        phone1 = ((TextView) findViewById(R.id.tv_signIn_phone1)).getText().toString();
+        phone2 = ((TextView) findViewById(R.id.tv_signIn_phone2)).getText().toString();
+        phone3 = ((TextView) findViewById(R.id.tv_signIn_phone3)).getText().toString();
+        if (TextUtils.isEmpty(phone1) || TextUtils.isEmpty(phone2) || TextUtils.isEmpty(phone1))
+            return false;
+        if (phone1.length() != 3 || phone2.length() != 4 || phone3.length() != 4) {
             showToast("올바르지 않은 번호입니다.");
             return false;
         }
-        phoneNumber=phone1+phone2+phone3;
+        phoneNumber = phone1 + phone2 + phone3;
         signInMember.setPhoneNumber(phoneNumber);
 
         return true;
     }
 
-    protected boolean getAccountInfo() {
+    private boolean getAccountInfo() {
         if (bank_type.getSelectedItemPosition() == 0) {
             signInMemberAccount.setAccountBank("AAAA");
         } else if (bank_type.getSelectedItemPosition() == 1) {
@@ -263,39 +313,52 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         else signInMemberAccount.setAccountBalance(Integer.parseInt(accountBalance));
 
         String accountPw = ((TextView) findViewById(R.id.textAccountPW)).getText().toString();
-        accountPw.replaceAll(" ", "");
+        accountPw = accountPw.trim();
 
+        String accountPWCheck = ((TextView) findViewById(R.id.textAccountPWCheck)).getText().toString();
+        accountPWCheck = accountPWCheck.trim();
         if (TextUtils.isEmpty(accountPw)) return false;
         else if (accountPw.length() != 4) {
             showToast("계좌 비밀번호는 4자리 입니다.");
             return false;
-        } else {
+        }
+
+        if (accountPw.equals(accountPWCheck)) {
             signInMemberAccount.setAccountPassword(accountPw);
+        } else {
+            showToast("계좌 비밀번호가 일치하지 않습니다.");
+            return false;
         }
         return true;
     }
 
-    private void beforeSignInCheck(){
-        if (!getUserInfo() || !getAccountInfo()) {
-            showToast("빈칸 ㄴㄴ해");
-        } else {
-            if (emailValid && idValid && ssnValid && pwValid) {
-                registerBegin();
-            } else {
-                if (!emailValid) {
-                    showToast("이메일 다시 확인");
-                } else if (!ssnValid) {
-                    showToast("민증 다시 확인");
-                } else if (!idValid) {
-                    showToast("아이디 다시 확인");
-                } else if (!pwValid) {
-                    showToast("비밀번호 불일치");
-                }
-            }
-        }
+    protected void registerBegin() {
+        //회원가입을 위함
+        //가입하기 위해 작성한 member의 전체 정보,account의 전체정보 전달
+        //결과로 성공/실패 여부 전송받아야함
+        String urlRegister = "http://" + curIp + "/member/join";
+
+        NetworkTask networkTask = new NetworkTask();
+        networkTask.setURL(urlRegister);
+        networkTask.setTAG("registerBegin");
+
+        Map<String, String> params = new HashMap<>();
+        params.put("memID", signInMember.getMemID());
+        params.put("memPW", signInMember.getMemPW());
+        params.put("memName", signInMember.getMemName());
+        params.put("memEmail", signInMember.getMemEmail());
+        params.put("memSsn", signInMember.getMemSsn());
+        params.put("phoneNumber", signInMember.getPhoneNumber());
+
+        params.put("accountBank", signInMemberAccount.getAccountBank());
+        params.put("accountBalance", signInMemberAccount.getAccountBalance() + "");
+        params.put("accountNum", signInMemberAccount.getAccountNum());
+        params.put("accountPassword", signInMemberAccount.getAccountPassword());
+
+        networkTask.execute(params);
     }
 
-    protected void showToast(String data) {
+    private void showToast(String data) {
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
 
@@ -341,40 +404,64 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private void emailAuthProcess(String response) throws JSONException {
         JSONObject jsonObject = new JSONObject(response);
         final String number = jsonObject.getString("number");
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this,R.style.CustomDialog);
-        builder.setTitle("인증");
-        builder.setMessage("인증번호를 입력하세요");
-
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
-        builder.setView(input);
 
-        builder.setPositiveButton("OK",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        if((input.getText().toString()).equals(number)) {
-                            Toast.makeText(getApplicationContext(),"인증 성공",Toast.LENGTH_LONG).show();
+        final AlertDialog dialog=new AlertDialog.Builder(this,R.style.CustomDialog)
+                .setTitle("인증")
+                .setView(input)
+                .setPositiveButton(android.R.string.ok,null)
+                .setNegativeButton(android.R.string.cancel,null)
+                .create();
+
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialog2) {
+                Button button=((AlertDialog)dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if ((input.getText().toString()).equals(number)) {
+                            Toast.makeText(getApplicationContext(), "인증 성공", Toast.LENGTH_LONG).show();
+                            dialog.dismiss();
                         } else {
-                            Toast.makeText(getApplicationContext(),"인증번호가 일치하지 않습니다.",Toast.LENGTH_LONG).show();
+                            Toast.makeText(getApplicationContext(), "인증번호가 일치하지 않습니다.", Toast.LENGTH_LONG).show();
                         }
-
+                        //원하면 dialog.dismiss();
                     }
                 });
-        builder.setNegativeButton("CANCEL",
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(getApplicationContext(),"인증 취소",Toast.LENGTH_LONG).show();
-                    }
-                });
-        builder.show();
+            }
+        });
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomDialog);
+//        builder.setTitle("인증");
+//        builder.setMessage("인증번호를 입력하세요");
+//
+//        final EditText input = new EditText(this);
+//        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+//        builder.setView(input);
+//
+//        builder.setPositiveButton("OK",
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        if ((input.getText().toString()).equals(number)) {
+//                            Toast.makeText(getApplicationContext(), "인증 성공", Toast.LENGTH_LONG).show();
+//                        } else {
+//                            Toast.makeText(getApplicationContext(), "인증번호가 일치하지 않습니다.", Toast.LENGTH_LONG).show();
+//                        }
+//
+//                    }
+//                });
+//        builder.setNegativeButton("CANCEL",
+//                new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        Toast.makeText(getApplicationContext(), "인증 취소", Toast.LENGTH_LONG).show();
+//                    }
+//                });
+//        builder.show();
     }
 
-    private void registerProcess(String response) {
+    private void registerBeginProcess(String response) {
         try {
-            if (response.isEmpty()) {
-                showToast("error!");
-            }
             JSONObject jsonObject = new JSONObject(response);
 
             boolean success = jsonObject.getBoolean(TAG_SUCCESS);
@@ -391,55 +478,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             }
 
         } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.btn_signIn:
-                beforeSignInCheck();
-                break;
-            case R.id.btn_idOverlap:
-                checkID = ((TextView) findViewById(R.id.textID)).getText().toString();
-                checkID.replaceAll(" ", "");
-
-                if (checkID.length() < 4 || checkID.length() > 20) {
-                    showToast("4~20 글자 입력");
-                } else {
-                    //id만 서버로 보내서 중복확인
-                    checkOverlap("id");
-                }
-                break;
-            case R.id.btn_emailOverlap:
-                String emailID = ((TextView) findViewById(R.id.textEmail)).getText().toString();
-                if (TextUtils.isEmpty(emailID)) {
-                    showToast("빈칸 노노");
-                    return;
-                }
-                emailForm = email_type.getSelectedItem().toString();
-                if (emailForm.equals("이메일")) {
-                    showToast("이메일을 확인하세요");
-                    return;
-                }
-                emailForm = "@" + emailForm;
-                checkEmail = emailID + emailForm;
-                checkOverlap("email");
-                break;
-            case R.id.btn_emailAuth:
-                authEmail = checkEmail;
-                checkOverlap("auth");
-                break;
-            case R.id.identify:
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, TAKE_PICTURE);
-                String tmpssn = "970822-10041004";
-                showToast("민증확인! (구현중)");
-                ssnValid = true;
-                signInMember.setMemSsn(tmpssn);
-                break;
-
+            //e.printStackTrace();
         }
     }
 
@@ -476,14 +515,20 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         @Override
         protected void onPostExecute(String response) {
+            if(response.isEmpty()){
+                Log.d(TAG,"빈칸 옴!");
+                return;
+            }else{
+                Log.d(TAG,response);
+            }
+
             if (TAG.equals("idOverlap")) {
                 idOverlapProcess(response);
             } else if (TAG.equals("emailOverlap")) {
                 emailOverlapProcess(response);
-            } else if (TAG.equals("register")) {
-                registerProcess(response);
+            } else if (TAG.equals("registerBegin")) {
+                registerBeginProcess(response);
             } else if (TAG.equals("emailAuth")) {
-                Log.d("email",response);
                 try {
                     emailAuthProcess(response);
                 } catch (JSONException e) {

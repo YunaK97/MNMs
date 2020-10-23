@@ -296,8 +296,6 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
         bundle.putSerializable("loginMemberAccount", loginMemberAccount);
         bundle.putSerializable("memberArrayList", memberArrayList);
 
-        showToast(membershipGroup.getPayDuration());
-
         viewPager = findViewById(R.id.viewpager_membership);
         MembershipPagerAdapter adapter = new MembershipPagerAdapter(getSupportFragmentManager(), bundle);
         viewPager.setAdapter(adapter);

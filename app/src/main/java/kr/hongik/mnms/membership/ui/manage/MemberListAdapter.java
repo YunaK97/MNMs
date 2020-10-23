@@ -1,54 +1,55 @@
-package kr.hongik.mnms.mainscreen.ui.friend;
+package kr.hongik.mnms.membership.ui.manage;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
+
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
 
 
-public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.ViewHolder> {
-    private ArrayList<Member> items = new ArrayList<>();
+public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.ViewHolder> {
+    private ArrayList<MembershipMemFragment.MembershipMember> items = new ArrayList<>();
 
-    private OnFriendItemClickListener listener;
-    private OnFriendItemLongClickListener longlistener;
+    private OnMemberListClickListener listener;
+    private OnMemberListLongClickListener longlistener;
 
-    public void addItem(Member item) {
+    public void addItem(MembershipMemFragment.MembershipMember item) {
         items.add(item);
     }
 
-    public void setItems(ArrayList<Member> items) {
+    public void setItems(ArrayList<MembershipMemFragment.MembershipMember> items) {
         this.items = items;
     }
 
-    public Member getItem(int position) {
+    public MembershipMemFragment.MembershipMember getItem(int position) {
         return items.get(position);
     }
 
-    public ArrayList<Member> getList() {
+    public ArrayList<MembershipMemFragment.MembershipMember> getList() {
         return items;
     }
 
 
-    public void setItem(int position, Member item) {
+    public void setItem(int position, MembershipMemFragment.MembershipMember item) {
         items.set(position, item);
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView friendlist_name, friendlist_id;
+        TextView membership_name, membership_id,membership_cnt;
 
-        ViewHolder(View itemView, final OnFriendItemClickListener listener, final OnFriendItemLongClickListener longlistener) {
+        ViewHolder(View itemView,final OnMemberListClickListener listener,final OnMemberListLongClickListener longlistener) {
             super(itemView);
 
-            friendlist_name = itemView.findViewById(R.id.friendlist_name);
-            friendlist_id = itemView.findViewById(R.id.friendlistlist_id);
-
+            membership_name = itemView.findViewById(R.id.membership_name);
+            membership_id = itemView.findViewById(R.id.membership_id);
+            membership_cnt=itemView.findViewById(R.id.membership_cnt);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -72,17 +73,18 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
             });
         }
 
-        public void setItem(Member item) {
-            friendlist_name.setText(item.getMemName());
-            friendlist_id.setText(item.getMemID());
+        public void setItem(MembershipMemFragment.MembershipMember item) {
+            membership_name.setText(item.getMemName());
+            membership_id.setText(item.getMemID());
+            membership_cnt.setText(item.getNotSubmit());
         }
     }
 
-    public void setOnItemClickListener(OnFriendItemClickListener listener) {
+    public void setOnClickListener(OnMemberListClickListener listener) {
         this.listener = listener;
     }
 
-    public void setOnItemLongClickListener(OnFriendItemLongClickListener listener) {
+    public void setOnLongClickListener(OnMemberListLongClickListener listener) {
         this.longlistener = listener;
     }
 
@@ -93,7 +95,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
 
         //inflater 참조방법
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View itemView = inflater.inflate(R.layout.layout_friend_list, parent, false);
+        View itemView = inflater.inflate(R.layout.layout_member_list, parent, false);
 
         return new ViewHolder(itemView, listener, longlistener);
     }
@@ -102,7 +104,7 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //viewholder는 재사용된다! 계속 새로 만들순 없다.
 
-        final Member item = items.get(position);
+        final MembershipMemFragment.MembershipMember item = items.get(position);
         holder.setItem(item);
     }
 

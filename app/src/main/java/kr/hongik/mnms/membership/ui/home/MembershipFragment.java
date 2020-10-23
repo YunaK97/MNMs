@@ -29,6 +29,7 @@ import kr.hongik.mnms.TransactionAdapter;
 import kr.hongik.mnms.membership.MembershipGroup;
 
 public class MembershipFragment extends Fragment {
+    //멤버십에서 사용한 돈 출력
 
     private Member loginMember;
     private Account loginMemberAccount;

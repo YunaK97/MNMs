@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
@@ -26,9 +27,12 @@ import kr.hongik.mnms.membership.MembershipGroup;
 
 
 public class ManageFeeFragment extends Fragment {
+    //멤버십 관련 정보 출력
+    //회비, 미납 가능 횟수, 내 미납횟수
 
     private MembershipGroup membershipGroup;
     private Member loginMember;
+
     //layouts
     private TextView tv_monthly_membership;
     private TextView tv_notsubmit_cnt;
@@ -44,7 +48,7 @@ public class ManageFeeFragment extends Fragment {
 
         tv_monthly_membership = viewGroup.findViewById(R.id.tv_monthly_membership);
         tv_notsubmit_cnt = viewGroup.findViewById(R.id.tv_notsubmit_cnt);
-        tv_my_notSubmit=viewGroup.findViewById(R.id.tv_my_notSubmit);
+        tv_my_notSubmit = viewGroup.findViewById(R.id.tv_my_notSubmit);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -56,49 +60,50 @@ public class ManageFeeFragment extends Fragment {
         return viewGroup;
     }
 
-    private void setInformation(MembershipGroup membershipGroup){
-        String urlSetInfo="http://"+loginMember.getIp()+"/membership/notSubmit";
+    private void setInformation(MembershipGroup membershipGroup) {
+        String urlSetInfo = "http://" + loginMember.getIp() + "/membership/notSubmit";
 
-        NetworkTask networkTask=new NetworkTask();
+        NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("setInfo");
         networkTask.setURL(urlSetInfo);
 
-        Map<String,String> params=new HashMap<>();
-        params.put("memID",loginMember.getMemID());
-        params.put("MID",membershipGroup.getMID()+"");
-        params.put("GID",membershipGroup.getGID()+"");
-
-        //멤버십의 회비
-        tv_monthly_membership.setText(membershipGroup.getFee()+"");
-        //멤버십의 미납가능횟수
-        tv_notsubmit_cnt.setText(membershipGroup.getNotSubmit()+"");
+        Map<String, String> params = new HashMap<>();
+        params.put("memID", loginMember.getMemID());
+        params.put("MID", membershipGroup.getMID() + "");
+        params.put("GID", membershipGroup.getGID() + "");
 
         networkTask.execute(params);
     }
+
     public void setInformationProcess(String response) {
+        //멤버십의 회비
+        tv_monthly_membership.setText(membershipGroup.getFee() + "");
+        //멤버십의 미납가능횟수
+        tv_notsubmit_cnt.setText(membershipGroup.getNotSubmit() + "");
+
         //내 미납횟수
         tv_my_notSubmit.setText("1");
 
-        if(loginMember.getMemID().equals(membershipGroup.getPresident())){
+        if (loginMember.getMemID().equals(membershipGroup.getPresident())) {
             try {
-                JSONObject jsonObject=new JSONObject(response);
-                int notSubmitSize=jsonObject.getInt("MemberSize");
-                for(int i=0;i<notSubmitSize;i++){
-                    String memID=jsonObject.getString("memID"+i);
-                    if(memID.equals(loginMember.getMemID())){
-                        tv_my_notSubmit.setText(jsonObject.getString("count"+i));
+                JSONObject jsonObject = new JSONObject(response);
+                int notSubmitSize = jsonObject.getInt("MemberSize");
+                for (int i = 0; i < notSubmitSize; i++) {
+                    String memID = jsonObject.getString("memID" + i);
+                    if (memID.equals(loginMember.getMemID())) {
+                        tv_my_notSubmit.setText(jsonObject.getString("count" + i));
                         break;
                     }
                 }
-            }catch (Exception e){
-
+            } catch (Exception e) {
+                //e.printStackTrace();
             }
-        }else {
+        } else {
             try {
                 JSONObject jsonObject = new JSONObject(response);
                 tv_my_notSubmit.setText(jsonObject.getString("notSubmit"));
             } catch (Exception e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
     }
@@ -135,8 +140,8 @@ public class ManageFeeFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String response) {
-            Log.d("fee관련",response);
-            if(TAG.equals("setInfo")){
+            Log.d(TAG, response);
+            if (TAG.equals("setInfo")) {
                 setInformationProcess(response);
             }
         }

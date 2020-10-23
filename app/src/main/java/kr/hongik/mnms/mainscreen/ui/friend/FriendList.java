@@ -151,7 +151,8 @@ public class FriendList extends Fragment {
             friendListAdapter.setOnItemLongClickListener(new OnFriendItemLongClickListener() {
                 @Override
                 public void onItemLongClick(FriendListAdapter.ViewHolder holder, View view, int position) {
-                    selectDelFriend(position);
+                    //정산 안되면 친구 삭제 못함?
+//                    selectDelFriend(position);
                 }
             });
         } catch (JSONException e) {

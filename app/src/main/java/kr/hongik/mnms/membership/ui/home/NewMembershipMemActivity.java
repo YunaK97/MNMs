@@ -68,32 +68,8 @@ public class NewMembershipMemActivity extends AppCompatActivity {
                 requestAddMem();
             }
         });
+
         showFriend();
-
-    }
-
-    private void requestAddMem() {
-        String urlAddmembershipMem = "http://" + loginMember.getIp() + "/membership/add";
-
-        // 수락or거절 결과 전송
-        selectedFriend = new ArrayList<>();
-        for (int i = 0; i < memberAdapter.getItemCount(); i++) {
-            if (memberAdapter.getItem(i).isChecked()) {
-                selectedFriend.add(memberAdapter.getItem(i));
-            }
-        }
-
-        NetworkTask networkTask = new NetworkTask();
-        networkTask.setURL(urlAddmembershipMem);
-        networkTask.setTAG("addMembershipMem");
-
-        Map<String, String> params = new HashMap<>();
-        params.put("GID",membershipGroup.getGID()+"");
-        params.put("friendSize",selectedFriend.size()+"");
-        for (int i = 0; i < selectedFriend.size(); i++) {
-            params.put("memID"+i, selectedFriend.get(i).getMemID());
-        }
-        networkTask.execute(params);
     }
 
     private void showFriend() {
@@ -154,6 +130,30 @@ public class NewMembershipMemActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    private void requestAddMem() {
+        String urlAddmembershipMem = "http://" + loginMember.getIp() + "/membership/add";
+
+        // 수락or거절 결과 전송
+        selectedFriend = new ArrayList<>();
+        for (int i = 0; i < memberAdapter.getItemCount(); i++) {
+            if (memberAdapter.getItem(i).isChecked()) {
+                selectedFriend.add(memberAdapter.getItem(i));
+            }
+        }
+
+        NetworkTask networkTask = new NetworkTask();
+        networkTask.setURL(urlAddmembershipMem);
+        networkTask.setTAG("addMembershipMem");
+
+        Map<String, String> params = new HashMap<>();
+        params.put("GID",membershipGroup.getGID()+"");
+        params.put("friendSize",selectedFriend.size()+"");
+        for (int i = 0; i < selectedFriend.size(); i++) {
+            params.put("memID"+i, selectedFriend.get(i).getMemID());
+        }
+        networkTask.execute(params);
     }
 
     private void showToast(String data) {
