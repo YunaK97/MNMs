@@ -64,7 +64,7 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
             Intent intent=new Intent(DailyActivity.this, DailyQRActivity.class);
             intent.putExtra("loginMember", loginMember);
             intent.putExtra("loginMemberAccount", loginMemberAccount);
-            intent.putExtra("dailiyGroup", dailyGroup);
+            intent.putExtra("dailyGroup", dailyGroup);
             intent.putExtra("memberArrayList",memberArrayList);
 
             //돈얼마송금해야하는지 가능하면 담아서 보내기

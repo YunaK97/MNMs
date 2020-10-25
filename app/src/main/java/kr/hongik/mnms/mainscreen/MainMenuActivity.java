@@ -315,6 +315,7 @@ public class MainMenuActivity extends AppCompatActivity {
         intent.putExtra("membershipGroup", membershipGroup);
         intent.putExtra("loginMember", loginMember);
         intent.putExtra("loginMemberAccount", loginMemberAccount);
+        intent.putExtra("feeType","regular");
         PendingIntent pendingIntent = PendingIntent.getActivity(this, GID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         //알림창 제목
         notiBuilder.setContentTitle("MnMs");
@@ -464,6 +465,7 @@ public class MainMenuActivity extends AppCompatActivity {
             return post.getBody();
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
         protected void onPostExecute(String response) {
             if (TAG.equals("checkSubmit")) {

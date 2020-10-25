@@ -38,6 +38,7 @@ public class NewFeeActivity extends AppCompatActivity {
     private Member loginMember;
     private Account loginMemberaccount;
     private MembershipGroup membershipGroup;
+    private String feeType;
 
     //layouts
     private TextView TV_newFee_groupName,TV_newFee_fee;
