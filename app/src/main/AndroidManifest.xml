@@ -30,7 +30,9 @@
         <activity android:name=".daily.ui.home.NewDailyMemActivity" />
         <activity android:name=".newprocesses.NewTransactionActivity" />
         <activity android:name=".membership.ui.home.NewMembershipMemActivity" />
-        <activity android:name=".mainscreen.ui.settings.SettingsActivity" />
+        <activity android:name=".mainscreen.ui.settings.SettingsActivity"
+            android:label="@string/app_setting"
+            />
         <activity android:name=".newprocesses.NewFriendActivity" />
         <activity
             android:name=".membership.MembershipActivity"

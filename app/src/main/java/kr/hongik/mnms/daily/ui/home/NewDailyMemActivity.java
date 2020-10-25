@@ -47,6 +47,7 @@ public class NewDailyMemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_daily_mem);
 
+        setTitle("친구초대");
         //intent 받아오기
         Intent intent = getIntent();
         loginMember = (Member) intent.getSerializableExtra("loginMember");

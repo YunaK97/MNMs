@@ -80,6 +80,8 @@ public class ManageMembershipActivity extends AppCompatActivity {
         final Intent intent = getIntent();
         loginMember = (Member) intent.getSerializableExtra("loginMember");
         membershipGroup = (MembershipGroup) intent.getSerializableExtra("membershipGroup");
+        
+        setTitle(membershipGroup.getGroupName());
 
         etNewFee = findViewById(R.id.new_membership_fee);
         etNewName = findViewById(R.id.new_membership_name);

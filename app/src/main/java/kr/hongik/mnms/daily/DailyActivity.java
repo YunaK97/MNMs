@@ -93,6 +93,8 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
         loginMember = (Member) intent.getSerializableExtra("loginMember");
         loginMemberAccount = (Account) intent.getSerializableExtra("loginMemberAccount");
 
+        setTitle(dailyGroup.getGroupName());
+
         getDailyGroupInfo();
 
     }

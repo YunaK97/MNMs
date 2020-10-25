@@ -74,6 +74,8 @@ public class DailyQRActivity extends AppCompatActivity {
             loginMemberAccount = (Account) intent.getSerializableExtra("loginMemberAccount");
             memberArrayList=(ArrayList<Member>) intent.getSerializableExtra("memberArrayList");
 
+            setTitle(dailyGroup.getGroupName());
+
             qr_code = findViewById(R.id.daily_qrImage);
 
             MultiFormatWriter multiFormatWriter = new MultiFormatWriter();

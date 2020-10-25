@@ -74,8 +74,8 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
         loginMember = (Member) intent.getSerializableExtra("loginMember");
         loginMemberAccount = (Account) intent.getSerializableExtra("loginMemberAccount");
 
+        setTitle(membershipGroup.getGroupName());
         getMembershipGroupInfo();
-
     }
 
     @Override

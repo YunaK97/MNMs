@@ -181,11 +181,11 @@ public class MembershipMemFragment extends Fragment {
 
         try {
             JSONObject jsonObject = new JSONObject(response);
-            int membershipMemberSize = Integer.parseInt(jsonObject.getString("membershipMemberSize"));
+            int membershipMemberSize = Integer.parseInt(jsonObject.getString("MemberSize"));
 
             for (int i = 0; i < membershipMemberSize; i++) {
                 String memberID = jsonObject.getString("memID" + i);
-                String notSubmit = jsonObject.getString("notsubmit" + i);
+                String notSubmit = jsonObject.getString("count" + i);
 
                 submitList.put(memberID, notSubmit);
             }
@@ -193,11 +193,17 @@ public class MembershipMemFragment extends Fragment {
             e.printStackTrace();
         }
 
-        for (int i = 0; i < presidentMemberAdapter.getItemCount(); i++) {
-            MembershipMember membershipMember=presidentMemberAdapter.getItem(i);
+        //멤버십 애들이랑 미납자 연결
+        //presidentMemberAdapter에 나중에 set
+
+        for (int i = 0; i < memberArrayList.size(); i++) {
+            Member member=memberArrayList.get(i);
+            MembershipMember membershipMember=new MembershipMember();
+            membershipMember.setMemID(member.getMemID());
+            membershipMember.setMemName(member.getMemName());
             String notsubmit = submitList.get(membershipMember.getMemID());
             membershipMember.setNotSubmit(Integer.parseInt(notsubmit));
-            presidentMemberAdapter.setItem(i,membershipMember);
+            presidentMemberAdapter.addItem(membershipMember);
         }
 
         memberList.setAdapter(presidentMemberAdapter);

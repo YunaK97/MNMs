@@ -55,6 +55,8 @@ public class NewMembershipMemActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_membership_mem);
 
+        setTitle("친구초대");
+
         //intent 받아오기
         Intent intent = getIntent();
         loginMember = (Member) intent.getSerializableExtra("loginMember");

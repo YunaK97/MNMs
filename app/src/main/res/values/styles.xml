@@ -26,7 +26,7 @@
         <item name="android:textSize">20sp</item>
         <item name="android:padding">3dp</item>
         <item name="colorAccent">@android:color/holo_red_light</item>
-        <item name="android:textColorHint">@android:color/holo_red_light</item>
+        <item name="android:textColorHint">@color/colorContent</item>
         <item name="android:textColor">@android:color/holo_red_dark</item>
     </style>
 

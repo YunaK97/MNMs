@@ -76,7 +76,7 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Vi
         public void setItem(MembershipMemFragment.MembershipMember item) {
             membership_name.setText(item.getMemName());
             membership_id.setText(item.getMemID());
-            membership_cnt.setText(item.getNotSubmit());
+            membership_cnt.setText(item.getNotSubmit()+"");
         }
     }
 
