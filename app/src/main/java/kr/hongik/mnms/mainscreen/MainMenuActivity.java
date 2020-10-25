@@ -318,7 +318,7 @@ public class MainMenuActivity extends AppCompatActivity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
-            builder.setSmallIcon(R.drawable.ic_launcher_foreground); //mipmap 사용시 Oreo 이상에서 시스템 UI 에러남
+            builder.setSmallIcon(R.drawable.logo_fore_mnms2); //mipmap 사용시 Oreo 이상에서 시스템 UI 에러남
             CharSequence channelName = "노티 채널";
             String description = "오레오 이상을 위한 것임";
             int importance = NotificationManager.IMPORTANCE_HIGH;
@@ -331,7 +331,7 @@ public class MainMenuActivity extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
 
         } else
-            builder.setSmallIcon(R.mipmap.ic_launcher); // Oreo 이하에서 mipmap 사용하지 않으면 Couldn't create icon: StatusBarIcon 에러남
+            builder.setSmallIcon(R.mipmap.launcher_round); // Oreo 이하에서 mipmap 사용하지 않으면 Couldn't create icon: StatusBarIcon 에러남
 
         assert notificationManager != null;
         notificationManager.notify(GID, builder.build()); // 고유숫자로 노티피케이션 동작시킴

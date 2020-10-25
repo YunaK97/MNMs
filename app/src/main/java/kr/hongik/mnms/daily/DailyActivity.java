@@ -61,14 +61,12 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.daily_QRsend){
+        if (item.getItemId() == R.id.daily_result){
             Intent intent=new Intent(DailyActivity.this, DailyQRActivity.class);
             intent.putExtra("loginMember", loginMember);
             intent.putExtra("loginMemberAccount", loginMemberAccount);
             intent.putExtra("dailyGroup", dailyGroup);
             intent.putExtra("memberArrayList",memberArrayList);
-
-            //돈얼마송금해야하는지 가능하면 담아서 보내기
 
             startActivity(intent);
         }

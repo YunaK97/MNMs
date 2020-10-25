@@ -24,10 +24,6 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Vi
         items.add(item);
     }
 
-    public void setItems(ArrayList<MembershipMemFragment.MembershipMember> items) {
-        this.items = items;
-    }
-
     public MembershipMemFragment.MembershipMember getItem(int position) {
         return items.get(position);
     }
@@ -36,10 +32,6 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Vi
         return items;
     }
 
-
-    public void setItem(int position, MembershipMemFragment.MembershipMember item) {
-        items.set(position, item);
-    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView membership_name, membership_id,membership_cnt;

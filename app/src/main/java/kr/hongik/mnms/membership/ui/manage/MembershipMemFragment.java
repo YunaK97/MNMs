@@ -22,8 +22,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,8 +29,6 @@ import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.mainscreen.ui.friend.FriendListAdapter;
-import kr.hongik.mnms.mainscreen.ui.friend.OnFriendItemClickListener;
-import kr.hongik.mnms.mainscreen.ui.friend.OnFriendItemLongClickListener;
 import kr.hongik.mnms.membership.MembershipGroup;
 
 
@@ -130,12 +126,11 @@ public class MembershipMemFragment extends Fragment {
         builder.setNeutralButton("삭제",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        AlertDialog.Builder builder2 = new AlertDialog.Builder(context, R.style.CustomDialog);
+                        AlertDialog.Builder builder2 = new AlertDialog.Builder(rootView.getContext(), R.style.CustomDialog);
 
-                        builder2.setTitle(selMember.getMemName()).setMessage(selMember.getMemName() + "삭제하시겠습니까?");
+                        builder2.setTitle(selMember.getMemName()).setMessage(selMember.getMemName() + "을 탈퇴시킬까요?");
 
                         final AlertDialog alertDialog2 = builder2.create();
-                        alertDialog2.show();
 
                         builder2.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
                             @Override
@@ -149,6 +144,10 @@ public class MembershipMemFragment extends Fragment {
                                 alertDialog2.dismiss();
                             }
                         });
+
+
+
+                        builder2.show();
 
                     }
                 });
@@ -207,6 +206,13 @@ public class MembershipMemFragment extends Fragment {
         }
 
         memberList.setAdapter(presidentMemberAdapter);
+
+        presidentMemberAdapter.setOnLongClickListener(new OnMemberListLongClickListener() {
+            @Override
+            public void onItemLongClick(MemberListAdapter.ViewHolder holder, View view, int position) {
+                selectDelMember(position);
+            }
+        });
     }
 
     private void deleteMember(String delMemberId) {

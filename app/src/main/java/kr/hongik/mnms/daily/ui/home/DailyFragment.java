@@ -58,7 +58,6 @@ public class DailyFragment extends Fragment {
      * monOne보다 많이 쓴사람도 돈 차이가 0이 될때까지 돈 받기
      *
      *
-     *
      * */
 
     private DailyGroup dailyGroup;
@@ -69,8 +68,6 @@ public class DailyFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
-    private RadioGroup dutchType;
-    private Spinner dutchRange;
 
     //variables
     private ArrayAdapter dutchRangeAdapter;
@@ -85,11 +82,6 @@ public class DailyFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_daily, container, false);
 
-        dutchRange = rootView.findViewById(R.id.dutch_type);
-        dutchRangeAdapter = ArrayAdapter.createFromResource(rootView.getContext(), R.array.dutch_money, R.layout.support_simple_spinner_dropdown_item);
-        dutchRangeAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        dutchRange.setAdapter(dutchRangeAdapter);
-
         mRecyclerView = rootView.findViewById(R.id.recyclerView_daily);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -97,9 +89,6 @@ public class DailyFragment extends Fragment {
 
         mAdapter = new TransactionAdapter();
         mRecyclerView.setAdapter(mAdapter);
-
-        dutchType = rootView.findViewById(R.id.dutch_radioGroup);
-        dutchType.setOnCheckedChangeListener(radioGroupListener);
 
         Bundle bundle = getArguments();
         if (bundle != null) {

@@ -2,9 +2,14 @@ package kr.hongik.mnms.daily.ui.home;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import kr.hongik.mnms.Account;
+import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
+import kr.hongik.mnms.daily.DailyActivity;
 import kr.hongik.mnms.daily.DailyGroup;
 import kr.hongik.mnms.firstscreen.MainActivity;
 import kr.hongik.mnms.newprocesses.NewDailyActivity;
@@ -12,10 +17,12 @@ import kr.hongik.mnms.newprocesses.NewFriendActivity;
 import kr.hongik.mnms.newprocesses.NewMembershipActivity;
 import kr.hongik.mnms.newprocesses.NewTransactionActivity;
 
+import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -34,6 +41,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DailyQRActivity extends AppCompatActivity {
 
@@ -43,15 +52,18 @@ public class DailyQRActivity extends AppCompatActivity {
     private Account loginMemberAccount;
     private DailyGroup dailyGroup;
     private ArrayList<Member> memberArrayList;
+
     private IntentIntegrator qrScan;
-    private String urlTransaction;
 
     //Layouts
     private ImageView qr_code;
-    private Button btn_qrScan;
+    private Button btn_qrScan,btn_qrMake;
+    private RecyclerView RVdutchMember;
+    private DutchListAdapter dutchListAdapter;
 
     //variables
     private String qrMessage;
+    private String totalMoney;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +80,35 @@ public class DailyQRActivity extends AppCompatActivity {
                 qrScan.initiateScan();
             }
         });
+
+        btn_qrMake=findViewById(R.id.btn_qrMake);
+        btn_qrMake.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                qr_code = findViewById(R.id.daily_qrImage);
+                qr_code.setVisibility(View.VISIBLE);
+
+                MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+
+                try {
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("myID", loginMember.getMemID());
+                    jsonObject.put("myAccount", loginMember.getAccountNum());
+                    jsonObject.put("myName", loginMember.getMemName());
+                    //내가 받을 돈
+
+                    BitMatrix bitMatrix = multiFormatWriter.encode(jsonObject.toString(), BarcodeFormat.QR_CODE, 200, 200);
+                    BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+                    Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+                    qr_code.setImageBitmap(bitmap);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
         Intent intent=getIntent();
         if (intent != null) {
             dailyGroup = (DailyGroup) intent.getSerializableExtra("dailyGroup");
@@ -77,24 +118,10 @@ public class DailyQRActivity extends AppCompatActivity {
 
             setTitle(dailyGroup.getGroupName());
 
-            qr_code = findViewById(R.id.daily_qrImage);
+            //돈 정산 목록 출력
+            calculateTotal();
 
-            MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
 
-            try {
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put("myID", loginMember.getMemID());
-                jsonObject.put("myAccount", loginMember.getAccountNum());
-                jsonObject.put("myName", loginMember.getMemName());
-
-                BitMatrix bitMatrix = multiFormatWriter.encode(jsonObject.toString(), BarcodeFormat.QR_CODE, 200, 200);
-                BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-                Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
-                qr_code.setImageBitmap(bitmap);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
     }
 
@@ -118,6 +145,19 @@ public class DailyQRActivity extends AppCompatActivity {
         }
     }
 
+    private void calculateTotal(){
+        String urlCalculateTotal = "http://" + loginMember.getIp() + "/daily/result";
+
+        NetworkTask networkTask = new NetworkTask();
+        networkTask.setURL(urlCalculateTotal);
+        networkTask.setTAG("calculateTotal");
+
+        Map<String, String> params = new HashMap<>();
+        params.put("DID", dailyGroup.getDID()+"");
+
+        networkTask.execute(params);
+    }
+
     private void floatDialog(IntentResult result){
         Member friendMember=new Member();
         try {
@@ -128,6 +168,7 @@ public class DailyQRActivity extends AppCompatActivity {
             friendMember.setMemID(jsonObject.getString("myID"));
             friendMember.setMemName(jsonObject.getString("myName"));
             friendMember.setAccountNum(jsonObject.getString("myAccount"));
+            //내가 보낼 돈
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -135,5 +176,103 @@ public class DailyQRActivity extends AppCompatActivity {
 
         AlertDialog.Builder builder=new AlertDialog.Builder(DailyQRActivity.this);
         builder.setTitle("송금하시겠습니까?");
+    }
+
+    private void calculateTotalProcess(String response){
+        Map<String,String> memberMap=new HashMap<>();
+
+        RVdutchMember=findViewById(R.id.recyclerView_dutch_members);
+        LinearLayoutManager layoutManager=new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
+        RVdutchMember.setLayoutManager(layoutManager);
+        dutchListAdapter=new DutchListAdapter();
+
+
+        try {
+            JSONObject jsonObject=new JSONObject(response);
+            int memSize=Integer.parseInt(jsonObject.getString("memSize"));
+
+
+            for(int i=0;i<memSize;i++){
+                String memID=jsonObject.getString("memID"+i);
+                String money=jsonObject.getString("money"+i);
+
+                Log.d("money"+i,memID+" "+money);
+                memberMap.put(memID,money);
+            }
+
+            totalMoney=jsonObject.getString("total");
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        for(int i=0;i<memberArrayList.size();i++){
+            Member member=memberArrayList.get(i);
+            DutchMember dutchMember=new DutchMember();
+            dutchMember.setMemID(member.getMemID());
+            dutchMember.setMemName(member.getMemName());
+            String money=memberMap.get(dutchMember.getMemID());
+            if(money==null){
+                dutchMember.setMyMoney(0);
+            }else {
+                dutchMember.setMyMoney(Integer.parseInt(money));
+            }
+
+            dutchListAdapter.addItem(dutchMember);
+        }
+
+        RVdutchMember.setAdapter(dutchListAdapter);
+
+    }
+    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+        protected String url, TAG;
+
+        void setURL(String url) {
+            this.url = url;
+        }
+
+        void setTAG(String TAG) {
+            this.TAG = TAG;
+        }
+
+        @Override
+        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+
+            // Http 요청 준비 작업
+            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+
+            // Parameter 를 전송한다.
+            http.addAllParameters(maps[0]);
+
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
+            // 응답 본문 가져오기
+
+            return post.getBody();
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            Log.d(TAG,response);
+            if (TAG.equals("calculateTotal")) {
+                calculateTotalProcess(response);
+            }
+
+        }
+    }
+
+    public class DutchMember extends Member{
+        private int myMoney;
+
+        public int getMyMoney() {
+            return myMoney;
+        }
+
+        public void setMyMoney(int myMoney) {
+            this.myMoney = myMoney;
+        }
     }
 }

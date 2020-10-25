@@ -22,7 +22,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".daily.ui.home.DutchActivity"></activity>
         <activity android:name=".newprocesses.NewMoneyToFriendActivity" />
         <activity android:name=".newprocesses.NewFeeActivity" />
         <activity android:name=".daily.ui.home.DailyQRActivity" />
