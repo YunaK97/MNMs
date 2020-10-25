@@ -134,6 +134,6 @@ public class DailyQRActivity extends AppCompatActivity {
         }
 
         AlertDialog.Builder builder=new AlertDialog.Builder(DailyQRActivity.this);
-        builder.setTitle("");
+        builder.setTitle("송금하시겠습니까?");
     }
 }

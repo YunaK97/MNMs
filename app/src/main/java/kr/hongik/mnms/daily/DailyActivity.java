@@ -27,6 +27,7 @@ import java.util.Map;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
@@ -96,7 +97,6 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
         setTitle(dailyGroup.getGroupName());
 
         getDailyGroupInfo();
-
     }
 
     @Override
@@ -106,8 +106,9 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
             if(resultCode==TAG_SUCCESS)
                 showToast("멤버 추가 완료 - 멤버십 업데이트 필요");
         } else if (requestCode == TAG_NEW_TRANS) {
-            if(resultCode==TAG_SUCCESS)
-                showToast("내역 추가 완료 - 트랜잭션 업데이트 필요");
+            if(resultCode==TAG_SUCCESS){
+            }
+
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -124,7 +125,7 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
                 intent = new Intent(DailyActivity.this, NewTransactionActivity.class);
                 intent.putExtra("loginMember", loginMember);
                 intent.putExtra("loginMemberAccount", loginMemberAccount);
-                intent.putExtra("dailiyGroup", dailyGroup);
+                intent.putExtra("dailyGroup", dailyGroup);
                 intent.putExtra("mainActivity","daily");
 
                 startActivityForResult(intent, TAG_NEW_TRANS);

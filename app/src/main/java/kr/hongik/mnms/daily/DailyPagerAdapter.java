@@ -34,7 +34,7 @@ public class DailyPagerAdapter extends FragmentPagerAdapter {
     @Nullable
     @Override
     public CharSequence getPageTitle(int position) {
-        return tab.get(position);
+         return tab.get(position);
     }
 
     @NonNull

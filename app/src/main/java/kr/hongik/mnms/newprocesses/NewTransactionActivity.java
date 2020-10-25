@@ -3,10 +3,13 @@ package kr.hongik.mnms.newprocesses;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.integration.android.IntentIntegrator;
@@ -20,6 +23,7 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
@@ -32,19 +36,19 @@ import kr.hongik.mnms.membership.MembershipGroup;
 
 public class NewTransactionActivity extends AppCompatActivity {
     /*
-    * 사용한 돈, 사용한 곳, 그룹들 불러오기
-    * 멤버십 사용 - 회장만 가능 - newTransaction
-    * 회비 내기 - 회장,부원 - newFee
-    * 데일리 사용 - 외부 사용 적어두기 (외부 : 임시 QR 발급(임시 계좌번호로 송금하는 형태)) - newTransaction
-    * 데일리 - 더치페이 -> 상대방 이름 선택 -newMoneyTOFriend
-    *
-    *
-    *
-    *
-    *
-    *
-    *
-    * */
+     * 사용한 돈, 사용한 곳, 그룹들 불러오기
+     * 멤버십 사용 - 회장만 가능 - newTransaction
+     * 회비 내기 - 회장,부원 - newFee
+     * 데일리 사용 - 외부 사용 적어두기 (외부 : 임시 QR 발급(임시 계좌번호로 송금하는 형태)) - newTransaction
+     * 데일리 - 더치페이 -> 상대방 이름 선택 -newMoneyTOFriend
+     *
+     *
+     *
+     *
+     *
+     *
+     *
+     * */
 
     private Member loginMember;
     private Account loginMemberAccount;
@@ -57,27 +61,35 @@ public class NewTransactionActivity extends AppCompatActivity {
     private IntentIntegrator qrScan;
 
     //layouts
-    private LinearLayout LL_newTrans_daily,LL_newTrans_membership;
+    private TextView newTrans_daily_name;
+    private LinearLayout LL_newTrans_daily, LL_newTrans_membership;
 
     //variables
-    public int TAG_TRANS_SUCCESS=111;
+    public int TAG_TRANS_SUCCESS = 111;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_transaction);
 
-        Intent intent=getIntent();
-        loginMember= (Member) intent.getSerializableExtra("loginMember");
-        loginMemberAccount=(Account)intent.getSerializableExtra("loginMemberAccount");
-        mainActivity=intent.getStringExtra("mainActivity");
+        Intent intent = getIntent();
+        loginMember = (Member) intent.getSerializableExtra("loginMember");
+        loginMemberAccount = (Account) intent.getSerializableExtra("loginMemberAccount");
+        mainActivity = intent.getStringExtra("mainActivity");
 
-        LL_newTrans_daily=findViewById(R.id.LL_newTrans_daily);
-        LL_newTrans_membership=findViewById(R.id.LL_newTrans_membership);
-        if(mainActivity.equals("daily")){
-            dailyGroup=(DailyGroup)intent.getSerializableExtra("dailyGroup");
-        }else if(mainActivity.equals("membership")){
-            membershipGroup=(MembershipGroup)intent.getSerializableExtra("membershipGroup");
+        LL_newTrans_daily = findViewById(R.id.LL_newTrans_daily);
+        LL_newTrans_membership = findViewById(R.id.LL_newTrans_membership);
+        if (mainActivity.equals("daily")) {
+            dailyGroup = (DailyGroup) intent.getSerializableExtra("dailyGroup");
+
+            newTrans_daily_name=findViewById(R.id.newTrans_daily_name);
+            newTrans_daily_name.setText(dailyGroup.getGroupName());
+            LL_newTrans_daily.setVisibility(View.VISIBLE);
+
+        } else if (mainActivity.equals("membership")) {
+            membershipGroup = (MembershipGroup) intent.getSerializableExtra("membershipGroup");
+
+            LL_newTrans_membership.setVisibility(View.VISIBLE);
         }
     }
 
@@ -90,76 +102,68 @@ public class NewTransactionActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.new_confirm) {
-            plusTransaction();
+            String accountPW = ((EditText) findViewById(R.id.newTrans_daily_pw)).getText().toString();
+
+            checkAccountPW(accountPW);
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void plusTransaction() {
-        plus_history = ((EditText) findViewById(R.id.plus_history)).getText().toString();
-        plus_money=Integer.parseInt(((EditText)findViewById(R.id.plus_money)).getText().toString());
-        Transaction newTransaction=new Transaction();
-        newTransaction.setTransactHistroy(plus_history);
-        newTransaction.setTransactMoney(plus_money);
-        if (plus_money==0 || plus_history.isEmpty()) {
-            showToast("빈칸 노노");
-        } else {
-            //실시간으로 팀원들이 돈 사용을 허락해야함?!?
-            showToast("아직 미구현");
-            if(mainActivity.equals("daily")){
-                newTransaction.setAccountNum(loginMember.getAccountNum());
-                newTransaction.setDID(dailyGroup.getDID());
-                newDailyTransaction(newTransaction);
-            }else if(mainActivity.equals("membership")){
-                newTransaction.setAccountNum(membershipGroup.getAccountNum());
-                newTransaction.setMID(dailyGroup.getGID());
-                newMembershipTransaction(newTransaction);
-            }
-        }
-    }
+    private void checkAccountPW(String accountPW) {
+        String urlCheckPW = "http://" + loginMember.getIp() + "/membership/checkPW";
 
-    private void newDailyTransaction(Transaction newTransaction){
-        //데일리그룹과 관련된 돈사용 - 멤버계좌에서 돈 사용됨!
-        //멤버정보와 transaction 정보 보냄 - 멤버의 계좌 잔액도 변동됨!
-        //트랜잭션 생성 후 성공유무 받아야함
-        String urlNewDailyTransaction="http://" + loginMember.getIp() + "/newDailyTransaction";
-        NetworkTask networkTask=new NetworkTask();
-        networkTask.setTAG("newDailyTransaction");
-        networkTask.setURL(urlNewDailyTransaction);
+        NetworkTask networkTask = new NetworkTask();
+        networkTask.setTAG("checkAccountPW");
+        networkTask.setURL(urlCheckPW);
 
         Map<String, String> params = new HashMap<>();
-        params.put("accountNum",newTransaction.getAccountNum());
-        params.put("DID",newTransaction.getDID()+"");
-        params.put("since",newTransaction.getSince());
-        params.put("transactHistory",newTransaction.getTransactHistroy());
-        params.put("transactMoney",newTransaction.getTransactMoney()+"");
+        params.put("accountPassword", accountPW);
+        params.put("accountNum", loginMemberAccount.getAccountNum());
 
         networkTask.execute(params);
     }
 
-    private void newMembershipTransaction(Transaction newTransaction){
+    private void newDailyTransaction(Transaction newTransaction) {
+        //데일리그룹과 관련된 돈사용 - 멤버계좌에서 돈 사용됨!
+        //멤버정보와 transaction 정보 보냄 - 멤버의 계좌 잔액도 변동됨!
+        //트랜잭션 생성 후 성공유무 받아야함
+        String urlNewDailyTransaction = "http://" + loginMember.getIp() + "/daily/pay";
+        NetworkTask networkTask = new NetworkTask();
+        networkTask.setTAG("newDailyTransaction");
+        networkTask.setURL(urlNewDailyTransaction);
+
+        Map<String, String> params = new HashMap<>();
+        params.put("accountNum", newTransaction.getAccountNum());
+        params.put("DID", newTransaction.getDID() + "");
+        params.put("history", newTransaction.getTransactHistroy());
+        params.put("money", newTransaction.getTransactMoney() + "");
+
+        networkTask.execute(params);
+    }
+
+    private void newMembershipTransaction(Transaction newTransaction) {
         //멤버십과 관련된 돈사용 - 멤버십계좌에서 돈 사용됨!
         //멤버십정보와 transaction 정보 보냄 - 멤버십계좌의 잔액이 변동됨
         //트랜잭션 생성 후 성공유무 받아야함
-        String urlNewMembershipTransaction="http://" + loginMember.getIp() + "/newMembershipTransaction";
-        NetworkTask networkTask=new NetworkTask();
+        String urlNewMembershipTransaction = "http://" + loginMember.getIp() + "/newMembershipTransaction";
+        NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("newMembershipTransaction");
         networkTask.setURL(urlNewMembershipTransaction);
 
         Map<String, String> params = new HashMap<>();
-        params.put("accountNum",newTransaction.getAccountNum());
-        params.put("MID",newTransaction.getMID()+"");
-        params.put("since",newTransaction.getSince());
-        params.put("transactHistory",newTransaction.getTransactHistroy());
-        params.put("transactMoney",newTransaction.getTransactMoney()+"");
+        params.put("accountNum", newTransaction.getAccountNum());
+        params.put("MID", newTransaction.getMID() + "");
+        params.put("since", newTransaction.getSince());
+        params.put("transactHistory", newTransaction.getTransactHistroy());
+        params.put("transactMoney", newTransaction.getTransactMoney() + "");
 
         networkTask.execute(params);
     }
 
     //Getting the scan results
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (result != null) {
             //qrcode 가 없으면
@@ -186,6 +190,51 @@ public class NewTransactionActivity extends AppCompatActivity {
         }
     }
 
+    private void newTransaction(){
+        Transaction newTransaction = new Transaction();
+
+        plus_history = ((EditText) findViewById(R.id.plus_history)).getText().toString();
+        plus_money = Integer.parseInt(((EditText) findViewById(R.id.plus_money)).getText().toString());
+
+        newTransaction.setTransactHistroy(plus_history);
+        newTransaction.setTransactMoney(plus_money);
+
+        if (plus_money == 0 || plus_history.isEmpty()) {
+            showToast("빈칸 노노");
+        } else {
+            if (mainActivity.equals("daily")) {
+                newTransaction.setAccountNum(loginMember.getAccountNum());
+                newTransaction.setDID(dailyGroup.getDID());
+                newDailyTransaction(newTransaction);
+            } else if (mainActivity.equals("membership")) {
+                newTransaction.setAccountNum(membershipGroup.getAccountNum());
+                newTransaction.setMID(dailyGroup.getGID());
+                newMembershipTransaction(newTransaction);
+            }
+        }
+    }
+
+    private void newDailyTransactionProcess(String response){
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            boolean success = jsonObject.getBoolean("success");
+            if (success) {
+                if (mainActivity.equals("daily")) {
+                    Intent intent = new Intent(NewTransactionActivity.this, DailyActivity.class);
+                    setResult(TAG_TRANS_SUCCESS, intent);
+                    finish();
+                } else if (mainActivity.equals("membership")) {
+                    Intent intent = new Intent(NewTransactionActivity.this, MembershipActivity.class);
+                    setResult(TAG_TRANS_SUCCESS, intent);
+                    finish();
+                }
+            } else {
+                showToast("추가 실패");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     protected void showToast(String data) {
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
@@ -224,25 +273,21 @@ public class NewTransactionActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
-            try{
-                JSONObject jsonObject=new JSONObject(response);
-                boolean success=jsonObject.getBoolean("success");
-                if(success){
-                    showToast("추가 완료");
-                    if(mainActivity.equals("newDailyTransaction")){
-                        Intent intent=new Intent(NewTransactionActivity.this, DailyActivity.class);
-                        setResult(TAG_TRANS_SUCCESS,intent);
-                        finish();
-                    }else if(mainActivity.equals("newMembershipTransaction")){
-                        Intent intent=new Intent(NewTransactionActivity.this, MembershipActivity.class);
-                        setResult(TAG_TRANS_SUCCESS,intent);
-                        finish();
+            Log.d(TAG,response);
+            if (TAG.equals("checkAccountPW")) {
+                try {
+                    JSONObject jsonObject = new JSONObject(response);
+                    boolean success = jsonObject.getBoolean("success");
+                    if (success) {
+                        newTransaction();
+                    } else {
+                        showToast("계좌비밀번호 오류");
                     }
-                }else {
-                    showToast("추가 실패");
+                } catch (Exception e) {
+
                 }
-            }catch (Exception e){
-                e.printStackTrace();
+            } else if (TAG.equals("newDailyTransaction")) {
+                newDailyTransactionProcess(response);
             }
         }
     }

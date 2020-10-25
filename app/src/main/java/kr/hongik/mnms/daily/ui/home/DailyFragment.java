@@ -76,6 +76,12 @@ public class DailyFragment extends Fragment {
     private ArrayAdapter dutchRangeAdapter;
     private ViewGroup rootView;
 
+    @Override
+    public void onResume() {
+        setTransaction(dailyGroup);
+        super.onResume();
+    }
+
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_daily, container, false);
 

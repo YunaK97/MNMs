@@ -123,7 +123,6 @@ public class NewFeeActivity extends AppCompatActivity {
         params.put("accountNum",loginMemberaccount.getAccountNum());
 
         networkTask.execute(params);
-
     }
 
     private void submitFee(){

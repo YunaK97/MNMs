@@ -6,6 +6,7 @@
     <string name="app_new_membership">NEW MEMBERSHIP</string>
     <string name="app_new_daily">NEW DAILY</string>
     <string name="app_new_friend">NEW FRIEND</string>
+    <string name="app_new_transaction">NEW TRANSACTION</string>
     <string name="app_setting">환경설정</string>
 
     <string name="text_signin">회원가입</string>

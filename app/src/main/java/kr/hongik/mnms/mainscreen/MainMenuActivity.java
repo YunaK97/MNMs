@@ -4,8 +4,10 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -293,20 +295,8 @@ public class MainMenuActivity extends AppCompatActivity {
         networkTask.execute(params);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     public void showNoti(int GID, String groupName) {
-        notiBuilder = null;
-        notiManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        //버전 오레오 이상일 경우
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notiManager.createNotificationChannel(
-                    new NotificationChannel(GID + "", CHANEL_NAME, NotificationManager.IMPORTANCE_DEFAULT));
-            notiBuilder = new NotificationCompat.Builder(this, CHANNEL_ID);
-
-            //하위 버전일 경우
-        } else {
-            notiBuilder = new NotificationCompat.Builder(this);
-        }
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         Intent intent = new Intent(this, NewFeeActivity.class);
         MembershipGroup membershipGroup = new MembershipGroup();
@@ -315,27 +305,77 @@ public class MainMenuActivity extends AppCompatActivity {
         intent.putExtra("membershipGroup", membershipGroup);
         intent.putExtra("loginMember", loginMember);
         intent.putExtra("loginMemberAccount", loginMemberAccount);
-        intent.putExtra("feeType","regular");
+
         PendingIntent pendingIntent = PendingIntent.getActivity(this, GID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-        //알림창 제목
-        notiBuilder.setContentTitle("MnMs");
-        //알림창 메시지
-        notiBuilder.setContentText(groupName + "의 회비내는날! ");
-        //알림창 아이콘
-        notiBuilder.setSmallIcon(R.drawable.ic_menu_camera);
-        //알림창 터치시 상단 알림상태창에서 알림이 자동으로 삭제되게 합니다.
-        notiBuilder.setAutoCancel(true);
 
-        //pendingIntent를 builder에 설정 해줍니다.
-        // 알림창 터치시 인텐트가 전달할 수 있도록 해줍니다.
-        notiBuilder.setContentIntent(pendingIntent);
-        Notification notification = notiBuilder.build();
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.launcher_foreground))
+                .setContentTitle("MnMs")
+                .setContentText(groupName + " 회비 내야해요")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
 
-        //알림창 실행
-        notiManager.notify(GID, notification);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+            builder.setSmallIcon(R.drawable.ic_launcher_foreground); //mipmap 사용시 Oreo 이상에서 시스템 UI 에러남
+            CharSequence channelName = "노티 채널";
+            String description = "오레오 이상을 위한 것임";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, channelName, importance);
+            channel.setDescription(description);
+
+            // 노티피케이션 채널을 시스템에 등록
+            assert notificationManager != null;
+            notificationManager.createNotificationChannel(channel);
+
+        } else
+            builder.setSmallIcon(R.mipmap.ic_launcher); // Oreo 이하에서 mipmap 사용하지 않으면 Couldn't create icon: StatusBarIcon 에러남
+
+        assert notificationManager != null;
+        notificationManager.notify(GID, builder.build()); // 고유숫자로 노티피케이션 동작시킴
+
+//        notiBuilder = null;
+//        notiManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+//        //버전 오레오 이상일 경우
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            notiManager.createNotificationChannel(
+//                    new NotificationChannel(GID + "", CHANEL_NAME, NotificationManager.IMPORTANCE_DEFAULT));
+//            notiBuilder = new NotificationCompat.Builder(this, CHANNEL_ID);
+//
+//            //하위 버전일 경우
+//        } else {
+//            notiBuilder = new NotificationCompat.Builder(this);
+//        }
+//
+//        Intent intent = new Intent(this, NewFeeActivity.class);
+//        MembershipGroup membershipGroup = new MembershipGroup();
+//        membershipGroup.setGID(GID);
+//        membershipGroup.setGroupName(groupName);
+//        intent.putExtra("membershipGroup", membershipGroup);
+//        intent.putExtra("loginMember", loginMember);
+//        intent.putExtra("loginMemberAccount", loginMemberAccount);
+//        intent.putExtra("feeType","regular");
+//        PendingIntent pendingIntent = PendingIntent.getActivity(this, GID, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        //알림창 제목
+//        notiBuilder.setContentTitle("MnMs");
+//        //알림창 메시지
+//        notiBuilder.setContentText(groupName + "의 회비내는날! ");
+//        //알림창 아이콘
+//        notiBuilder.setSmallIcon(R.mipmap.launcher_foreground);
+//        //알림창 터치시 상단 알림상태창에서 알림이 자동으로 삭제되게 합니다.
+//        notiBuilder.setAutoCancel(true);
+//
+//        //pendingIntent를 builder에 설정 해줍니다.
+//        // 알림창 터치시 인텐트가 전달할 수 있도록 해줍니다.
+//        notiBuilder.setContentIntent(pendingIntent);
+//        Notification notification = notiBuilder.build();
+//
+//        //알림창 실행
+//        notiManager.notify(GID, notification);
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.M)
     private void checkMembershipSubmitProcess(String response) {
         Log.d("checkFee", response);
         try {

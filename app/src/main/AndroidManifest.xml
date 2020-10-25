@@ -28,7 +28,9 @@
         <activity android:name=".daily.ui.home.DailyQRActivity" />
         <activity android:name=".membership.ui.manage.ManageMembershipActivity" />
         <activity android:name=".daily.ui.home.NewDailyMemActivity" />
-        <activity android:name=".newprocesses.NewTransactionActivity" />
+        <activity android:name=".newprocesses.NewTransactionActivity"
+            android:label="@string/app_new_transaction"
+            />
         <activity android:name=".membership.ui.home.NewMembershipMemActivity" />
         <activity android:name=".mainscreen.ui.settings.SettingsActivity"
             android:label="@string/app_setting"
