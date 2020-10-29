@@ -26,8 +26,12 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.zxing.BarcodeFormat;
@@ -41,6 +45,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,23 +58,52 @@ public class DailyQRActivity extends AppCompatActivity {
     private Account loginMemberAccount;
     private DailyGroup dailyGroup;
     private ArrayList<Member> memberArrayList;
+    private ArrayList<DutchMember> dutchMemberArrayList;
 
     private IntentIntegrator qrScan;
 
     //Layouts
     private ImageView qr_code;
     private Button btn_qrScan,btn_qrMake;
-    private RecyclerView RVdutchMember;
+    private RecyclerView RVdutchMember,RVeachMemMoney;
     private DutchListAdapter dutchListAdapter;
+    private RecSendListAdapter recSendListAdapter;
+    private TextView tvTotalMoney;
+
+    private Spinner dutchType;
+    private ArrayAdapter dutchTypeAdapter;
 
     //variables
     private String qrMessage;
-    private String totalMoney;
+    private int perMoney;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_q_r);
+
+        tvTotalMoney=findViewById(R.id.tvTotalMoney);
+
+        //종류 선택
+        dutchType = findViewById(R.id.dutchType);
+        dutchTypeAdapter = ArrayAdapter.createFromResource(this, R.array.dutch_money, R.layout.support_simple_spinner_dropdown_item);
+        dutchTypeAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
+        dutchType.setAdapter(dutchTypeAdapter);
+        dutchType.setSelection(0);
+
+        Intent intent=getIntent();
+        if (intent != null) {
+            dailyGroup = (DailyGroup) intent.getSerializableExtra("dailyGroup");
+            loginMember = (Member) intent.getSerializableExtra("loginMember");
+            loginMemberAccount = (Account) intent.getSerializableExtra("loginMemberAccount");
+            memberArrayList=(ArrayList<Member>) intent.getSerializableExtra("memberArrayList");
+            dutchMemberArrayList=new ArrayList<>();
+
+            setTitle(dailyGroup.getGroupName());
+
+            //돈 정산 목록 출력
+            calculateTotal();
+        }
 
         qrScan=new IntentIntegrator(this);
         btn_qrScan=findViewById(R.id.btn_qrScan);
@@ -107,22 +142,6 @@ public class DailyQRActivity extends AppCompatActivity {
                 }
             }
         });
-
-
-        Intent intent=getIntent();
-        if (intent != null) {
-            dailyGroup = (DailyGroup) intent.getSerializableExtra("dailyGroup");
-            loginMember = (Member) intent.getSerializableExtra("loginMember");
-            loginMemberAccount = (Account) intent.getSerializableExtra("loginMemberAccount");
-            memberArrayList=(ArrayList<Member>) intent.getSerializableExtra("memberArrayList");
-
-            setTitle(dailyGroup.getGroupName());
-
-            //돈 정산 목록 출력
-            calculateTotal();
-
-
-        }
     }
 
     //Getting the scan results
@@ -181,7 +200,7 @@ public class DailyQRActivity extends AppCompatActivity {
     private void calculateTotalProcess(String response){
         Map<String,String> memberMap=new HashMap<>();
 
-        RVdutchMember=findViewById(R.id.recyclerView_dutch_members);
+        RVdutchMember=findViewById(R.id.rvDutchMembers);
         LinearLayoutManager layoutManager=new LinearLayoutManager(getApplicationContext(),LinearLayoutManager.VERTICAL,false);
         RVdutchMember.setLayoutManager(layoutManager);
         dutchListAdapter=new DutchListAdapter();
@@ -196,11 +215,12 @@ public class DailyQRActivity extends AppCompatActivity {
                 String memID=jsonObject.getString("memID"+i);
                 String money=jsonObject.getString("money"+i);
 
-                Log.d("money"+i,memID+" "+money);
                 memberMap.put(memID,money);
             }
 
-            totalMoney=jsonObject.getString("total");
+            String totalMoney=jsonObject.getString("total");
+            tvTotalMoney.setText(totalMoney);
+            perMoney=Integer.parseInt(totalMoney) / memberArrayList.size();
 
         }catch (Exception e){
             e.printStackTrace();
@@ -213,17 +233,82 @@ public class DailyQRActivity extends AppCompatActivity {
             dutchMember.setMemName(member.getMemName());
             String money=memberMap.get(dutchMember.getMemID());
             if(money==null){
-                dutchMember.setMyMoney(0);
+                dutchMember.setUsedMoney(0);
+                dutchMember.setRsMoney(-perMoney);
             }else {
-                dutchMember.setMyMoney(Integer.parseInt(money));
+                dutchMember.setUsedMoney(Integer.parseInt(money));
+                dutchMember.setRsMoney(Integer.parseInt(money)-perMoney);
             }
 
-            dutchListAdapter.addItem(dutchMember);
+            dutchMemberArrayList.add(dutchMember);
+
+            Comparator<DutchMember> noAsc = new Comparator<DutchMember>() {
+                @Override
+                public int compare(DutchMember item1, DutchMember item2) {
+                   return item1.getRsMoney()>item2.getRsMoney() ? 1:-1;
+                }
+            };
+            Collections.sort(dutchMemberArrayList, noAsc);
+
+            dutchListAdapter.setItems(dutchMemberArrayList);
         }
+
 
         RVdutchMember.setAdapter(dutchListAdapter);
 
+        calculateEachMember();
+
     }
+
+    private void  calculateEachMember(){
+        RVeachMemMoney=findViewById(R.id.rvEachMemMoney);
+        LinearLayoutManager layoutManager=new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false);
+        RVeachMemMoney.setLayoutManager(layoutManager);
+        recSendListAdapter=new RecSendListAdapter();
+
+        //누가 누구에게 얼마주는지 쓰기
+        for(DutchMember mainMember:dutchMemberArrayList){
+            //mainMember : 주는 사람(돈 적게 쓴 사람)
+            // -> 돈 받을 사람한테 줘야함
+            int totalSend=-mainMember.getRsMoney();
+            if(totalSend<=0){continue;}
+
+            for (int i=dutchMemberArrayList.size()-1;i>=0;i--) {
+                //돈 받을 사람
+                DutchMember receiveMem = dutchMemberArrayList.get(i);
+                int recMoney = receiveMem.getRsMoney();
+                if(recMoney-totalSend >0){
+                    //아직 더 받아야함 - totalSend 끝
+                    RecSend recSend=new RecSend();
+                    recSend.setDutchMoney(totalSend);
+                    recSend.setDutchSendID(mainMember.getMemID());
+                    recSend.setDutchReceiveID(receiveMem.getMemID());
+                    recSendListAdapter.addItem(recSend);
+                    break;
+                }else if(recMoney-totalSend <0){
+                    //줄 돈 아직 여유 있음
+                    totalSend-=recMoney;
+                    RecSend recSend=new RecSend();
+                    recSend.setDutchReceiveID(receiveMem.getMemID());
+                    recSend.setDutchSendID(mainMember.getMemID());
+                    recSend.setDutchMoney(recMoney);
+                    recSendListAdapter.addItem(recSend);
+                }else{
+                    //주고 받기가 깔금
+                    RecSend recSend=new RecSend();
+                    recSend.setDutchReceiveID(receiveMem.getMemID());
+                    recSend.setDutchSendID(mainMember.getMemID());
+                    recSend.setDutchMoney(recMoney);
+                    totalSend=0;
+                    recSendListAdapter.addItem(recSend);
+                    break;
+                }
+            }
+        }
+
+        RVeachMemMoney.setAdapter(recSendListAdapter);
+    }
+
     private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
         protected String url, TAG;
 
@@ -265,14 +350,23 @@ public class DailyQRActivity extends AppCompatActivity {
     }
 
     public class DutchMember extends Member{
-        private int myMoney;
+        private int usedMoney,rsMoney;
 
-        public int getMyMoney() {
-            return myMoney;
+        public int getUsedMoney() {
+            return usedMoney;
         }
 
-        public void setMyMoney(int myMoney) {
-            this.myMoney = myMoney;
+        public void setUsedMoney(int usedMoney) {
+            this.usedMoney = usedMoney;
+        }
+
+        public int getRsMoney() {
+            return rsMoney;
+        }
+
+        public void setRsMoney(int rsMoney) {
+            this.rsMoney = rsMoney;
         }
     }
 }
+

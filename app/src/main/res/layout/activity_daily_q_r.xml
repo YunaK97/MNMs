@@ -42,6 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:textSize="25sp"
+        android:id="@+id/tvTotalMoney"
         android:layout_toLeftOf="@+id/btn_qrMake"
         android:textAlignment="textEnd"
         android:text="1000000000"
@@ -50,22 +51,41 @@
     <Spinner
         android:background="@color/colorTitle"
         android:layout_toRightOf="@id/dutch_radioGroup"
-        android:id="@+id/dutch_type"
+        android:id="@+id/dutchType"
         android:layout_width="30sp"
         android:layout_height="25sp"
         android:layout_margin="2sp"
         android:layout_gravity="center"
         android:dropDownWidth="250dp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView_dutch_members"
-        android:background="@drawable/sidecustom"
-        android:scrollbars="vertical"
-        android:layout_below="@id/dutch_radioGroup"
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_below="@+id/dutch_radioGroup"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:layout_above="@+id/btn_qrMake"
-        />
+        android:layout_height="match_parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvDutchMembers"
+            android:background="@drawable/sidecustom"
+            android:scrollbars="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvEachMemMoney"
+            android:layout_weight="1"
+            android:background="@drawable/sidecustom"
+            android:scrollbars="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+    </LinearLayout>
+
+
 
     <ImageView
         android:visibility="gone"

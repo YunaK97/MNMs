@@ -1,5 +1,6 @@
 package kr.hongik.mnms.daily.ui.home;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,22 +26,31 @@ public class DutchListAdapter extends RecyclerView.Adapter<DutchListAdapter.View
 
     public ArrayList<DailyQRActivity.DutchMember> getList(){return items;}
 
+    public  void  setItems(ArrayList<DailyQRActivity.DutchMember> items){this.items=items;}
+
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView dutchMemName,dutchMemID,dutchMemMoney;
+        TextView dutchMemUsed,dutchMemID,dutchRS;
 
         ViewHolder(View itemView){
             super(itemView);
 
             dutchMemID=itemView.findViewById(R.id.dutchMemID);
-            dutchMemMoney=itemView.findViewById(R.id.dutchMemMoney);
-            dutchMemName=itemView.findViewById(R.id.dutchMemName);
+            dutchMemUsed=itemView.findViewById(R.id.dutchMemUsed);
+            dutchRS=itemView.findViewById(R.id.dutchRS);
 
         }
 
         public void setItem(DailyQRActivity.DutchMember item){
-            dutchMemName.setText(item.getMemName());
+            dutchRS.setText(item.getRsMoney()+"");
             dutchMemID.setText(item.getMemID());
-            dutchMemMoney.setText(item.getMyMoney()+"");
+            dutchMemUsed.setText(item.getUsedMoney()+"");
+            if(item.getRsMoney()==0){
+                dutchRS.setTextColor(Color.BLACK);
+            }else if(item.getRsMoney()>0){
+                dutchRS.setTextColor(Color.RED);
+            }else{
+                dutchRS.setTextColor(Color.BLUE);
+            }
         }
     }
 

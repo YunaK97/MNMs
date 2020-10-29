@@ -41,7 +41,7 @@ public class NewFeeActivity extends AppCompatActivity {
     private String feeType;
 
     //layouts
-    private TextView TV_newFee_groupName,TV_newFee_fee;
+    private TextView TV_newFee_groupName, TV_newFee_fee;
     private EditText TV_newFee_accPW;
 
     @Override
@@ -54,25 +54,24 @@ public class NewFeeActivity extends AppCompatActivity {
         loginMemberaccount = (Account) intent.getSerializableExtra("loginMemberAccount");
         membershipGroup = (MembershipGroup) intent.getSerializableExtra("membershipGroup");
 
-        if (membershipGroup.getPresident()==null){
+        if (membershipGroup.getPresident() == null) {
             showToast("멤버십 그룹가져오리다");
             getMembershipGroupInfo();
-        }else{
+        } else {
             showToast("바로 송금정보 띄우리다");
             showInfo();
         }
-
     }
 
     private void getMembershipGroupInfo() {
         String urlMembershipGroup = "http://" + loginMember.getIp() + "/membership/info";
 
-       NetworkTask networkTask = new NetworkTask();
+        NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlMembershipGroup);
         networkTask.setTAG("membershipGroup");
 
         Map<String, String> params = new HashMap<>();
-        params.put("GID", membershipGroup.getGID()+"");
+        params.put("GID", membershipGroup.getGID() + "");
 
         networkTask.execute(params);
     }
@@ -86,11 +85,11 @@ public class NewFeeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.new_confirm) {
-            String accPW=((TextView)findViewById(R.id.TV_newFee_accPW)).getText().toString();
-            if(accPW.length()!=4){
+            String accPW = ((TextView) findViewById(R.id.TV_newFee_accPW)).getText().toString();
+            if (accPW.length() != 4) {
                 showToast("비밀번호는 4자리 입니다.");
-            }else{
-                int accoutnPW=Integer.parseInt(accPW);
+            } else {
+                int accoutnPW = Integer.parseInt(accPW);
                 checkAccountPW(accoutnPW);
             }
             return true;
@@ -103,43 +102,43 @@ public class NewFeeActivity extends AppCompatActivity {
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
 
-    private void showInfo(){
-        TV_newFee_groupName=findViewById(R.id.TV_newFee_groupName);
-        TV_newFee_fee=findViewById(R.id.TV_newFee_fee);
+    private void showInfo() {
+        TV_newFee_groupName = findViewById(R.id.TV_newFee_groupName);
+        TV_newFee_fee = findViewById(R.id.TV_newFee_fee);
 
-        TV_newFee_fee.setText(membershipGroup.getFee()+"");
+        TV_newFee_fee.setText(membershipGroup.getFee() + "");
         TV_newFee_groupName.setText(membershipGroup.getGroupName());
     }
 
-    private void checkAccountPW(int accountPW){
-        String urlCheckPW="http://"+loginMember.getIp()+"/membership/checkPW";
+    private void checkAccountPW(int accountPW) {
+        String urlCheckPW = "http://" + loginMember.getIp() + "/membership/checkPW";
 
-        NetworkTask networkTask=new NetworkTask();
+        NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("checkAccountPW");
         networkTask.setURL(urlCheckPW);
 
-        Map<String,String> params=new HashMap<>();
-        params.put("accountPassword",accountPW+"");
-        params.put("accountNum",loginMemberaccount.getAccountNum());
+        Map<String, String> params = new HashMap<>();
+        params.put("accountPassword", accountPW + "");
+        params.put("accountNum", loginMemberaccount.getAccountNum());
 
         networkTask.execute(params);
     }
 
-    private void submitFee(){
-        String urlSubmitFee="http://"+loginMember.getIp()+"/membership/pay";
+    private void submitFee() {
+        String urlSubmitFee = "http://" + loginMember.getIp() + "/membership/pay";
 
-        NetworkTask networkTask=new NetworkTask();
+        NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("submitFee");
         networkTask.setURL(urlSubmitFee);
 
-        Map<String,String> params=new HashMap<>();
+        Map<String, String> params = new HashMap<>();
 
-        params.put("MID",membershipGroup.getMID()+"");
-        params.put("groupName",membershipGroup.getGroupName());
-        params.put("money",membershipGroup.getFee()+"");
-        params.put("memID",loginMember.getMemID());
-        params.put("accountNum",loginMember.getAccountNum());
-        params.put("memName",loginMember.getMemName());
+        params.put("MID", membershipGroup.getMID() + "");
+        params.put("groupName", membershipGroup.getGroupName());
+        params.put("money", membershipGroup.getFee() + "");
+        params.put("memID", loginMember.getMemID());
+        params.put("accountNum", loginMember.getAccountNum());
+        params.put("memName", loginMember.getMemName());
 
         networkTask.execute(params);
     }
@@ -198,32 +197,32 @@ public class NewFeeActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
-            if(TAG.equals("checkAccountPW")){
+            if (TAG.equals("checkAccountPW")) {
                 try {
-                    JSONObject jsonObject=new JSONObject(response);
-                    boolean success=jsonObject.getBoolean("success");
-                    if (success){
+                    JSONObject jsonObject = new JSONObject(response);
+                    boolean success = jsonObject.getBoolean("success");
+                    if (success) {
                         submitFee();
-                    }else{
+                    } else {
                         showToast("계좌비밀번호 오류");
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
 
                 }
-            }else if(TAG.equals("submitFee")){
+            } else if (TAG.equals("submitFee")) {
                 try {
-                    JSONObject jsonObject=new JSONObject(response);
-                    boolean success=jsonObject.getBoolean("success");
-                    if(success){
+                    JSONObject jsonObject = new JSONObject(response);
+                    boolean success = jsonObject.getBoolean("success");
+                    if (success) {
                         showToast("성공적으로 냄");
                         finish();
-                    }else{
+                    } else {
                         showToast("잉 이미 낸거 아니오?");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-            }else if (TAG.equals("membershipGroup")) {
+            } else if (TAG.equals("membershipGroup")) {
                 membershipGroupProcess(response);
             }
         }

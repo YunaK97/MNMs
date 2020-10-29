@@ -5,7 +5,7 @@
 
     <TextView
         android:padding="5dp"
-        android:id="@+id/dutchMemID"
+        android:id="@+id/dutchSendID"
         android:background="@drawable/sidecustom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,23 +16,30 @@
     <TextView
         android:background="@drawable/sidecustom"
         android:id="@+id/dutchMemUsed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textAlignment="center"
+        android:padding="5dp"
+        android:text="▶"
+        android:gravity="center_horizontal" />
+    <TextView
+        android:padding="5dp"
+        android:id="@+id/dutchReceiveID"
+        android:background="@drawable/sidecustom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:textSize="20sp"
-        android:textAlignment="textEnd"
-        android:padding="5dp"
-        android:text="250000"
-        android:gravity="end" />
+        android:text="친구ID" />
     <TextView
         android:padding="5dp"
-        android:id="@+id/dutchRS"
+        android:id="@+id/dutchMoney"
         android:background="@drawable/sidecustom"
         android:layout_width="120sp"
         android:layout_height="wrap_content"
         android:textAlignment="textEnd"
         android:textSize="20sp"
         android:text="25000"
-        android:textColor="#FF0000"
         android:gravity="end" />
 </LinearLayout>
