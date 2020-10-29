@@ -238,6 +238,9 @@ public class DailyQRActivity extends AppCompatActivity {
         networkTask.setTAG("sendMoney");
 
         Map<String, String> params = new HashMap<>();
+        params.put("memID",loginMember.getMemID());
+        params.put("friendID",recMember.getMemID());
+        params.put("money",money+"");
 
         networkTask.execute(params);
     }
