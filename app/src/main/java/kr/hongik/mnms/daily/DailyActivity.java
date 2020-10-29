@@ -46,7 +46,7 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
 
     //Layouts
     private ViewPager viewPager;
-    private FloatingActionButton fab_daily_main, fab_daily_member, fab_daily_trans;
+    private FloatingActionButton fab_daily_main, fab_daily_trans;
     private Animation fab_open, fab_close;
     private boolean isFabOpen = false;
 
@@ -81,11 +81,9 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
         fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
         fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
         fab_daily_main = findViewById(R.id.fab_daily_main);
-        fab_daily_member = findViewById(R.id.fab_daily_member);
         fab_daily_trans = findViewById(R.id.fab_daily_trans);
         fab_daily_main.setOnClickListener(this);
         fab_daily_trans.setOnClickListener(this);
-        fab_daily_member.setOnClickListener(this);
 
         Intent intent = getIntent();
         dailyGroup = (DailyGroup) intent.getSerializableExtra("dailyGroup");
@@ -128,15 +126,6 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
 
                 startActivityForResult(intent, TAG_NEW_TRANS);
                 break;
-            case R.id.fab_daily_member:
-                toggleFab();
-                intent = new Intent(DailyActivity.this, NewDailyMemActivity.class);
-                intent.putExtra("loginMember", loginMember);
-                intent.putExtra("dailyGroup", dailyGroup);
-                intent.putExtra("memberArrayList", memberArrayList);
-
-                startActivityForResult(intent, TAG_NEW_MEM);
-                break;
         }
     }
 
@@ -162,26 +151,13 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
 
     private void toggleFab() {
         if (isFabOpen) {
-            fab_daily_member.startAnimation(fab_close);
             fab_daily_trans.startAnimation(fab_close);
             fab_daily_trans.setClickable(false);
-            fab_daily_member.setClickable(false);
-            //멤버 추가 버튼
-//            if (dailyGroup.getPresident().equals(loginMember.getMemName())) {
-//                fab_membership_manage.startAnimation(fab_close);
-//                fab_membership_manage.setClickable(false);
-//            }
             isFabOpen = false;
         } else {
-            fab_daily_member.startAnimation(fab_open);
             fab_daily_trans.startAnimation(fab_open);
             fab_daily_trans.setClickable(true);
-            fab_daily_member.setClickable(true);
-            //멤버추가버튼
-//            if (dailyGroup.getPresident().equals(loginMember.getMemName())) {
-//                fab_membership_manage.startAnimation(fab_open);
-//                fab_membership_manage.setClickable(true);
-//            }
+
             isFabOpen = true;
         }
     }

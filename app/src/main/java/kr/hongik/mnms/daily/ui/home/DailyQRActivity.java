@@ -77,6 +77,8 @@ public class DailyQRActivity extends AppCompatActivity {
     private String qrMessage;
     private int perMoney;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,24 +123,30 @@ public class DailyQRActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 qr_code = findViewById(R.id.daily_qrImage);
-                qr_code.setVisibility(View.VISIBLE);
+                if(qr_code.getVisibility()==View.GONE) {
+                    btn_qrMake.setText("QR없애기");
+                    qr_code.setVisibility(View.VISIBLE);
 
-                MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
+                    MultiFormatWriter multiFormatWriter = new MultiFormatWriter();
 
-                try {
-                    JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("myID", loginMember.getMemID());
-                    jsonObject.put("myAccount", loginMember.getAccountNum());
-                    jsonObject.put("myName", loginMember.getMemName());
-                    //내가 받을 돈
+                    try {
+                        JSONObject jsonObject = new JSONObject();
+                        jsonObject.put("myID", loginMember.getMemID());
+                        jsonObject.put("myAccount", loginMember.getAccountNum());
+                        jsonObject.put("myName", loginMember.getMemName());
+                        //내가 받을 돈
 
-                    BitMatrix bitMatrix = multiFormatWriter.encode(jsonObject.toString(), BarcodeFormat.QR_CODE, 200, 200);
-                    BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
-                    Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
-                    qr_code.setImageBitmap(bitmap);
+                        BitMatrix bitMatrix = multiFormatWriter.encode(jsonObject.toString(), BarcodeFormat.QR_CODE, 200, 200);
+                        BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
+                        Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
+                        qr_code.setImageBitmap(bitmap);
 
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }else{
+                    btn_qrMake.setText("QR생성");
+                    qr_code.setVisibility(View.GONE);
                 }
             }
         });
@@ -187,7 +195,7 @@ public class DailyQRActivity extends AppCompatActivity {
             friendMember.setMemID(jsonObject.getString("myID"));
             friendMember.setMemName(jsonObject.getString("myName"));
             friendMember.setAccountNum(jsonObject.getString("myAccount"));
-            //내가 보낼 돈
+            //내가 보낼 돈 찾기
 
         } catch (JSONException e) {
             e.printStackTrace();
