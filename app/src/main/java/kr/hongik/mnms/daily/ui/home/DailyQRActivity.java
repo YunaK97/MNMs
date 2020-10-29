@@ -12,6 +12,7 @@ import kr.hongik.mnms.R;
 import kr.hongik.mnms.daily.DailyActivity;
 import kr.hongik.mnms.daily.DailyGroup;
 import kr.hongik.mnms.firstscreen.MainActivity;
+import kr.hongik.mnms.mainscreen.ui.friend.FriendList;
 import kr.hongik.mnms.newprocesses.NewDailyActivity;
 import kr.hongik.mnms.newprocesses.NewFriendActivity;
 import kr.hongik.mnms.newprocesses.NewMembershipActivity;
@@ -186,7 +187,8 @@ public class DailyQRActivity extends AppCompatActivity {
     }
 
     private void floatDialog(IntentResult result){
-        Member friendMember=new Member();
+        final Member friendMember=new Member();
+        int sendMoney=0;
         try {
             //data를 json으로 변환
             JSONObject jsonObject = new JSONObject(result.getContents());
@@ -196,13 +198,48 @@ public class DailyQRActivity extends AppCompatActivity {
             friendMember.setMemName(jsonObject.getString("myName"));
             friendMember.setAccountNum(jsonObject.getString("myAccount"));
             //내가 보낼 돈 찾기
+            ArrayList<RecSend> tmpList=new ArrayList<>();
+            for(RecSend rs:tmpList){
+                if(loginMember.getMemID().equals(rs.getDutchSendID()) && friendMember.getMemID().equals(rs.getDutchReceiveID())){
+                    sendMoney=rs.getDutchMoney();
+                }
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        AlertDialog.Builder builder=new AlertDialog.Builder(DailyQRActivity.this);
-        builder.setTitle("송금하시겠습니까?");
+        final int sendMoney2=sendMoney;
+
+        AlertDialog.Builder builder=new AlertDialog.Builder(DailyQRActivity.this,R.style.CustomDialog);
+        builder.setTitle(sendMoney+" 송금하시겠습니까?");
+        builder.setPositiveButton("송금", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                sendMoneyToFriend(friendMember,sendMoney2);
+            }
+        });
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        final AlertDialog alertDialog=builder.create();
+        alertDialog.show();
+    }
+
+    private void sendMoneyToFriend(Member recMember,int money){
+        String urlSendMoney = "http://" + loginMember.getIp() + "/daily/dutchPay";
+
+        NetworkTask networkTask = new NetworkTask();
+        networkTask.setURL(urlSendMoney);
+        networkTask.setTAG("sendMoney");
+
+        Map<String, String> params = new HashMap<>();
+
+        networkTask.execute(params);
     }
 
     private void calculateTotalProcess(String response){

@@ -28,6 +28,10 @@ public class RecSendListAdapter extends RecyclerView.Adapter<RecSendListAdapter.
 
     public  void  setItems(ArrayList<RecSend> items){this.items=items;}
 
+    public ArrayList<RecSend> getItems() {
+        return items;
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder{
         TextView dutchSendID,dutchReceiveID,dutchMoney;
 
