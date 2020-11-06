@@ -103,9 +103,13 @@ public class NewTransactionActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        String accountPW="1";
         if (item.getItemId() == R.id.new_confirm) {
-            String accountPW = ((EditText) findViewById(R.id.etNewTransMembershipPW)).getText().toString();
-
+            if(mainActivity.equals("daily")){
+                accountPW = ((EditText) findViewById(R.id.etNewTransDailyPW)).getText().toString();
+            }else {
+                accountPW = ((EditText) findViewById(R.id.etNewTransMembershipPW)).getText().toString();
+            }
             checkAccountPW(accountPW);
             return true;
         }
@@ -127,6 +131,7 @@ public class NewTransactionActivity extends AppCompatActivity {
             params.put("accountNum", membershipGroup.getAccountNum());
         }
 
+        Log.d("유알엘",urlCheckPW+" : "+mainActivity);
         NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("checkAccountPW");
         networkTask.setURL(urlCheckPW);
