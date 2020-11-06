@@ -247,6 +247,8 @@ public class DailyQRActivity extends AppCompatActivity {
         params.put("myAccountNum", loginMember.getAccountNum());
         params.put("nick", recMember.getMemName());
         params.put("Mynick", loginMember.getMemName());
+        params.put("memID",loginMember.getMemID());
+        params.put("DID",dailyGroup.getDID()+"");
 
         networkTask.execute(params);
     }
