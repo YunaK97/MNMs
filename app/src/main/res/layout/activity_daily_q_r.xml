@@ -6,6 +6,7 @@
     tools:context=".daily.ui.home.DailyQRActivity">
 
     <RadioGroup
+        android:background="@android:color/darker_gray"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:id="@+id/rgDutch"
@@ -28,6 +29,7 @@
             android:layout_height="wrap_content" />
 
         <RadioButton
+            android:focusedByDefault="true"
             android:id="@+id/rbtDown"
             android:text="내림"
             android:textSize="15sp"
@@ -51,11 +53,11 @@
         android:background="@color/colorTitle"
         android:layout_toRightOf="@id/rgDutch"
         android:id="@+id/spinnerDutchType"
-        android:layout_width="30sp"
+        android:layout_width="wrap_content"
         android:layout_height="25sp"
         android:layout_margin="2sp"
         android:layout_gravity="center"
-        android:dropDownWidth="250dp" />
+        android:dropDownWidth="wrap_content" />
 
     <LinearLayout
         android:orientation="vertical"

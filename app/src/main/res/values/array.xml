@@ -24,6 +24,7 @@
     </string-array>
 
     <string-array name="dutch_money">
+        <item>1원</item>
         <item>100원</item>
         <item>1000원</item>
         <item>10000원</item>

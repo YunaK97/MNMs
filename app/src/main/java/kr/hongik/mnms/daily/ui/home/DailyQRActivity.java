@@ -26,12 +26,14 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -260,6 +262,7 @@ public class DailyQRActivity extends AppCompatActivity {
 
         try {
             JSONObject jsonObject = new JSONObject(response);
+
             int memSize = Integer.parseInt(jsonObject.getString("memSize"));
 
 
@@ -301,9 +304,9 @@ public class DailyQRActivity extends AppCompatActivity {
                 @Override
                 public int compare(DutchMember item1, DutchMember item2) {
                     if(item1.getMemName().equals(item2.getMemName())){
-                        return -1;
-                    }else{
                         return 1;
+                    }else{
+                        return -1;
                     }
                 }
             };
@@ -374,7 +377,60 @@ public class DailyQRActivity extends AppCompatActivity {
             }
         }
 
+        Comparator<RecSend> noAsc = new Comparator<RecSend>() {
+            @Override
+            public int compare(RecSend item1, RecSend item2) {
+                if(item1.getDutchSendID().equals(item2.getDutchSendID())){
+                    return 1;
+                }else{
+                    return -1;
+                }
+            }
+        };
+
+        ArrayList<RecSend> tmpList=recSendListAdapter.getList();
+        Collections.sort(tmpList, noAsc);
+        recSendListAdapter.setItems(tmpList);
+
         RVeachMemMoney.setAdapter(recSendListAdapter);
+
+        insertDB();
+    }
+
+    private void insertDB(){
+        String urlIntoDB = "http://" + loginMember.getIp() + "/daily/calculate";
+
+        NetworkTask networkTask = new NetworkTask();
+        networkTask.setURL(urlIntoDB);
+        networkTask.setTAG("intoDB");
+
+        Map<String,String> params=new HashMap<>();
+
+        ArrayList<RecSend> recSendArrayList=recSendListAdapter.getList();
+
+        Map<String,Integer> cntArray=new HashMap<>();
+        for(int i=0;i<memberArrayList.size();i++){
+            cntArray.put(memberArrayList.get(i).getMemID(),0);
+        }
+
+        for (RecSend recSend: recSendArrayList){
+            String id=recSend.getDutchSendID();
+            int tmpCnt=cntArray.get(id);
+            tmpCnt++;
+            cntArray.put(id,tmpCnt);
+        }
+
+        params.put("DID",dailyGroup.getDID()+"");
+        params.put("friendSize",cntArray.size()+"");
+        for(int i=0;i<memberArrayList.size();i++){
+            String id=memberArrayList.get(i).getMemID();
+            Log.d("확인",id+" : "+cntArray.get(id));
+            params.put("count"+i,cntArray.get(id)+"");
+            params.put("memID"+i,id);
+        }
+
+        networkTask.execute(params);
+
     }
 
     private void sendMoneyToFriendProcess(String response) {
@@ -432,6 +488,8 @@ public class DailyQRActivity extends AppCompatActivity {
                 calculateTotalProcess(response);
             } else if (TAG.equals("sendMoney")) {
                 sendMoneyToFriendProcess(response);
+            }else if(TAG.equals("intoDB")){
+                Log.d(TAG+"intoDB", response);
             }
 
         }
