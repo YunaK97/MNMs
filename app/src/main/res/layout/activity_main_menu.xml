@@ -16,11 +16,11 @@
         android:layout_centerHorizontal="true"
         android:background="@drawable/sidecustom_round"
         android:orientation="vertical"
-        android:id="@+id/linearLayout_memberInfo"
+        android:id="@+id/LLMemberInfo"
         android:padding="10dp">
 
         <TextView
-            android:id="@+id/textName"
+            android:id="@+id/tvName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
@@ -30,7 +30,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/accName"
+            android:id="@+id/tvAccountNum"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
@@ -40,18 +40,18 @@
     </LinearLayout>
 
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/pager"
-        android:layout_below="@+id/linearLayout_memberInfo"
+        android:id="@+id/vpMainList"
+        android:layout_below="@+id/LLMemberInfo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"
         android:layout_marginBottom="10sp"
         android:layout_marginTop="10sp"
-        android:layout_above="@+id/linearLayout_pagerBtn"
+        android:layout_above="@+id/LLPagerBtn"
         />
 
     <LinearLayout
-        android:id="@+id/linearLayout_pagerBtn"
+        android:id="@+id/LLPagerBtn"
         android:layout_width="wrap_content"
         android:layout_height="40sp"
         android:layout_alignParentBottom="true"
@@ -60,28 +60,28 @@
         android:orientation="horizontal">
 
         <ImageButton
-            android:id="@+id/btn_transaction"
+            android:id="@+id/btnTransaction"
             android:layout_width="30sp"
             android:layout_height="30sp"
             android:layout_margin="5dp"
             android:background="@drawable/tab_selector" />
 
         <ImageButton
-            android:id="@+id/btn_membership"
+            android:id="@+id/btnMembership"
             android:layout_width="30sp"
             android:layout_height="30sp"
             android:layout_margin="5dp"
             android:background="@drawable/tab_selector" />
 
         <ImageButton
-            android:id="@+id/btn_daily"
+            android:id="@+id/btnDaily"
             android:layout_width="30sp"
             android:layout_height="30sp"
             android:layout_margin="5dp"
             android:background="@drawable/tab_selector" />
 
         <ImageButton
-            android:id="@+id/btn_friendList"
+            android:id="@+id/btnFriendList"
             android:layout_width="30sp"
             android:layout_height="30sp"
             android:layout_margin="5dp"

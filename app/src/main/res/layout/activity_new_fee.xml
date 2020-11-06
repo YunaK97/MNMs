@@ -8,8 +8,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:id="@+id/LL_newFee_groupName"
-        android:layout_above="@+id/LL_newFee_fee"
+        android:id="@+id/LLNewFeeGroupName"
+        android:layout_above="@+id/LLNewFeeFee"
         android:layout_height="wrap_content">
         <TextView
             style="@style/CustomTextView"
@@ -18,7 +18,7 @@
             android:layout_weight="1"
             />
         <TextView
-            android:id="@+id/TV_newFee_groupName"
+            android:id="@+id/tvNewFeeGroupName"
             android:layout_weight="1"
             android:layout_width="match_parent"
             style="@style/CustomTextView"
@@ -28,7 +28,7 @@
 
 
     <LinearLayout
-        android:id="@+id/LL_newFee_fee"
+        android:id="@+id/LLNewFeeFee"
         android:layout_centerInParent="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -40,7 +40,7 @@
             />
         <TextView
             android:layout_weight="1"
-            android:id="@+id/TV_newFee_fee"
+            android:id="@+id/tvNewFeeFee"
             android:layout_width="match_parent"
             style="@style/CustomTextView"
             android:text="ex)50000"
@@ -48,8 +48,8 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/LL_newFee_pw"
-        android:layout_below="@+id/LL_newFee_fee"
+        android:id="@+id/LLNewFeePW"
+        android:layout_below="@+id/LLNewFeeFee"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
@@ -60,7 +60,7 @@
             />
         <EditText
             android:layout_weight="1"
-            android:id="@+id/TV_newFee_accPW"
+            android:id="@+id/etNewFeeAccPW"
             android:inputType="numberPassword"
             android:layout_width="match_parent"
             style="@style/CustomTextView"

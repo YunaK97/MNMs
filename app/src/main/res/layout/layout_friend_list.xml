@@ -6,7 +6,7 @@
 
     <TextView
         android:background="@drawable/sidecustom"
-        android:id="@+id/friendlist_name"
+        android:id="@+id/tvFriendlistName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -16,7 +16,7 @@
 
     <TextView
         android:padding="5dp"
-        android:id="@+id/friendlistlist_id"
+        android:id="@+id/tvFriendlistId"
         android:background="@drawable/sidecustom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

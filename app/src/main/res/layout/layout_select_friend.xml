@@ -5,7 +5,7 @@
 
     <TextView
         android:background="@drawable/sidecustom"
-        android:id="@+id/friend_name"
+        android:id="@+id/tvFriendName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -14,7 +14,7 @@
         android:text="친구이름" />
 
     <TextView
-        android:id="@+id/friend_id"
+        android:id="@+id/tvFriendId"
         android:background="@drawable/sidecustom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,7 +23,7 @@
         android:padding="5dp"
         android:text="친구ID" />
     <CheckBox
-        android:id="@+id/friend_check"
+        android:id="@+id/cbFriendCheck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:checked="false"

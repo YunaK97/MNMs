@@ -36,9 +36,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private Account loginMemberAccount;
 
     //layouts
-    private RelativeLayout RL_settings_info;
-    private LinearLayout LL_settings_first;
-    private Button btn_memberOut, btn_newPW, btn_settings_pw;
+    private RelativeLayout RLSettingsInfo;
+    private LinearLayout LLSettingsFirst;
+    private Button btnMemberOut, btnNewPW, btnSettingsPW;
 
     //variables
     private boolean validPW = false;
@@ -51,26 +51,26 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         loginMember = (Member) intent.getSerializableExtra("loginMember");
         loginMemberAccount = (Account) intent.getSerializableExtra("loginMemberAccount");
 
-        RL_settings_info = findViewById(R.id.RL_settings_info);
-        LL_settings_first = findViewById(R.id.LL_settings_first);
-        btn_memberOut = findViewById(R.id.btn_memberOut);
-        btn_newPW = findViewById(R.id.btn_newPW);
-        btn_settings_pw = findViewById(R.id.btn_settings_pw);
+        RLSettingsInfo = findViewById(R.id.RLSettingsInfo);
+        LLSettingsFirst = findViewById(R.id.LLSettingsFirst);
+        btnMemberOut = findViewById(R.id.btnMemberOut);
+        btnNewPW = findViewById(R.id.btnNewPW);
+        btnSettingsPW = findViewById(R.id.btnSettingsPW);
 
         //회원정보 출력
         showInfo();
 
-        btn_newPW.setOnClickListener(this);
-        btn_settings_pw.setOnClickListener(this);
-        btn_memberOut.setOnClickListener(this);
+        btnNewPW.setOnClickListener(this);
+        btnSettingsPW.setOnClickListener(this);
+        btnMemberOut.setOnClickListener(this);
     }
 
     private void showInfo() {
-        TextView tv_memName, tv_email;
-        tv_memName = findViewById(R.id.tv_memName);
-        tv_email = findViewById(R.id.tv_email);
-        tv_memName.setText(loginMember.getMemName());
-        tv_email.setText(loginMember.getMemEmail());
+        TextView tvMemName, tvEmail;
+        tvMemName = findViewById(R.id.tvMemName);
+        tvEmail = findViewById(R.id.tvEmail);
+        tvMemName.setText(loginMember.getMemName());
+        tvEmail.setText(loginMember.getMemEmail());
     }
 
     private void pwCheck(String pw) {
@@ -111,27 +111,27 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_settings_pw:
-                String pw = ((TextView) findViewById(R.id.tv_first_pw)).getText().toString();
+            case R.id.btnSettingsPW:
+                String pw = ((TextView) findViewById(R.id.tvFirstPW)).getText().toString();
                 pwCheck(pw);
                 break;
-            case R.id.btn_newPW:
+            case R.id.btnNewPW:
                 //멤버의 비밀번호 변경
                 //memID와 새 memPW를 전송
                 //비밀번호 바꾸고 성공여부 받아야함
-                String pw1 = ((TextView) findViewById(R.id.tv_pw)).getText().toString();
-                String pw2 = ((TextView) findViewById(R.id.tv_pw_check)).getText().toString();
-                if(pw1.length()<8 || pw1.length()>20) {
+                String etSettingsPW = ((TextView) findViewById(R.id.etSettingsPW)).getText().toString();
+                String etPWCheck = ((TextView) findViewById(R.id.etPWCheck)).getText().toString();
+                if(etSettingsPW.length()<8 || etSettingsPW.length()>20) {
                     showToast("비밀번호 : 8~20자");
                     return;
                 }
-                if (pw1.equals(pw2)) {
-                    pwChange(pw1);
+                if (etSettingsPW.equals(etPWCheck)) {
+                    pwChange(etSettingsPW);
                 } else {
                     showToast("비밀번호가 일치하지않습니다.");
                 }
                 break;
-            case R.id.btn_memberOut:
+            case R.id.btnMemberOut:
                 checkMemberOut();
                 break;
         }
@@ -228,8 +228,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
                     boolean success = jsonObject.getBoolean("success");
                     if (success) {
-                        LL_settings_first.setVisibility(View.GONE);
-                        RL_settings_info.setVisibility(View.VISIBLE);
+                        LLSettingsFirst.setVisibility(View.GONE);
+                        RLSettingsInfo.setVisibility(View.VISIBLE);
 
                     } else {//비밀번호 확인 실패한 경우
                         showToast("비밀번호가 틀렸습니다.");

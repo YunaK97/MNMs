@@ -55,14 +55,14 @@ public class NewTransactionActivity extends AppCompatActivity {
     private DailyGroup dailyGroup;
     private MembershipGroup membershipGroup;
 
-    private String plus_history, mainActivity;
-    private int plus_money;
+    private String etPlusHistory, mainActivity;
+    private int etPlusMoney;
     private boolean QRSend;
     private IntentIntegrator qrScan;
 
     //layouts
-    private TextView newTrans_daily_name;
-    private LinearLayout LL_newTrans_daily, LL_newTrans_membership;
+    private TextView tvNewTransDailyName;
+    private LinearLayout LLNewTransDaily, LLNewTransMembership;
 
     //variables
     public int TAG_TRANS_SUCCESS = 111;
@@ -77,19 +77,21 @@ public class NewTransactionActivity extends AppCompatActivity {
         loginMemberAccount = (Account) intent.getSerializableExtra("loginMemberAccount");
         mainActivity = intent.getStringExtra("mainActivity");
 
-        LL_newTrans_daily = findViewById(R.id.LL_newTrans_daily);
-        LL_newTrans_membership = findViewById(R.id.LL_newTrans_membership);
+        LLNewTransDaily = findViewById(R.id.LLNewTransDaily);
+        LLNewTransMembership = findViewById(R.id.LLNewTransMembership);
         if (mainActivity.equals("daily")) {
             dailyGroup = (DailyGroup) intent.getSerializableExtra("dailyGroup");
 
-            newTrans_daily_name=findViewById(R.id.newTrans_daily_name);
-            newTrans_daily_name.setText(dailyGroup.getGroupName());
-            LL_newTrans_daily.setVisibility(View.VISIBLE);
+            tvNewTransDailyName=findViewById(R.id.tvNewTransDailyName);
+            tvNewTransDailyName.setText(dailyGroup.getGroupName());
+            LLNewTransDaily.setVisibility(View.VISIBLE);
+            LLNewTransMembership.setVisibility(View.GONE);
 
         } else if (mainActivity.equals("membership")) {
             membershipGroup = (MembershipGroup) intent.getSerializableExtra("membershipGroup");
 
-            LL_newTrans_membership.setVisibility(View.VISIBLE);
+            LLNewTransMembership.setVisibility(View.VISIBLE);
+            LLNewTransDaily.setVisibility(View.GONE);
         }
     }
 
@@ -102,7 +104,7 @@ public class NewTransactionActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.new_confirm) {
-            String accountPW = ((EditText) findViewById(R.id.newTrans_daily_pw)).getText().toString();
+            String accountPW = ((EditText) findViewById(R.id.etNewTransMembershipPW)).getText().toString();
 
             checkAccountPW(accountPW);
             return true;
@@ -111,15 +113,23 @@ public class NewTransactionActivity extends AppCompatActivity {
     }
 
     private void checkAccountPW(String accountPW) {
-        String urlCheckPW = "http://" + loginMember.getIp() + "/daily/checkPW";
+        String urlCheckPW = "http://" + loginMember.getIp();
+        Map<String, String> params = new HashMap<>();
+
+        if(mainActivity.equals("daily")){
+            urlCheckPW+="/daily/checkPW";
+            params.put("accountPassword", accountPW);
+            params.put("accountNum", loginMemberAccount.getAccountNum());
+        }else{
+            Log.d("checkPWWW",accountPW+" : "+ membershipGroup.getAccountNum());
+            urlCheckPW+="/membership/checkPW";
+            params.put("accountPassword", accountPW);
+            params.put("accountNum", membershipGroup.getAccountNum());
+        }
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("checkAccountPW");
         networkTask.setURL(urlCheckPW);
-
-        Map<String, String> params = new HashMap<>();
-        params.put("accountPassword", accountPW);
-        params.put("accountNum", loginMemberAccount.getAccountNum());
 
         networkTask.execute(params);
     }
@@ -146,7 +156,7 @@ public class NewTransactionActivity extends AppCompatActivity {
         //멤버십과 관련된 돈사용 - 멤버십계좌에서 돈 사용됨!
         //멤버십정보와 transaction 정보 보냄 - 멤버십계좌의 잔액이 변동됨
         //트랜잭션 생성 후 성공유무 받아야함
-        String urlNewMembershipTransaction = "http://" + loginMember.getIp() + "/newMembershipTransaction";
+        String urlNewMembershipTransaction = "http://" + loginMember.getIp() + "/membership/transaction";
         NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("newMembershipTransaction");
         networkTask.setURL(urlNewMembershipTransaction);
@@ -154,14 +164,12 @@ public class NewTransactionActivity extends AppCompatActivity {
         Map<String, String> params = new HashMap<>();
         params.put("accountNum", newTransaction.getAccountNum());
         params.put("MID", newTransaction.getMID() + "");
-        params.put("since", newTransaction.getSince());
-        params.put("transactHistory", newTransaction.getTransactHistroy());
-        params.put("transactMoney", newTransaction.getTransactMoney() + "");
+        params.put("history", newTransaction.getTransactHistroy());
+        params.put("money", newTransaction.getTransactMoney() + "");
 
         networkTask.execute(params);
     }
 
-    //Getting the scan results
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
@@ -193,13 +201,13 @@ public class NewTransactionActivity extends AppCompatActivity {
     private void newTransaction(){
         Transaction newTransaction = new Transaction();
 
-        plus_history = ((EditText) findViewById(R.id.plus_history)).getText().toString();
-        plus_money = Integer.parseInt(((EditText) findViewById(R.id.plus_money)).getText().toString());
+        etPlusHistory = ((EditText) findViewById(R.id.etPlusHistory)).getText().toString();
+        etPlusMoney = Integer.parseInt(((EditText) findViewById(R.id.etPlusMoney)).getText().toString());
 
-        newTransaction.setTransactHistroy(plus_history);
-        newTransaction.setTransactMoney(plus_money);
+        newTransaction.setTransactHistroy(etPlusHistory);
+        newTransaction.setTransactMoney(etPlusMoney);
 
-        if (plus_money == 0 || plus_history.isEmpty()) {
+        if (etPlusMoney == 0 || etPlusHistory.isEmpty()) {
             showToast("빈칸 노노");
         } else {
             if (mainActivity.equals("daily")) {
@@ -208,13 +216,13 @@ public class NewTransactionActivity extends AppCompatActivity {
                 newDailyTransaction(newTransaction);
             } else if (mainActivity.equals("membership")) {
                 newTransaction.setAccountNum(membershipGroup.getAccountNum());
-                newTransaction.setMID(dailyGroup.getGID());
+                newTransaction.setMID(membershipGroup.getMID());
                 newMembershipTransaction(newTransaction);
             }
         }
     }
 
-    private void newDailyTransactionProcess(String response){
+    private void newTransactionProcess(String response){
         try {
             JSONObject jsonObject = new JSONObject(response);
             boolean success = jsonObject.getBoolean("success");
@@ -286,8 +294,8 @@ public class NewTransactionActivity extends AppCompatActivity {
                 } catch (Exception e) {
 
                 }
-            } else if (TAG.equals("newDailyTransaction")) {
-                newDailyTransactionProcess(response);
+            } else if (TAG.equals("newDailyTransaction") || TAG.equals("newMembershipTransaction")) {
+                newTransactionProcess(response);
             }
         }
     }

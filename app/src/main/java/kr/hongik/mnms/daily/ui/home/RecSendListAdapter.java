@@ -33,21 +33,21 @@ public class RecSendListAdapter extends RecyclerView.Adapter<RecSendListAdapter.
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView dutchSendID,dutchReceiveID,dutchMoney;
+        TextView tvDutchSendID,tvDutchReceiveID,tvDutchMoney;
 
         ViewHolder(View itemView){
             super(itemView);
 
-            dutchSendID=itemView.findViewById(R.id.dutchSendID);
-            dutchReceiveID=itemView.findViewById(R.id.dutchReceiveID);
-            dutchMoney=itemView.findViewById(R.id.dutchMoney);
+            tvDutchSendID=itemView.findViewById(R.id.tvDutchSendID);
+            tvDutchReceiveID=itemView.findViewById(R.id.tvDutchReceiveID);
+            tvDutchMoney=itemView.findViewById(R.id.tvDutchMoney);
 
         }
 
         public void setItem(RecSend item){
-            dutchSendID.setText(item.getDutchSendID());
-            dutchReceiveID.setText(item.getDutchReceiveID());
-            dutchMoney.setText(item.getDutchMoney()+"");
+            tvDutchSendID.setText(item.getDutchSendID());
+            tvDutchReceiveID.setText(item.getDutchReceiveID());
+            tvDutchMoney.setText(item.getDutchMoney()+"");
         }
     }
 

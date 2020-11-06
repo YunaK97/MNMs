@@ -21,19 +21,17 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         // each data item is  just a string in this case
-        public TextView TextView_transLeftMoney;
-        public TextView TextView_transHistory;
-        public TextView TextView_transMoney;
-        public TextView TextView_since;
+        public TextView tvTransHistory;
+        public TextView tvTransMoney;
+        public TextView tvTransSince;
 
         public View rootView;
 
         public MyViewHolder(View v) {
             super(v);
-            TextView_transHistory = v.findViewById(R.id.trans_history);
-            TextView_transMoney = v.findViewById(R.id.trans_money);
-            TextView_since = v.findViewById(R.id.trans_since);
-            TextView_transLeftMoney = v.findViewById(R.id.trans_leftmoney);
+            tvTransHistory = v.findViewById(R.id.tvTransHistory);
+            tvTransMoney = v.findViewById(R.id.tvTransMoney);
+            tvTransSince = v.findViewById(R.id.tvTransSince);
 
             rootView = v;
         }
@@ -63,14 +61,14 @@ public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.
         Transaction tData = mDataset.get(position);
 
         if (tData.getTransactMoney() < 0) {
-            holder.TextView_transMoney.setTextColor(Color.BLUE);
+            holder.tvTransMoney.setTextColor(Color.BLUE);
         } else {
-            holder.TextView_transMoney.setTextColor(Color.RED);
+            holder.tvTransMoney.setTextColor(Color.RED);
         }
 
-        holder.TextView_transHistory.setText(tData.getTransactHistroy());
-        holder.TextView_transMoney.setText(tData.getTransactMoney()+"");
-        holder.TextView_since.setText(tData.getSince());
+        holder.tvTransHistory.setText(tData.getTransactHistroy());
+        holder.tvTransMoney.setText(tData.getTransactMoney()+"");
+        holder.tvTransSince.setText(tData.getSince());
 
     }
 

@@ -45,8 +45,8 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
     private ArrayList<Member> memberArrayList;
 
     //Layouts
-    private ViewPager viewPager;
-    private FloatingActionButton fab_daily_main, fab_daily_trans;
+    private ViewPager viewpagerDaily;
+    private FloatingActionButton fabDailyMain, fabDailyTrans;
     private Animation fab_open, fab_close;
     private boolean isFabOpen = false;
 
@@ -80,10 +80,10 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
 
         fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
         fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
-        fab_daily_main = findViewById(R.id.fab_daily_main);
-        fab_daily_trans = findViewById(R.id.fab_daily_trans);
-        fab_daily_main.setOnClickListener(this);
-        fab_daily_trans.setOnClickListener(this);
+        fabDailyMain = findViewById(R.id.fabDailyMain);
+        fabDailyTrans = findViewById(R.id.fabDailyTrans);
+        fabDailyMain.setOnClickListener(this);
+        fabDailyTrans.setOnClickListener(this);
 
         Intent intent = getIntent();
         dailyGroup = (DailyGroup) intent.getSerializableExtra("dailyGroup");
@@ -113,10 +113,10 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         Intent intent;
         switch (v.getId()) {
-            case R.id.fab_daily_main:
+            case R.id.fabDailyMain:
                 toggleFab();
                 break;
-            case R.id.fab_daily_trans:
+            case R.id.fabDailyTrans:
                 toggleFab();
                 intent = new Intent(DailyActivity.this, NewTransactionActivity.class);
                 intent.putExtra("loginMember", loginMember);
@@ -151,12 +151,12 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
 
     private void toggleFab() {
         if (isFabOpen) {
-            fab_daily_trans.startAnimation(fab_close);
-            fab_daily_trans.setClickable(false);
+            fabDailyTrans.startAnimation(fab_close);
+            fabDailyTrans.setClickable(false);
             isFabOpen = false;
         } else {
-            fab_daily_trans.startAnimation(fab_open);
-            fab_daily_trans.setClickable(true);
+            fabDailyTrans.startAnimation(fab_open);
+            fabDailyTrans.setClickable(true);
 
             isFabOpen = true;
         }
@@ -226,12 +226,12 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
         bundle.putSerializable("loginMemberAccount", loginMemberAccount);
         bundle.putSerializable("memberArrayList", memberArrayList);
 
-        viewPager = findViewById(R.id.viewpager_daily);
+        viewpagerDaily = findViewById(R.id.viewpagerDaily);
         DailyPagerAdapter adapter = new DailyPagerAdapter(getSupportFragmentManager(), bundle);
-        viewPager.setAdapter(adapter);
+        viewpagerDaily.setAdapter(adapter);
 
-        TabLayout tabLayout = findViewById(R.id.tabLayout_daily);
-        tabLayout.setupWithViewPager(viewPager);
+        TabLayout tabLayoutDaily = findViewById(R.id.tabLayoutDaily);
+        tabLayoutDaily.setupWithViewPager(viewpagerDaily);
     }
 
     private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {

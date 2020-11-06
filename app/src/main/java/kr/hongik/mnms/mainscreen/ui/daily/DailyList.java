@@ -41,7 +41,7 @@ public class DailyList extends Fragment {
     private Account loginMemberAccount;
 
     //layouts
-    private RecyclerView groupMembershiplList;
+    private RecyclerView rvMainDailyList;
     private GroupAdapter groupAdapter;
     private Context context;
     private ViewGroup rootView;
@@ -146,9 +146,9 @@ public class DailyList extends Fragment {
             JSONObject jsonObject=new JSONObject(response);
             int dailyGroupSize=Integer.parseInt(jsonObject.getString("dailyGroupSize"));
             if (dailyGroupSize == 0) return;
-            groupMembershiplList = rootView.findViewById(R.id.main_daily_list);
+            rvMainDailyList = rootView.findViewById(R.id.rvMainDailyList);
             LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
-            groupMembershiplList.setLayoutManager(layoutManager);
+            rvMainDailyList.setLayoutManager(layoutManager);
 
             groupAdapter = new GroupAdapter();
             for (int i = 0; i < dailyGroupSize; i++) {
@@ -161,7 +161,7 @@ public class DailyList extends Fragment {
                 groupAdapter.addItem(group);
             }
 
-            groupMembershiplList.setAdapter(groupAdapter);
+            rvMainDailyList.setAdapter(groupAdapter);
 
             groupAdapter.setOnItemClickListener(new OnGroupItemClickListener() {
                 @Override

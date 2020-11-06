@@ -22,7 +22,7 @@
         android:layout_weight="1"
         android:text="Membership"
         android:layout_centerHorizontal="true"
-        android:id="@+id/TV_membershipList_membership"
+        android:id="@+id/tvMembershipListMembership"
         android:textColor="@android:color/holo_red_dark"
         android:textSize="30sp" />
 
@@ -35,8 +35,8 @@
         android:textSize="20sp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/main_membership_list"
-        android:layout_below="@+id/TV_membershipList_membership"
+        android:id="@+id/rvMainMembershipList"
+        android:layout_below="@+id/tvMembershipListMembership"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

@@ -5,7 +5,7 @@
 
     <TextView
         android:background="@drawable/sidecustom"
-        android:id="@+id/membership_name"
+        android:id="@+id/tvMembershipName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -15,7 +15,7 @@
 
     <TextView
         android:padding="5dp"
-        android:id="@+id/membership_id"
+        android:id="@+id/tvMembershipId"
         android:background="@drawable/sidecustom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -24,7 +24,7 @@
         android:text="친구ID" />
     <TextView
         android:padding="5dp"
-        android:id="@+id/membership_cnt"
+        android:id="@+id/tvMembershipCnt"
         android:background="@drawable/sidecustom"
         android:layout_width="50sp"
         android:layout_height="wrap_content"

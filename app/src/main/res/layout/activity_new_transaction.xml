@@ -7,10 +7,10 @@
     tools:context=".newprocesses.NewTransactionActivity">
 
     <LinearLayout
-        android:id="@+id/LL_newTrans1"
+        android:id="@+id/LLNewTrans1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/LL_newTrans2"
+        android:layout_above="@+id/LLNewTrans2"
         android:orientation="horizontal"
         android:paddingLeft="10sp"
         android:paddingRight="10sp">
@@ -24,7 +24,7 @@
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/plus_money"
+            android:id="@+id/etPlusMoney"
             style="@style/CustomTextView"
             android:layout_width="match_parent"
             android:layout_weight="1"
@@ -36,10 +36,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/LL_newTrans2"
+        android:id="@+id/LLNewTrans2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/LL_newTrans3"
+        android:layout_above="@+id/LLNewTrans3"
         android:orientation="horizontal"
         android:paddingLeft="10sp"
         android:paddingRight="10sp">
@@ -53,7 +53,7 @@
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/plus_history"
+            android:id="@+id/etPlusHistory"
             style="@style/CustomTextView"
             android:layout_width="match_parent"
             android:layout_weight="1"
@@ -64,7 +64,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/LL_newTrans3"
+        android:id="@+id/LLNewTrans3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
@@ -82,7 +82,7 @@
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/plus_accountNum"
+            android:id="@+id/etPlusUseName"
             style="@style/CustomTextView"
             android:layout_width="match_parent"
             android:layout_weight="1"
@@ -93,10 +93,10 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/LL_newTrans_membership"
+        android:id="@+id/LLNewTransMembership"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/LL_newTrans3"
+        android:layout_below="@id/LLNewTrans3"
         android:layout_centerHorizontal="true"
         android:orientation="vertical"
         android:paddingLeft="10sp"
@@ -120,7 +120,7 @@
                 android:layout_weight="1"
                 android:padding="1dp"
                 android:text="아우디"
-                android:id="@+id/newTrans_membership_name"
+                android:id="@+id/tvNewTransMembershipName"
                 android:textSize="20sp" />
         </LinearLayout>
         <LinearLayout
@@ -139,22 +139,22 @@
                 android:layout_width="match_parent"
                 android:layout_weight="1"
                 android:padding="1dp"
-                android:id="@+id/newTrans_membership_pw"
+                android:id="@+id/etNewTransMembershipPW"
                 android:inputType="numberPassword"
                 android:textSize="20sp" />
         </LinearLayout>
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/LL_newTrans_daily"
+        android:id="@+id/LLNewTransDaily"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/LL_newTrans3"
+        android:layout_below="@id/LLNewTrans3"
         android:layout_centerHorizontal="true"
         android:orientation="vertical"
         android:paddingLeft="10sp"
         android:paddingRight="10sp"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -174,7 +174,7 @@
                 android:layout_weight="1"
                 android:padding="1dp"
                 android:text="running맨"
-                android:id="@+id/newTrans_daily_name"
+                android:id="@+id/tvNewTransDailyName"
                 android:textSize="20sp" />
         </LinearLayout>
         <LinearLayout
@@ -193,7 +193,7 @@
                 android:layout_width="match_parent"
                 android:layout_weight="1"
                 android:padding="1dp"
-                android:id="@+id/newTrans_daily_pw"
+                android:id="@+id/etNewTransDailyPW"
                 android:inputType="numberPassword"
                 android:textSize="20sp" />
         </LinearLayout>

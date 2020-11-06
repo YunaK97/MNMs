@@ -7,24 +7,95 @@
     android:orientation="vertical"
     tools:context="kr.hongik.mnms.membership.MembershipActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="10sp"
+        android:layout_marginBottom="10sp"
+        android:layout_marginRight="30sp"
+        android:layout_marginLeft="30sp"
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/sidecustom_round"
+        android:orientation="vertical"
+        android:id="@+id/LLMembershipInfo"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/tvMembershipName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:text="이름 : ex) 런닝맨"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tvMembershipPresident"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:text="이름 : ex) 유재석"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tvMembershipAccountNum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:text="계좌번호 : ex) 123-12-4567"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tlMembership"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/LLMembershipInfo">
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/membershipTabItem1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="1번 탭" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/membershipTabItem2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2번 탭" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/membershipTabItem3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="3번 탭" />
+
+    </com.google.android.material.tabs.TabLayout>
+
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewpager_membership"
+        android:id="@+id/vpMembership"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignBaseline="@+id/tabLayout_membership"
+        android:layout_alignBaseline="@+id/tlMembership"
         android:layout_alignParentEnd="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/tabLayout_membership"
+        android:layout_below="@+id/tlMembership"
         android:layout_marginEnd="0dp"
         android:layout_marginRight="0dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_membership_manage"
+        android:id="@+id/fabMembershipManage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/fab_membership_member"
+        android:layout_above="@+id/fabMembershipMember"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="15dp"
@@ -37,10 +108,10 @@
         app:fabSize="normal" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_membership_member"
+        android:id="@+id/fabMembershipMember"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/fab_membership_trans"
+        android:layout_above="@+id/fabMembershipTrans"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="15dp"
@@ -53,10 +124,10 @@
         app:fabSize="normal" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_membership_trans"
+        android:id="@+id/fabMembershipTrans"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/fab_membership_main"
+        android:layout_above="@+id/fabMembershipMain"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="15dp"
@@ -69,7 +140,7 @@
         app:fabSize="normal" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_membership_main"
+        android:id="@+id/fabMembershipMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -82,29 +153,4 @@
         app:borderWidth="0dp"
         app:fabSize="normal" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout_membership"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true">
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/membership_tabItem1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="1번 탭" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/membership_tabItem2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="2번 탭" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/membership_tabItem3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="3번 탭" />
-
-    </com.google.android.material.tabs.TabLayout>
 </RelativeLayout>

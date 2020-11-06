@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,27 +8,27 @@
     <RadioGroup
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:id="@+id/dutch_radioGroup"
+        android:id="@+id/rgDutch"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
         <RadioButton
-            android:id="@+id/rbt_up"
+            android:id="@+id/rbtUP"
             android:text="올림"
             android:textSize="15sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <RadioButton
-            android:id="@+id/rbt_round"
+            android:id="@+id/rbtRound"
             android:text="반올림"
             android:textSize="15sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
         <RadioButton
-            android:id="@+id/rbt_down"
+            android:id="@+id/rbtDown"
             android:text="내림"
             android:textSize="15sp"
             android:layout_width="wrap_content"
@@ -43,15 +42,15 @@
         android:layout_alignParentBottom="true"
         android:textSize="25sp"
         android:id="@+id/tvTotalMoney"
-        android:layout_toLeftOf="@+id/btn_qrMake"
+        android:layout_toLeftOf="@+id/btnQRMake"
         android:textAlignment="textEnd"
         android:text="1000000000"
         android:gravity="end" />
 
     <Spinner
         android:background="@color/colorTitle"
-        android:layout_toRightOf="@id/dutch_radioGroup"
-        android:id="@+id/dutchType"
+        android:layout_toRightOf="@id/rgDutch"
+        android:id="@+id/spinnerDutchType"
         android:layout_width="30sp"
         android:layout_height="25sp"
         android:layout_margin="2sp"
@@ -60,9 +59,9 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_below="@+id/dutch_radioGroup"
+        android:layout_below="@+id/rgDutch"
         android:layout_width="match_parent"
-        android:layout_above="@+id/btn_qrMake"
+        android:layout_above="@+id/btnQRMake"
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -85,12 +84,10 @@
 
     </LinearLayout>
 
-
-
     <ImageView
         android:visibility="gone"
         android:layout_alignParentTop="true"
-        android:id="@+id/daily_qrImage"
+        android:id="@+id/ivDailyQR"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
@@ -99,15 +96,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:id="@+id/btn_qrMake"
-        android:layout_toLeftOf="@id/btn_qrScan"
+        android:id="@+id/btnQRMake"
+        android:layout_toLeftOf="@id/btnQRScan"
         style="@style/CustomButton"
         android:text="QR생성"/>
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:id="@+id/btn_qrScan"
+        android:id="@+id/btnQRScan"
         style="@style/CustomButton"
         android:layout_alignParentRight="true"
         android:text="QR스캔"/>

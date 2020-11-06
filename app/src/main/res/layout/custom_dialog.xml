@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/dialog_title"
+        android:id="@+id/tvDialogTitle"
         style="@style/CustomTextView"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -19,7 +19,7 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tv_customWeek"
+            android:id="@+id/tvCustomWeek"
             android:background="@android:color/holo_red_light"
             style="@style/CustomTextView"
             android:textColor="#ffffff"
@@ -30,7 +30,7 @@
             android:text="매주" />
 
         <TextView
-            android:id="@+id/tv_customMon"
+            android:id="@+id/tvCustomMonth"
             style="@style/CustomTextView"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -39,7 +39,7 @@
             android:text="매월" />
 
         <TextView
-            android:id="@+id/tv_customYear"
+            android:id="@+id/tvCustomYear"
             style="@style/CustomTextView"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -51,13 +51,13 @@
 
     <LinearLayout
         android:visibility="visible"
-        android:id="@+id/LL_dialog_week"
+        android:id="@+id/LLDialogWeek"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/tv_custom_sun"
+            android:id="@+id/tvCustomSun"
             style="@style/CustomTextView"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -67,7 +67,7 @@
             android:textSize="17sp" />
 
         <TextView
-            android:id="@+id/tv_custom_mon"
+            android:id="@+id/tvCustomMon"
             style="@style/CustomTextView"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -79,7 +79,7 @@
             android:textSize="17sp" />
 
         <TextView
-            android:id="@+id/tv_custom_tue"
+            android:id="@+id/tvCustomTue"
             style="@style/CustomTextView"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -89,7 +89,7 @@
             android:textSize="17sp" />
 
         <TextView
-            android:id="@+id/tv_custom_wed"
+            android:id="@+id/tvCustomWed"
             style="@style/CustomTextView"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -99,7 +99,7 @@
             android:textSize="17sp" />
 
         <TextView
-            android:id="@+id/tv_custom_thu"
+            android:id="@+id/tvCustomThu"
             style="@style/CustomTextView"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -109,7 +109,7 @@
             android:textSize="17sp" />
 
         <TextView
-            android:id="@+id/tv_custom_fri"
+            android:id="@+id/tvCustomFri"
             style="@style/CustomTextView"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -119,7 +119,7 @@
             android:textSize="17sp" />
 
         <TextView
-            android:id="@+id/tv_custom_sat"
+            android:id="@+id/tvCustomSat"
             style="@style/CustomTextView"
             android:layout_width="match_parent"
             android:layout_height="60dp"
@@ -135,11 +135,11 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:visibility="gone"
-        android:id="@+id/LL_dialog_month"
+        android:id="@+id/LLDialogMonth"
         android:orientation="horizontal">
 
         <Spinner
-            android:id="@+id/mon_spinner"
+            android:id="@+id/spinnerMon"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal"
@@ -150,14 +150,14 @@
     <LinearLayout
         android:visibility="gone"
         android:layout_width="match_parent"
-        android:id="@+id/LL_dialog_year"
+        android:id="@+id/LLDialogYear"
         android:layout_height="60dp"
         android:orientation="horizontal">
 
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/year_monSpinner"
+            android:id="@+id/spinnerYearMonth"
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:layout_gravity="center"
@@ -176,7 +176,7 @@
         <Spinner
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/year_daySpinner"
+            android:id="@+id/spinnerYearDay"
             android:gravity="center_horizontal"
             android:layout_gravity="center"
             android:layout_weight="1"
@@ -189,7 +189,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/btn_confirm"
+            android:id="@+id/btnConfirm"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_weight="1"
@@ -200,7 +200,7 @@
             android:textSize="20sp" />
 
         <Button
-            android:id="@+id/btn_cancel"
+            android:id="@+id/btnCancel"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_weight="1"

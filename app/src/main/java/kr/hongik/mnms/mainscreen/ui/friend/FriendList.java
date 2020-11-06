@@ -33,7 +33,7 @@ public class FriendList extends Fragment {
 
     //layouts
     private FriendListAdapter friendListAdapter;
-    private RecyclerView friend_list;
+    private RecyclerView rvMainFriendList;
     private Context context;
     private ViewGroup rootView;
 
@@ -133,9 +133,9 @@ public class FriendList extends Fragment {
             int showFriendSize=Integer.parseInt(jsonObject.getString("showFriendSize"));
             if (showFriendSize==0) return;
 
-            friend_list = rootView.findViewById(R.id.main_friend_list);
+            rvMainFriendList = rootView.findViewById(R.id.rvMainFriendList);
             LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
-            friend_list.setLayoutManager(layoutManager);
+            rvMainFriendList.setLayoutManager(layoutManager);
             friendListAdapter = new FriendListAdapter();
 
             for (int i = 0; i < showFriendSize; i++) {
@@ -147,7 +147,7 @@ public class FriendList extends Fragment {
                 member.setMemID(friendId);
                 friendListAdapter.addItem(member);
             }
-            friend_list.setAdapter(friendListAdapter);
+            rvMainFriendList.setAdapter(friendListAdapter);
             friendListAdapter.setOnItemLongClickListener(new OnFriendItemLongClickListener() {
                 @Override
                 public void onItemLongClick(FriendListAdapter.ViewHolder holder, View view, int position) {

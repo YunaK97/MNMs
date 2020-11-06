@@ -34,14 +34,14 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Vi
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView membership_name, membership_id,membership_cnt;
+        TextView tvMembershipName, tvMembershipId,tvMembershipCnt;
 
         ViewHolder(View itemView,final OnMemberListClickListener listener,final OnMemberListLongClickListener longlistener) {
             super(itemView);
 
-            membership_name = itemView.findViewById(R.id.membership_name);
-            membership_id = itemView.findViewById(R.id.membership_id);
-            membership_cnt=itemView.findViewById(R.id.membership_cnt);
+            tvMembershipName = itemView.findViewById(R.id.tvMembershipName);
+            tvMembershipId = itemView.findViewById(R.id.tvMembershipId);
+            tvMembershipCnt=itemView.findViewById(R.id.tvMembershipCnt);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -66,9 +66,9 @@ public class MemberListAdapter extends RecyclerView.Adapter<MemberListAdapter.Vi
         }
 
         public void setItem(MembershipMemFragment.MembershipMember item) {
-            membership_name.setText(item.getMemName());
-            membership_id.setText(item.getMemID());
-            membership_cnt.setText(item.getNotSubmit()+"");
+            tvMembershipName.setText(item.getMemName());
+            tvMembershipId.setText(item.getMemID());
+            tvMembershipCnt.setText(item.getNotSubmit()+"");
         }
     }
 

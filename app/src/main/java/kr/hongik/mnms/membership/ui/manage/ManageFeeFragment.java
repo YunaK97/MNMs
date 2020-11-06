@@ -34,9 +34,9 @@ public class ManageFeeFragment extends Fragment {
     private Member loginMember;
 
     //layouts
-    private TextView tv_monthly_membership;
-    private TextView tv_notsubmit_cnt;
-    private TextView tv_my_notSubmit;
+    private TextView tvMonthlyMembership;
+    private TextView tvNotsubmitCnt;
+    private TextView tvMyNotSubmit;
 
     private ViewGroup viewGroup;
 
@@ -46,9 +46,9 @@ public class ManageFeeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         viewGroup = (ViewGroup) inflater.inflate(R.layout.fragment_manage_fee, container, false);
 
-        tv_monthly_membership = viewGroup.findViewById(R.id.tv_monthly_membership);
-        tv_notsubmit_cnt = viewGroup.findViewById(R.id.tv_notsubmit_cnt);
-        tv_my_notSubmit = viewGroup.findViewById(R.id.tv_my_notSubmit);
+        tvMonthlyMembership = viewGroup.findViewById(R.id.tvMonthlyMembership);
+        tvNotsubmitCnt = viewGroup.findViewById(R.id.tvNotsubmitCnt);
+        tvMyNotSubmit = viewGroup.findViewById(R.id.tvMyNotSubmit);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -77,12 +77,12 @@ public class ManageFeeFragment extends Fragment {
 
     public void setInformationProcess(String response) {
         //멤버십의 회비
-        tv_monthly_membership.setText(membershipGroup.getFee() + "");
+        tvMonthlyMembership.setText(membershipGroup.getFee() + "");
         //멤버십의 미납가능횟수
-        tv_notsubmit_cnt.setText(membershipGroup.getNotSubmit() + "");
+        tvNotsubmitCnt.setText(membershipGroup.getNotSubmit() + "");
 
         //내 미납횟수
-        tv_my_notSubmit.setText("1");
+        tvMyNotSubmit.setText("1");
 
         if (loginMember.getMemID().equals(membershipGroup.getPresident())) {
             try {
@@ -91,7 +91,7 @@ public class ManageFeeFragment extends Fragment {
                 for (int i = 0; i < notSubmitSize; i++) {
                     String memID = jsonObject.getString("memID" + i);
                     if (memID.equals(loginMember.getMemID())) {
-                        tv_my_notSubmit.setText(jsonObject.getString("count" + i));
+                        tvMyNotSubmit.setText(jsonObject.getString("count" + i));
                         break;
                     }
                 }
@@ -101,7 +101,7 @@ public class ManageFeeFragment extends Fragment {
         } else {
             try {
                 JSONObject jsonObject = new JSONObject(response);
-                tv_my_notSubmit.setText(jsonObject.getString("notSubmit"));
+                tvMyNotSubmit.setText(jsonObject.getString("notSubmit"));
             } catch (Exception e) {
                 //e.printStackTrace();
             }

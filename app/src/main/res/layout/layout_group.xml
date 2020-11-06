@@ -5,7 +5,7 @@
 
     <TextView
         android:background="@drawable/sidecustom"
-        android:id="@+id/group_name"
+        android:id="@+id/tvGroupName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"

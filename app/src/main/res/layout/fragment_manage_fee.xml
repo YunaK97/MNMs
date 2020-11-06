@@ -21,7 +21,7 @@
             android:layout_height="wrap_content"
             style="@style/CustomTextView"
             android:text="00원"
-            android:id="@+id/tv_monthly_membership"
+            android:id="@+id/tvMonthlyMembership"
             />
     </LinearLayout>
     <LinearLayout
@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:text="00번"
             style="@style/CustomTextView"
-            android:id="@+id/tv_notsubmit_cnt"
+            android:id="@+id/tvNotsubmitCnt"
             />
     </LinearLayout>
 
@@ -57,7 +57,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_my_notSubmit"
+            android:id="@+id/tvMyNotSubmit"
             android:text="00번"
             style="@style/CustomTextView"
             />

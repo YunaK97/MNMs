@@ -9,16 +9,16 @@
     <TextView
         style="@style/CustomTextView"
         android:text="친구"
-        android:id="@+id/TV_dailyFriend"
+        android:id="@+id/tvDailyFriend"
         android:layout_alignParentLeft="true"
         android:textSize="30sp"
         android:gravity="top"
         />
     <androidx.recyclerview.widget.RecyclerView
         android:scrollbars="vertical"
-        android:layout_below="@+id/TV_dailyFriend"
-        android:layout_above="@+id/btn_newDailyMem"
-        android:id="@+id/RV_newDailyMem"
+        android:layout_below="@+id/tvDailyFriend"
+        android:layout_above="@+id/btnNewDailyMem"
+        android:id="@+id/rvNewDailyMem"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
     <Button
@@ -26,6 +26,6 @@
         android:layout_centerInParent="true"
         style="@style/CustomButton"
         android:text="추가"
-        android:id="@+id/btn_newDailyMem"
+        android:id="@+id/btnNewDailyMem"
         />
 </RelativeLayout>

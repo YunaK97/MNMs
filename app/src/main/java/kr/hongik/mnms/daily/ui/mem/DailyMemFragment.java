@@ -41,7 +41,7 @@ public class DailyMemFragment extends Fragment {
     private ArrayList<Member> memberArrayList;
 
     //layouts
-    private RecyclerView memberList;
+    private RecyclerView rvDailyMemberList;
     private FriendListAdapter memberAdapter;
 
     private Context context;
@@ -64,12 +64,12 @@ public class DailyMemFragment extends Fragment {
     }
 
     private void showMember() {
-        memberList = rootView.findViewById(R.id.RV_daily_member_list);
+        rvDailyMemberList = rootView.findViewById(R.id.rvDailyMemberList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
-        memberList.setLayoutManager(layoutManager);
+        rvDailyMemberList.setLayoutManager(layoutManager);
         memberAdapter = new FriendListAdapter();
         memberAdapter.setItems(memberArrayList);
-        memberList.setAdapter(memberAdapter);
+        rvDailyMemberList.setAdapter(memberAdapter);
     }
 
     private void selectDelMember(int position) {

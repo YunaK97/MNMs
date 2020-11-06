@@ -34,15 +34,15 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView friend_name, friend_id;
-        CheckBox friend_check;
+        TextView tvFriendName, tvFriendId;
+        CheckBox cbFriendCheck;
 
         ViewHolder(View itemView, final OnMemberItemClickListener listener) {
             super(itemView);
 
-            friend_name = itemView.findViewById(R.id.friend_name);
-            friend_id = itemView.findViewById(R.id.friend_id);
-            friend_check = itemView.findViewById(R.id.friend_check);
+            tvFriendName = itemView.findViewById(R.id.tvFriendName);
+            tvFriendId = itemView.findViewById(R.id.tvFriendId);
+            cbFriendCheck = itemView.findViewById(R.id.cbFriendCheck);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -57,9 +57,9 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
         }
 
         public void setItem(Member item) {
-            friend_name.setText(item.getMemName());
-            friend_id.setText(item.getMemID());
-            friend_check.setChecked(false);
+            tvFriendName.setText(item.getMemName());
+            tvFriendId.setText(item.getMemID());
+            cbFriendCheck.setChecked(false);
         }
     }
 
@@ -86,9 +86,9 @@ public class MemberAdapter extends RecyclerView.Adapter<MemberAdapter.ViewHolder
         final Member item = items.get(position);
         holder.setItem(item);
 
-        holder.friend_check.setChecked(item.isChecked());
-        holder.friend_check.setOnCheckedChangeListener(null);
-        holder.friend_check.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        holder.cbFriendCheck.setChecked(item.isChecked());
+        holder.cbFriendCheck.setOnCheckedChangeListener(null);
+        holder.cbFriendCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 item.setChecked(isChecked);

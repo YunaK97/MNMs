@@ -29,7 +29,7 @@ import kr.hongik.mnms.mainscreen.MainMenuActivity;
 public class MainActivity extends AppCompatActivity {
 
     //layouts
-    private CheckBox autoLogin;
+    private CheckBox cbAutoLogin;
 
     //URLs
     private String curIp = "211.186.21.254:8090";
@@ -62,17 +62,17 @@ public class MainActivity extends AppCompatActivity {
             loginProcess(member);
         }
 
-        final Button login, signin;
+        final Button btnLogin, btnSignin;
 
         setContentView(R.layout.activity_main);
-        login = findViewById(R.id.login);
-        signin = findViewById(R.id.signin);
+        btnLogin = findViewById(R.id.btnLogin);
+        btnSignin = findViewById(R.id.btnSignin);
 
-        login.setOnClickListener(new View.OnClickListener() {
+        btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loginID = ((TextView) findViewById(R.id.id)).getText().toString();
-                loginPW = ((TextView) findViewById(R.id.pw)).getText().toString();
+                loginID = ((TextView) findViewById(R.id.etID)).getText().toString();
+                loginPW = ((TextView) findViewById(R.id.etPW)).getText().toString();
                 if (TextUtils.isEmpty(loginID) || TextUtils.isEmpty(loginPW)) {
                     showToast("빈칸 노노!");
                 } else if (loginID.length() < 4 || loginID.length() > 20 || loginPW.length()<8|| loginPW.length()>20) {
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        signin.setOnClickListener(new View.OnClickListener() {
+        btnSignin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, SignInActivity.class);
@@ -199,9 +199,9 @@ public class MainActivity extends AppCompatActivity {
                     Account memAcc = new Account();
                     memAcc.setAccountNum(accNum);
 
-                    autoLogin = findViewById(R.id.autoLogin);
+                    cbAutoLogin = findViewById(R.id.cbAutoLogin);
 
-                    if (autoLogin.isChecked()) {
+                    if (cbAutoLogin.isChecked()) {
                         editor.putString("loginId", loginID);
                         editor.putString("loginPw", loginPW);
                         editor.commit();

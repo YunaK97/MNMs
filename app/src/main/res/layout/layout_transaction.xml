@@ -7,7 +7,7 @@
     android:paddingLeft="10sp"
     android:paddingRight="10sp">
     <TextView
-        android:id="@+id/trans_history"
+        android:id="@+id/tvTransHistory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="ex)지지고 컵밥"
@@ -15,8 +15,8 @@
         android:layout_alignParentTop="true"
         android:textSize="20sp" />
     <TextView
-        android:id="@+id/trans_since"
-        android:layout_below="@+id/trans_history"
+        android:id="@+id/tvTransSince"
+        android:layout_below="@+id/tvTransHistory"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="ex)2020.09.06 13:55"
@@ -24,19 +24,11 @@
         android:textSize="15sp" />
 
     <TextView
-        android:id="@+id/trans_money"
+        android:id="@+id/tvTransMoney"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="-50000"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:textSize="20sp" />
-    <TextView
-        android:id="@+id/trans_leftmoney"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="잔액:10000원"
-        android:layout_below="@+id/trans_money"
-        android:layout_alignParentRight="true"
-        android:textSize="15sp" />
+        android:textSize="25sp" />
 </RelativeLayout>

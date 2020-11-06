@@ -36,7 +36,7 @@ public class TransactionList extends Fragment {
     //layouts
     private Context context;
     private ViewGroup rootView;
-    private RecyclerView transactionList;
+    private RecyclerView rvMainTransactionList;
     private TransactionAdapter transactionAdapter;
 
     public TransactionList() {
@@ -92,15 +92,15 @@ public class TransactionList extends Fragment {
             JSONObject jsonObject = new JSONObject(response);
             loginMemberAccount.setAccountBalance(Integer.parseInt(jsonObject.getString("accountBalance")));
 
-            transactionList = rootView.findViewById(R.id.main_transaction_list);
+            rvMainTransactionList = rootView.findViewById(R.id.rvMainTransactionList);
             LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
-            transactionList.setLayoutManager(layoutManager);
+            rvMainTransactionList.setLayoutManager(layoutManager);
             transactionAdapter=new TransactionAdapter();
 
             ArrayList<Transaction> transactionArrayList=new ArrayList<>();
 
-            TextView TV_accountBalance=rootView.findViewById(R.id.TV_accountBalance);
-            TV_accountBalance.setText(jsonObject.getString("accountBalance"));
+            TextView tvAccountBalance=rootView.findViewById(R.id.tvAccountBalance);
+            tvAccountBalance.setText(jsonObject.getString("accountBalance"));
             int listTransactionSize = Integer.parseInt(jsonObject.getString("listTransactionSize"));
             if (listTransactionSize == 0) return;
             for (int i=0;i<listTransactionSize;i++) {
@@ -125,7 +125,7 @@ public class TransactionList extends Fragment {
             Collections.sort(transactionArrayList, noAsc);
 
             transactionAdapter.setItems(transactionArrayList);
-            transactionList.setAdapter(transactionAdapter);
+            rvMainTransactionList.setAdapter(transactionAdapter);
 
         } catch (JSONException e) {
             e.printStackTrace();

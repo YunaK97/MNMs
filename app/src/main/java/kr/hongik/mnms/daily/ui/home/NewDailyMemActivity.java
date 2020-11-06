@@ -34,13 +34,15 @@ public class NewDailyMemActivity extends AppCompatActivity {
 
     //layouts
     private MemberAdapter memberAdapter;
-    private RecyclerView friend_list;
-    private Button btn_newDailyMem;
+    private RecyclerView rvNewDailyMem;
+    private Button btnNewDailyMem;
 
     //variables
     private String TAG_SUCCESS = "success";
-    private String memberId;
     private ArrayList<Member> selectedFriend;
+
+    public NewDailyMemActivity() {
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +56,8 @@ public class NewDailyMemActivity extends AppCompatActivity {
         dailyGroup = (DailyGroup) intent.getSerializableExtra("dailyGroup");
         memberArrayList = (ArrayList<Member>) intent.getSerializableExtra("memberArrayList");
 
-        btn_newDailyMem = findViewById(R.id.btn_newDailyMem);
-        btn_newDailyMem.setOnClickListener(new View.OnClickListener() {
+        btnNewDailyMem = findViewById(R.id.btnNewDailyMem);
+        btnNewDailyMem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 requestAddMem();
@@ -108,9 +110,9 @@ public class NewDailyMemActivity extends AppCompatActivity {
             int showFriendSize = Integer.parseInt(jsonObject.getString("showFriendSize"));
             if (showFriendSize == 0) return;
 
-            friend_list = findViewById(R.id.RV_newDailyMem);
+            rvNewDailyMem = findViewById(R.id.rvNewDailyMem);
             LinearLayoutManager layoutManager = new LinearLayoutManager(NewDailyMemActivity.this, LinearLayoutManager.VERTICAL, false);
-            friend_list.setLayoutManager(layoutManager);
+            rvNewDailyMem.setLayoutManager(layoutManager);
             memberAdapter = new MemberAdapter();
             friendArrayList = new ArrayList<>();
 
@@ -143,7 +145,7 @@ public class NewDailyMemActivity extends AppCompatActivity {
             Collections.sort(friendArrayList, noAsc);
 
             memberAdapter.setItems(friendArrayList);
-            friend_list.setAdapter(memberAdapter);
+            rvNewDailyMem.setAdapter(memberAdapter);
         } catch (JSONException e) {
             e.printStackTrace();
         }

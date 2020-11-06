@@ -41,13 +41,13 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView friendlist_name, friendlist_id;
+        TextView tvFriendlistName, tvFriendlistId;
 
         ViewHolder(View itemView, final OnFriendItemClickListener listener, final OnFriendItemLongClickListener longlistener) {
             super(itemView);
 
-            friendlist_name = itemView.findViewById(R.id.friendlist_name);
-            friendlist_id = itemView.findViewById(R.id.friendlistlist_id);
+            tvFriendlistName = itemView.findViewById(R.id.tvFriendlistName);
+            tvFriendlistId = itemView.findViewById(R.id.tvFriendlistId);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -73,8 +73,8 @@ public class FriendListAdapter extends RecyclerView.Adapter<FriendListAdapter.Vi
         }
 
         public void setItem(Member item) {
-            friendlist_name.setText(item.getMemName());
-            friendlist_id.setText(item.getMemID());
+            tvFriendlistName.setText(item.getMemName());
+            tvFriendlistId.setText(item.getMemID());
         }
     }
 

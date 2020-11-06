@@ -61,9 +61,9 @@ public class MainMenuActivity extends AppCompatActivity {
 
     //layouts
     private ActionBar actionBar;
-    private TextView textName, accName;
-    private ImageButton btn_transaction, btn_membership, btn_daily, btn_friendList;
-    private ViewPager pager;
+    private TextView tvName, tvAccountNum;
+    private ImageButton btnTransaction, btnMembership, btnDaily, btnFriendList;
+    private ViewPager vpMainList;
     private NotificationManager notiManager;
     private NotificationCompat.Builder notiBuilder;
     public MyPagerAdapter adapter;
@@ -79,13 +79,13 @@ public class MainMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
 
         //id찾기
-        pager = findViewById(R.id.pager);
-        textName = findViewById(R.id.textName);
-        accName = findViewById(R.id.accName);
-        btn_transaction = findViewById(R.id.btn_transaction);
-        btn_membership = findViewById(R.id.btn_membership);
-        btn_daily = findViewById(R.id.btn_daily);
-        btn_friendList = findViewById(R.id.btn_friendList);
+        vpMainList = findViewById(R.id.vpMainList);
+        tvName = findViewById(R.id.tvName);
+        tvAccountNum = findViewById(R.id.tvAccountNum);
+        btnTransaction = findViewById(R.id.btnTransaction);
+        btnMembership = findViewById(R.id.btnMembership);
+        btnDaily = findViewById(R.id.btnDaily);
+        btnFriendList = findViewById(R.id.btnFriendList);
 
         //액션바
         actionBar = getSupportActionBar();
@@ -98,7 +98,7 @@ public class MainMenuActivity extends AppCompatActivity {
         loginMemberAccount = (Account) intent.getSerializableExtra("loginMemberAccount");
 
         //송금내역,membership,daily pager
-        pager.setOffscreenPageLimit(4);
+        vpMainList.setOffscreenPageLimit(4);
 
         adapter = new MyPagerAdapter(getSupportFragmentManager());
 
@@ -111,9 +111,9 @@ public class MainMenuActivity extends AppCompatActivity {
         FriendList friendList = new FriendList();
         adapter.addItem(friendList);
 
-        pager.setAdapter(adapter);
-        btn_transaction.setSelected(true);
-        pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        vpMainList.setAdapter(adapter);
+        btnTransaction.setSelected(true);
+        vpMainList.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -141,47 +141,47 @@ public class MainMenuActivity extends AppCompatActivity {
 
         showInfo();
 
-        btn_transaction.setOnClickListener(new View.OnClickListener() {
+        btnTransaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btn_transaction.setSelected(true);
-                btn_membership.setSelected(false);
-                btn_daily.setSelected(false);
-                btn_friendList.setSelected(false);
-                pager.setCurrentItem(0);
+                btnTransaction.setSelected(true);
+                btnMembership.setSelected(false);
+                btnDaily.setSelected(false);
+                btnFriendList.setSelected(false);
+                vpMainList.setCurrentItem(0);
             }
         });
 
-        btn_membership.setOnClickListener(new View.OnClickListener() {
+        btnMembership.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btn_transaction.setSelected(false);
-                btn_membership.setSelected(true);
-                btn_daily.setSelected(false);
-                btn_friendList.setSelected(false);
-                pager.setCurrentItem(1);
+                btnTransaction.setSelected(false);
+                btnMembership.setSelected(true);
+                btnDaily.setSelected(false);
+                btnFriendList.setSelected(false);
+                vpMainList.setCurrentItem(1);
             }
         });
 
-        btn_daily.setOnClickListener(new View.OnClickListener() {
+        btnDaily.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btn_transaction.setSelected(false);
-                btn_membership.setSelected(false);
-                btn_daily.setSelected(true);
-                btn_friendList.setSelected(false);
-                pager.setCurrentItem(2);
+                btnTransaction.setSelected(false);
+                btnMembership.setSelected(false);
+                btnDaily.setSelected(true);
+                btnFriendList.setSelected(false);
+                vpMainList.setCurrentItem(2);
             }
         });
 
-        btn_friendList.setOnClickListener(new View.OnClickListener() {
+        btnFriendList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                btn_transaction.setSelected(false);
-                btn_membership.setSelected(false);
-                btn_daily.setSelected(false);
-                btn_friendList.setSelected(true);
-                pager.setCurrentItem(3);
+                btnTransaction.setSelected(false);
+                btnMembership.setSelected(false);
+                btnDaily.setSelected(false);
+                btnFriendList.setSelected(true);
+                vpMainList.setCurrentItem(3);
             }
         });
 
@@ -248,36 +248,36 @@ public class MainMenuActivity extends AppCompatActivity {
 
     private void showInfo() {
         String text = "이름 : " + loginMember.getMemName();
-        textName.setText(text);
+        tvName.setText(text);
         text = "계좌번호 : " + loginMemberAccount.getAccountNum();
-        accName.setText(text);
+        tvAccountNum.setText(text);
     }
 
     private void switchPage(int position) {
         switch (position) {
             case 0:
-                btn_transaction.setSelected(true);
-                btn_membership.setSelected(false);
-                btn_daily.setSelected(false);
-                btn_friendList.setSelected(false);
+                btnTransaction.setSelected(true);
+                btnMembership.setSelected(false);
+                btnDaily.setSelected(false);
+                btnFriendList.setSelected(false);
                 break;
             case 1:
-                btn_transaction.setSelected(false);
-                btn_membership.setSelected(true);
-                btn_daily.setSelected(false);
-                btn_friendList.setSelected(false);
+                btnTransaction.setSelected(false);
+                btnMembership.setSelected(true);
+                btnDaily.setSelected(false);
+                btnFriendList.setSelected(false);
                 break;
             case 2:
-                btn_transaction.setSelected(false);
-                btn_membership.setSelected(false);
-                btn_daily.setSelected(true);
-                btn_friendList.setSelected(false);
+                btnTransaction.setSelected(false);
+                btnMembership.setSelected(false);
+                btnDaily.setSelected(true);
+                btnFriendList.setSelected(false);
                 break;
             case 3:
-                btn_transaction.setSelected(false);
-                btn_membership.setSelected(false);
-                btn_daily.setSelected(false);
-                btn_friendList.setSelected(true);
+                btnTransaction.setSelected(false);
+                btnMembership.setSelected(false);
+                btnDaily.setSelected(false);
+                btnFriendList.setSelected(true);
                 break;
         }
     }
@@ -425,17 +425,17 @@ public class MainMenuActivity extends AppCompatActivity {
                     Intent intent = new Intent(getApplicationContext(), NewMembershipActivity.class);
                     intent.putExtra("loginMember", loginMember);
                     startActivity(intent);
-                    pager.setCurrentItem(1);
+                    vpMainList.setCurrentItem(1);
                 } else if (selected[0] == 1) {
                     Intent intent = new Intent(getApplicationContext(), NewDailyActivity.class);
                     intent.putExtra("loginMember", loginMember);
                     startActivity(intent);
-                    pager.setCurrentItem(2);
+                    vpMainList.setCurrentItem(2);
                 } else if (selected[0] == 2) {
                     Intent intent = new Intent(getApplicationContext(), NewFriendActivity.class);
                     intent.putExtra("loginMember", loginMember);
                     startActivity(intent);
-                    pager.setCurrentItem(3);
+                    vpMainList.setCurrentItem(3);
                 }
             }
         });

@@ -35,12 +35,12 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView group_name;
+        TextView tvGroupName;
 
         ViewHolder(View itemView, final OnGroupItemClickListener listener, final OnGroupItemLongClickListener longListener) {
             super(itemView);
 
-            group_name = itemView.findViewById(R.id.group_name);
+            tvGroupName = itemView.findViewById(R.id.tvGroupName);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -66,7 +66,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder> 
         }
 
         public void setItem(Group item) {
-            group_name.setText(item.getGroupName());
+            tvGroupName.setText(item.getGroupName());
         }
     }
 

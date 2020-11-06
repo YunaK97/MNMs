@@ -42,8 +42,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     //layouts
     private ArrayAdapter bankTypeAdapter, emailTypeAdapter;
-    private Spinner email_type, bank_type;
-    private Button cameraBtn, signInBtn, emailAuth, emailCheck;
+    private Spinner spinnerEmailType, spinnerBankType;
+    private Button cameraBtn, btnSignIn, emailAuth, emailCheck;
 
     //urls
     private String curIp = "211.186.21.254:8090";
@@ -65,37 +65,37 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         setAccountNum();
 
         //회원가입 버튼
-        signInBtn = findViewById(R.id.btn_signIn);
-        signInBtn.setOnClickListener(this);
+        btnSignIn = findViewById(R.id.btnSignIn);
+        btnSignIn.setOnClickListener(this);
 
         //이메일 종류 선택
-        email_type = findViewById(R.id.email_type);
+        spinnerEmailType = findViewById(R.id.spinnerEmailType);
         emailTypeAdapter = ArrayAdapter.createFromResource(this, R.array.email_type, R.layout.support_simple_spinner_dropdown_item);
         emailTypeAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        email_type.setAdapter(emailTypeAdapter);
-        email_type.setSelection(0);
+        spinnerEmailType.setAdapter(emailTypeAdapter);
+        spinnerEmailType.setSelection(0);
 
         //은행 종류 선택
-        bank_type = findViewById(R.id.bank_type);
+        spinnerBankType = findViewById(R.id.spinnerBankType);
         bankTypeAdapter = ArrayAdapter.createFromResource(this, R.array.bank_type, R.layout.support_simple_spinner_dropdown_item);
         bankTypeAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        bank_type.setAdapter(bankTypeAdapter);
-        bank_type.setSelection(0);
+        spinnerBankType.setAdapter(bankTypeAdapter);
+        spinnerBankType.setSelection(0);
 
         //id 중복확인
-        Button overlap = findViewById(R.id.btn_idOverlap);
+        Button overlap = findViewById(R.id.btnIdOverlap);
         overlap.setOnClickListener(this);
 
         //이메일 확인
-        emailCheck = findViewById(R.id.btn_emailOverlap);
+        emailCheck = findViewById(R.id.btnEmailOverlap);
         emailCheck.setOnClickListener(this);
 
         //이메일 인증
-        emailAuth = findViewById(R.id.btn_emailAuth);
+        emailAuth = findViewById(R.id.btnEmailAuth);
         emailAuth.setOnClickListener(this);
 
         //민증확인
-        cameraBtn = findViewById(R.id.identify);
+        cameraBtn = findViewById(R.id.btnIdentify);
         cameraBtn.setOnClickListener(this);
         // 6.0 마쉬멜로우 이상일 경우에는 권한 체크 후 권한 요청
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -129,12 +129,12 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.btn_signIn:
+            case R.id.btnSignIn:
                 beforeSignInCheck();
                 break;
-            case R.id.btn_idOverlap:
-                checkID = ((TextView) findViewById(R.id.textID)).getText().toString();
-                checkID=checkID.trim();
+            case R.id.btnIdOverlap:
+                checkID = ((TextView) findViewById(R.id.etID)).getText().toString();
+                checkID = checkID.trim();
 
                 if (checkID.length() < 4 || checkID.length() > 20) {
                     showToast("4~20 글자 입력");
@@ -143,13 +143,13 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                     checkOverlap("id");
                 }
                 break;
-            case R.id.btn_emailOverlap:
-                String emailID = ((TextView) findViewById(R.id.textEmail)).getText().toString();
+            case R.id.btnEmailOverlap:
+                String emailID = ((TextView) findViewById(R.id.etEmail)).getText().toString();
                 if (TextUtils.isEmpty(emailID)) {
                     showToast("빈칸 노노");
                     return;
                 }
-                emailForm = email_type.getSelectedItem().toString();
+                emailForm = spinnerEmailType.getSelectedItem().toString();
                 if (emailForm.equals("이메일")) {
                     showToast("이메일을 확인하세요");
                     return;
@@ -158,11 +158,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 checkEmail = emailID + emailForm;
                 checkOverlap("email");
                 break;
-            case R.id.btn_emailAuth:
+            case R.id.btnEmailAuth:
                 authEmail = checkEmail;
                 checkOverlap("auth");
                 break;
-            case R.id.identify:
+            case R.id.btnIdentify:
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 startActivityForResult(cameraIntent, TAKE_PICTURE);
                 String tmpssn = "970822-10041004";
@@ -184,8 +184,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         signInMemberAccount.setAccountNum(accountNum);
 
-        TextView tv_accountNum = findViewById(R.id.textAccountNum);
-        tv_accountNum.setText(accountNum);
+        TextView tvAccountNum = findViewById(R.id.tvAccountNum);
+        tvAccountNum.setText(accountNum);
     }
 
     protected void checkOverlap(String TAG_TYPE) {
@@ -251,19 +251,19 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private boolean getUserInfo() {
-        String name = ((TextView) findViewById(R.id.textName)).getText().toString();
+        String name = ((TextView) findViewById(R.id.etName)).getText().toString();
         name = name.trim();
         if (TextUtils.isEmpty(name)) return false;
         else signInMember.setMemName(name);
 
-        String pw = ((TextView) findViewById(R.id.textPW)).getText().toString();
+        String pw = ((TextView) findViewById(R.id.etPW)).getText().toString();
         pw = pw.trim();
         if (TextUtils.isEmpty(pw)) return false;
         if (pw.length() < 8 || pw.length() > 20) {
             showToast("비밀번호 : 8~20자");
             return false;
         }
-        String checkPw = ((TextView) findViewById(R.id.textCheckPW)).getText().toString();
+        String checkPw = ((TextView) findViewById(R.id.etCheckPW)).getText().toString();
         checkPw = checkPw.trim();
         if (TextUtils.isEmpty(checkPw)) return false;
         if (pw.equals(checkPw)) {
@@ -271,14 +271,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             signInMember.setMemPW(pw);
         } else {
             showToast("비밀번호가 일치하지 않습니다.");
-            pwValid=false;
+            pwValid = false;
             return false;
         }
 
         String phone1, phone2, phone3, phoneNumber;
-        phone1 = ((TextView) findViewById(R.id.tv_signIn_phone1)).getText().toString();
-        phone2 = ((TextView) findViewById(R.id.tv_signIn_phone2)).getText().toString();
-        phone3 = ((TextView) findViewById(R.id.tv_signIn_phone3)).getText().toString();
+        phone1 = ((TextView) findViewById(R.id.tvSignInPhone1)).getText().toString();
+        phone2 = ((TextView) findViewById(R.id.tvSignInPhone2)).getText().toString();
+        phone3 = ((TextView) findViewById(R.id.tvSignInPhone3)).getText().toString();
         if (TextUtils.isEmpty(phone1) || TextUtils.isEmpty(phone2) || TextUtils.isEmpty(phone1))
             return false;
         if (phone1.length() != 3 || phone2.length() != 4 || phone3.length() != 4) {
@@ -292,30 +292,30 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private boolean getAccountInfo() {
-        if (bank_type.getSelectedItemPosition() == 0) {
+        if (spinnerBankType.getSelectedItemPosition() == 0) {
             signInMemberAccount.setAccountBank("AAAA");
-        } else if (bank_type.getSelectedItemPosition() == 1) {
+        } else if (spinnerBankType.getSelectedItemPosition() == 1) {
             signInMemberAccount.setAccountBank("AAAB");
-        } else if (bank_type.getSelectedItemPosition() == 2) {
+        } else if (spinnerBankType.getSelectedItemPosition() == 2) {
             signInMemberAccount.setAccountBank("AAAC");
-        } else if (bank_type.getSelectedItemPosition() == 3) {
+        } else if (spinnerBankType.getSelectedItemPosition() == 3) {
             signInMemberAccount.setAccountBank("AAAD");
-        } else if (bank_type.getSelectedItemPosition() == 4) {
+        } else if (spinnerBankType.getSelectedItemPosition() == 4) {
             signInMemberAccount.setAccountBank("AAAE");
-        } else if (bank_type.getSelectedItemPosition() == 5) {
+        } else if (spinnerBankType.getSelectedItemPosition() == 5) {
             signInMemberAccount.setAccountBank("AAAF");
-        } else if (bank_type.getSelectedItemPosition() == 6) {
+        } else if (spinnerBankType.getSelectedItemPosition() == 6) {
             signInMemberAccount.setAccountBank("AAAG");
         }
 
-        String accountBalance = "1000000";
+        String accountBalance = "10000000";
         if (TextUtils.isEmpty(accountBalance)) return false;
         else signInMemberAccount.setAccountBalance(Integer.parseInt(accountBalance));
 
-        String accountPw = ((TextView) findViewById(R.id.textAccountPW)).getText().toString();
+        String accountPw = ((TextView) findViewById(R.id.tvAccountPW)).getText().toString();
         accountPw = accountPw.trim();
 
-        String accountPWCheck = ((TextView) findViewById(R.id.textAccountPWCheck)).getText().toString();
+        String accountPWCheck = ((TextView) findViewById(R.id.tvAccountPWCheck)).getText().toString();
         accountPWCheck = accountPWCheck.trim();
         if (TextUtils.isEmpty(accountPw)) return false;
         else if (accountPw.length() != 4) {
@@ -407,17 +407,17 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         final EditText input = new EditText(this);
         input.setInputType(InputType.TYPE_CLASS_NUMBER);
 
-        final AlertDialog dialog=new AlertDialog.Builder(this,R.style.CustomDialog)
+        final AlertDialog dialog = new AlertDialog.Builder(this, R.style.CustomDialog)
                 .setTitle("인증")
                 .setView(input)
-                .setPositiveButton(android.R.string.ok,null)
-                .setNegativeButton(android.R.string.cancel,null)
+                .setPositiveButton(android.R.string.ok, null)
+                .setNegativeButton(android.R.string.cancel, null)
                 .create();
 
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog2) {
-                Button button=((AlertDialog)dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -432,32 +432,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 });
             }
         });
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomDialog);
-//        builder.setTitle("인증");
-//        builder.setMessage("인증번호를 입력하세요");
-//
-//        final EditText input = new EditText(this);
-//        input.setInputType(InputType.TYPE_CLASS_NUMBER);
-//        builder.setView(input);
-//
-//        builder.setPositiveButton("OK",
-//                new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        if ((input.getText().toString()).equals(number)) {
-//                            Toast.makeText(getApplicationContext(), "인증 성공", Toast.LENGTH_LONG).show();
-//                        } else {
-//                            Toast.makeText(getApplicationContext(), "인증번호가 일치하지 않습니다.", Toast.LENGTH_LONG).show();
-//                        }
-//
-//                    }
-//                });
-//        builder.setNegativeButton("CANCEL",
-//                new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        Toast.makeText(getApplicationContext(), "인증 취소", Toast.LENGTH_LONG).show();
-//                    }
-//                });
-//        builder.show();
     }
 
     private void registerBeginProcess(String response) {
@@ -515,11 +489,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         @Override
         protected void onPostExecute(String response) {
-            if(response.isEmpty()){
-                Log.d(TAG,"빈칸 옴!");
+            if (response.isEmpty()) {
+                Log.d(TAG, "빈칸 옴!");
                 return;
-            }else{
-                Log.d(TAG,response);
+            } else {
+                Log.d(TAG, response);
             }
 
             if (TAG.equals("idOverlap")) {

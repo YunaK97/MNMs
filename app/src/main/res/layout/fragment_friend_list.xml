@@ -17,7 +17,7 @@
         />
 
     <TextView
-        android:id="@+id/TV_friendList_friend"
+        android:id="@+id/tvFriendListFriend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -27,8 +27,8 @@
         android:textSize="30sp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_below="@+id/TV_friendList_friend"
-        android:id="@+id/main_friend_list"
+        android:layout_below="@+id/tvFriendListFriend"
+        android:id="@+id/rvMainFriendList"
         android:layout_marginTop="10sp"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

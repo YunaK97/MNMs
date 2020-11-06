@@ -8,7 +8,7 @@
     tools:context="kr.hongik.mnms.newprocesses.NewFriendActivity">
 
     <LinearLayout
-        android:id="@+id/layout_search"
+        android:id="@+id/LLSearch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10sp"
@@ -16,29 +16,29 @@
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/friend_search"
+            android:id="@+id/etFriendSearch"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:hint="친구의 id 입력"
             android:inputType="text" />
 
         <ImageButton
-            android:id="@+id/id_search"
+            android:id="@+id/btnIDsearch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@android:drawable/ic_menu_search" />
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/friend_layout"
+        android:id="@+id/LLFriendLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10sp"
         android:visibility="gone"
-        android:layout_below="@+id/layout_search"
+        android:layout_below="@+id/LLSearch"
         android:orientation="horizontal">
         <TextView
-            android:id="@+id/friend_id"
+            android:id="@+id/tvFriendID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -48,7 +48,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/friend_name"
+            android:id="@+id/tvFriendName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -57,7 +57,7 @@
             android:text="친구이름"
             android:textSize="20sp" />
         <Button
-            android:id="@+id/btn_addFriend"
+            android:id="@+id/btnAddFriend"
             style="@style/CustomButton"
             android:layout_gravity="center"
             android:text="@string/app_new_friend"
@@ -67,8 +67,8 @@
 
     <LinearLayout
         android:layout_alignParentBottom="true"
-        android:id="@+id/request_friend_layout"
-        android:layout_below="@+id/friend_layout"
+        android:id="@+id/LLRequestFriend"
+        android:layout_below="@+id/LLFriendLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -83,7 +83,7 @@
             android:textColor="@android:color/holo_red_dark"
             android:textSize="30sp" />
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/request_friend"
+            android:id="@+id/rvRequestFriend"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1" />
@@ -94,14 +94,14 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/request_accept"
+                android:id="@+id/btnRequestAccept"
                 style="@style/CustomButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="accept" />
 
             <Button
-                android:id="@+id/request_reject"
+                android:id="@+id/btnRequestReject"
                 style="@style/CustomButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

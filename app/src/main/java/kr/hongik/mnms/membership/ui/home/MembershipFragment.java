@@ -2,6 +2,7 @@ package kr.hongik.mnms.membership.ui.home;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,7 @@ public class MembershipFragment extends Fragment {
     private ArrayList<Transaction> transactionArrayList;
 
     //layouts
-    private RecyclerView mRecyclerView;
+    private RecyclerView rvMembership;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
@@ -53,7 +54,7 @@ public class MembershipFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_membership, container, false);
 
-        mRecyclerView = v.findViewById(R.id.my_recycler_view);
+        rvMembership = v.findViewById(R.id.rvMembership);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -86,9 +87,9 @@ public class MembershipFragment extends Fragment {
 
     private void setTransactionProcess(String response) {
         try {
-            mRecyclerView.setHasFixedSize(true);
+            rvMembership.setHasFixedSize(true);
             mLayoutManager = new LinearLayoutManager(getActivity());
-            mRecyclerView.setLayoutManager(mLayoutManager);
+            rvMembership.setLayoutManager(mLayoutManager);
 
             mAdapter = new TransactionAdapter();
 
@@ -102,7 +103,9 @@ public class MembershipFragment extends Fragment {
                 transact.setAccountNum(jsonObject.getString("accountNum" + i));
                 transact.setTransactID(Integer.parseInt(jsonObject.getString("transactID" + i)));
                 transact.setTransactHistroy(jsonObject.getString("transactHistory" + i));
+                Log.d("플마플마",jsonObject.getString("transactMoney"+i));
                 transact.setTransactMoney(Integer.parseInt(jsonObject.getString("transactMoney" + i)));
+                Log.d("마플마플",transact.getTransactMoney()+"");
                 transact.setSince(jsonObject.getString("since" + i));
                 transact.setMID(Integer.parseInt(jsonObject.getString("MID" + i)));
 
@@ -111,7 +114,7 @@ public class MembershipFragment extends Fragment {
                     transactionArrayList.add(transact);
                 }
             }
-            mRecyclerView.setAdapter(mAdapter);
+            rvMembership.setAdapter(mAdapter);
 
         } catch (JSONException e) {
             e.printStackTrace();

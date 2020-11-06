@@ -53,9 +53,9 @@ public class ManageMembershipActivity extends AppCompatActivity {
     private Calendar calendar;
 
     //Layouts
-    private EditText etNewNotSubmit, etNewName, etNewFee;
-    private TextView new_membership_payType, new_membership_payTypeNum;
-    private Button btn_feeSubmitComplete;
+    private EditText etNewMembershipNotsubmit, etNewMembershipName, etNembershipFee;
+    private TextView tvNewMembershipPaytype, tvNewMembershipPaytypeNum;
+    private Button btnFeeSubmitComplete;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -80,42 +80,42 @@ public class ManageMembershipActivity extends AppCompatActivity {
         final Intent intent = getIntent();
         loginMember = (Member) intent.getSerializableExtra("loginMember");
         membershipGroup = (MembershipGroup) intent.getSerializableExtra("membershipGroup");
-        
+
         setTitle(membershipGroup.getGroupName());
 
-        etNewFee = findViewById(R.id.new_membership_fee);
-        etNewName = findViewById(R.id.new_membership_name);
-        etNewNotSubmit = findViewById(R.id.new_membership_notsubmit);
-        btn_feeSubmitComplete = findViewById(R.id.btn_feeSubmitComplete);
+        etNembershipFee = findViewById(R.id.etNembershipFee);
+        etNewMembershipName = findViewById(R.id.etNewMembershipName);
+        etNewMembershipNotsubmit = findViewById(R.id.etNewMembershipNotsubmit);
+        btnFeeSubmitComplete = findViewById(R.id.btnFeeSubmitComplete);
 
-        etNewFee.setText(membershipGroup.getFee() / 10000 + "");
-        etNewNotSubmit.setText(membershipGroup.getNotSubmit() + "");
-        etNewName.setText(membershipGroup.getGroupName());
+        etNembershipFee.setText(membershipGroup.getFee() / 10000 + "");
+        etNewMembershipNotsubmit.setText(membershipGroup.getNotSubmit() + "");
+        etNewMembershipName.setText(membershipGroup.getGroupName());
 
-        new_membership_payType = findViewById(R.id.new_membership_payType);
-        new_membership_payTypeNum = findViewById(R.id.new_membership_payTypeNum);
+        tvNewMembershipPaytype = findViewById(R.id.tvNewMembershipPaytype);
+        tvNewMembershipPaytypeNum = findViewById(R.id.tvNewMembershipPaytypeNum);
 
         setPayDay();
         checkEndDay();
 
-        new_membership_payType.setOnClickListener(new View.OnClickListener() {
+        tvNewMembershipPaytype.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 CustomDialogDuration customDialogDuration = new CustomDialogDuration(ManageMembershipActivity.this);
-                customDialogDuration.callFunction(new_membership_payType, new_membership_payTypeNum);
+                customDialogDuration.callFunction(tvNewMembershipPaytype, tvNewMembershipPaytypeNum);
             }
         });
-        new_membership_payTypeNum.setOnClickListener(new View.OnClickListener() {
+        tvNewMembershipPaytypeNum.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
                 CustomDialogDuration customDialogDuration = new CustomDialogDuration(ManageMembershipActivity.this);
-                customDialogDuration.callFunction(new_membership_payType, new_membership_payTypeNum);
+                customDialogDuration.callFunction(tvNewMembershipPaytype, tvNewMembershipPaytypeNum);
             }
         });
 
-        btn_feeSubmitComplete.setOnClickListener(new View.OnClickListener() {
+        btnFeeSubmitComplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ManageMembershipActivity.this, R.style.CustomDialog);
@@ -141,9 +141,9 @@ public class ManageMembershipActivity extends AppCompatActivity {
 
     }
 
-    private void setPayDay(){
+    private void setPayDay() {
         if (membershipGroup.getPayDuration().equals("week")) {
-            new_membership_payType.setText("매주");
+            tvNewMembershipPaytype.setText("매주");
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             try {
@@ -156,25 +156,25 @@ public class ManageMembershipActivity extends AppCompatActivity {
 
                 switch (dayNum) {
                     case 1:
-                        new_membership_payTypeNum.setText("일");
+                        tvNewMembershipPaytypeNum.setText("일");
                         break;
                     case 2:
-                        new_membership_payTypeNum.setText("월");
+                        tvNewMembershipPaytypeNum.setText("월");
                         break;
                     case 3:
-                        new_membership_payTypeNum.setText("화");
+                        tvNewMembershipPaytypeNum.setText("화");
                         break;
                     case 4:
-                        new_membership_payTypeNum.setText("수");
+                        tvNewMembershipPaytypeNum.setText("수");
                         break;
                     case 5:
-                        new_membership_payTypeNum.setText("목");
+                        tvNewMembershipPaytypeNum.setText("목");
                         break;
                     case 6:
-                        new_membership_payTypeNum.setText("금");
+                        tvNewMembershipPaytypeNum.setText("금");
                         break;
                     case 7:
-                        new_membership_payTypeNum.setText("토");
+                        tvNewMembershipPaytypeNum.setText("토");
                         break;
                 }
             } catch (ParseException e) {
@@ -182,7 +182,7 @@ public class ManageMembershipActivity extends AppCompatActivity {
             }
 
         } else if (membershipGroup.getPayDuration().equals("month")) {
-            new_membership_payType.setText("매월");
+            tvNewMembershipPaytype.setText("매월");
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             try {
                 Date nDate = dateFormat.parse(membershipGroup.getPayDay());
@@ -191,13 +191,13 @@ public class ManageMembershipActivity extends AppCompatActivity {
                 cal.setTime(nDate);
 
                 int monNum = cal.get(Calendar.MONTH) + 1;
-                new_membership_payTypeNum.setText(monNum + "");
+                tvNewMembershipPaytypeNum.setText(monNum + "");
             } catch (ParseException e) {
                 //e.printStackTrace();
             }
 
         } else if (membershipGroup.getPayDuration().equals("year")) {
-            new_membership_payType.setText("매년");
+            tvNewMembershipPaytype.setText("매년");
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             try {
                 Date nDate = dateFormat.parse(membershipGroup.getPayDay());
@@ -207,7 +207,7 @@ public class ManageMembershipActivity extends AppCompatActivity {
 
                 int monNum = cal.get(Calendar.MONTH) + 1;
                 int dayNum = cal.get(Calendar.DATE);
-                new_membership_payTypeNum.setText(monNum + "-" + dayNum);
+                tvNewMembershipPaytypeNum.setText(monNum + "-" + dayNum);
             } catch (ParseException e) {
                 //e.printStackTrace();
             }
@@ -236,11 +236,11 @@ public class ManageMembershipActivity extends AppCompatActivity {
         }
 
         if (curDate.compareTo(payDate) >= 0) {
-            btn_feeSubmitComplete.setVisibility(View.VISIBLE);
-            btn_feeSubmitComplete.setClickable(true);
+            btnFeeSubmitComplete.setVisibility(View.VISIBLE);
+            btnFeeSubmitComplete.setClickable(true);
         } else {
-            btn_feeSubmitComplete.setVisibility(View.INVISIBLE);
-            btn_feeSubmitComplete.setClickable(false);
+            btnFeeSubmitComplete.setVisibility(View.INVISIBLE);
+            btnFeeSubmitComplete.setClickable(false);
         }
     }
 
@@ -267,8 +267,8 @@ public class ManageMembershipActivity extends AppCompatActivity {
         calendar.setTime(today);
         dayNum = calendar.get(Calendar.DAY_OF_WEEK);
 
-        String payType = ((TextView) findViewById(R.id.new_membership_payType)).getText().toString();
-        String payTypeNum = ((TextView) findViewById(R.id.new_membership_payTypeNum)).getText().toString();
+        String payType = ((TextView) findViewById(R.id.tvNewMembershipPaytype)).getText().toString();
+        String payTypeNum = ((TextView) findViewById(R.id.tvNewMembershipPaytypeNum)).getText().toString();
 
         if (payType.equals("매주")) {
             int payNum = dayNum;//내가 정한 요일
@@ -318,7 +318,7 @@ public class ManageMembershipActivity extends AppCompatActivity {
     private void changeDate() {
         String urlChangeDate = "http://" + loginMember.getIp() + "/membership/date";
 
-        String payType = ((TextView) findViewById(R.id.new_membership_payType)).getText().toString();
+        String payType = ((TextView) findViewById(R.id.tvNewMembershipPaytype)).getText().toString();
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("changeDate");
@@ -347,8 +347,8 @@ public class ManageMembershipActivity extends AppCompatActivity {
         networkTask.setTAG("changeUpdatePay");
         networkTask.setURL(urlChangeUpdatePay);
 
-        etNewFee = findViewById(R.id.new_membership_fee);
-        String newFee = (etNewFee).getText().toString();
+        etNembershipFee = findViewById(R.id.etNembershipFee);
+        String newFee = (etNembershipFee).getText().toString();
 
         Map<String, String> params = new HashMap<>();
         params.put("pay", newFee);
@@ -364,8 +364,8 @@ public class ManageMembershipActivity extends AppCompatActivity {
         networkTask.setTAG("changeMembershipName");
         networkTask.setURL(urlChangeMembershipName);
 
-        etNewName = findViewById(R.id.new_membership_name);
-        String newName = (etNewName).getText().toString();
+        etNewMembershipName = findViewById(R.id.etNewMembershipName);
+        String newName = (etNewMembershipName).getText().toString();
 
         Map<String, String> params = new HashMap<>();
         params.put("name", newName);
@@ -380,8 +380,8 @@ public class ManageMembershipActivity extends AppCompatActivity {
         NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("changeNotSubmit");
         networkTask.setURL(urlChangeNotSubmit);
-        etNewNotSubmit = findViewById(R.id.new_membership_notsubmit);
-        String newNotSubmit = (etNewNotSubmit).getText().toString();
+        etNewMembershipNotsubmit = findViewById(R.id.etNewMembershipNotsubmit);
+        String newNotSubmit = (etNewMembershipNotsubmit).getText().toString();
 
         Map<String, String> params = new HashMap<>();
         params.put("NotSubmit", newNotSubmit);

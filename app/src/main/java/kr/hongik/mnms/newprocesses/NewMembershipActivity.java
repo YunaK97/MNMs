@@ -33,15 +33,15 @@ public class NewMembershipActivity extends AppCompatActivity {
     private Member loginMember;
 
     //layouts
-    private RecyclerView friend_list;
+    private RecyclerView rvMembershipSelectFriend;
     private MemberAdapter memberAdapter;
-    private TextView TV_newMembership_accountNum;
+    private TextView tvNewMembershipAccountNum;
 
     //variables
     private String TAG_SUCCESS = "success";
     private ArrayList<String> groupName;
     private ArrayList<Member> selectedMember;
-    private String membership_pw, membership_name, membership_money, membership_notsubmit, membershipAccountNum;
+    private String etNewMembershipPW, etMembershipName, etMembershipMoney, etMembershipNotsubmit, membershipAccountNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class NewMembershipActivity extends AppCompatActivity {
         Intent intent = getIntent();
         loginMember = (Member) intent.getSerializableExtra("loginMember");
 
-        TV_newMembership_accountNum = findViewById(R.id.TV_newMembership_accountNum);
+        tvNewMembershipAccountNum = findViewById(R.id.tvNewMembershipAccountNum);
 
         Random random=new Random();
         random.setSeed(System.currentTimeMillis());
@@ -59,7 +59,7 @@ public class NewMembershipActivity extends AppCompatActivity {
         int div2 = random.nextInt(100)+1000;
         int div3 = random.nextInt(100)+1000;
         membershipAccountNum = (int) (Math.random() * div1) + "-" + (int) (Math.random() * div2) + "-" + (int) (Math.random() * div3);
-        TV_newMembership_accountNum.setText(membershipAccountNum);
+        tvNewMembershipAccountNum.setText(membershipAccountNum);
 
         //친구 가져와서 출력
         showFriend();
@@ -67,8 +67,8 @@ public class NewMembershipActivity extends AppCompatActivity {
         groupNameList();
 
         //membership 생성 버튼 클릭
-        Button btn_new_membership = findViewById(R.id.btn_new_membership);
-        btn_new_membership.setOnClickListener(new View.OnClickListener() {
+        Button btnNewMembership = findViewById(R.id.btnNewMembership);
+        btnNewMembership.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NewMembership();
@@ -78,26 +78,26 @@ public class NewMembershipActivity extends AppCompatActivity {
 
     protected void NewMembership() {
         selectedMember = new ArrayList<>();
-        membership_name = ((TextView) findViewById(R.id.membership_name)).getText().toString();
-        membership_money = ((TextView) findViewById(R.id.membership_money)).getText().toString();
-        membership_notsubmit = ((TextView) findViewById(R.id.membership_notsubmit)).getText().toString();
-        membership_pw = ((TextView) findViewById(R.id.TV_newMembership_pw)).getText().toString();
+        etMembershipName = ((TextView) findViewById(R.id.etMembershipName)).getText().toString();
+        etMembershipMoney = ((TextView) findViewById(R.id.etMembershipMoney)).getText().toString();
+        etMembershipNotsubmit = ((TextView) findViewById(R.id.etMembershipNotsubmit)).getText().toString();
+        etNewMembershipPW = ((TextView) findViewById(R.id.etNewMembershipPW)).getText().toString();
 
-        if (TextUtils.isEmpty(membership_money) || TextUtils.isEmpty(membership_name)|| TextUtils.isEmpty(membership_notsubmit)) {
+        if (TextUtils.isEmpty(etMembershipMoney) || TextUtils.isEmpty(etMembershipName)|| TextUtils.isEmpty(etMembershipNotsubmit)) {
             showToast("이러시면 안됨니다 고갱님 정보를 쓰세욥");
         } else {
-            if (membership_pw.length() != 4) {
+            if (etNewMembershipPW.length() != 4) {
                 showToast("비밀번호는 4자리 입니다.");
-            } else if(Integer.parseInt(membership_notsubmit)<1 || Integer.parseInt(membership_notsubmit)>365) {
+            } else if(Integer.parseInt(etMembershipNotsubmit)<1 || Integer.parseInt(etMembershipNotsubmit)>365) {
                 showToast("미납횟수는 1~365입니다.");
-            }else if(Integer.parseInt(membership_money)<1 || Integer.parseInt(membership_money)>2100000000){
+            }else if(Integer.parseInt(etMembershipMoney)<1 || Integer.parseInt(etMembershipMoney)>2100000000){
                 showToast("불가능한 회비입니다.");
             }
             else
              {
                 boolean overlap = true;
                 for (String s : groupName) {
-                    if (s.equals(membership_name)) {
+                    if (s.equals(etMembershipName)) {
                         overlap = false;
                         break;
                     }
@@ -126,12 +126,12 @@ public class NewMembershipActivity extends AppCompatActivity {
                     Map<String, String> params = new HashMap<>();
 
                     params.put("memID", loginMember.getMemID());
-                    params.put("membershipName", membership_name);
-                    params.put("membershipMoney", membership_money);
-                    params.put("membershipNotSubmit", membership_notsubmit);
+                    params.put("membershipName", etMembershipName);
+                    params.put("membershipMoney", etMembershipMoney);
+                    params.put("membershipNotSubmit", etMembershipNotsubmit);
                     params.put("accountNum", membershipAccountNum);
                     params.put("memberSize", selectedMember.size() + "");
-                    params.put("passWD",membership_pw);
+                    params.put("passWD",etNewMembershipPW);
                     for (int i = 0; i < selectedMember.size(); i++) {
                         params.put("memID" + i, selectedMember.get(i).getMemID());
                     }
@@ -182,9 +182,9 @@ public class NewMembershipActivity extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(response);
             int showFriendSize = Integer.parseInt(jsonObject.getString("showFriendSize"));
 
-            friend_list = findViewById(R.id.membership_select_friend);
+            rvMembershipSelectFriend = findViewById(R.id.rvMembershipSelectFriend);
             LinearLayoutManager layoutManager = new LinearLayoutManager(NewMembershipActivity.this, LinearLayoutManager.VERTICAL, false);
-            friend_list.setLayoutManager(layoutManager);
+            rvMembershipSelectFriend.setLayoutManager(layoutManager);
             memberAdapter = new MemberAdapter();
 
             for (int i = 0; i < showFriendSize; i++) {
@@ -197,7 +197,7 @@ public class NewMembershipActivity extends AppCompatActivity {
                 memberAdapter.addItem(member);
             }
 
-            friend_list.setAdapter(memberAdapter);
+            rvMembershipSelectFriend.setAdapter(memberAdapter);
         } catch (JSONException e) {
             e.printStackTrace();
         }

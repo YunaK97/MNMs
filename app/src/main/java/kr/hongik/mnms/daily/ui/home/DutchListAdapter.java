@@ -29,27 +29,27 @@ public class DutchListAdapter extends RecyclerView.Adapter<DutchListAdapter.View
     public  void  setItems(ArrayList<DailyQRActivity.DutchMember> items){this.items=items;}
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        TextView dutchMemUsed,dutchMemID,dutchRS;
+        TextView tvDutchMemUsed,tvDutchMemId,tvDutchRS;
 
         ViewHolder(View itemView){
             super(itemView);
 
-            dutchMemID=itemView.findViewById(R.id.dutchMemID);
-            dutchMemUsed=itemView.findViewById(R.id.dutchMemUsed);
-            dutchRS=itemView.findViewById(R.id.dutchRS);
+            tvDutchMemId=itemView.findViewById(R.id.tvDutchMemId);
+            tvDutchMemUsed=itemView.findViewById(R.id.tvDutchMemUsed);
+            tvDutchRS=itemView.findViewById(R.id.tvDutchRS);
 
         }
 
         public void setItem(DailyQRActivity.DutchMember item){
-            dutchRS.setText(item.getRsMoney()+"");
-            dutchMemID.setText(item.getMemID());
-            dutchMemUsed.setText(item.getUsedMoney()+"");
+            tvDutchRS.setText(item.getRsMoney()+"");
+            tvDutchMemId.setText(item.getMemID());
+            tvDutchMemUsed.setText(item.getUsedMoney()+"");
             if(item.getRsMoney()==0){
-                dutchRS.setTextColor(Color.BLACK);
+                tvDutchRS.setTextColor(Color.BLACK);
             }else if(item.getRsMoney()>0){
-                dutchRS.setTextColor(Color.RED);
+                tvDutchRS.setTextColor(Color.RED);
             }else{
-                dutchRS.setTextColor(Color.BLUE);
+                tvDutchRS.setTextColor(Color.BLUE);
             }
         }
     }

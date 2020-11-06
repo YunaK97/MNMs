@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:text="송금내역"
-        android:id="@+id/TV_transList_trans"
+        android:id="@+id/tvTransListTrans"
         android:layout_centerHorizontal="true"
         android:textColor="@android:color/holo_red_dark"
         android:textSize="30sp"
@@ -28,15 +28,15 @@
         />
     <TextView
         style="@style/CustomTextView"
-        android:layout_below="@+id/TV_transList_trans"
-        android:id="@+id/TV_accountBalance"
+        android:layout_below="@+id/tvTransListTrans"
+        android:id="@+id/tvAccountBalance"
         android:text="ex)1000원"
         android:layout_alignParentRight="true"
         />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/main_transaction_list"
-        android:layout_below="@+id/TV_accountBalance"
+        android:id="@+id/rvMainTransactionList"
+        android:layout_below="@+id/tvAccountBalance"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

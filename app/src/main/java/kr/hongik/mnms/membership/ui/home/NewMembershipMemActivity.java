@@ -42,8 +42,8 @@ public class NewMembershipMemActivity extends AppCompatActivity {
 
     //layouts
     private MemberAdapter memberAdapter;
-    private RecyclerView friend_list;
-    private Button btn_newMembershipMem;
+    private RecyclerView rvNewMembershipMem;
+    private Button btnNewMembershipMem;
 
     //variables
     private String TAG_SUCCESS = "success";
@@ -63,8 +63,8 @@ public class NewMembershipMemActivity extends AppCompatActivity {
         membershipGroup = (MembershipGroup) intent.getSerializableExtra("membershipGroup");
         memberArrayList = (ArrayList<Member>) intent.getSerializableExtra("memberArrayList");
 
-        btn_newMembershipMem = findViewById(R.id.btn_newMembershipMem);
-        btn_newMembershipMem.setOnClickListener(new View.OnClickListener() {
+        btnNewMembershipMem = findViewById(R.id.btnNewMembershipMem);
+        btnNewMembershipMem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 requestAddMem();
@@ -93,9 +93,9 @@ public class NewMembershipMemActivity extends AppCompatActivity {
             int showFriendSize = Integer.parseInt(jsonObject.getString("showFriendSize"));
             if (showFriendSize == 0) return;
 
-            friend_list = findViewById(R.id.RV_newMembershipMem);
+            rvNewMembershipMem = findViewById(R.id.rvNewMembershipMem);
             LinearLayoutManager layoutManager = new LinearLayoutManager(NewMembershipMemActivity.this, LinearLayoutManager.VERTICAL, false);
-            friend_list.setLayoutManager(layoutManager);
+            rvNewMembershipMem.setLayoutManager(layoutManager);
             memberAdapter = new MemberAdapter();
             friendArrayList = new ArrayList<>();
 
@@ -128,7 +128,7 @@ public class NewMembershipMemActivity extends AppCompatActivity {
             Collections.sort(friendArrayList, noAsc);
 
             memberAdapter.setItems(friendArrayList);
-            friend_list.setAdapter(memberAdapter);
+            rvNewMembershipMem.setAdapter(memberAdapter);
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -65,7 +65,7 @@ public class DailyFragment extends Fragment {
     private Account loginMemberAccount;
 
     //layouts
-    private RecyclerView mRecyclerView;
+    private RecyclerView rvDaily;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
 
@@ -82,13 +82,13 @@ public class DailyFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_daily, container, false);
 
-        mRecyclerView = rootView.findViewById(R.id.recyclerView_daily);
-        mRecyclerView.setHasFixedSize(true);
+        rvDaily = rootView.findViewById(R.id.rvDaily);
+        rvDaily.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        rvDaily.setLayoutManager(mLayoutManager);
 
         mAdapter = new TransactionAdapter();
-        mRecyclerView.setAdapter(mAdapter);
+        rvDaily.setAdapter(mAdapter);
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -106,11 +106,11 @@ public class DailyFragment extends Fragment {
         @Override
         public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
             //단위 가져오기 - spinner
-            if (i == R.id.rbt_up) {
+            if (i == R.id.rbtUP) {
 
-            } else if (i == R.id.rbt_down) {
+            } else if (i == R.id.rbtRound) {
 
-            } else if (i == R.id.rbt_round) {
+            } else if (i == R.id.rbtDown) {
 
             }
         }
@@ -136,10 +136,10 @@ public class DailyFragment extends Fragment {
     }
 
     private void setTransactionProcess(String response){
-        mRecyclerView = rootView.findViewById(R.id.recyclerView_daily);
-        mRecyclerView.setHasFixedSize(true);
+        rvDaily = rootView.findViewById(R.id.rvDaily);
+        rvDaily.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        rvDaily.setLayoutManager(mLayoutManager);
 
         mAdapter = new TransactionAdapter();
 
@@ -159,7 +159,7 @@ public class DailyFragment extends Fragment {
                 ((TransactionAdapter) mAdapter).addItem(transact);
             }
 
-            mRecyclerView.setAdapter(mAdapter);
+            rvDaily.setAdapter(mAdapter);
 
         } catch (JSONException e) {
             e.printStackTrace();

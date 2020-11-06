@@ -32,13 +32,13 @@ public class NewDailyActivity extends AppCompatActivity {
     //layouts
     private MemberAdapter memberAdapter;
     private ArrayList<Member> arrayList;
-    private RecyclerView friend_list;
+    private RecyclerView rvDailySelectedFriend;
 
     //variable
     private ArrayList<Member> selectedMember;
     private ArrayList<String> groupName;
     private String TAG_SUCCESS = "success";
-    private String daily_name;
+    private String etDailyName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +55,8 @@ public class NewDailyActivity extends AppCompatActivity {
 
         //membership 생성 버튼 클릭
 
-        Button btn_new_daily = findViewById(R.id.btn_new_daily);
-        btn_new_daily.setOnClickListener(new View.OnClickListener() {
+        Button btnNewDaily = findViewById(R.id.btnNewDaily);
+        btnNewDaily.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NewDaily();
@@ -66,13 +66,13 @@ public class NewDailyActivity extends AppCompatActivity {
 
     private void NewDaily() {
         selectedMember = new ArrayList<>();
-        daily_name = ((TextView) findViewById(R.id.daily_name)).getText().toString();
-        if (TextUtils.isEmpty(daily_name)) {
+        etDailyName = ((TextView) findViewById(R.id.etDailyName)).getText().toString();
+        if (TextUtils.isEmpty(etDailyName)) {
             showToast("이러시면 안됨니다 고갱님 정보를 쓰세욥");
         } else {
             boolean overlap = true;
             for (String s : groupName) {
-                if (s.equals(daily_name)) {
+                if (s.equals(etDailyName)) {
                     overlap = false;
                 }
             }
@@ -97,7 +97,7 @@ public class NewDailyActivity extends AppCompatActivity {
                 networkTask.setTAG("newDaily");
 
                 Map<String, String> params = new HashMap<>();
-                params.put("dailyName", daily_name);
+                params.put("dailyName", etDailyName);
                 params.put("memID",loginMember.getMemID());
                 params.put("memberSize",selectedMember.size()+"");
                 for (int i = 0; i < selectedMember.size(); i++) {
@@ -169,9 +169,9 @@ public class NewDailyActivity extends AppCompatActivity {
             JSONObject jsonObject = new JSONObject(response);
             int showFriendSize = Integer.parseInt(jsonObject.getString("showFriendSize"));
 
-            friend_list = findViewById(R.id.daily_selected_friend);
+            rvDailySelectedFriend = findViewById(R.id.rvDailySelectedFriend);
             LinearLayoutManager layoutManager = new LinearLayoutManager(NewDailyActivity.this, LinearLayoutManager.VERTICAL, false);
-            friend_list.setLayoutManager(layoutManager);
+            rvDailySelectedFriend.setLayoutManager(layoutManager);
             memberAdapter = new MemberAdapter();
 
             for (int i = 0; i < showFriendSize; i++) {
@@ -184,7 +184,7 @@ public class NewDailyActivity extends AppCompatActivity {
                 memberAdapter.addItem(member);
             }
 
-            friend_list.setAdapter(memberAdapter);
+            rvDailySelectedFriend.setAdapter(memberAdapter);
         } catch (JSONException e) {
             e.printStackTrace();
         }

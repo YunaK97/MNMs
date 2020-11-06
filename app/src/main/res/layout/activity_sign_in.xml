@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/TV_signIn"
+        android:id="@+id/tvSignIn"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
@@ -16,15 +16,15 @@
         android:textSize="30sp" />
 
     <LinearLayout
-        android:layout_below="@+id/TV_signIn"
-        android:id="@+id/LL_signIn_name"
+        android:layout_below="@+id/tvSignIn"
+        android:id="@+id/LLSignInName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="3sp"
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/textName"
+            android:id="@+id/etName"
             style="@style/CustomTextView"
             android:layout_width="0dp"
             android:layout_weight="1"
@@ -34,21 +34,21 @@
             android:inputType="text" />
 
         <Button
-            android:id="@+id/identify"
+            android:id="@+id/btnIdentify"
             style="@style/CustomButton"
             android:text="@string/btn_identify" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_below="@+id/LL_signIn_name"
-        android:id="@+id/LL_signIn_id"
+        android:layout_below="@+id/LLSignInName"
+        android:id="@+id/LLSignInId"
         android:layout_margin="3sp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/textID"
+            android:id="@+id/etID"
             style="@style/CustomTextView"
             android:background="@drawable/sidecustom_round"
             android:layout_weight="1"
@@ -56,27 +56,27 @@
             android:inputType="text" />
 
         <Button
-            android:id="@+id/btn_idOverlap"
+            android:id="@+id/btnIdOverlap"
             style="@style/CustomButton"
             android:text="@string/btn_overlap" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_below="@+id/LL_signIn_id"
-        android:id="@+id/LL_signIn_pw"
+        android:layout_below="@+id/LLSignInId"
+        android:id="@+id/LLSignInPw"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="3sp"
         android:orientation="vertical">
         <EditText
-            android:id="@+id/textPW"
+            android:id="@+id/etPW"
             style="@style/CustomTextView"
             android:layout_width="match_parent"
             android:background="@drawable/sidecustom_round"
             android:hint="@string/hint_pw"
             android:inputType="textPassword" />
         <EditText
-            android:id="@+id/textCheckPW"
+            android:id="@+id/etCheckPW"
             style="@style/CustomTextView"
             android:layout_width="match_parent"
             android:background="@drawable/sidecustom_round"
@@ -88,9 +88,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/LL_signIn_phone"
+        android:id="@+id/LLSignInPhone"
         android:gravity="center"
-        android:layout_below="@id/LL_signIn_pw"
+        android:layout_below="@id/LLSignInPw"
         >
         <TextView
             style="@style/CustomTextView"
@@ -102,7 +102,7 @@
         <EditText
             android:background="@drawable/sidecustom_round"
             style="@style/CustomTextView"
-            android:id="@+id/tv_signIn_phone1"
+            android:id="@+id/tvSignInPhone1"
             android:layout_width="match_parent"
             android:inputType="number"
             android:layout_weight="1"
@@ -117,7 +117,7 @@
             />
         <EditText
             style="@style/CustomTextView"
-            android:id="@+id/tv_signIn_phone2"
+            android:id="@+id/tvSignInPhone2"
             android:layout_weight="1"
             android:inputType="number"
             android:layout_width="match_parent"
@@ -133,7 +133,7 @@
             />
         <EditText
             style="@style/CustomTextView"
-            android:id="@+id/tv_signIn_phone3"
+            android:id="@+id/tvSignInPhone3"
             android:layout_weight="1"
             android:inputType="number"
             android:layout_width="match_parent"
@@ -143,14 +143,14 @@
 
     <LinearLayout
         android:layout_margin="3sp"
-        android:layout_below="@+id/LL_signIn_phone"
-        android:id="@+id/LL_signIn_email"
+        android:layout_below="@+id/LLSignInPhone"
+        android:id="@+id/LLSignInEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
         <EditText
-            android:id="@+id/textEmail"
+            android:id="@+id/etEmail"
             style="@style/CustomTextView"
             android:layout_width="match_parent"
             android:layout_weight="1"
@@ -168,7 +168,7 @@
 
         <Spinner
             android:background="@drawable/sidecustom_round"
-            android:id="@+id/email_type"
+            android:id="@+id/spinnerEmailType"
             android:layout_width="match_parent"
             android:layout_height="25sp"
             android:layout_margin="2sp"
@@ -176,11 +176,11 @@
             android:layout_weight="1"
             android:dropDownWidth="250dp" />
         <Button
-            android:id="@+id/btn_emailOverlap"
+            android:id="@+id/btnEmailOverlap"
             style="@style/CustomButton"
             android:text="@string/btn_email" />
         <Button
-            android:id="@+id/btn_emailAuth"
+            android:id="@+id/btnEmailAuth"
             style="@style/CustomButton"
             android:visibility="gone"
             android:text="Email 인증" />
@@ -188,15 +188,15 @@
     </LinearLayout>
 
     <LinearLayout
-        android:layout_below="@id/LL_signIn_email"
-        android:id="@+id/LL_signIn_account"
+        android:layout_below="@id/LLSignInEmail"
+        android:id="@+id/LLSignInAccount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal">
         <Spinner
             android:background="@drawable/sidecustom_round"
-            android:id="@+id/bank_type"
+            android:id="@+id/spinnerBankType"
             android:layout_width="200sp"
             android:layout_height="match_parent"
             android:layout_margin="10sp"
@@ -205,7 +205,7 @@
             android:dropDownWidth="150dp" />
 
         <TextView
-            android:id="@+id/textAccountNum"
+            android:id="@+id/tvAccountNum"
             style="@style/CustomTextView"
             android:layout_width="match_parent"
             android:layout_weight="1"
@@ -214,16 +214,16 @@
     </LinearLayout>
 
     <EditText
-        android:id="@+id/textAccountPW"
-        android:layout_below="@+id/LL_signIn_account"
+        android:id="@+id/tvAccountPW"
+        android:layout_below="@+id/LLSignInAccount"
         style="@style/CustomTextView"
         android:background="@drawable/sidecustom_round"
-        android:layout_toLeftOf="@id/textAccountPWCheck"
+        android:layout_toLeftOf="@id/tvAccountPWCheck"
         android:hint="@string/hint_bankpw"
         android:inputType="numberPassword" />
     <EditText
-        android:id="@+id/textAccountPWCheck"
-        android:layout_below="@+id/LL_signIn_account"
+        android:id="@+id/tvAccountPWCheck"
+        android:layout_below="@+id/LLSignInAccount"
         style="@style/CustomTextView"
         android:layout_alignParentRight="true"
         android:background="@drawable/sidecustom_round"
@@ -234,7 +234,7 @@
     <Button
         style="@style/CustomButton"
         android:text="회원가입"
-        android:id="@+id/btn_signIn"
+        android:id="@+id/btnSignIn"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         />

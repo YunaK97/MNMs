@@ -8,11 +8,11 @@
 
     <LinearLayout
         android:padding="10sp"
-        android:id="@+id/linearLayout1"
+        android:id="@+id/LL1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:layout_above="@id/linearLayout2"
+        android:layout_above="@id/LL2"
         android:layout_centerInParent="true"
         android:orientation="horizontal">
 
@@ -24,7 +24,7 @@
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/new_membership_name"
+            android:id="@+id/etNewMembershipName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -36,11 +36,11 @@
 
     <LinearLayout
         android:padding="10sp"
-        android:id="@+id/linearLayout2"
+        android:id="@+id/LL2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:layout_above="@id/linearLayout3"
+        android:layout_above="@id/LL3"
         android:layout_centerInParent="true"
         android:orientation="horizontal">
 
@@ -52,7 +52,7 @@
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/new_membership_fee"
+            android:id="@+id/etNembershipFee"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -64,7 +64,7 @@
 
     <LinearLayout
         android:padding="10sp"
-        android:id="@+id/linearLayout3"
+        android:id="@+id/LL3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -79,7 +79,7 @@
             android:textSize="20sp" />
 
         <EditText
-            android:id="@+id/new_membership_notsubmit"
+            android:id="@+id/etNewMembershipNotsubmit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -90,11 +90,11 @@
     </LinearLayout>
     <LinearLayout
         android:padding="10sp"
-        android:id="@+id/linearLayout4"
+        android:id="@+id/LL4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:layout_below="@+id/linearLayout3"
+        android:layout_below="@+id/LL3"
         android:orientation="horizontal">
 
         <TextView
@@ -109,10 +109,10 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_weight="1"
-            android:id="@+id/LL_manage_pay"
+            android:id="@+id/LLManagePayDuration"
             >
             <TextView
-                android:id="@+id/new_membership_payType"
+                android:id="@+id/tvNewMembershipPaytype"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -120,7 +120,7 @@
                 android:inputType="number"
                 android:textSize="20sp" />
             <TextView
-                android:id="@+id/new_membership_payTypeNum"
+                android:id="@+id/tvNewMembershipPaytypeNum"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -139,6 +139,6 @@
         android:text="회비 마감"
         android:visibility="invisible"
         android:clickable="false"
-        android:id="@+id/btn_feeSubmitComplete"
+        android:id="@+id/btnFeeSubmitComplete"
         />
 </RelativeLayout>

@@ -46,7 +46,7 @@ public class MembershipMemFragment extends Fragment {
     private ArrayList<Member> memberArrayList;
 
     //Layouts
-    private RecyclerView memberList;
+    private RecyclerView rvMembershipMemberList;
     private MemberListAdapter presidentMemberAdapter;
     private FriendListAdapter normalMemberAdapter;
 
@@ -79,12 +79,12 @@ public class MembershipMemFragment extends Fragment {
     }
 
     private void showMember() {
-        memberList = rootView.findViewById(R.id.RV_membership_member_list);
+        rvMembershipMemberList = rootView.findViewById(R.id.rvMembershipMemberList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
-        memberList.setLayoutManager(layoutManager);
+        rvMembershipMemberList.setLayoutManager(layoutManager);
         normalMemberAdapter = new FriendListAdapter();
         normalMemberAdapter.setItems(memberArrayList);
-        memberList.setAdapter(normalMemberAdapter);
+        rvMembershipMemberList.setAdapter(normalMemberAdapter);
     }
 
     private void selectDelMember(final int position) {
@@ -171,9 +171,9 @@ public class MembershipMemFragment extends Fragment {
 
     private void submitLateFeeProcess(String response) {
         //회장만 미납자 볼수있게해야함
-        memberList = rootView.findViewById(R.id.RV_membership_member_list);
+        rvMembershipMemberList = rootView.findViewById(R.id.rvMembershipMemberList);
         LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
-        memberList.setLayoutManager(layoutManager);
+        rvMembershipMemberList.setLayoutManager(layoutManager);
         presidentMemberAdapter = new MemberListAdapter();
 
         Map<String, String> submitList = new HashMap<>();
@@ -205,7 +205,7 @@ public class MembershipMemFragment extends Fragment {
             presidentMemberAdapter.addItem(membershipMember);
         }
 
-        memberList.setAdapter(presidentMemberAdapter);
+        rvMembershipMemberList.setAdapter(presidentMemberAdapter);
 
         presidentMemberAdapter.setOnLongClickListener(new OnMemberListLongClickListener() {
             @Override

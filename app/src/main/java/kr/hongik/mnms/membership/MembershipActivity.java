@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -27,6 +28,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
+
 import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
@@ -44,8 +46,8 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
     private ArrayList<Member> memberArrayList;
 
     //Layouts
-    private ViewPager viewPager;
-    private FloatingActionButton fab_membership_main, fab_membership_member, fab_membership_trans, fab_membership_manage;
+    private ViewPager vpMembership;
+    private FloatingActionButton fabMembershipMain, fabMembershipMember, fabMembershipTrans, fabMembershipManage;
     private Animation fab_open, fab_close;
     private boolean isFabOpen = false;
 
@@ -60,14 +62,14 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
 
         fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
         fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);
-        fab_membership_main = findViewById(R.id.fab_membership_main);
-        fab_membership_member = findViewById(R.id.fab_membership_member);
-        fab_membership_trans = findViewById(R.id.fab_membership_trans);
-        fab_membership_manage = findViewById(R.id.fab_membership_manage);
-        fab_membership_main.setOnClickListener(this);
-        fab_membership_trans.setOnClickListener(this);
-        fab_membership_member.setOnClickListener(this);
-        fab_membership_manage.setOnClickListener(this);
+        fabMembershipMain = findViewById(R.id.fabMembershipMain);
+        fabMembershipMember = findViewById(R.id.fabMembershipMember);
+        fabMembershipTrans = findViewById(R.id.fabMembershipTrans);
+        fabMembershipManage = findViewById(R.id.fabMembershipManage);
+        fabMembershipMain.setOnClickListener(this);
+        fabMembershipTrans.setOnClickListener(this);
+        fabMembershipMember.setOnClickListener(this);
+        fabMembershipManage.setOnClickListener(this);
 
         Intent intent = getIntent();
         membershipGroup = (MembershipGroup) intent.getSerializableExtra("membershipGroup");
@@ -94,26 +96,26 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View v) {
         Intent intent;
         switch (v.getId()) {
-            case R.id.fab_membership_main:
+            case R.id.fabMembershipMain:
                 toggleFab();
                 break;
-            case R.id.fab_membership_trans:
+            case R.id.fabMembershipTrans:
                 toggleFab();
-                if(membershipGroup.getPresident().equals(loginMember.getMemName())){
+                if (membershipGroup.getPresident().equals(loginMember.getMemID())) {
                     //돈사용 or 회비납입 중 선택
                     selectTransType();
-                }else{
+                } else {
                     //회비납입만 가능
-                    intent=new Intent(MembershipActivity.this, NewFeeActivity.class);
-                    intent.putExtra("loginMember",loginMember);
-                    intent.putExtra("loginMemberAccount",loginMemberAccount);
-                    intent.putExtra("membershipGroup",membershipGroup);
+                    intent = new Intent(MembershipActivity.this, NewFeeActivity.class);
+                    intent.putExtra("loginMember", loginMember);
+                    intent.putExtra("loginMemberAccount", loginMemberAccount);
+                    intent.putExtra("membershipGroup", membershipGroup);
 
                     startActivity(intent);
                 }
 
                 break;
-            case R.id.fab_membership_member:
+            case R.id.fabMembershipMember:
                 toggleFab();
                 intent = new Intent(MembershipActivity.this, NewMembershipMemActivity.class);
                 intent.putExtra("loginMember", loginMember);
@@ -122,7 +124,7 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
 
                 startActivityForResult(intent, TAG_MEM);
                 break;
-            case R.id.fab_membership_manage:
+            case R.id.fabMembershipManage:
                 toggleFab();
                 intent = new Intent(MembershipActivity.this, ManageMembershipActivity.class);
                 intent.putExtra("loginMember", loginMember);
@@ -134,10 +136,10 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
         }
     }
 
-    private void selectTransType(){
+    private void selectTransType() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomDialog);
 
-        final String[] items = {"회비내기", "돈사용"};
+        final String[] items = {"공금사용", "회비내기"};
         final Integer[] selected = {0};
 
         builder.setTitle("추가 하실 것은?");
@@ -164,10 +166,10 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
 
                 } else if (selected[0] == 1) {
                     //회비납입
-                    Intent intent=new Intent(MembershipActivity.this, NewFeeActivity.class);
-                    intent.putExtra("loginMember",loginMember);
-                    intent.putExtra("loginMemberAccount",loginMemberAccount);
-                    intent.putExtra("membershipGroup",membershipGroup);
+                    Intent intent = new Intent(MembershipActivity.this, NewFeeActivity.class);
+                    intent.putExtra("loginMember", loginMember);
+                    intent.putExtra("loginMemberAccount", loginMemberAccount);
+                    intent.putExtra("membershipGroup", membershipGroup);
                     startActivity(intent);
                 }
             }
@@ -203,23 +205,23 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
 
     private void toggleFab() {
         if (isFabOpen) {
-            fab_membership_member.startAnimation(fab_close);
-            fab_membership_trans.startAnimation(fab_close);
-            fab_membership_trans.setClickable(false);
-            fab_membership_member.setClickable(false);
+            fabMembershipMember.startAnimation(fab_close);
+            fabMembershipTrans.startAnimation(fab_close);
+            fabMembershipTrans.setClickable(false);
+            fabMembershipMember.setClickable(false);
             if (membershipGroup.getPresident().equals(loginMember.getMemID())) {
-                fab_membership_manage.startAnimation(fab_close);
-                fab_membership_manage.setClickable(false);
+                fabMembershipManage.startAnimation(fab_close);
+                fabMembershipManage.setClickable(false);
             }
             isFabOpen = false;
         } else {
-            fab_membership_member.startAnimation(fab_open);
-            fab_membership_trans.startAnimation(fab_open);
-            fab_membership_trans.setClickable(true);
-            fab_membership_member.setClickable(true);
+            fabMembershipMember.startAnimation(fab_open);
+            fabMembershipTrans.startAnimation(fab_open);
+            fabMembershipTrans.setClickable(true);
+            fabMembershipMember.setClickable(true);
             if (membershipGroup.getPresident().equals(loginMember.getMemID())) {
-                fab_membership_manage.startAnimation(fab_open);
-                fab_membership_manage.setClickable(true);
+                fabMembershipManage.startAnimation(fab_open);
+                fabMembershipManage.setClickable(true);
             }
             isFabOpen = true;
         }
@@ -239,41 +241,43 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
             membershipGroup.setAccountNum(jsonObject.getString("accountNum"));
             membershipGroup.setGroupName(jsonObject.getString("groupName"));
             membershipGroup.setPayDuration(jsonObject.getString("payDuration"));
-
-            showMembershipMem();
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        showMembershipMem();
     }
 
-    private void showMembershipMem(){
-        String urlShowMembershipMem="http://"+loginMember.getIp()+"/membership/member";
+    private void showMembershipMem() {
+        String urlShowMembershipMem = "http://" + loginMember.getIp() + "/membership/member";
 
-        NetworkTask networkTask=new NetworkTask();
+        NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("showMembershipMem");
         networkTask.setURL(urlShowMembershipMem);
 
-        Map<String,String> params=new HashMap<>();
-        params.put("GID",membershipGroup.getGID()+"");
+        Map<String, String> params = new HashMap<>();
+        params.put("GID", membershipGroup.getGID() + "");
 
         networkTask.execute(params);
     }
 
     private void showMemberProcess(String response) {
+        String presidentName = "a";
         memberArrayList = new ArrayList<>();
         try {
-            JSONObject jsonObject=new JSONObject(response);
+            JSONObject jsonObject = new JSONObject(response);
             int membershipMemberSize = Integer.parseInt(jsonObject.getString("membershipMemberSize"));
 
             for (int i = 0; i < membershipMemberSize; i++) {
-                String friendId = jsonObject.getString("memID"+i);
-                String friendName = jsonObject.getString("memName"+i);
+                String friendId = jsonObject.getString("memID" + i);
+                String friendName = jsonObject.getString("memName" + i);
 
                 Member member = new Member();
                 member.setMemName(friendName);
                 member.setMemID(friendId);
                 memberArrayList.add(member);
+                if (membershipGroup.getPresident().equals(friendId)) {
+                    presidentName = friendName;
+                }
             }
 
             Comparator<Member> noAsc = new Comparator<Member>() {
@@ -290,18 +294,27 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
             e.printStackTrace();
         }
 
+        TextView tvMembershipName, tvMembershipPresident, tvMembershipAccountNum;
+        tvMembershipName = findViewById(R.id.tvMembershipName);
+        tvMembershipPresident = findViewById(R.id.tvMembershipPresident);
+        tvMembershipAccountNum = findViewById(R.id.tvMembershipAccountNum);
+
+        tvMembershipName.setText("그룹명:" + membershipGroup.getGroupName());
+        tvMembershipPresident.setText("회장: " + presidentName);
+        tvMembershipAccountNum.setText("그룹계좌번호: " + membershipGroup.getAccountNum());
+
         Bundle bundle = new Bundle();
         bundle.putSerializable("membershipGroup", membershipGroup);
         bundle.putSerializable("loginMember", loginMember);
         bundle.putSerializable("loginMemberAccount", loginMemberAccount);
         bundle.putSerializable("memberArrayList", memberArrayList);
 
-        viewPager = findViewById(R.id.viewpager_membership);
+        vpMembership = findViewById(R.id.vpMembership);
         MembershipPagerAdapter adapter = new MembershipPagerAdapter(getSupportFragmentManager(), bundle);
-        viewPager.setAdapter(adapter);
+        vpMembership.setAdapter(adapter);
 
-        TabLayout tabLayout = findViewById(R.id.tabLayout_membership);
-        tabLayout.setupWithViewPager(viewPager);
+        TabLayout tvMembership = findViewById(R.id.tlMembership);
+        tvMembership.setupWithViewPager(vpMembership);
     }
 
     private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
@@ -336,7 +349,7 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
 
         @Override
         protected void onPostExecute(String response) {
-            Log.d("loglog",response);
+            Log.d(TAG, response);
             if (TAG.equals("membershipGroup")) {
                 membershipGroupProcess(response);
             } else if (TAG.equals("showMembershipMem")) {

@@ -31,11 +31,11 @@ public class NewFriendActivity extends AppCompatActivity {
     private Member loginMember;
 
     //layouts
-    private TextView friend_name_text, friend_id_text;
-    private ImageButton id_search;
-    private Button btn_addFriend, request_accept, request_reject;
-    private LinearLayout linearLayout, request_friend_layout;
-    private RecyclerView requestedRecyclerView;
+    private TextView tvFriendName, tvFriendID;
+    private ImageButton btnIDsearch;
+    private Button btnAddFriend, btnRequestAccept, btnRequestReject;
+    private LinearLayout LLFriendLayout, LLRequestFriend;
+    private RecyclerView rvRequestFriend;
     private MemberAdapter memberAdapter;
 
     //variables
@@ -53,33 +53,33 @@ public class NewFriendActivity extends AppCompatActivity {
         loginMember = (Member) intent.getSerializableExtra("loginMember");
 
         //findViewById
-        id_search = findViewById(R.id.id_search);
-        btn_addFriend = findViewById(R.id.btn_addFriend);
-        linearLayout = findViewById(R.id.friend_layout);
-        friend_name_text = findViewById(R.id.friend_name);
-        friend_id_text = findViewById(R.id.friend_id);
-        requestedRecyclerView = findViewById(R.id.request_friend);
-        request_accept = findViewById(R.id.request_accept);
-        request_reject = findViewById(R.id.request_reject);
-        request_friend_layout = findViewById(R.id.request_friend_layout);
+        btnIDsearch = findViewById(R.id.btnIDsearch);
+        btnAddFriend = findViewById(R.id.btnAddFriend);
+        LLFriendLayout = findViewById(R.id.LLFriendLayout);
+        tvFriendName = findViewById(R.id.tvFriendName);
+        tvFriendID = findViewById(R.id.tvFriendID);
+        rvRequestFriend = findViewById(R.id.rvRequestFriend);
+        btnRequestAccept = findViewById(R.id.btnRequestAccept);
+        btnRequestReject = findViewById(R.id.btnRequestReject);
+        LLRequestFriend = findViewById(R.id.LLRequestFriend);
 
         showRequest();
-        id_search.setOnClickListener(new View.OnClickListener() {
+        btnIDsearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //친구 ID 검색
-                friend_id = ((TextView) findViewById(R.id.friend_search)).getText().toString();
+                friend_id = ((TextView) findViewById(R.id.etFriendSearch)).getText().toString();
                 if (friend_id.equals(loginMember.getMemID()) || friend_id==null
                         || friend_id.length()<4 || friend_id.length()>20) {
                     showToast("불가능한 id 입니다.");
                 } else {
-                    request_friend_layout.setVisibility(View.GONE);
+                    LLRequestFriend.setVisibility(View.GONE);
                     searchFriend(friend_id);
                 }
             }
         });
 
-        btn_addFriend.setOnClickListener(new View.OnClickListener() {
+        btnAddFriend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendRequest();
@@ -123,7 +123,7 @@ public class NewFriendActivity extends AppCompatActivity {
         networkTask.execute(params);
 
         //체크박스 -> 수락버튼 -> accept
-        request_accept.setOnClickListener(new View.OnClickListener() {
+        btnRequestAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 friendResult("friend");
@@ -131,7 +131,7 @@ public class NewFriendActivity extends AppCompatActivity {
         });
 
         //체크박스 -> 거절버튼 -> reject
-        request_reject.setOnClickListener(new View.OnClickListener() {
+        btnRequestReject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 friendResult("reject");
@@ -258,10 +258,10 @@ public class NewFriendActivity extends AppCompatActivity {
                 try {
                     JSONObject jsonObject=new JSONObject(response);
 
-                    linearLayout.setVisibility(View.GONE);
-                    requestedRecyclerView = findViewById(R.id.request_friend);
+                    LLFriendLayout.setVisibility(View.GONE);
+                    rvRequestFriend = findViewById(R.id.rvRequestFriend);
                     LinearLayoutManager layoutManager = new LinearLayoutManager(NewFriendActivity.this, LinearLayoutManager.VERTICAL, false);
-                    requestedRecyclerView.setLayoutManager(layoutManager);
+                    rvRequestFriend.setLayoutManager(layoutManager);
                     memberAdapter = new MemberAdapter();
 
                     int showFriendSize=jsonObject.getInt("showFriendSize");
@@ -275,9 +275,9 @@ public class NewFriendActivity extends AppCompatActivity {
                         memberAdapter.addItem(member);
                     }
 
-                    requestedRecyclerView.setAdapter(memberAdapter);
+                    rvRequestFriend.setAdapter(memberAdapter);
 
-                    request_friend_layout.setVisibility(View.VISIBLE);
+                    LLRequestFriend.setVisibility(View.VISIBLE);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -295,7 +295,7 @@ public class NewFriendActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                request_friend_layout.setVisibility(View.GONE);
+                LLRequestFriend.setVisibility(View.GONE);
             } else if (TAG.equals("deleteFriend")) {
                 try {
                     Log.d("deleteFriend", response);
@@ -312,7 +312,7 @@ public class NewFriendActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                request_friend_layout.setVisibility(View.GONE);
+                LLRequestFriend.setVisibility(View.GONE);
             } else if (TAG.equals("newFriend")) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
@@ -320,10 +320,10 @@ public class NewFriendActivity extends AppCompatActivity {
                     if (success) {
                         String friend_name = jsonObject.getString("memName");
 
-                        friend_name_text.setText(friend_name);
-                        friend_id_text.setText(friend_id);
+                        tvFriendName.setText(friend_name);
+                        tvFriendID.setText(friend_id);
 
-                        linearLayout.setVisibility(View.VISIBLE);
+                        LLFriendLayout.setVisibility(View.VISIBLE);
                     } else {
                         showToast("ID 검색 실패");
                     }

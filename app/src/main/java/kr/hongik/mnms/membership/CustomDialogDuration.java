@@ -20,13 +20,13 @@ import kr.hongik.mnms.R;
 
 public class CustomDialogDuration implements View.OnClickListener {
     private Context context;
-    private TextView tv_custom_mon,tv_custom_tue,tv_custom_wed,tv_custom_thu,tv_custom_fri,tv_custom_sat,tv_custom_sun;
+    private TextView tvCustomMon,tvCustomTue,tvCustomWed,tvCustomThu,tvCustomFri,tvCustomSat,tvCustomSun;
     private int payType=1,type1=1;
     public CustomDialogDuration(Context context) {
         this.context = context;
     }
     private ArrayAdapter monType,year_monType,year_dayType;
-    private Spinner monSpinner,yearMonSpinner,yearDaySpinner;
+    private Spinner spinnerMon,spinnerYearMonth,spinnerYearDay;
     private int colorWhite=Color.WHITE,colorTextPink,colorBackPink;
 
     // 호출할 다이얼로그 함수를 정의한다.
@@ -46,67 +46,67 @@ public class CustomDialogDuration implements View.OnClickListener {
         dialog.show();
 
         //variables
-        final TextView tv_customWeek,tv_customMon,tv_customYear;
+        final TextView tvCustomWeek,tvCustomMonth,tvCustomYear;
         final LinearLayout LL_dialog_week,LL_dialog_month,LL_dialog_year;
 
         colorTextPink=dialog.getContext().getColor(R.color.colorTitle);
         colorBackPink=dialog.getContext().getColor(R.color.colorContent);
 
-        monSpinner=dialog.findViewById(R.id.mon_spinner);
+        spinnerMon=dialog.findViewById(R.id.spinnerMon);
         monType=ArrayAdapter.createFromResource(dialog.getContext(),R.array.date_day,R.layout.support_simple_spinner_dropdown_item);
         monType.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        monSpinner.setAdapter(monType);
-        monSpinner.setSelection(0);
+        spinnerMon.setAdapter(monType);
+        spinnerMon.setSelection(0);
 
-        yearMonSpinner=dialog.findViewById(R.id.year_monSpinner);
+        spinnerYearMonth=dialog.findViewById(R.id.spinnerYearMonth);
         year_monType=ArrayAdapter.createFromResource(dialog.getContext(),R.array.date_month,R.layout.support_simple_spinner_dropdown_item);
         year_monType.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        yearMonSpinner.setAdapter(year_monType);
-        yearMonSpinner.setSelection(0);
+        spinnerYearMonth.setAdapter(year_monType);
+        spinnerYearMonth.setSelection(0);
 
-        yearDaySpinner=dialog.findViewById(R.id.year_daySpinner);
+        spinnerYearDay=dialog.findViewById(R.id.spinnerYearDay);
         year_dayType=ArrayAdapter.createFromResource(dialog.getContext(),R.array.date_day,R.layout.support_simple_spinner_dropdown_item);
         year_dayType.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        yearDaySpinner.setAdapter(year_dayType);
-        yearDaySpinner.setSelection(0);
+        spinnerYearDay.setAdapter(year_dayType);
+        spinnerYearDay.setSelection(0);
 
         //id 찾기
-        tv_customMon=dialog.findViewById(R.id.tv_customMon);
-        tv_customWeek=dialog.findViewById(R.id.tv_customWeek);
-        tv_customYear=dialog.findViewById(R.id.tv_customYear);
+        tvCustomMonth=dialog.findViewById(R.id.tvCustomMonth);
+        tvCustomWeek=dialog.findViewById(R.id.tvCustomWeek);
+        tvCustomYear=dialog.findViewById(R.id.tvCustomYear);
 
-        tv_custom_mon=dialog.findViewById(R.id.tv_custom_mon);
-        tv_custom_mon.setOnClickListener(this);
-        tv_custom_tue=dialog.findViewById(R.id.tv_custom_tue);
-        tv_custom_tue.setOnClickListener(this);
-        tv_custom_wed=dialog.findViewById(R.id.tv_custom_wed);
-        tv_custom_wed.setOnClickListener(this);
-        tv_custom_thu=dialog.findViewById(R.id.tv_custom_thu);
-        tv_custom_thu.setOnClickListener(this);
-        tv_custom_fri=dialog.findViewById(R.id.tv_custom_fri);
-        tv_custom_fri.setOnClickListener(this);
-        tv_custom_sat=dialog.findViewById(R.id.tv_custom_sat);
-        tv_custom_sat.setOnClickListener(this);
-        tv_custom_sun=dialog.findViewById(R.id.tv_custom_sun);
-        tv_custom_sun.setOnClickListener(this);
+        tvCustomMon=dialog.findViewById(R.id.tvCustomMon);
+        tvCustomMon.setOnClickListener(this);
+        tvCustomTue=dialog.findViewById(R.id.tvCustomTue);
+        tvCustomTue.setOnClickListener(this);
+        tvCustomWed=dialog.findViewById(R.id.tvCustomWed);
+        tvCustomWed.setOnClickListener(this);
+        tvCustomThu=dialog.findViewById(R.id.tvCustomThu);
+        tvCustomThu.setOnClickListener(this);
+        tvCustomFri=dialog.findViewById(R.id.tvCustomFri);
+        tvCustomFri.setOnClickListener(this);
+        tvCustomSat=dialog.findViewById(R.id.tvCustomSat);
+        tvCustomSat.setOnClickListener(this);
+        tvCustomSun=dialog.findViewById(R.id.tvCustomSun);
+        tvCustomSun.setOnClickListener(this);
 
-        LL_dialog_month=dialog.findViewById(R.id.LL_dialog_month);
-        LL_dialog_week=dialog.findViewById(R.id.LL_dialog_week);
-        LL_dialog_year=dialog.findViewById(R.id.LL_dialog_year);
+        LL_dialog_month=dialog.findViewById(R.id.LLDialogMonth);
+        LL_dialog_week=dialog.findViewById(R.id.LLDialogWeek);
+        LL_dialog_year=dialog.findViewById(R.id.LLDialogYear);
 
         //tv_customMon.setDefaultFocusHighlightEnabled(true);
-        tv_customMon.setOnClickListener(new View.OnClickListener() {
+        tvCustomMon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //매달 낼 날짜 하루 지정 1~12
-                tv_customMon.setTextColor(colorWhite);
-                tv_customMon.setBackgroundColor(colorBackPink);
+                tvCustomMon.setTextColor(colorWhite);
+                tvCustomMon.setBackgroundColor(colorBackPink);
                 payType=2;
 
-                tv_customWeek.setTextColor(colorTextPink);
-                tv_customWeek.setBackgroundColor(colorWhite);
-                tv_customYear.setTextColor(colorTextPink);
-                tv_customYear.setBackgroundColor(colorWhite);
+                tvCustomWeek.setTextColor(colorTextPink);
+                tvCustomWeek.setBackgroundColor(colorWhite);
+                tvCustomYear.setTextColor(colorTextPink);
+                tvCustomYear.setBackgroundColor(colorWhite);
 
                 LL_dialog_month.setVisibility(View.VISIBLE);
                 LL_dialog_week.setVisibility(View.GONE);
@@ -115,17 +115,17 @@ public class CustomDialogDuration implements View.OnClickListener {
         });
 
         //tv_customWeek.setDefaultFocusHighlightEnabled(true);
-        tv_customWeek.setOnClickListener(new View.OnClickListener() {
+        tvCustomWeek.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tv_customWeek.setTextColor(colorWhite);
-                tv_customWeek.setBackgroundColor(colorBackPink);
+                tvCustomWeek.setTextColor(colorWhite);
+                tvCustomWeek.setBackgroundColor(colorBackPink);
                 payType=1;
 
-                tv_customMon.setTextColor(colorTextPink);
-                tv_customMon.setBackgroundColor(colorWhite);
-                tv_customYear.setTextColor(colorTextPink);
-                tv_customYear.setBackgroundColor(colorWhite);
+                tvCustomMon.setTextColor(colorTextPink);
+                tvCustomMon.setBackgroundColor(colorWhite);
+                tvCustomYear.setTextColor(colorTextPink);
+                tvCustomYear.setBackgroundColor(colorWhite);
 
                 LL_dialog_month.setVisibility(View.GONE);
                 LL_dialog_week.setVisibility(View.VISIBLE);
@@ -134,17 +134,17 @@ public class CustomDialogDuration implements View.OnClickListener {
         });
 
         //tv_customYear.setDefaultFocusHighlightEnabled(true);
-        tv_customYear.setOnClickListener(new View.OnClickListener() {
+        tvCustomYear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                tv_customYear.setTextColor(colorWhite);
-                tv_customYear.setBackgroundColor(colorBackPink);
+                tvCustomYear.setTextColor(colorWhite);
+                tvCustomYear.setBackgroundColor(colorBackPink);
                 payType=3;
 
-                tv_customWeek.setTextColor(colorTextPink);
-                tv_customWeek.setBackgroundColor(colorWhite);
-                tv_customMon.setTextColor(colorTextPink);
-                tv_customMon.setBackgroundColor(colorWhite);
+                tvCustomWeek.setTextColor(colorTextPink);
+                tvCustomWeek.setBackgroundColor(colorWhite);
+                tvCustomMon.setTextColor(colorTextPink);
+                tvCustomMon.setBackgroundColor(colorWhite);
 
                 LL_dialog_month.setVisibility(View.GONE);
                 LL_dialog_week.setVisibility(View.GONE);
@@ -153,10 +153,10 @@ public class CustomDialogDuration implements View.OnClickListener {
             }
         });
 
-        final Button btn_confirm = dialog.findViewById(R.id.btn_confirm);
-        final Button btn_cancel = dialog.findViewById(R.id.btn_cancel);
+        final Button btnConfirm = dialog.findViewById(R.id.btnConfirm);
+        final Button btnCancel = dialog.findViewById(R.id.btnCancel);
 
-        btn_confirm.setOnClickListener(new View.OnClickListener() {
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 switch (payType){
@@ -190,12 +190,12 @@ public class CustomDialogDuration implements View.OnClickListener {
                     case 2:
                         //월 - 01~12선택
                         tvPayType.setText("매월");
-                        tvPayTypeNum.setText(monSpinner.getSelectedItem().toString());
+                        tvPayTypeNum.setText(spinnerMon.getSelectedItem().toString());
                         break;
                     case 3:
                         //년 - 월,일 선택
                         tvPayType.setText("매년");
-                        String day=yearMonSpinner.getSelectedItem().toString()+"-"+yearDaySpinner.getSelectedItem().toString();
+                        String day=spinnerYearMonth.getSelectedItem().toString()+"-"+spinnerYearDay.getSelectedItem().toString();
                         tvPayTypeNum.setText(day);
                         break;
                 }
@@ -204,7 +204,7 @@ public class CustomDialogDuration implements View.OnClickListener {
                 dialog.dismiss();
             }
         });
-        btn_cancel.setOnClickListener(new View.OnClickListener() {
+        btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(context, "취소 했습니다.", Toast.LENGTH_SHORT).show();
@@ -218,136 +218,136 @@ public class CustomDialogDuration implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()){
-            case R.id.tv_custom_mon:
-                tv_custom_mon.setTextColor(colorWhite);
-                tv_custom_mon.setBackgroundColor(colorBackPink);
+            case R.id.tvCustomMon:
+                tvCustomMon.setTextColor(colorWhite);
+                tvCustomMon.setBackgroundColor(colorBackPink);
                 type1=2;
 
-                tv_custom_tue.setBackgroundColor(colorWhite);
-                tv_custom_tue.setTextColor(colorTextPink);
-                tv_custom_wed.setBackgroundColor(colorWhite);
-                tv_custom_wed.setTextColor(colorTextPink);
-                tv_custom_thu.setBackgroundColor(colorWhite);
-                tv_custom_thu.setTextColor(colorTextPink);
-                tv_custom_fri.setBackgroundColor(colorWhite);
-                tv_custom_fri.setTextColor(colorTextPink);
-                tv_custom_sat.setBackgroundColor(colorWhite);
-                tv_custom_sat.setTextColor(colorTextPink);
-                tv_custom_sun.setBackgroundColor(colorWhite);
-                tv_custom_sun.setTextColor(colorTextPink);
+                tvCustomTue.setBackgroundColor(colorWhite);
+                tvCustomTue.setTextColor(colorTextPink);
+                tvCustomWed.setBackgroundColor(colorWhite);
+                tvCustomWed.setTextColor(colorTextPink);
+                tvCustomThu.setBackgroundColor(colorWhite);
+                tvCustomThu.setTextColor(colorTextPink);
+                tvCustomFri.setBackgroundColor(colorWhite);
+                tvCustomFri.setTextColor(colorTextPink);
+                tvCustomSat.setBackgroundColor(colorWhite);
+                tvCustomSat.setTextColor(colorTextPink);
+                tvCustomSun.setBackgroundColor(colorWhite);
+                tvCustomSun.setTextColor(colorTextPink);
                 break;
-            case R.id.tv_custom_tue:
-                tv_custom_tue.setTextColor(colorWhite);
-                tv_custom_tue.setBackgroundColor(colorBackPink);
+            case R.id.tvCustomTue:
+                tvCustomTue.setTextColor(colorWhite);
+                tvCustomTue.setBackgroundColor(colorBackPink);
                 type1=3;
 
-                tv_custom_mon.setBackgroundColor(colorWhite);
-                tv_custom_mon.setTextColor(colorTextPink);
-                tv_custom_wed.setBackgroundColor(colorWhite);
-                tv_custom_wed.setTextColor(colorTextPink);
-                tv_custom_thu.setBackgroundColor(colorWhite);
-                tv_custom_thu.setTextColor(colorTextPink);
-                tv_custom_fri.setBackgroundColor(colorWhite);
-                tv_custom_fri.setTextColor(colorTextPink);
-                tv_custom_sat.setBackgroundColor(colorWhite);
-                tv_custom_sat.setTextColor(colorTextPink);
-                tv_custom_sun.setBackgroundColor(colorWhite);
-                tv_custom_sun.setTextColor(colorTextPink);
+                tvCustomMon.setBackgroundColor(colorWhite);
+                tvCustomMon.setTextColor(colorTextPink);
+                tvCustomWed.setBackgroundColor(colorWhite);
+                tvCustomWed.setTextColor(colorTextPink);
+                tvCustomThu.setBackgroundColor(colorWhite);
+                tvCustomThu.setTextColor(colorTextPink);
+                tvCustomFri.setBackgroundColor(colorWhite);
+                tvCustomFri.setTextColor(colorTextPink);
+                tvCustomSat.setBackgroundColor(colorWhite);
+                tvCustomSat.setTextColor(colorTextPink);
+                tvCustomSun.setBackgroundColor(colorWhite);
+                tvCustomSun.setTextColor(colorTextPink);
 
                 break;
-            case R.id.tv_custom_wed:
-                tv_custom_wed.setTextColor(colorWhite);
-                tv_custom_wed.setBackgroundColor(colorBackPink);
+            case R.id.tvCustomWed:
+                tvCustomWed.setTextColor(colorWhite);
+                tvCustomWed.setBackgroundColor(colorBackPink);
                 type1=4;
 
-                tv_custom_mon.setBackgroundColor(colorWhite);
-                tv_custom_mon.setTextColor(colorTextPink);
-                tv_custom_tue.setBackgroundColor(colorWhite);
-                tv_custom_tue.setTextColor(colorTextPink);
-                tv_custom_thu.setBackgroundColor(colorWhite);
-                tv_custom_thu.setTextColor(colorTextPink);
-                tv_custom_fri.setBackgroundColor(colorWhite);
-                tv_custom_fri.setTextColor(colorTextPink);
-                tv_custom_sat.setBackgroundColor(colorWhite);
-                tv_custom_sat.setTextColor(colorTextPink);
-                tv_custom_sun.setBackgroundColor(colorWhite);
-                tv_custom_sun.setTextColor(colorTextPink);
+                tvCustomMon.setBackgroundColor(colorWhite);
+                tvCustomMon.setTextColor(colorTextPink);
+                tvCustomTue.setBackgroundColor(colorWhite);
+                tvCustomTue.setTextColor(colorTextPink);
+                tvCustomThu.setBackgroundColor(colorWhite);
+                tvCustomThu.setTextColor(colorTextPink);
+                tvCustomFri.setBackgroundColor(colorWhite);
+                tvCustomFri.setTextColor(colorTextPink);
+                tvCustomSat.setBackgroundColor(colorWhite);
+                tvCustomSat.setTextColor(colorTextPink);
+                tvCustomSun.setBackgroundColor(colorWhite);
+                tvCustomSun.setTextColor(colorTextPink);
 
                 break;
-            case R.id.tv_custom_thu:
-                tv_custom_thu.setTextColor(colorWhite);
-                tv_custom_thu.setBackgroundColor(colorBackPink);
+            case R.id.tvCustomThu:
+                tvCustomThu.setTextColor(colorWhite);
+                tvCustomThu.setBackgroundColor(colorBackPink);
                 type1=5;
 
-                tv_custom_mon.setBackgroundColor(colorWhite);
-                tv_custom_mon.setTextColor(colorTextPink);
-                tv_custom_wed.setBackgroundColor(colorWhite);
-                tv_custom_wed.setTextColor(colorTextPink);
-                tv_custom_tue.setBackgroundColor(colorWhite);
-                tv_custom_tue.setTextColor(colorTextPink);
-                tv_custom_fri.setBackgroundColor(colorWhite);
-                tv_custom_fri.setTextColor(colorTextPink);
-                tv_custom_sat.setBackgroundColor(colorWhite);
-                tv_custom_sat.setTextColor(colorTextPink);
-                tv_custom_sun.setBackgroundColor(colorWhite);
-                tv_custom_sun.setTextColor(colorTextPink);
+                tvCustomMon.setBackgroundColor(colorWhite);
+                tvCustomMon.setTextColor(colorTextPink);
+                tvCustomTue.setBackgroundColor(colorWhite);
+                tvCustomTue.setTextColor(colorTextPink);
+                tvCustomWed.setBackgroundColor(colorWhite);
+                tvCustomWed.setTextColor(colorTextPink);
+                tvCustomFri.setBackgroundColor(colorWhite);
+                tvCustomFri.setTextColor(colorTextPink);
+                tvCustomSat.setBackgroundColor(colorWhite);
+                tvCustomSat.setTextColor(colorTextPink);
+                tvCustomSun.setBackgroundColor(colorWhite);
+                tvCustomSun.setTextColor(colorTextPink);
 
                 break;
-            case R.id.tv_custom_fri:
-                tv_custom_fri.setTextColor(colorWhite);
-                tv_custom_fri.setBackgroundColor(colorBackPink);
+            case R.id.tvCustomFri:
+                tvCustomFri.setTextColor(colorWhite);
+                tvCustomFri.setBackgroundColor(colorBackPink);
                 type1=6;
 
-                tv_custom_mon.setBackgroundColor(colorWhite);
-                tv_custom_mon.setTextColor(colorTextPink);
-                tv_custom_wed.setBackgroundColor(colorWhite);
-                tv_custom_wed.setTextColor(colorTextPink);
-                tv_custom_thu.setBackgroundColor(colorWhite);
-                tv_custom_thu.setTextColor(colorTextPink);
-                tv_custom_tue.setBackgroundColor(colorWhite);
-                tv_custom_tue.setTextColor(colorTextPink);
-                tv_custom_sat.setBackgroundColor(colorWhite);
-                tv_custom_sat.setTextColor(colorTextPink);
-                tv_custom_sun.setBackgroundColor(colorWhite);
-                tv_custom_sun.setTextColor(colorTextPink);
+                tvCustomMon.setBackgroundColor(colorWhite);
+                tvCustomMon.setTextColor(colorTextPink);
+                tvCustomWed.setBackgroundColor(colorWhite);
+                tvCustomWed.setTextColor(colorTextPink);
+                tvCustomThu.setBackgroundColor(colorWhite);
+                tvCustomThu.setTextColor(colorTextPink);
+                tvCustomTue.setBackgroundColor(colorWhite);
+                tvCustomTue.setTextColor(colorTextPink);
+                tvCustomSat.setBackgroundColor(colorWhite);
+                tvCustomSat.setTextColor(colorTextPink);
+                tvCustomSun.setBackgroundColor(colorWhite);
+                tvCustomSun.setTextColor(colorTextPink);
 
                 break;
-            case R.id.tv_custom_sat:
-                tv_custom_sat.setTextColor(colorWhite);
-                tv_custom_sat.setBackgroundColor(colorBackPink);
+            case R.id.tvCustomSat:
+                tvCustomSat.setTextColor(colorWhite);
+                tvCustomSat.setBackgroundColor(colorBackPink);
                 type1=7;
 
-                tv_custom_mon.setBackgroundColor(colorWhite);
-                tv_custom_mon.setTextColor(colorTextPink);
-                tv_custom_wed.setBackgroundColor(colorWhite);
-                tv_custom_wed.setTextColor(colorTextPink);
-                tv_custom_thu.setBackgroundColor(colorWhite);
-                tv_custom_thu.setTextColor(colorTextPink);
-                tv_custom_fri.setBackgroundColor(colorWhite);
-                tv_custom_fri.setTextColor(colorTextPink);
-                tv_custom_tue.setBackgroundColor(colorWhite);
-                tv_custom_tue.setTextColor(colorTextPink);
-                tv_custom_sun.setBackgroundColor(colorWhite);
-                tv_custom_sun.setTextColor(colorTextPink);
+                tvCustomMon.setBackgroundColor(colorWhite);
+                tvCustomMon.setTextColor(colorTextPink);
+                tvCustomWed.setBackgroundColor(colorWhite);
+                tvCustomWed.setTextColor(colorTextPink);
+                tvCustomThu.setBackgroundColor(colorWhite);
+                tvCustomThu.setTextColor(colorTextPink);
+                tvCustomFri.setBackgroundColor(colorWhite);
+                tvCustomFri.setTextColor(colorTextPink);
+                tvCustomTue.setBackgroundColor(colorWhite);
+                tvCustomTue.setTextColor(colorTextPink);
+                tvCustomSun.setBackgroundColor(colorWhite);
+                tvCustomSun.setTextColor(colorTextPink);
 
                 break;
-            case R.id.tv_custom_sun:
-                tv_custom_sun.setTextColor(colorWhite);
-                tv_custom_sun.setBackgroundColor(colorBackPink);
+            case R.id.tvCustomSun:
+                tvCustomSun.setTextColor(colorWhite);
+                tvCustomSun.setBackgroundColor(colorBackPink);
                 type1=1;
 
-                tv_custom_mon.setBackgroundColor(colorWhite);
-                tv_custom_mon.setTextColor(colorTextPink);
-                tv_custom_wed.setBackgroundColor(colorWhite);
-                tv_custom_wed.setTextColor(colorTextPink);
-                tv_custom_thu.setBackgroundColor(colorWhite);
-                tv_custom_thu.setTextColor(colorTextPink);
-                tv_custom_fri.setBackgroundColor(colorWhite);
-                tv_custom_fri.setTextColor(colorTextPink);
-                tv_custom_sat.setBackgroundColor(colorWhite);
-                tv_custom_sat.setTextColor(colorTextPink);
-                tv_custom_tue.setBackgroundColor(colorWhite);
-                tv_custom_tue.setTextColor(colorTextPink);
+                tvCustomMon.setBackgroundColor(colorWhite);
+                tvCustomMon.setTextColor(colorTextPink);
+                tvCustomWed.setBackgroundColor(colorWhite);
+                tvCustomWed.setTextColor(colorTextPink);
+                tvCustomThu.setBackgroundColor(colorWhite);
+                tvCustomThu.setTextColor(colorTextPink);
+                tvCustomFri.setBackgroundColor(colorWhite);
+                tvCustomFri.setTextColor(colorTextPink);
+                tvCustomSat.setBackgroundColor(colorWhite);
+                tvCustomSat.setTextColor(colorTextPink);
+                tvCustomTue.setBackgroundColor(colorWhite);
+                tvCustomTue.setTextColor(colorTextPink);
 
                 break;
             default:

@@ -40,7 +40,7 @@ public class MembershipList extends Fragment {
     private Group outGroupNum;
 
     //layout
-    private RecyclerView groupMembershiplList;
+    private RecyclerView rvMainMembershipList;
     private GroupAdapter groupAdapter;
     private Context context;
     private ViewGroup rootView;
@@ -173,9 +173,9 @@ public class MembershipList extends Fragment {
             JSONObject jsonObject=new JSONObject(response);
             int membershipGroupSize=Integer.parseInt(jsonObject.getString("membershipGroupSize"));
             if (membershipGroupSize == 0) return;
-            groupMembershiplList = rootView.findViewById(R.id.main_membership_list);
+            rvMainMembershipList = rootView.findViewById(R.id.rvMainMembershipList);
             LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
-            groupMembershiplList.setLayoutManager(layoutManager);
+            rvMainMembershipList.setLayoutManager(layoutManager);
 
             groupAdapter = new GroupAdapter();
             for (int i = 0; i < membershipGroupSize; i++) {
@@ -188,7 +188,7 @@ public class MembershipList extends Fragment {
                 groupAdapter.addItem(group);
             }
 
-            groupMembershiplList.setAdapter(groupAdapter);
+            rvMainMembershipList.setAdapter(groupAdapter);
 
             groupAdapter.setOnItemClickListener(new OnGroupItemClickListener() {
                 @Override

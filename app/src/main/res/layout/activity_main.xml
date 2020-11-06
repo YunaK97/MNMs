@@ -9,10 +9,10 @@
     tools:context="kr.hongik.mnms.firstscreen.MainActivity">
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/ivLogo"
         android:layout_width="250dp"
         android:layout_height="250dp"
-        android:layout_above="@id/linearLayout_text"
+        android:layout_above="@id/LLLoginInfo"
         android:gravity="center_vertical"
         android:layout_centerInParent="true"
         android:src="@drawable/logo_mnms"
@@ -21,8 +21,8 @@
 
     <LinearLayout
         android:layout_marginTop="20dp"
-        android:id="@+id/linearLayout_text"
-        android:layout_above="@id/linearLayout_btn"
+        android:id="@+id/LLLoginInfo"
+        android:layout_above="@id/LLBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -30,7 +30,7 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/id"
+            android:id="@+id/etID"
             style="@style/CustomTextView"
             android:background="@drawable/sidecustom_round"
             android:ems="10"
@@ -39,7 +39,7 @@
             android:textColorHint="@android:color/holo_red_light" />
 
         <EditText
-            android:id="@+id/pw"
+            android:id="@+id/etPW"
             style="@style/CustomTextView"
             android:background="@drawable/sidecustom_round"
             android:ems="10"
@@ -50,7 +50,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout_btn"
+        android:id="@+id/LLBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -60,19 +60,19 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/login"
+            android:id="@+id/btnLogin"
             style="@style/CustomButton"
             android:layout_marginRight="5dp"
             android:text="@string/btn_login" />
 
         <Button
-            android:id="@+id/signin"
+            android:id="@+id/btnSignin"
             style="@style/CustomButton"
             android:layout_marginLeft="5dp"
             android:text="@string/btn_signin" />
 
         <CheckBox
-            android:id="@+id/autoLogin"
+            android:id="@+id/cbAutoLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/sidecustom_round"

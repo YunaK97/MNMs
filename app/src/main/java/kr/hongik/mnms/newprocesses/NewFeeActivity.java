@@ -41,8 +41,8 @@ public class NewFeeActivity extends AppCompatActivity {
     private String feeType;
 
     //layouts
-    private TextView TV_newFee_groupName, TV_newFee_fee;
-    private EditText TV_newFee_accPW;
+    private TextView tvNewFeeGroupName, tvNewFeeFee;
+    private EditText etNewFeeAccPW;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +85,7 @@ public class NewFeeActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.new_confirm) {
-            String accPW = ((TextView) findViewById(R.id.TV_newFee_accPW)).getText().toString();
+            String accPW = ((TextView) findViewById(R.id.etNewFeeAccPW)).getText().toString();
             if (accPW.length() != 4) {
                 showToast("비밀번호는 4자리 입니다.");
             } else {
@@ -103,15 +103,15 @@ public class NewFeeActivity extends AppCompatActivity {
     }
 
     private void showInfo() {
-        TV_newFee_groupName = findViewById(R.id.TV_newFee_groupName);
-        TV_newFee_fee = findViewById(R.id.TV_newFee_fee);
+        tvNewFeeGroupName = findViewById(R.id.tvNewFeeGroupName);
+        tvNewFeeFee = findViewById(R.id.tvNewFeeFee);
 
-        TV_newFee_fee.setText(membershipGroup.getFee() + "");
-        TV_newFee_groupName.setText(membershipGroup.getGroupName());
+        tvNewFeeFee.setText(membershipGroup.getFee() + "");
+        tvNewFeeGroupName.setText(membershipGroup.getGroupName());
     }
 
     private void checkAccountPW(int accountPW) {
-        String urlCheckPW = "http://" + loginMember.getIp() + "/membership/checkPW";
+        String urlCheckPW = "http://" + loginMember.getIp() + "/membership/checkPW2";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("checkAccountPW");
