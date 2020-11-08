@@ -1,5 +1,6 @@
 package kr.hongik.mnms.daily;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
@@ -62,15 +64,7 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.daily_result){
-            showToast("진심인지 다이얼로그 띄우기 -> 노빠꾸다");
             floatCalculateDialog();
-//            Intent intent=new Intent(DailyActivity.this, DailyQRActivity.class);
-//            intent.putExtra("loginMember", loginMember);
-//            intent.putExtra("loginMemberAccount", loginMemberAccount);
-//            intent.putExtra("dailyGroup", dailyGroup);
-//            intent.putExtra("memberArrayList",memberArrayList);
-//
-//            startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
     }
@@ -132,6 +126,31 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void floatCalculateDialog(){
+
+        AlertDialog.Builder builder=new AlertDialog.Builder(DailyActivity.this,R.style.CustomDialog);
+        builder.setTitle("정산하시겠습니까?");
+        builder.setMessage("다시 되돌릴수 없습니다");
+        builder.setPositiveButton("정산", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent intent = new Intent(DailyActivity.this, DailyQRActivity.class);
+                intent.putExtra("loginMember", loginMember);
+                intent.putExtra("loginMemberAccount", loginMemberAccount);
+                intent.putExtra("dailyGroup", dailyGroup);
+                intent.putExtra("memberArrayList", memberArrayList);
+
+                startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+
+        final AlertDialog alertDialog=builder.create();
+        alertDialog.show();
 
     }
 

@@ -234,6 +234,7 @@ public class DailyQRActivity extends AppCompatActivity {
         params.put("accountNum", recMember.getAccountNum());
         params.put("myAccountNum", loginMember.getAccountNum());
         params.put("nick", recMember.getMemName());
+        params.put("friendID",recMember.getMemID());
         params.put("Mynick", loginMember.getMemName());
         params.put("memID",loginMember.getMemID());
         params.put("DID",dailyGroup.getDID()+"");
@@ -433,11 +434,13 @@ public class DailyQRActivity extends AppCompatActivity {
     private void sendMoneyToFriendProcess(String response) {
         try {
             JSONObject jsonObject = new JSONObject(response);
-            boolean success = jsonObject.getBoolean("success");
-            if (success) {
+            String success=jsonObject.getString("success");
+            if(success.equals("true")){
                 showToast("송금 성공");
-            } else {
+            } else if (success.equals("false")) {
                 showToast("이미 보냈읍니다.");
+            }else if(success.equals("notfriend")){
+                showToast("친구가 아니라 불가합니다.");
             }
         } catch (Exception e) {
             e.printStackTrace();
