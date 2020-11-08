@@ -1,41 +1,23 @@
 package kr.hongik.mnms.daily.ui.home;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
-import kr.hongik.mnms.Account;
-import kr.hongik.mnms.HttpClient;
-import kr.hongik.mnms.Member;
-import kr.hongik.mnms.R;
-import kr.hongik.mnms.daily.DailyActivity;
-import kr.hongik.mnms.daily.DailyGroup;
-import kr.hongik.mnms.firstscreen.MainActivity;
-import kr.hongik.mnms.mainscreen.ui.friend.FriendList;
-import kr.hongik.mnms.newprocesses.NewDailyActivity;
-import kr.hongik.mnms.newprocesses.NewFriendActivity;
-import kr.hongik.mnms.newprocesses.NewMembershipActivity;
-import kr.hongik.mnms.newprocesses.NewTransactionActivity;
-
-import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
@@ -52,6 +34,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+
+import kr.hongik.mnms.Account;
+import kr.hongik.mnms.HttpClient;
+import kr.hongik.mnms.Member;
+import kr.hongik.mnms.R;
+import kr.hongik.mnms.daily.DailyGroup;
 
 public class DailyQRActivity extends AppCompatActivity {
 
@@ -396,6 +384,13 @@ public class DailyQRActivity extends AppCompatActivity {
 
         RVeachMemMoney.setAdapter(recSendListAdapter);
 
+        recSendListAdapter.setOnItemLongClickListener(new OnDailyMemLongClickListener() {
+            @Override
+            public void onItemLongClick(RecSendListAdapter.ViewHolder holder, View view, int position) {
+                showToast("송금하시겟소?");
+            }
+        });
+
         insertDB();
     }
 
@@ -442,7 +437,7 @@ public class DailyQRActivity extends AppCompatActivity {
             if (success) {
                 showToast("송금 성공");
             } else {
-                showToast("송금_실패");
+                showToast("이미 보냈읍니다.");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -494,43 +489,6 @@ public class DailyQRActivity extends AppCompatActivity {
                 Log.d(TAG+"intoDB", response);
             }
 
-        }
-    }
-
-    public class DutchMember extends Member {
-        private int usedMoney, rsMoney,tmpRSMoney;
-        private boolean checkSend;
-
-        public boolean isCheckSend() {
-            return checkSend;
-        }
-
-        public void setCheckSend(boolean checkSend) {
-            this.checkSend = checkSend;
-        }
-
-        public int getTmpRSMoney() {
-            return tmpRSMoney;
-        }
-
-        public void setTmpRSMoney(int tmpRSMoney) {
-            this.tmpRSMoney = tmpRSMoney;
-        }
-
-        public int getUsedMoney() {
-            return usedMoney;
-        }
-
-        public void setUsedMoney(int usedMoney) {
-            this.usedMoney = usedMoney;
-        }
-
-        public int getRsMoney() {
-            return rsMoney;
-        }
-
-        public void setRsMoney(int rsMoney) {
-            this.rsMoney = rsMoney;
         }
     }
 }

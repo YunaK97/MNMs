@@ -70,7 +70,6 @@ public class DailyFragment extends Fragment {
     private RecyclerView.LayoutManager mLayoutManager;
 
     //variables
-    private ArrayAdapter dutchRangeAdapter;
     private ViewGroup rootView;
 
     @Override

@@ -36,6 +36,7 @@ public class NewMembershipActivity extends AppCompatActivity {
     private RecyclerView rvMembershipSelectFriend;
     private MemberAdapter memberAdapter;
     private TextView tvNewMembershipAccountNum;
+    private Button btnNewMembership;
 
     //variables
     private String TAG_SUCCESS = "success";
@@ -67,7 +68,7 @@ public class NewMembershipActivity extends AppCompatActivity {
         groupNameList();
 
         //membership 생성 버튼 클릭
-        Button btnNewMembership = findViewById(R.id.btnNewMembership);
+        btnNewMembership = findViewById(R.id.btnNewMembership);
         btnNewMembership.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,6 +147,8 @@ public class NewMembershipActivity extends AppCompatActivity {
         //그룹이름은 중복을 허용하지않음
         //memID를 보내면
         //멤버가 가입한 그룹들의 이름을 받아옴
+
+        btnNewMembership.setClickable(false);
 
         String urlGroupNameList = "http://" + loginMember.getIp() + "/member/membershipGroupList";
 
@@ -268,6 +271,7 @@ public class NewMembershipActivity extends AppCompatActivity {
                         finish();
                     } else {
                         showToast("membership 실패!");
+                        btnNewMembership.setClickable(true);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

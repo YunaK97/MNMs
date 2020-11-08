@@ -14,19 +14,19 @@ import java.util.ArrayList;
 import kr.hongik.mnms.R;
 
 public class DutchListAdapter extends RecyclerView.Adapter<DutchListAdapter.ViewHolder> {
-    private ArrayList<DailyQRActivity.DutchMember> items=new ArrayList<>();
+    private ArrayList<DutchMember> items=new ArrayList<>();
 
-    public void addItem(DailyQRActivity.DutchMember item){
+    public void addItem(DutchMember item){
         items.add(item);
     }
 
-    public DailyQRActivity.DutchMember getItem(int position){
+    public DutchMember getItem(int position){
         return items.get(position);
     }
 
-    public ArrayList<DailyQRActivity.DutchMember> getList(){return items;}
+    public ArrayList<DutchMember> getList(){return items;}
 
-    public  void  setItems(ArrayList<DailyQRActivity.DutchMember> items){this.items=items;}
+    public  void  setItems(ArrayList<DutchMember> items){this.items=items;}
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         TextView tvDutchMemUsed,tvDutchMemId,tvDutchRS;
@@ -40,7 +40,7 @@ public class DutchListAdapter extends RecyclerView.Adapter<DutchListAdapter.View
 
         }
 
-        public void setItem(DailyQRActivity.DutchMember item){
+        public void setItem(DutchMember item){
             tvDutchRS.setText(item.getRsMoney()+"");
             tvDutchMemId.setText(item.getMemID());
             tvDutchMemUsed.setText(item.getUsedMoney()+"");
@@ -71,7 +71,7 @@ public class DutchListAdapter extends RecyclerView.Adapter<DutchListAdapter.View
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         //viewholder는 재사용된다! 계속 새로 만들순 없다.
 
-        final DailyQRActivity.DutchMember item = items.get(position);
+        final DutchMember item = items.get(position);
         holder.setItem(item);
     }
 

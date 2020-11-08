@@ -33,6 +33,7 @@ public class NewDailyActivity extends AppCompatActivity {
     private MemberAdapter memberAdapter;
     private ArrayList<Member> arrayList;
     private RecyclerView rvDailySelectedFriend;
+    private Button btnNewDaily;
 
     //variable
     private ArrayList<Member> selectedMember;
@@ -55,7 +56,7 @@ public class NewDailyActivity extends AppCompatActivity {
 
         //membership 생성 버튼 클릭
 
-        Button btnNewDaily = findViewById(R.id.btnNewDaily);
+        btnNewDaily = findViewById(R.id.btnNewDaily);
         btnNewDaily.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,6 +116,8 @@ public class NewDailyActivity extends AppCompatActivity {
         //memID를 보내면
         //멤버가 가입한 그룹들의 이름을 받아옴
 
+        btnNewDaily.setClickable(false);
+
         String urlGroupNameList = "http://" + loginMember.getIp() + "/member/dailyGroupList";
 
         groupName = new ArrayList<>();
@@ -158,6 +161,7 @@ public class NewDailyActivity extends AppCompatActivity {
                 finish();
             } else {
                 showToast("daily생성 실패!");
+                btnNewDaily.setClickable(true);
             }
         } catch (JSONException e) {
             e.printStackTrace();

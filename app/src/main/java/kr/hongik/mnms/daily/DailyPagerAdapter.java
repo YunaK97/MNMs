@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 import kr.hongik.mnms.daily.ui.home.DailyFragment;
+import kr.hongik.mnms.daily.ui.home.PreviewFragment;
 import kr.hongik.mnms.daily.ui.mem.DailyMemFragment;
 
 public class DailyPagerAdapter extends FragmentPagerAdapter {
@@ -18,17 +19,21 @@ public class DailyPagerAdapter extends FragmentPagerAdapter {
 
     DailyFragment dailyFragment = new DailyFragment();
     DailyMemFragment memberFragment = new DailyMemFragment();
+    PreviewFragment previewFragment=new PreviewFragment();
 
     public DailyPagerAdapter(@NonNull FragmentManager fm, Bundle bundle) {
         super(fm);
         dailyFragment.setArguments(bundle);
         memberFragment.setArguments(bundle);
+        previewFragment.setArguments(bundle);
 
         items.add(dailyFragment);
         items.add(memberFragment);
+        items.add(previewFragment);
 
         tab.add("거래내역");
         tab.add("회원목록");
+        tab.add("정산미리보기");
     }
 
     @Nullable

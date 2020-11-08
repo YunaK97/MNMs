@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".daily.ui.home.PreviewFragment">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvPreviewMembers"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/tvTotalMoney"
+        android:layout_marginBottom="2dp"
+        android:layout_weight="1"
+        android:background="@drawable/sidecustom"
+        android:scrollbars="vertical" />
+
+    <TextView
+        style="@style/CustomTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:textSize="25sp"
+        android:id="@+id/tvPreviewMoney"
+        android:textAlignment="textEnd"
+        android:text="1000000000"
+        android:gravity="end" />
+
+</RelativeLayout>

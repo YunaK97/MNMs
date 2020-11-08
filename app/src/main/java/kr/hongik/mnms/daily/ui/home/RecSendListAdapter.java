@@ -12,9 +12,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import kr.hongik.mnms.R;
+import kr.hongik.mnms.mainscreen.GroupAdapter;
+import kr.hongik.mnms.mainscreen.OnGroupItemLongClickListener;
 
 public class RecSendListAdapter extends RecyclerView.Adapter<RecSendListAdapter.ViewHolder> {
     private ArrayList<RecSend> items=new ArrayList<>();
+
+    OnDailyMemLongClickListener longListener;
 
     public void addItem(RecSend item){
         items.add(item);
@@ -31,12 +35,23 @@ public class RecSendListAdapter extends RecyclerView.Adapter<RecSendListAdapter.
     public static class ViewHolder extends RecyclerView.ViewHolder{
         TextView tvDutchSendID,tvDutchReceiveID,tvDutchMoney;
 
-        ViewHolder(View itemView){
+        ViewHolder(View itemView,final OnDailyMemLongClickListener longListener){
             super(itemView);
 
             tvDutchSendID=itemView.findViewById(R.id.tvDutchSendID);
             tvDutchReceiveID=itemView.findViewById(R.id.tvDutchReceiveID);
             tvDutchMoney=itemView.findViewById(R.id.tvDutchMoney);
+
+            itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    int position = getAdapterPosition();
+                    if (longListener != null) {
+                        longListener.onItemLongClick(RecSendListAdapter.ViewHolder.this, view, position);
+                    }
+                    return true;
+                }
+            });
 
         }
 
@@ -46,7 +61,9 @@ public class RecSendListAdapter extends RecyclerView.Adapter<RecSendListAdapter.
             tvDutchMoney.setText(item.getDutchMoney()+"");
         }
     }
-
+    public void setOnItemLongClickListener(OnDailyMemLongClickListener listener) {
+        this.longListener = listener;
+    }
 
     @NonNull
     @Override
@@ -57,7 +74,7 @@ public class RecSendListAdapter extends RecyclerView.Adapter<RecSendListAdapter.
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View itemView = inflater.inflate(R.layout.layout_recsend_list, parent, false);
 
-        return new ViewHolder(itemView);
+        return new ViewHolder(itemView,longListener);
     }
 
     @Override

@@ -95,29 +95,6 @@ public class DailyList extends Fragment {
         networkTask.execute(params);
     }
 
-    private void selectOutGroup(int position) {
-        //돈정산 끝나야 나갈 수 있음
-        final Group outGroup = groupAdapter.getItem(position);
-        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.CustomDialog);
-
-        builder.setTitle(outGroup.getGroupName()).setMessage("친구목록에서 삭제하시겠습니까?");
-        builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dailyOutGroup(outGroup);
-            }
-        });
-        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                showToast("삭제 취소");
-            }
-        });
-
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
     private void intoDaily(int position) {
         DailyGroup item = (DailyGroup) groupAdapter.getItem(position);
         Intent intent = new Intent(rootView.getContext(), DailyActivity.class);
@@ -174,7 +151,7 @@ public class DailyList extends Fragment {
                 @Override
                 public void onItemLongClick(GroupAdapter.ViewHolder holder, View view, int position) {
                     showToast("아직 구현중");
-                    //selectOutGroup(position);
+                    showFloat(position);
                 }
             });
         } catch (JSONException e) {
@@ -183,15 +160,36 @@ public class DailyList extends Fragment {
         }
     }
 
+    private void showFloat(int position){
+        final Group outGroupNum = groupAdapter.getItem(position);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.CustomDialog);
+
+        builder.setTitle(outGroupNum.getGroupName()).setMessage("그룹을 없앨까요?");
+        builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dailyOutGroup(outGroupNum);
+            }
+        });
+        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                showToast("삭제 취소");
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
     private void dailyOutGroupProcess(String response){
         try {
             JSONObject jsonObject = new JSONObject(response);
             boolean success = jsonObject.getBoolean("success");
             if (success) {
                 //삭제 성공여부 확인
-                ((MainMenuActivity)getActivity()).refresh();
+                groupView();
             } else {
-                showToast("그룹 나가기 실패");
+                showToast("정산이 아직 안끝났어요!");
             }
 
         } catch (JSONException e) {
