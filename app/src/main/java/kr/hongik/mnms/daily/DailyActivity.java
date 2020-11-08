@@ -63,6 +63,7 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.daily_result){
             showToast("진심인지 다이얼로그 띄우기 -> 노빠꾸다");
+            floatCalculateDialog();
 //            Intent intent=new Intent(DailyActivity.this, DailyQRActivity.class);
 //            intent.putExtra("loginMember", loginMember);
 //            intent.putExtra("loginMemberAccount", loginMemberAccount);
@@ -128,6 +129,10 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
                 startActivityForResult(intent, TAG_NEW_TRANS);
                 break;
         }
+    }
+
+    private void floatCalculateDialog(){
+
     }
 
     private void getDailyGroupInfo() {

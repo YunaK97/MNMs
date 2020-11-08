@@ -118,6 +118,8 @@ public class NewMembershipActivity extends AppCompatActivity {
                     //멤버십 관련정보 모든것과 가입할 멤버들 전송
                     //멤버십 생성 후 성공했는지 받아야함
 
+                    btnNewMembership.setClickable(false);
+
                     String urlNewMembership = "http://" + loginMember.getIp() + "/membership/new";
 
                     NetworkTask networkTask = new NetworkTask();
@@ -147,8 +149,6 @@ public class NewMembershipActivity extends AppCompatActivity {
         //그룹이름은 중복을 허용하지않음
         //memID를 보내면
         //멤버가 가입한 그룹들의 이름을 받아옴
-
-        btnNewMembership.setClickable(false);
 
         String urlGroupNameList = "http://" + loginMember.getIp() + "/member/membershipGroupList";
 

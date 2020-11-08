@@ -91,6 +91,9 @@ public class NewDailyActivity extends AppCompatActivity {
                 //새 데일리 생성
                 //그룹이름전송, 가입하는 멤버들전송
                 //그룹생성 성공여부를 받아야함
+
+                btnNewDaily.setClickable(false);
+
                 String urlNewDaily = "http://" + loginMember.getIp() + "/daily/new";
 
                 NetworkTask networkTask = new NetworkTask();
@@ -115,8 +118,6 @@ public class NewDailyActivity extends AppCompatActivity {
         //그룹이름은 중복을 허용하지않음
         //memID를 보내면
         //멤버가 가입한 그룹들의 이름을 받아옴
-
-        btnNewDaily.setClickable(false);
 
         String urlGroupNameList = "http://" + loginMember.getIp() + "/member/dailyGroupList";
 
