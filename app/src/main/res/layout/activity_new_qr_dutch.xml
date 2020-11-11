@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".newprocesses.NewQRDutchActivity">
+
+    <LinearLayout
+        android:id="@+id/LLQRType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/CustomTextView"
+            android:text="그룹이름"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/CustomTextView"
+            android:text="Dutch"
+            android:id="@+id/tvQRDailyName"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LLQRReceivedName"
+        android:layout_below="@+id/LLQRType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/CustomTextView"
+            android:text="상대방 이름"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/CustomTextView"
+            android:id="@+id/tvQRReceiveName"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LLQRReceivedAccount"
+        android:layout_below="@+id/LLQRReceivedName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/CustomTextView"
+            android:text="송금 계좌번호"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/CustomTextView"
+            android:id="@+id/tvQRReceiveAccount"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LLQRReceivedMoney"
+        android:layout_below="@+id/LLQRReceivedAccount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/CustomTextView"
+            android:text="보내는 돈"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/CustomTextView"
+            android:id="@+id/tvQRReceiveMoney"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/LLQRPW"
+        android:layout_below="@+id/LLQRReceivedMoney"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/CustomTextView"
+            android:text="계좌비밀번호"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/CustomTextView"
+            android:inputType="numberPassword"
+            android:id="@+id/etQRAccountPW"
+            />
+    </LinearLayout>
+
+
+</RelativeLayout>

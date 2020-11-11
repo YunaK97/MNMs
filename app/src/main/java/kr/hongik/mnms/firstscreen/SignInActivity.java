@@ -293,19 +293,19 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     private boolean getAccountInfo() {
         if (spinnerBankType.getSelectedItemPosition() == 0) {
-            signInMemberAccount.setAccountBank("AAAA");
+            signInMemberAccount.setAccountBank("국민");
         } else if (spinnerBankType.getSelectedItemPosition() == 1) {
-            signInMemberAccount.setAccountBank("AAAB");
+            signInMemberAccount.setAccountBank("우리");
         } else if (spinnerBankType.getSelectedItemPosition() == 2) {
-            signInMemberAccount.setAccountBank("AAAC");
+            signInMemberAccount.setAccountBank("신한");
         } else if (spinnerBankType.getSelectedItemPosition() == 3) {
-            signInMemberAccount.setAccountBank("AAAD");
+            signInMemberAccount.setAccountBank("하나");
         } else if (spinnerBankType.getSelectedItemPosition() == 4) {
-            signInMemberAccount.setAccountBank("AAAE");
+            signInMemberAccount.setAccountBank("카카오뱅크");
         } else if (spinnerBankType.getSelectedItemPosition() == 5) {
-            signInMemberAccount.setAccountBank("AAAF");
+            signInMemberAccount.setAccountBank("농협");
         } else if (spinnerBankType.getSelectedItemPosition() == 6) {
-            signInMemberAccount.setAccountBank("AAAG");
+            signInMemberAccount.setAccountBank("IBK");
         }
 
         String accountBalance = "10000000";

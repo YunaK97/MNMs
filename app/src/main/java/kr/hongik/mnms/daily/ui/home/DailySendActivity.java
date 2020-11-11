@@ -40,8 +40,10 @@ import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.daily.DailyGroup;
+import kr.hongik.mnms.newprocesses.NewDutchActivity;
+import kr.hongik.mnms.newprocesses.NewQRDutchActivity;
 
-public class DailyQRActivity extends AppCompatActivity {
+public class DailySendActivity extends AppCompatActivity {
 
     //1.친구 사이에서의 QR 인식
     //2.결제 시 QR인식 - url로 결제 창 들어가야함!
@@ -73,7 +75,7 @@ public class DailyQRActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_daily_q_r);
+        setContentView(R.layout.activity_daily_send);
 
         tvTotalMoney = findViewById(R.id.tvTotalMoney);
 
@@ -151,10 +153,10 @@ public class DailyQRActivity extends AppCompatActivity {
         if (result != null) {
             //qrcode 가 없으면
             if (result.getContents() == null) {
-                Toast.makeText(DailyQRActivity.this, "취소!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DailySendActivity.this, "취소!", Toast.LENGTH_SHORT).show();
             } else {
                 //qrcode 결과가 있으면
-                Toast.makeText(DailyQRActivity.this, "스캔완료!" + result.getContents(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(DailySendActivity.this, "스캔완료!" + result.getContents(), Toast.LENGTH_SHORT).show();
 
                 floatDialog(result);
 
@@ -179,7 +181,7 @@ public class DailyQRActivity extends AppCompatActivity {
 
     private void floatDialog(IntentResult result) {
         final Member friendMember = new Member();
-        int sendMoney = 0;
+        int sendMoney=0;
         try {
             //data를 json으로 변환
             JSONObject jsonObject = new JSONObject(result.getContents());
@@ -202,12 +204,19 @@ public class DailyQRActivity extends AppCompatActivity {
 
         final int sendMoney2 = sendMoney;
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(DailyQRActivity.this, R.style.CustomDialog);
+        AlertDialog.Builder builder = new AlertDialog.Builder(DailySendActivity.this, R.style.CustomDialog);
         builder.setTitle(sendMoney + " 송금하시겠습니까?");
         builder.setPositiveButton("송금", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                sendMoneyToFriend(friendMember, sendMoney2);
+                Intent intent = new Intent(DailySendActivity.this, NewQRDutchActivity.class);
+                intent.putExtra("loginMember",loginMember);
+                intent.putExtra("loginMemberAccount",loginMemberAccount);
+                intent.putExtra("friendMember",friendMember);
+                intent.putExtra("sendMoney",sendMoney2);
+                intent.putExtra("dailyGroup",dailyGroup);
+
+                startActivity(intent);
             }
         });
         builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -221,26 +230,6 @@ public class DailyQRActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
-    private void sendMoneyToFriend(Member recMember, int money) {
-        String urlSendMoney = "http://" + loginMember.getIp() + "/daily/transact";
-
-        NetworkTask networkTask = new NetworkTask();
-        networkTask.setURL(urlSendMoney);
-        networkTask.setTAG("sendMoney");
-
-        Map<String, String> params = new HashMap<>();
-
-        params.put("money", money + "");
-        params.put("accountNum", recMember.getAccountNum());
-        params.put("myAccountNum", loginMember.getAccountNum());
-        params.put("nick", recMember.getMemName());
-        params.put("friendID",recMember.getMemID());
-        params.put("Mynick", loginMember.getMemName());
-        params.put("memID",loginMember.getMemID());
-        params.put("DID",dailyGroup.getDID()+"");
-
-        networkTask.execute(params);
-    }
 
     private void calculateTotalProcess(String response) {
         Map<String, String> memberMap = new HashMap<>();
@@ -387,8 +376,35 @@ public class DailyQRActivity extends AppCompatActivity {
 
         recSendListAdapter.setOnItemLongClickListener(new OnDailyMemLongClickListener() {
             @Override
-            public void onItemLongClick(RecSendListAdapter.ViewHolder holder, View view, int position) {
-                showToast("송금하시겟소?");
+            public void onItemLongClick(RecSendListAdapter.ViewHolder holder, View view, final int position) {
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(DailySendActivity.this, R.style.CustomDialog);
+                builder.setTitle("송금하시겠습니까?");
+                builder.setPositiveButton("송금", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(DailySendActivity.this, NewDutchActivity.class);
+                        intent.putExtra("loginMember",loginMember);
+                        intent.putExtra("loginMemberAccount",loginMemberAccount);
+                        intent.putExtra("dailyGroup",dailyGroup);
+                        intent.putExtra("sendMoney",recSendListAdapter.getItem(position).getDutchMoney());
+                        intent.putExtra("friendID",recSendListAdapter.getItem(position).getDutchReceiveID());
+
+                        startActivity(intent);
+                    }
+                });
+                builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+
+                final AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
+
+
             }
         });
 
@@ -431,22 +447,6 @@ public class DailyQRActivity extends AppCompatActivity {
 
     }
 
-    private void sendMoneyToFriendProcess(String response) {
-        try {
-            JSONObject jsonObject = new JSONObject(response);
-            String success=jsonObject.getString("success");
-            if(success.equals("true")){
-                showToast("송금 성공");
-            } else if (success.equals("false")) {
-                showToast("이미 보냈읍니다.");
-            }else if(success.equals("notfriend")){
-                showToast("친구가 아니라 불가합니다.");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
     private void showToast(String data) {
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
@@ -486,9 +486,7 @@ public class DailyQRActivity extends AppCompatActivity {
             Log.d(TAG, response);
             if (TAG.equals("calculateTotal")) {
                 calculateTotalProcess(response);
-            } else if (TAG.equals("sendMoney")) {
-                sendMoneyToFriendProcess(response);
-            }else if(TAG.equals("intoDB")){
+            } else if(TAG.equals("intoDB")){
                 Log.d(TAG+"intoDB", response);
             }
 

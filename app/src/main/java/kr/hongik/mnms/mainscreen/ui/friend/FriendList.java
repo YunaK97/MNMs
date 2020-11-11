@@ -3,6 +3,7 @@ package kr.hongik.mnms.mainscreen.ui.friend;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,15 +22,19 @@ import java.util.Map;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.mainscreen.MainMenuActivity;
+import kr.hongik.mnms.newprocesses.SendMoneyActivity;
 
 public class FriendList extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private Member loginMember;
+    private Account loginMemberAccount;
 
     //layouts
     private FriendListAdapter friendListAdapter;
@@ -67,6 +72,7 @@ public class FriendList extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             loginMember = (Member) bundle.getSerializable("loginMember");
+            loginMemberAccount=(Account) bundle.getSerializable("loginMemberAccount");
         }
         showFriend();
 
@@ -86,22 +92,36 @@ public class FriendList extends Fragment {
         networkTask.execute(params);
     }
 
-    private void selectDelFriend(int position) {
+    private void selectFriend(final int position) {
         final Member delMember = friendListAdapter.getItem(position);
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.CustomDialog);
 
-        builder.setTitle(delMember.getMemID()).setMessage("친구목록에서 삭제하시겠습니까?");
+        builder.setTitle(delMember.getMemName());
 
-        builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
+        builder.setNeutralButton("삭제", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                deleteFriend(delMember.getMemID());
+                showToast("삭제");
+                //deleteFriend(delMember.getMemID());
             }
         });
-        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("송금", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                showToast("삭제 취소");
+                showToast("송금");
+                Intent intent=new Intent(rootView.getContext(), SendMoneyActivity.class);
+                intent.putExtra("loginMember",loginMember);
+                intent.putExtra("loginMemberAccount",loginMemberAccount);
+                intent.putExtra("friendID",friendListAdapter.getItem(position).getMemID());
+                intent.putExtra("friendName",friendListAdapter.getItem(position).getMemName());
+
+                startActivity(intent);
+            }
+        });
+        builder.setPositiveButton("취소", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                showToast("취소");
             }
         });
 
@@ -129,9 +149,9 @@ public class FriendList extends Fragment {
 
     private void showFriendProcess(String response) {
         try {
-            JSONObject jsonObject=new JSONObject(response);
-            int showFriendSize=Integer.parseInt(jsonObject.getString("showFriendSize"));
-            if (showFriendSize==0) return;
+            JSONObject jsonObject = new JSONObject(response);
+            int showFriendSize = Integer.parseInt(jsonObject.getString("showFriendSize"));
+            if (showFriendSize == 0) return;
 
             rvMainFriendList = rootView.findViewById(R.id.rvMainFriendList);
             LinearLayoutManager layoutManager = new LinearLayoutManager(rootView.getContext(), LinearLayoutManager.VERTICAL, false);
@@ -139,8 +159,8 @@ public class FriendList extends Fragment {
             friendListAdapter = new FriendListAdapter();
 
             for (int i = 0; i < showFriendSize; i++) {
-                String friendId = jsonObject.getString("memID"+i);
-                String friendName = jsonObject.getString("memName"+i);
+                String friendId = jsonObject.getString("memID" + i);
+                String friendName = jsonObject.getString("memName" + i);
 
                 Member member = new Member();
                 member.setMemName(friendName);
@@ -152,7 +172,7 @@ public class FriendList extends Fragment {
                 @Override
                 public void onItemLongClick(FriendListAdapter.ViewHolder holder, View view, int position) {
                     //정산 안되면 친구 삭제 못함?
-//                    selectDelFriend(position);
+                    selectFriend(position);
                 }
             });
         } catch (JSONException e) {
@@ -168,7 +188,7 @@ public class FriendList extends Fragment {
             if (success) {
                 //삭제 성공여부 확인
                 showToast("친구 삭제 성공");
-                ((MainMenuActivity)getActivity()).refresh();
+                ((MainMenuActivity) getActivity()).refresh();
             } else {
                 showToast("친구 삭제 실패");
             }

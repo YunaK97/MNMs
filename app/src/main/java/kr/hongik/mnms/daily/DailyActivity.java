@@ -15,7 +15,6 @@ import android.widget.Toast;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -29,14 +28,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
-import kr.hongik.mnms.daily.ui.home.DailyQRActivity;
-import kr.hongik.mnms.daily.ui.home.NewDailyMemActivity;
+import kr.hongik.mnms.daily.ui.home.DailySendActivity;
 import kr.hongik.mnms.newprocesses.NewTransactionActivity;
 
 public class DailyActivity extends AppCompatActivity implements View.OnClickListener {
@@ -133,7 +130,7 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
         builder.setPositiveButton("정산", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                Intent intent = new Intent(DailyActivity.this, DailyQRActivity.class);
+                Intent intent = new Intent(DailyActivity.this, DailySendActivity.class);
                 intent.putExtra("loginMember", loginMember);
                 intent.putExtra("loginMemberAccount", loginMemberAccount);
                 intent.putExtra("dailyGroup", dailyGroup);

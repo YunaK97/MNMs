@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".newprocesses.SendMoneyActivity">
+
+    <LinearLayout
+        android:id="@+id/LLSendName"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/CustomTextView"
+            android:text="이름"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/CustomTextView"
+            android:text="ex)홍길동"
+            android:id="@+id/tvSendName"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LLSendAccount"
+        android:layout_below="@+id/LLSendName"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/CustomTextView"
+            android:text="계좌번호"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/CustomTextView"
+            android:id="@+id/tvSendAccount"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LLSendMoney"
+        android:layout_below="@+id/LLSendAccount"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/CustomTextView"
+            android:text="금액"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/CustomTextView"
+            android:hint="ex)10000"
+            android:inputType="number"
+            android:id="@+id/etSendMoney"
+            />
+    </LinearLayout>
+
+    <EditText
+        android:layout_below="@+id/LLSendMoney"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        style="@style/CustomTextView"
+        android:hint="상대방에게 남길 메모(미기입시 예금주명)"
+        android:id="@+id/etSendHistory2"
+        />
+
+    <LinearLayout
+        android:id="@+id/LLSendPW"
+        android:layout_below="@+id/etSendHistory2"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/CustomTextView"
+            android:text="계좌 비밀번호"
+            />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/CustomTextView"
+            android:hint="4자리 비밀번호"
+            android:inputType="numberPassword"
+            android:id="@+id/etSendPW"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/LLSendHistory1"
+        android:layout_below="@+id/LLSendPW"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            style="@style/CustomTextView"
+            android:hint="메모"
+            android:id="@+id/etSendHistory1"
+            />
+    </LinearLayout>
+
+</RelativeLayout>

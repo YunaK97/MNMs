@@ -125,13 +125,11 @@ public class NewTransactionActivity extends AppCompatActivity {
             params.put("accountPassword", accountPW);
             params.put("accountNum", loginMemberAccount.getAccountNum());
         }else{
-            Log.d("checkPWWW",accountPW+" : "+ membershipGroup.getAccountNum());
             urlCheckPW+="/membership/checkPW";
             params.put("accountPassword", accountPW);
             params.put("accountNum", membershipGroup.getAccountNum());
         }
 
-        Log.d("유알엘",urlCheckPW+" : "+mainActivity);
         NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("checkAccountPW");
         networkTask.setURL(urlCheckPW);
