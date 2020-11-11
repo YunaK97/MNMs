@@ -201,6 +201,7 @@ public class MainMenuActivity extends AppCompatActivity {
         int curId = item.getItemId();
         if(curId == R.id.renew){
             showToast("새로고침되면 좋겟ㄷ");
+            refresh();
         }
         if (curId == R.id.new_process) {
             newProcess();
@@ -398,6 +399,11 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     //상단 우측의 추가 버튼 클릭
+
+
+    public void refresh() {
+        adapter.notifyDataSetChanged();
+    }
 
 
     protected void showToast(String data) {
