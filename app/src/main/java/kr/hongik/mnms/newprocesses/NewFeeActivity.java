@@ -111,7 +111,7 @@ public class NewFeeActivity extends AppCompatActivity {
     }
 
     private void checkAccountPW(int accountPW) {
-        String urlCheckPW = "http://" + loginMember.getIp() + "/membership/checkPW2";
+        String urlCheckPW = "http://" + loginMember.getIp() + "/membership/checkPW";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("checkAccountPW");

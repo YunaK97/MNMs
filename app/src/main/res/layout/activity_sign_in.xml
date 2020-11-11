@@ -99,14 +99,14 @@
             android:textSize="20sp"
             android:text="핸드폰 번호" />
 
-        <EditText
-            android:background="@drawable/sidecustom_round"
+        <TextView
             style="@style/CustomTextView"
             android:id="@+id/tvSignInPhone1"
             android:layout_width="match_parent"
-            android:inputType="number"
+            android:text="010"
+            android:textAlignment="center"
             android:layout_weight="1"
-            />
+            android:gravity="center_horizontal" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -175,20 +175,38 @@
             android:layout_gravity="center"
             android:layout_weight="1"
             android:dropDownWidth="250dp" />
+
         <Button
             android:id="@+id/btnEmailOverlap"
             style="@style/CustomButton"
-            android:text="@string/btn_email" />
+            android:text="email인증" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_alignParentRight="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:id="@+id/LLSignInEmailCheck"
+        android:layout_below="@+id/LLSignInEmail"
+        android:visibility="invisible"
+        >
+        <EditText
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="인증번호 입력"
+            android:layout_below="@id/LLSignInEmail"
+            android:id="@+id/etCheckEmail"
+            android:layout_marginRight="10sp"
+            android:inputType="number"
+            />
         <Button
             android:id="@+id/btnEmailAuth"
             style="@style/CustomButton"
-            android:visibility="gone"
-            android:text="Email 인증" />
-
+            android:text="인증번호 확인" />
     </LinearLayout>
-
     <LinearLayout
-        android:layout_below="@id/LLSignInEmail"
+        android:layout_below="@id/LLSignInEmailCheck"
         android:id="@+id/LLSignInAccount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

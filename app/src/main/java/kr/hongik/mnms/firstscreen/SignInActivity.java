@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,7 +44,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     //layouts
     private ArrayAdapter bankTypeAdapter, emailTypeAdapter;
     private Spinner spinnerEmailType, spinnerBankType;
-    private Button cameraBtn, btnSignIn, emailAuth, emailCheck;
+    private Button cameraBtn, btnSignIn, btnEmailAuth, btnEmailOverlap;
 
     //urls
     private String curIp = "211.186.21.254:8090";
@@ -56,6 +57,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private boolean idValid = false, ssnValid = false, emailValid = false, pwValid = false;
     private final static int TAKE_PICTURE = 1;
     private String checkID, checkEmail, authEmail;
+    private String emailAuthNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,12 +89,12 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         overlap.setOnClickListener(this);
 
         //이메일 확인
-        emailCheck = findViewById(R.id.btnEmailOverlap);
-        emailCheck.setOnClickListener(this);
+        btnEmailOverlap = findViewById(R.id.btnEmailOverlap);
+        btnEmailOverlap.setOnClickListener(this);
 
         //이메일 인증
-        emailAuth = findViewById(R.id.btnEmailAuth);
-        emailAuth.setOnClickListener(this);
+        btnEmailAuth = findViewById(R.id.btnEmailAuth);
+        btnEmailAuth.setOnClickListener(this);
 
         //민증확인
         cameraBtn = findViewById(R.id.btnIdentify);
@@ -159,8 +161,17 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 checkOverlap("email");
                 break;
             case R.id.btnEmailAuth:
-                authEmail = checkEmail;
-                checkOverlap("auth");
+                String etCheckEmail=((EditText)findViewById(R.id.etCheckEmail)).getText().toString();
+                showToast(emailAuthNumber+" : "+etCheckEmail);
+
+                if(etCheckEmail.equals(emailAuthNumber)){
+                    showToast("인증 완료");
+                    btnEmailAuth.setClickable(false);
+                    btnEmailOverlap.setClickable(false);
+                }else{
+                    showToast("인증번호가 일치하지 않습니다");
+                }
+
                 break;
             case R.id.btnIdentify:
                 Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -214,19 +225,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             params.put("memEmail", checkEmail);
 
             networkTask.execute(params);
-        } else if (TAG_TYPE.equals("auth")) {
-            String urlEmailAuth = "http://" + curIp + "/member/mail";
-
-            NetworkTask networkTask = new NetworkTask();
-            networkTask.setURL(urlEmailAuth);
-            networkTask.setTAG("emailAuth");
-
-            Map<String, String> params = new HashMap<String, String>();
-            params.put("memEmail", authEmail);
-
-            networkTask.execute(params);
         }
-
     }
 
     private void beforeSignInCheck() {
@@ -275,17 +274,16 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             return false;
         }
 
-        String phone1, phone2, phone3, phoneNumber;
-        phone1 = ((TextView) findViewById(R.id.tvSignInPhone1)).getText().toString();
+        String phone2, phone3, phoneNumber;
         phone2 = ((TextView) findViewById(R.id.tvSignInPhone2)).getText().toString();
         phone3 = ((TextView) findViewById(R.id.tvSignInPhone3)).getText().toString();
-        if (TextUtils.isEmpty(phone1) || TextUtils.isEmpty(phone2) || TextUtils.isEmpty(phone1))
+        if (TextUtils.isEmpty(phone2) || TextUtils.isEmpty(phone3))
             return false;
-        if (phone1.length() != 3 || phone2.length() != 4 || phone3.length() != 4) {
+        if (phone2.length() != 4 || phone3.length() != 4) {
             showToast("올바르지 않은 번호입니다.");
             return false;
         }
-        phoneNumber = phone1 + phone2 + phone3;
+        phoneNumber ="010" + phone2 + phone3;
         signInMember.setPhoneNumber(phoneNumber);
 
         return true;
@@ -385,12 +383,22 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             JSONObject jsonObject = new JSONObject(response);
             boolean success = jsonObject.getBoolean(TAG_SUCCESS);
             if (success) {
-                showToast("사용가능한 이메일.");
-
                 signInMember.setMemEmail(checkEmail);
-                emailValid = true;
-                emailAuth.setVisibility(View.VISIBLE);
-                emailCheck.setVisibility(View.GONE);
+                LinearLayout LLSignInEmailCheck = findViewById(R.id.LLSignInEmailCheck);
+                LLSignInEmailCheck.setVisibility(View.VISIBLE);
+
+                showToast("이메일로 인증번호가 발송되었습니다.");
+
+                String urlEmailAuth = "http://" + curIp + "/member/mail";
+
+                NetworkTask networkTask = new NetworkTask();
+                networkTask.setURL(urlEmailAuth);
+                networkTask.setTAG("emailAuth");
+
+                Map<String, String> params = new HashMap<String, String>();
+                params.put("memEmail", checkEmail);
+
+                networkTask.execute(params);
 
             } else {
                 showToast("사용 불가능한 이메일.");
@@ -403,35 +411,8 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
     private void emailAuthProcess(String response) throws JSONException {
         JSONObject jsonObject = new JSONObject(response);
-        final String number = jsonObject.getString("number");
-        final EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_NUMBER);
+        emailAuthNumber = jsonObject.getString("number");
 
-        final AlertDialog dialog = new AlertDialog.Builder(this, R.style.CustomDialog)
-                .setTitle("인증")
-                .setView(input)
-                .setPositiveButton(android.R.string.ok, null)
-                .setNegativeButton(android.R.string.cancel, null)
-                .create();
-
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialog2) {
-                Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if ((input.getText().toString()).equals(number)) {
-                            Toast.makeText(getApplicationContext(), "인증 성공", Toast.LENGTH_LONG).show();
-                            dialog.dismiss();
-                        } else {
-                            Toast.makeText(getApplicationContext(), "인증번호가 일치하지 않습니다.", Toast.LENGTH_LONG).show();
-                        }
-                        //원하면 dialog.dismiss();
-                    }
-                });
-            }
-        });
     }
 
     private void registerBeginProcess(String response) {

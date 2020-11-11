@@ -132,7 +132,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 }
                 break;
             case R.id.btnMemberOut:
-                checkMemberOut();
+                //checkMemberOut();
                 break;
         }
     }

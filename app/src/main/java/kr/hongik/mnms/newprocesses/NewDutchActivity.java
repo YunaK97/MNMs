@@ -99,10 +99,9 @@ public class NewDutchActivity extends AppCompatActivity {
     }
 
     private void checkAccountPW(String accountPW) {
-        String urlCheckPW = "http://" + loginMember.getIp();
+        String urlCheckPW = "http://" + loginMember.getIp()+"/daily/checkPW";
         Map<String, String> params = new HashMap<>();
 
-        urlCheckPW+="/daily/checkPW";
         params.put("accountPassword", accountPW);
         params.put("accountNum", loginMemberAccount.getAccountNum());
 

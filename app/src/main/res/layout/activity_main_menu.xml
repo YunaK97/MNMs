@@ -6,25 +6,25 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/LLMemberInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="30sp"
         android:layout_marginTop="10sp"
         android:layout_marginRight="30sp"
-        android:layout_marginLeft="30sp"
-        android:gravity="center"
-        android:layout_centerHorizontal="true"
         android:background="@drawable/sidecustom_round"
+        android:gravity="center"
         android:orientation="vertical"
-        android:id="@+id/LLMemberInfo"
         android:padding="10dp">
 
         <TextView
             android:id="@+id/tvName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
             android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:text="이름 : ex) 김나현"
             android:textColor="@android:color/holo_red_dark"
             android:textSize="20sp" />
@@ -39,14 +39,6 @@
             android:textSize="20sp" />
     </LinearLayout>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/mainSwipeLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/LLPagerBtn"
-        android:layout_below="@+id/LLMemberInfo"
-        android:layout_marginTop="-1dp"
-        android:layout_marginBottom="1dp">
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/vpMainList"
@@ -58,7 +50,6 @@
             android:layout_marginTop="10sp"
             android:layout_marginBottom="10sp" />
 
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <LinearLayout
         android:id="@+id/LLPagerBtn"

@@ -18,6 +18,9 @@ import com.google.zxing.integration.android.IntentResult;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -117,16 +120,14 @@ public class NewTransactionActivity extends AppCompatActivity {
     }
 
     private void checkAccountPW(String accountPW) {
-        String urlCheckPW = "http://" + loginMember.getIp();
+        String urlCheckPW = "http://" + loginMember.getIp()+"/daily/checkPW";
         Map<String, String> params = new HashMap<>();
 
+        params.put("accountPassword", accountPW);
+
         if(mainActivity.equals("daily")){
-            urlCheckPW+="/daily/checkPW";
-            params.put("accountPassword", accountPW);
             params.put("accountNum", loginMemberAccount.getAccountNum());
         }else{
-            urlCheckPW+="/membership/checkPW";
-            params.put("accountPassword", accountPW);
             params.put("accountNum", membershipGroup.getAccountNum());
         }
 
@@ -149,6 +150,14 @@ public class NewTransactionActivity extends AppCompatActivity {
         Map<String, String> params = new HashMap<>();
         params.put("accountNum", newTransaction.getAccountNum());
         params.put("DID", newTransaction.getDID() + "");
+        showToast(newTransaction.getTransactHistroy());
+
+        try {
+            String strEndcode= URLEncoder.encode(newTransaction.getTransactHistroy(),"UTF-8");
+            newTransaction.setTransactHistroy(strEndcode);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         params.put("history", newTransaction.getTransactHistroy());
         params.put("money", newTransaction.getTransactMoney() + "");
 

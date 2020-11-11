@@ -57,7 +57,7 @@ import kr.hongik.mnms.newprocesses.NewFriendActivity;
 import kr.hongik.mnms.newprocesses.NewMembershipActivity;
 
 
-public class MainMenuActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class MainMenuActivity extends AppCompatActivity {
     private Member loginMember;
     private Account loginMemberAccount;
 
@@ -67,7 +67,7 @@ public class MainMenuActivity extends AppCompatActivity implements SwipeRefreshL
     private ImageButton btnTransaction, btnMembership, btnDaily, btnFriendList;
     private ViewPager vpMainList;
     public MyPagerAdapter adapter;
-    private SwipeRefreshLayout mainSwipeLayout=null;
+    //private SwipeRefreshLayout mainSwipeLayout=null;
     private TransactionList transactionList;
     private FriendList friendList;
     private DailyList dailyList;
@@ -85,7 +85,7 @@ public class MainMenuActivity extends AppCompatActivity implements SwipeRefreshL
 
         //id찾기
 
-        mainSwipeLayout= findViewById(R.id.mainSwipeLayout);
+        //mainSwipeLayout= findViewById(R.id.mainSwipeLayout);
         vpMainList = findViewById(R.id.vpMainList);
         tvName = findViewById(R.id.tvName);
         tvAccountNum = findViewById(R.id.tvAccountNum);
@@ -94,7 +94,7 @@ public class MainMenuActivity extends AppCompatActivity implements SwipeRefreshL
         btnDaily = findViewById(R.id.btnDaily);
         btnFriendList = findViewById(R.id.btnFriendList);
 
-        mainSwipeLayout.setOnRefreshListener(this);
+        //mainSwipeLayout.setOnRefreshListener(this);
 
         //액션바
         actionBar = getSupportActionBar();
@@ -197,18 +197,18 @@ public class MainMenuActivity extends AppCompatActivity implements SwipeRefreshL
         checkMembershipSubmit();
     }
 
-    @Override
-    public void onRefresh(){
-        mainSwipeLayout.setRefreshing(true);
-
-        dailyList.groupView();
-        friendList.showFriend();
-        transactionList.showTransaction();
-        membershipList.groupView();
-
-        mainSwipeLayout.setRefreshing(false);
-
-    }
+//    @Override
+//    public void onRefresh(){
+//        mainSwipeLayout.setRefreshing(true);
+//
+//        dailyList.groupView();
+//        friendList.showFriend();
+//        transactionList.showTransaction();
+//        membershipList.groupView();
+//
+//        mainSwipeLayout.setRefreshing(false);
+//
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
