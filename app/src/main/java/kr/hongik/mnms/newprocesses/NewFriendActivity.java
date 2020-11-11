@@ -236,6 +236,7 @@ public class NewFriendActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
+            Log.d(TAG, response);
             if (TAG.equals("newFriendAdd")) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);
@@ -284,7 +285,6 @@ public class NewFriendActivity extends AppCompatActivity {
             } else if (TAG.equals("requestedResult")) {
                 try {
                     String TAG = "honey";
-                    Log.d(TAG, response);
                     JSONObject jsonObject = new JSONObject(response);
                     boolean success = jsonObject.getBoolean(TAG_SUCCESS);
                     if (success) {
@@ -298,7 +298,6 @@ public class NewFriendActivity extends AppCompatActivity {
                 LLRequestFriend.setVisibility(View.GONE);
             } else if (TAG.equals("deleteFriend")) {
                 try {
-                    Log.d("deleteFriend", response);
                     JSONObject jsonObject = new JSONObject(response);
                     boolean success = jsonObject.getBoolean(TAG_SUCCESS);
                     if (success) {

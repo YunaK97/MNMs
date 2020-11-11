@@ -2,6 +2,7 @@ package kr.hongik.mnms.daily.ui.home;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -197,6 +198,7 @@ public class DailyFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String response) {
+            Log.d(TAG, response);
             if(TAG.equals("dailyTransaction")){
                 setTransactionProcess(response);
             }

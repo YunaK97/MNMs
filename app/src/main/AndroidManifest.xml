@@ -24,11 +24,6 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".newprocesses.SendMoneyActivity"></activity>
 
-        <service
-            android:name=".mainscreen.MembershipService"
-            android:enabled="true"
-            android:exported="true" />
-
         <activity android:name=".newprocesses.NewDutchActivity" />
         <activity android:name=".newprocesses.NewQRDutchActivity" />
         <activity android:name=".newprocesses.NewFeeActivity" />

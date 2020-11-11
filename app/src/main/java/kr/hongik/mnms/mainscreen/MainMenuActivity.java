@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +35,7 @@ import androidx.core.app.NotificationCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import org.json.JSONObject;
@@ -55,7 +57,7 @@ import kr.hongik.mnms.newprocesses.NewFriendActivity;
 import kr.hongik.mnms.newprocesses.NewMembershipActivity;
 
 
-public class MainMenuActivity extends AppCompatActivity {
+public class MainMenuActivity extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener {
     private Member loginMember;
     private Account loginMemberAccount;
 
@@ -64,9 +66,12 @@ public class MainMenuActivity extends AppCompatActivity {
     private TextView tvName, tvAccountNum;
     private ImageButton btnTransaction, btnMembership, btnDaily, btnFriendList;
     private ViewPager vpMainList;
-    private NotificationManager notiManager;
-    private NotificationCompat.Builder notiBuilder;
     public MyPagerAdapter adapter;
+    private SwipeRefreshLayout mainSwipeLayout=null;
+    private TransactionList transactionList;
+    private FriendList friendList;
+    private DailyList dailyList;
+    private MembershipList membershipList;
 
 
     //variables
@@ -78,8 +83,9 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-
         //id찾기
+
+        mainSwipeLayout= findViewById(R.id.mainSwipeLayout);
         vpMainList = findViewById(R.id.vpMainList);
         tvName = findViewById(R.id.tvName);
         tvAccountNum = findViewById(R.id.tvAccountNum);
@@ -87,6 +93,8 @@ public class MainMenuActivity extends AppCompatActivity {
         btnMembership = findViewById(R.id.btnMembership);
         btnDaily = findViewById(R.id.btnDaily);
         btnFriendList = findViewById(R.id.btnFriendList);
+
+        mainSwipeLayout.setOnRefreshListener(this);
 
         //액션바
         actionBar = getSupportActionBar();
@@ -103,13 +111,13 @@ public class MainMenuActivity extends AppCompatActivity {
 
         adapter = new MyPagerAdapter(getSupportFragmentManager());
 
-        TransactionList transactionList = new TransactionList();
+         transactionList = new TransactionList();
         adapter.addItem(transactionList);
-        MembershipList membershipList = new MembershipList();
+         membershipList = new MembershipList();
         adapter.addItem(membershipList);
-        DailyList dailyList = new DailyList();
+         dailyList = new DailyList();
         adapter.addItem(dailyList);
-        FriendList friendList = new FriendList();
+         friendList = new FriendList();
         adapter.addItem(friendList);
 
         vpMainList.setAdapter(adapter);
@@ -187,6 +195,19 @@ public class MainMenuActivity extends AppCompatActivity {
         });
 
         checkMembershipSubmit();
+    }
+
+    @Override
+    public void onRefresh(){
+        mainSwipeLayout.setRefreshing(true);
+
+        dailyList.groupView();
+        friendList.showFriend();
+        transactionList.showTransaction();
+        membershipList.groupView();
+
+        mainSwipeLayout.setRefreshing(false);
+
     }
 
     @Override
@@ -384,7 +405,6 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void checkMembershipSubmitProcess(String response) {
-        Log.d("checkFee", response);
         try {
             JSONObject jsonObject = new JSONObject(response);
             int GIDsize = jsonObject.getInt("GIDsize");
@@ -515,6 +535,7 @@ public class MainMenuActivity extends AppCompatActivity {
         @RequiresApi(api = Build.VERSION_CODES.M)
         @Override
         protected void onPostExecute(String response) {
+            Log.d(TAG, response);
             if (TAG.equals("checkSubmit")) {
                 checkMembershipSubmitProcess(response);
             }

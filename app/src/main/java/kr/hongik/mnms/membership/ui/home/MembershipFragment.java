@@ -103,9 +103,7 @@ public class MembershipFragment extends Fragment {
                 transact.setAccountNum(jsonObject.getString("accountNum" + i));
                 transact.setTransactID(Integer.parseInt(jsonObject.getString("transactID" + i)));
                 transact.setTransactHistroy(jsonObject.getString("transactHistory" + i));
-                Log.d("플마플마",jsonObject.getString("transactMoney"+i));
                 transact.setTransactMoney(Integer.parseInt(jsonObject.getString("transactMoney" + i)));
-                Log.d("마플마플",transact.getTransactMoney()+"");
                 transact.setSince(jsonObject.getString("since" + i));
                 transact.setMID(Integer.parseInt(jsonObject.getString("MID" + i)));
 
@@ -153,6 +151,7 @@ public class MembershipFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String response) {
+            Log.d(TAG, response);
             if (TAG.equals("setTransaction")) {
                 setTransactionProcess(response);
             }

@@ -80,7 +80,7 @@ public class MembershipList extends Fragment {
     }
 
 
-    private void groupView() {
+    public void groupView() {
         //회원이 가입한 멤버십 그룹을 출력
         //memID 전송
         //가입한 멤버십들의 GID,groupName들을 받아옴

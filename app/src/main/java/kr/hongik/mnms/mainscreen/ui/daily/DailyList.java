@@ -82,7 +82,7 @@ public class DailyList extends Fragment {
         groupView();
     }
 
-    private void groupView() {
+    public void groupView() {
         String urlDailyGroupInfo = "http://" + loginMember.getIp() + "/member/dailyGroupList";
 
         NetworkTask networkTask = new NetworkTask();

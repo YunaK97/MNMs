@@ -79,7 +79,7 @@ public class FriendList extends Fragment {
         return rootView;
     }
 
-    private void showFriend() {
+    public void showFriend() {
         String urlShowFriend = "http://" + loginMember.getIp() + "/member/showFriend";
 
         NetworkTask networkTask = new NetworkTask();
@@ -182,7 +182,6 @@ public class FriendList extends Fragment {
 
     private void deleteFriendProcess(String response) {
         try {
-            Log.d("deleteFriend", response);
             JSONObject jsonObject = new JSONObject(response);
             boolean success = jsonObject.getBoolean(TAG_SUCCESS);
             if (success) {
@@ -231,6 +230,7 @@ public class FriendList extends Fragment {
 
         @Override
         protected void onPostExecute(String response) {
+            Log.d(TAG, response);
             if (TAG.equals("showFriend")) {
                 showFriendProcess(response);
             } else if (TAG.equals("deleteFriend")) {

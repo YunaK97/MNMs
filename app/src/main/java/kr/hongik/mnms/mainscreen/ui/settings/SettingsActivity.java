@@ -222,6 +222,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         @Override
         protected void onPostExecute(String response) {
+            Log.d(TAG, response);
             if (TAG.equals("pwCheck")) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);

@@ -127,7 +127,6 @@ public class DailySendActivity extends AppCompatActivity {
                         jsonObject.put("myID", loginMember.getMemID());
                         jsonObject.put("myAccount", loginMember.getAccountNum());
                         jsonObject.put("myName", loginMember.getMemName());
-                        showToast(loginMember.getAccountNum());
                         //내가 받을 돈
 
                         BitMatrix bitMatrix = multiFormatWriter.encode(jsonObject.toString(), BarcodeFormat.QR_CODE, 200, 200);
@@ -181,7 +180,7 @@ public class DailySendActivity extends AppCompatActivity {
 
     private void floatDialog(IntentResult result) {
         final Member friendMember = new Member();
-        int sendMoney=0;
+        int sendMoney = 0;
         try {
             //data를 json으로 변환
             JSONObject jsonObject = new JSONObject(result.getContents());
@@ -210,11 +209,11 @@ public class DailySendActivity extends AppCompatActivity {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 Intent intent = new Intent(DailySendActivity.this, NewQRDutchActivity.class);
-                intent.putExtra("loginMember",loginMember);
-                intent.putExtra("loginMemberAccount",loginMemberAccount);
-                intent.putExtra("friendMember",friendMember);
-                intent.putExtra("sendMoney",sendMoney2);
-                intent.putExtra("dailyGroup",dailyGroup);
+                intent.putExtra("loginMember", loginMember);
+                intent.putExtra("loginMemberAccount", loginMemberAccount);
+                intent.putExtra("friendMember", friendMember);
+                intent.putExtra("sendMoney", sendMoney2);
+                intent.putExtra("dailyGroup", dailyGroup);
 
                 startActivity(intent);
             }
@@ -283,9 +282,9 @@ public class DailySendActivity extends AppCompatActivity {
             Comparator<DutchMember> noAsc = new Comparator<DutchMember>() {
                 @Override
                 public int compare(DutchMember item1, DutchMember item2) {
-                    if(item1.getMemName().equals(item2.getMemName())){
+                    if (item1.getMemName().equals(item2.getMemName())) {
                         return 1;
-                    }else{
+                    } else {
                         return -1;
                     }
                 }
@@ -319,7 +318,7 @@ public class DailySendActivity extends AppCompatActivity {
 
             for (int i = dutchMemberArrayList.size() - 1; i >= 0; i--) {
                 //돈 받을 사람
-                if(dutchMemberArrayList.get(i).getRsMoney() <=0){
+                if (dutchMemberArrayList.get(i).getRsMoney() <= 0) {
                     continue;
                 }
                 DutchMember receiveMem = dutchMemberArrayList.get(i);
@@ -327,7 +326,7 @@ public class DailySendActivity extends AppCompatActivity {
                 int recMoney = receiveMem.getTmpRSMoney();
                 if (recMoney - totalSend > 0) {
                     //아직 더 받아야함 - totalSend 끝
-                    receiveMem.setTmpRSMoney(recMoney-totalSend);
+                    receiveMem.setTmpRSMoney(recMoney - totalSend);
                     RecSend recSend = new RecSend();
                     recSend.setDutchMoney(totalSend);
                     recSend.setDutchSendID(mainMember.getMemID());
@@ -360,15 +359,15 @@ public class DailySendActivity extends AppCompatActivity {
         Comparator<RecSend> noAsc = new Comparator<RecSend>() {
             @Override
             public int compare(RecSend item1, RecSend item2) {
-                if(item1.getDutchSendID().equals(item2.getDutchSendID())){
+                if (item1.getDutchSendID().equals(item2.getDutchSendID())) {
                     return 1;
-                }else{
+                } else {
                     return -1;
                 }
             }
         };
 
-        ArrayList<RecSend> tmpList=recSendListAdapter.getList();
+        ArrayList<RecSend> tmpList = recSendListAdapter.getList();
         Collections.sort(tmpList, noAsc);
         recSendListAdapter.setItems(tmpList);
 
@@ -384,11 +383,11 @@ public class DailySendActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent = new Intent(DailySendActivity.this, NewDutchActivity.class);
-                        intent.putExtra("loginMember",loginMember);
-                        intent.putExtra("loginMemberAccount",loginMemberAccount);
-                        intent.putExtra("dailyGroup",dailyGroup);
-                        intent.putExtra("sendMoney",recSendListAdapter.getItem(position).getDutchMoney());
-                        intent.putExtra("friendID",recSendListAdapter.getItem(position).getDutchReceiveID());
+                        intent.putExtra("loginMember", loginMember);
+                        intent.putExtra("loginMemberAccount", loginMemberAccount);
+                        intent.putExtra("dailyGroup", dailyGroup);
+                        intent.putExtra("sendMoney", recSendListAdapter.getItem(position).getDutchMoney());
+                        intent.putExtra("friendID", recSendListAdapter.getItem(position).getDutchReceiveID());
 
                         startActivity(intent);
                     }
@@ -404,51 +403,46 @@ public class DailySendActivity extends AppCompatActivity {
                 alertDialog.show();
 
 
-
             }
         });
 
         insertDB();
     }
 
-    private void insertDB(){
+    private void insertDB() {
         String urlIntoDB = "http://" + loginMember.getIp() + "/daily/calculate";
 
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlIntoDB);
         networkTask.setTAG("intoDB");
 
-        Map<String,String> params=new HashMap<>();
+        Map<String, String> params = new HashMap<>();
 
-        ArrayList<RecSend> recSendArrayList=recSendListAdapter.getList();
+        ArrayList<RecSend> recSendArrayList = recSendListAdapter.getList();
 
-        Map<String,Integer> cntArray=new HashMap<>();
-        for(int i=0;i<memberArrayList.size();i++){
-            cntArray.put(memberArrayList.get(i).getMemID(),0);
+        Map<String, Integer> cntArray = new HashMap<>();
+        for (int i = 0; i < memberArrayList.size(); i++) {
+            cntArray.put(memberArrayList.get(i).getMemID(), 0);
         }
 
-        for (RecSend recSend: recSendArrayList){
-            String id=recSend.getDutchSendID();
-            int tmpCnt=cntArray.get(id);
+        for (RecSend recSend : recSendArrayList) {
+            String id = recSend.getDutchSendID();
+            int tmpCnt = cntArray.get(id);
             tmpCnt++;
-            cntArray.put(id,tmpCnt);
+            cntArray.put(id, tmpCnt);
         }
 
-        params.put("DID",dailyGroup.getDID()+"");
-        params.put("friendSize",cntArray.size()+"");
-        for(int i=0;i<memberArrayList.size();i++){
-            String id=memberArrayList.get(i).getMemID();
-            Log.d("확인",id+" : "+cntArray.get(id));
-            params.put("count"+i,cntArray.get(id)+"");
-            params.put("memID"+i,id);
+        params.put("DID", dailyGroup.getDID() + "");
+        params.put("friendSize", cntArray.size() + "");
+        for (int i = 0; i < memberArrayList.size(); i++) {
+            String id = memberArrayList.get(i).getMemID();
+            Log.d("확인", id + " : " + cntArray.get(id));
+            params.put("count" + i, cntArray.get(id) + "");
+            params.put("memID" + i, id);
         }
 
         networkTask.execute(params);
 
-    }
-
-    private void showToast(String data) {
-        Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
 
     private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
@@ -486,8 +480,8 @@ public class DailySendActivity extends AppCompatActivity {
             Log.d(TAG, response);
             if (TAG.equals("calculateTotal")) {
                 calculateTotalProcess(response);
-            } else if(TAG.equals("intoDB")){
-                Log.d(TAG+"intoDB", response);
+            } else if (TAG.equals("intoDB")) {
+                Log.d(TAG + "intoDB", response);
             }
 
         }

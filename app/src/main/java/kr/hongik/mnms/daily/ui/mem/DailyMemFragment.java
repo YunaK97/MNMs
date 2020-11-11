@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,53 +73,6 @@ public class DailyMemFragment extends Fragment {
         rvDailyMemberList.setAdapter(memberAdapter);
     }
 
-    private void selectDelMember(int position) {
-        final EditText edittext = new EditText(rootView.getContext());
-        final Member selMember = memberAdapter.getItem(position);
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.CustomDialog);
-
-        builder.setTitle(selMember.getMemName()).setMessage("membership에서 삭제하시겠습니까?");
-
-        builder.setPositiveButton("삭제", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                deleteMember(selMember.getMemID());
-            }
-        });
-        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                showToast("삭제 취소");
-            }
-        });
-
-        final AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
-    private void deleteMember(String delMemberId) {
-        //데일리 그룹에서 멤버 삭제할것임
-        //삭제할 멤버아이디와 GID,DID를전송함
-        //그룹에서 멤버를 삭제한 후, 성공여부를 전달받아야함
-        String urlDeleteMember = "http://" + loginMember.getIp() + "/deleteMember";
-
-        NetworkTask networkTask = new NetworkTask();
-        networkTask.setURL(urlDeleteMember);
-        networkTask.setTAG("delMem");
-
-        Map<String, String> params = new HashMap<>();
-        params.put("memID", delMemberId);
-        params.put("GID", dailyGroup.getGID()+"");
-        params.put("DID", dailyGroup.getDID()+"");
-
-        networkTask.execute(params);
-    }
-
-    private void showToast(String data) {
-        Toast.makeText(context, data, Toast.LENGTH_LONG).show();
-    }
-
     private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
         protected String url;
         protected String TAG;
@@ -152,9 +106,8 @@ public class DailyMemFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String response) {
-            if (TAG.equals("delMem")) {
+            Log.d(TAG, response);
 
-            }
         }
     }
 

@@ -3,6 +3,7 @@ package kr.hongik.mnms.daily.ui.home;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -188,6 +189,7 @@ public class NewDailyMemActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
+            Log.d(TAG, response);
             if (TAG.equals("addDailyMem")) {
                 try {
                     JSONObject jsonObject = new JSONObject(response);

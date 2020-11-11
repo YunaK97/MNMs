@@ -185,7 +185,6 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void dailyGroupProcess(String response) {
-        Log.d("dailyGroup",response);
         try {
             JSONObject jsonObject = new JSONObject(response);
 
@@ -288,6 +287,7 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
 
         @Override
         protected void onPostExecute(String response) {
+            Log.d(TAG, response);
             if (TAG.equals("dailyGroup")) {
                 dailyGroupProcess(response);
             } else if (TAG.equals("showMem")) {

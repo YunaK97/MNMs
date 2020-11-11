@@ -100,9 +100,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         // 6.0 마쉬멜로우 이상일 경우에는 권한 체크 후 권한 요청
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                Log.d(TAG, "권한 설정 완료");
+                //Log.d(TAG, "권한 설정 완료");
             } else {
-                Log.d(TAG, "권한 설정 요청");
+                //Log.d(TAG, "권한 설정 요청");
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             }
         }
@@ -112,9 +112,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        Log.d(TAG, "onRequestPermissionsResult");
+        //Log.d(TAG, "onRequestPermissionsResult");
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-            Log.d(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
+            //Log.d(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
         }
     }
 
@@ -417,7 +417,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         dialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
             public void onShow(DialogInterface dialog2) {
-                Button button = ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE);
+                Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
                 button.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -489,12 +489,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         @Override
         protected void onPostExecute(String response) {
-            if (response.isEmpty()) {
-                Log.d(TAG, "빈칸 옴!");
-                return;
-            } else {
-                Log.d(TAG, response);
-            }
+            Log.d(TAG, response);
 
             if (TAG.equals("idOverlap")) {
                 idOverlapProcess(response);

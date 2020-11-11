@@ -261,8 +261,8 @@ public class NewMembershipActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
+            Log.d(TAG, response);
             if (TAG.equals("newMembership")) {
-                Log.d("newMembership",response);
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     boolean success = jsonObject.getBoolean(TAG_SUCCESS);
@@ -277,10 +277,8 @@ public class NewMembershipActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             } else if (TAG.equals("groupNameList")) {
-                Log.d("groupNameList",response);
                 membershipGroupNameProcess(response);
             } else if (TAG.equals("showFriend")) {
-                Log.d("showFriend",response);
                 showFriendProcess(response);
             }
 

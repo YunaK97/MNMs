@@ -74,7 +74,7 @@ public class TransactionList extends Fragment {
         return rootView;
     }
 
-    private void showTransaction() {
+    public void showTransaction() {
         String urlListTransaction = "http://" + loginMember.getIp() + "/member/listTransaction";
 
         NetworkTask networkTask = new NetworkTask();
