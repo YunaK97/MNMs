@@ -113,7 +113,6 @@ public class MembershipList extends Fragment {
         //memID,GID를 전송하면
         //멤버십을 나간후 성공여부를 받음
         String urlOutMGroup = "http://" + loginMember.getIp() + "/membership/deleteMembershipgroup";
-        showToast(urlOutMGroup);
         NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlOutMGroup);
         networkTask.setTAG("membershipOutGroup");

@@ -150,7 +150,6 @@ public class DailyList extends Fragment {
             groupAdapter.setOnItemLongClickListener(new OnGroupItemLongClickListener() {
                 @Override
                 public void onItemLongClick(GroupAdapter.ViewHolder holder, View view, int position) {
-                    showToast("아직 구현중");
                     showFloat(position);
                 }
             });
