@@ -94,13 +94,13 @@ public class CustomDialogDuration implements View.OnClickListener {
         LL_dialog_week=dialog.findViewById(R.id.LLDialogWeek);
         LL_dialog_year=dialog.findViewById(R.id.LLDialogYear);
 
-        //tv_customMon.setDefaultFocusHighlightEnabled(true);
-        tvCustomMon.setOnClickListener(new View.OnClickListener() {
+        //tvCustomMonth.setDefaultFocusHighlightEnabled(true);
+        tvCustomMonth.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //매달 낼 날짜 하루 지정 1~12
-                tvCustomMon.setTextColor(colorWhite);
-                tvCustomMon.setBackgroundColor(colorBackPink);
+                tvCustomMonth.setTextColor(colorWhite);
+                tvCustomMonth.setBackgroundColor(colorBackPink);
                 payType=2;
 
                 tvCustomWeek.setTextColor(colorTextPink);
@@ -114,7 +114,7 @@ public class CustomDialogDuration implements View.OnClickListener {
             }
         });
 
-        //tv_customWeek.setDefaultFocusHighlightEnabled(true);
+        //tvCustomWeek.setDefaultFocusHighlightEnabled(true);
         tvCustomWeek.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,8 +122,8 @@ public class CustomDialogDuration implements View.OnClickListener {
                 tvCustomWeek.setBackgroundColor(colorBackPink);
                 payType=1;
 
-                tvCustomMon.setTextColor(colorTextPink);
-                tvCustomMon.setBackgroundColor(colorWhite);
+                tvCustomMonth.setTextColor(colorTextPink);
+                tvCustomMonth.setBackgroundColor(colorWhite);
                 tvCustomYear.setTextColor(colorTextPink);
                 tvCustomYear.setBackgroundColor(colorWhite);
 
@@ -133,7 +133,7 @@ public class CustomDialogDuration implements View.OnClickListener {
             }
         });
 
-        //tv_customYear.setDefaultFocusHighlightEnabled(true);
+        //tvCustomYear.setDefaultFocusHighlightEnabled(true);
         tvCustomYear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -143,8 +143,8 @@ public class CustomDialogDuration implements View.OnClickListener {
 
                 tvCustomWeek.setTextColor(colorTextPink);
                 tvCustomWeek.setBackgroundColor(colorWhite);
-                tvCustomMon.setTextColor(colorTextPink);
-                tvCustomMon.setBackgroundColor(colorWhite);
+                tvCustomMonth.setTextColor(colorTextPink);
+                tvCustomMonth.setBackgroundColor(colorWhite);
 
                 LL_dialog_month.setVisibility(View.GONE);
                 LL_dialog_week.setVisibility(View.GONE);

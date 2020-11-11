@@ -64,7 +64,7 @@ public class NewTransactionActivity extends AppCompatActivity {
     private IntentIntegrator qrScan;
 
     //layouts
-    private TextView tvNewTransDailyName;
+    private TextView tvNewTransDailyName,tvNewTransMembershipName;
     private LinearLayout LLNewTransDaily, LLNewTransMembership;
 
     //variables
@@ -90,11 +90,18 @@ public class NewTransactionActivity extends AppCompatActivity {
             LLNewTransDaily.setVisibility(View.VISIBLE);
             LLNewTransMembership.setVisibility(View.GONE);
 
+            setTitle(dailyGroup.getGroupName());
+
         } else if (mainActivity.equals("membership")) {
             membershipGroup = (MembershipGroup) intent.getSerializableExtra("membershipGroup");
 
+            tvNewTransMembershipName=findViewById(R.id.tvNewTransMembershipName);
+            tvNewTransMembershipName.setText(membershipGroup.getGroupName());
+
             LLNewTransMembership.setVisibility(View.VISIBLE);
             LLNewTransDaily.setVisibility(View.GONE);
+            
+            setTitle(membershipGroup.getGroupName());
         }
     }
 
