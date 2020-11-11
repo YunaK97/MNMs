@@ -78,7 +78,6 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
 
-        
 
         //id찾기
         vpMainList = findViewById(R.id.vpMainList);
@@ -200,6 +199,9 @@ public class MainMenuActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int curId = item.getItemId();
+        if(curId == R.id.renew){
+            showToast("새로고침되면 좋겟ㄷ");
+        }
         if (curId == R.id.new_process) {
             newProcess();
         } else if (curId == R.id.settings) {
@@ -223,6 +225,8 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
     }
+
+
 
     @Override
     public void onBackPressed() {
@@ -394,11 +398,6 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     //상단 우측의 추가 버튼 클릭
-
-
-    public void refresh() {
-        adapter.notifyDataSetChanged();
-    }
 
 
     protected void showToast(String data) {

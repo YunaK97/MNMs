@@ -116,13 +116,13 @@ public class TransactionList extends Fragment {
                 transactionArrayList.add(transact);
             }
 
-            Comparator<Transaction> noAsc = new Comparator<Transaction>() {
-                @Override
-                public int compare(Transaction item1, Transaction item2) {
-                    return item1.getSince().compareTo(item2.getSince());
-                }
-            };
-            Collections.sort(transactionArrayList, noAsc);
+//            Comparator<Transaction> noAsc = new Comparator<Transaction>() {
+//                @Override
+//                public int compare(Transaction item1, Transaction item2) {
+//                    return item1.getSince().compareTo(item2.getSince());
+//                }
+//            };
+//            Collections.sort(transactionArrayList, noAsc);
 
             transactionAdapter.setItems(transactionArrayList);
             rvMainTransactionList.setAdapter(transactionAdapter);

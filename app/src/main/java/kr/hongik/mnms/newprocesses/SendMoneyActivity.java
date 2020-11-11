@@ -137,11 +137,11 @@ public class SendMoneyActivity extends AppCompatActivity {
         String history1=((EditText)findViewById(R.id.etSendHistory1)).getText().toString();
         String history2=((EditText)findViewById(R.id.etSendHistory2)).getText().toString();
         if(history1.length()<=0){
-            history1=friendMember.getMemID();
+            history1=friendMember.getMemName();
         }
 
         if(history2.length()<=0){
-            history2=loginMember.getMemID();
+            history2=loginMember.getMemName();
         }
 
         params.put("money", etSendMoney);
