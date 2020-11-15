@@ -94,14 +94,14 @@ public class OCRProcess {
             out.write(fileString.toString().getBytes("UTF-8"));
             out.flush();
 
-            try (FileInputStream fis = new FileInputStream(file)) {
-                byte[] buffer = new byte[8192];
-                int count;
-                while ((count = fis.read(buffer)) != -1) {
-                    out.write(buffer, 0, count);
-                }
-                out.write("\r\n".getBytes());
-            }
+//            try (FileInputStream fis = new FileInputStream(file)) {
+//                byte[] buffer = new byte[8192];
+//                int count;
+//                while ((count = fis.read(buffer)) != -1) {
+//                    out.write(buffer, 0, count);
+//                }
+//                out.write("\r\n".getBytes());
+//            }
 
             out.write(("--" + boundary + "--\r\n").getBytes("UTF-8"));
         }
