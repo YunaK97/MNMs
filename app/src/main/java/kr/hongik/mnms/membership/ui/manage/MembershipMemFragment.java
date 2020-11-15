@@ -2,6 +2,8 @@ package kr.hongik.mnms.membership.ui.manage;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,6 +31,7 @@ import java.util.Map;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.NetworkTask;
+import kr.hongik.mnms.ProgressDialog;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.mainscreen.ui.friend.FriendListAdapter;
 import kr.hongik.mnms.membership.MembershipGroup;
@@ -51,6 +54,7 @@ public class MembershipMemFragment extends Fragment {
     private RecyclerView rvMembershipMemberList;
     private MemberListAdapter presidentMemberAdapter;
     private FriendListAdapter normalMemberAdapter;
+    private ProgressDialog progressDialog;
 
     private Context context;
     private ViewGroup rootView;
@@ -63,6 +67,9 @@ public class MembershipMemFragment extends Fragment {
         context = getContext();
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_membership_mem, container, false);
 
+        progressDialog = new ProgressDialog(rootView.getContext());
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         Bundle bundle = getArguments();
         if (bundle != null) {
             loginMember = (Member) bundle.getSerializable("loginMember");
@@ -74,9 +81,7 @@ public class MembershipMemFragment extends Fragment {
             } else {
                 showMember();
             }
-
         }
-
         return rootView;
     }
 
@@ -154,6 +159,9 @@ public class MembershipMemFragment extends Fragment {
     }
 
     private void submitLateFee() {
+
+        progressDialog.show();
+
         String urlFeeLateMember = "http://" + loginMember.getIp() + "/membership/notSubmit";
 
         final NetworkTask networkTask = new NetworkTask();
@@ -203,8 +211,8 @@ public class MembershipMemFragment extends Fragment {
         //presidentMemberAdapter에 나중에 set
 
         for (int i = 0; i < memberArrayList.size(); i++) {
-            Member member=memberArrayList.get(i);
-            MembershipMember membershipMember=new MembershipMember();
+            Member member = memberArrayList.get(i);
+            MembershipMember membershipMember = new MembershipMember();
             membershipMember.setMemID(member.getMemID());
             membershipMember.setMemName(member.getMemName());
             String notsubmit = submitList.get(membershipMember.getMemID());
@@ -220,6 +228,8 @@ public class MembershipMemFragment extends Fragment {
                 selectDelMember(position);
             }
         });
+
+        progressDialog.dismiss();
     }
 
     private void deleteMember(String delMemberId) {
@@ -247,16 +257,16 @@ public class MembershipMemFragment extends Fragment {
         }, 1500);
     }
 
-    private void delMemProcess(String response){
+    private void delMemProcess(String response) {
         try {
-            JSONObject jsonObject=new JSONObject(response);
-            boolean success=jsonObject.getBoolean("success");
-            if(success){
+            JSONObject jsonObject = new JSONObject(response);
+            boolean success = jsonObject.getBoolean("success");
+            if (success) {
                 showToast("멤버 삭제");
-            }else {
+            } else {
                 showToast("멤버 삭제 실패");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

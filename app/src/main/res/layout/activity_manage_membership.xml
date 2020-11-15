@@ -125,7 +125,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="매월"
                 android:inputType="number"
                 android:textSize="20sp" />
 
@@ -135,7 +134,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="1"
                 android:inputType="number"
                 android:textSize="20sp" />
         </LinearLayout>

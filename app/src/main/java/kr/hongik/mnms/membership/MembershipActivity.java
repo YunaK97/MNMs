@@ -96,6 +96,8 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
             showToast("멤버 추가 완료");
         } else if (requestCode == TAG_TRANS) {
             showToast("내역 추가 완료");
+        }else if(requestCode==TAG_MANAGE){
+            getMembershipGroupInfo();
         }
     }
 
@@ -302,12 +304,12 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
             e.printStackTrace();
         }
 
-        TextView tvMembershipName, tvMembershipPresident, tvMembershipAccountNum;
-        tvMembershipName = findViewById(R.id.tvMembershipName);
+        TextView tvMembershipPayDay, tvMembershipPresident, tvMembershipAccountNum;
+        tvMembershipPayDay = findViewById(R.id.tvMembershipPayDay);
         tvMembershipPresident = findViewById(R.id.tvMembershipPresident);
         tvMembershipAccountNum = findViewById(R.id.tvMembershipAccountNum);
 
-        tvMembershipName.setText("그룹명:" + membershipGroup.getGroupName());
+        tvMembershipPayDay.setText("회비 마감일:" + membershipGroup.getPayDay());
         tvMembershipPresident.setText("회장: " + presidentName);
         tvMembershipAccountNum.setText("그룹계좌번호: " + membershipGroup.getAccountNum());
 

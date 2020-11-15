@@ -2,6 +2,8 @@ package kr.hongik.mnms.membership.ui.manage;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,6 +36,7 @@ import java.util.Map;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.NetworkTask;
+import kr.hongik.mnms.ProgressDialog;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.membership.CustomDialogDuration;
 import kr.hongik.mnms.membership.MembershipActivity;
@@ -53,6 +56,7 @@ public class ManageMembershipActivity extends AppCompatActivity {
     private SimpleDateFormat todayFormat;
     private int dayNum;//오늘의 요일
     private Calendar calendar;
+    private ProgressDialog progressDialog;
 
     //Layouts
     private EditText etNewMembershipNotsubmit, etNewMembershipName, etNembershipFee;
@@ -68,6 +72,7 @@ public class ManageMembershipActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.membership_manage) {
+            progressDialog.show();
             changeDate();
             return true;
         }
@@ -78,6 +83,9 @@ public class ManageMembershipActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_membership);
+
+        progressDialog=new ProgressDialog(this);
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         final Intent intent = getIntent();
         loginMember = (Member) intent.getSerializableExtra("loginMember");
@@ -192,8 +200,8 @@ public class ManageMembershipActivity extends AppCompatActivity {
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(nDate);
 
-                int monNum = cal.get(Calendar.MONTH) + 1;
-                tvNewMembershipPaytypeNum.setText(monNum + "");
+                int dayNum = cal.get(Calendar.DAY_OF_MONTH);
+                tvNewMembershipPaytypeNum.setText(dayNum + "");
             } catch (ParseException e) {
                 //e.printStackTrace();
             }
@@ -237,7 +245,13 @@ public class ManageMembershipActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        if (curDate.compareTo(payDate) >= 0) {
+        String curDay=todayFormat.format(curDate.getTime())+"";
+        String payDay=membershipGroup.getPayDay();
+        Log.d("오늘",todayFormat.format(curDate.getTime())+"");
+        Log.d("페이데이",membershipGroup.getPayDay());
+
+        int compare=curDay.compareTo(payDay);
+        if (compare >= 0) {
             btnFeeSubmitComplete.setVisibility(View.VISIBLE);
             btnFeeSubmitComplete.setClickable(true);
         } else {
@@ -247,6 +261,7 @@ public class ManageMembershipActivity extends AppCompatActivity {
     }
 
     private void completeFee() {
+        progressDialog.show();
         String urlCompleteFee = "http://" + loginMember.getIp() + "/membership/unpay";
 
         final NetworkTask networkTask = new NetworkTask();
@@ -271,6 +286,7 @@ public class ManageMembershipActivity extends AppCompatActivity {
     }
 
     private void completeFeeProcess(String response){
+        progressDialog.dismiss();
         try {
             JSONObject jsonObject = new JSONObject(response);
             boolean success = jsonObject.getBoolean("success");
@@ -289,58 +305,60 @@ public class ManageMembershipActivity extends AppCompatActivity {
         calendar.setTime(today);
         dayNum = calendar.get(Calendar.DAY_OF_WEEK);
 
-        String payType = ((TextView) findViewById(R.id.tvNewMembershipPaytype)).getText().toString();
-        String payTypeNum = ((TextView) findViewById(R.id.tvNewMembershipPaytypeNum)).getText().toString();
+        String tvNewMembershipPaytype = ((TextView) findViewById(R.id.tvNewMembershipPaytype)).getText().toString();
+        String tvNewMembershipPaytypeNum = ((TextView) findViewById(R.id.tvNewMembershipPaytypeNum)).getText().toString();
 
-        if (payType.equals("매주")) {
+        if (tvNewMembershipPaytype.equals("매주")) {
             int payNum = dayNum;//내가 정한 요일
-            if (payTypeNum.equals("일")) {
+            if (tvNewMembershipPaytypeNum.equals("일")) {
                 payNum = 1;
-            } else if (payTypeNum.equals("월")) {
+            } else if (tvNewMembershipPaytypeNum.equals("월")) {
                 payNum = 2;
-            } else if (payTypeNum.equals("화")) {
+            } else if (tvNewMembershipPaytypeNum.equals("화")) {
                 payNum = 3;
-            } else if (payTypeNum.equals("수")) {
+            } else if (tvNewMembershipPaytypeNum.equals("수")) {
                 payNum = 4;
-            } else if (payTypeNum.equals("목")) {
+            } else if (tvNewMembershipPaytypeNum.equals("목")) {
                 payNum = 5;
-            } else if (payTypeNum.equals("금")) {
+            } else if (tvNewMembershipPaytypeNum.equals("금")) {
                 payNum = 6;
-            } else if (payTypeNum.equals("토")) {
+            } else if (tvNewMembershipPaytypeNum.equals("토")) {
                 payNum = 7;
             }
 
 
-            if (payNum - dayNum < 0) {
+            if (payNum - dayNum <= 0) {
                 calendar.add(Calendar.DATE, (7 - (dayNum - payNum)));
             } else {
                 calendar.add(Calendar.DATE, payNum - dayNum);
             }
-        } else if (payType.equals("매월")) {
+        } else if (tvNewMembershipPaytype.equals("매월")) {
             int day = calendar.get(Calendar.DATE);
-            if (day == Integer.parseInt(payTypeNum)) {
+            if (day == Integer.parseInt(tvNewMembershipPaytypeNum)) {
                 //같을땐 오늘 날짜로
-            } else if (day > Integer.parseInt(payTypeNum)) {
+            } else if (day > Integer.parseInt(tvNewMembershipPaytypeNum)) {
                 //내려는 날짜가 이미 지난 경우 다음달로 넘겨야함
                 calendar.add(Calendar.MONTH, 1);
-                calendar.set(Calendar.DATE, Integer.parseInt(payTypeNum));
-            } else if (day < Integer.parseInt(payTypeNum)) {
-                calendar.set(Calendar.DATE, Integer.parseInt(payTypeNum));
+                calendar.set(Calendar.DATE, Integer.parseInt(tvNewMembershipPaytypeNum));
+            } else if (day < Integer.parseInt(tvNewMembershipPaytypeNum)) {
+                calendar.set(Calendar.DATE, Integer.parseInt(tvNewMembershipPaytypeNum));
             }
-        } else if (payType.equals("매년")) {
-            String month = payTypeNum.substring(0, 2);
-            String day = payTypeNum.substring(3);
-            calendar.set(Calendar.MONTH, Integer.parseInt(month));
+        } else if (tvNewMembershipPaytype.equals("매년")) {
+            String month = tvNewMembershipPaytypeNum.substring(0, 2);
+            String day = tvNewMembershipPaytypeNum.substring(3);
+            showToast(month+" : " + day);
+            calendar.set(Calendar.MONTH, Integer.parseInt(month)-1);
             calendar.set(Calendar.DATE, Integer.parseInt(day));
+            showToast(todayFormat.format(calendar.getTime())+"");
         } else {
-            showToast(payType);
+            showToast(tvNewMembershipPaytype);
         }
     }
 
     private void changeDate() {
         String urlChangeDate = "http://" + loginMember.getIp() + "/membership/date";
 
-        String payType = ((TextView) findViewById(R.id.tvNewMembershipPaytype)).getText().toString();
+        String tvNewMembershipPaytype = ((TextView) findViewById(R.id.tvNewMembershipPaytype)).getText().toString();
 
         final NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("changeDate");
@@ -351,11 +369,11 @@ public class ManageMembershipActivity extends AppCompatActivity {
         Map<String, String> params = new HashMap<>();
         params.put("MID", membershipGroup.getMID() + "");
         params.put("date", todayFormat.format(calendar.getTime()));
-        if (payType.equals("매월")) {
+        if (tvNewMembershipPaytype.equals("매월")) {
             params.put("Duration", "MONTH");
-        } else if (payType.equals("매주")) {
+        } else if (tvNewMembershipPaytype.equals("매주")) {
             params.put("Duration", "WEEK");
-        } else if (payType.equals("매년")) {
+        } else if (tvNewMembershipPaytype.equals("매년")) {
             params.put("Duration", "YEAR");
         }
 
@@ -481,6 +499,7 @@ public class ManageMembershipActivity extends AppCompatActivity {
     }
 
     private void changeNotSubmitProcess(String response){
+        progressDialog.dismiss();
         try {
             JSONObject jsonObject = new JSONObject(response);
             boolean success = jsonObject.getBoolean("success");
