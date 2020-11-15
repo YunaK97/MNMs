@@ -269,13 +269,12 @@
                 android:inputType="numberPassword"
                 android:maxLength="4" />
 
+            <Button
+                android:layout_below="@+id/tvAccountPWCheck"
+                android:layout_alignParentRight="true"
+                android:id="@+id/btnSignIn"
+                style="@style/CustomButton"
+                android:text="회원가입" />
         </RelativeLayout>
     </ScrollView>
-
-    <Button
-        android:id="@+id/btnSignIn"
-        style="@style/CustomButton"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentBottom="true"
-        android:text="회원가입" />
 </RelativeLayout>
