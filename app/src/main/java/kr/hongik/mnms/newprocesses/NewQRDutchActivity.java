@@ -1,17 +1,18 @@
 package kr.hongik.mnms.newprocesses;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONObject;
 
@@ -19,8 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kr.hongik.mnms.Account;
-import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
+import kr.hongik.mnms.NetworkTask;
+import kr.hongik.mnms.ProgressDialog;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.daily.DailyGroup;
 
@@ -34,11 +36,15 @@ public class NewQRDutchActivity extends AppCompatActivity {
     private Account loginMemberAccount;
     private int sendMoney;
     private DailyGroup dailyGroup;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_qr_dutch);
+
+        progressDialog=new ProgressDialog(this);
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         Intent intent=getIntent();
         loginMember= (Member) intent.getSerializableExtra("loginMember");
@@ -65,6 +71,7 @@ public class NewQRDutchActivity extends AppCompatActivity {
             if (accountPW.length()!=4){
                 showToast("비밀번호는 4자리입니다");
             }else{
+                progressDialog.show();
                 checkAccountPW(accountPW);
             }
         }
@@ -91,18 +98,40 @@ public class NewQRDutchActivity extends AppCompatActivity {
         params.put("accountPassword", accountPW);
         params.put("accountNum", loginMemberAccount.getAccountNum());
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("checkAccountPW");
         networkTask.setURL(urlCheckPW);
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                checkAccountPWProcess(networkTask.getResponse());
+            }
+        }, 1500);
     }
 
+    private void checkAccountPWProcess(String response){
+        try {
+            JSONObject jsonObject=new JSONObject(response);
+            boolean success=jsonObject.getBoolean("success");
+            if(success){
+                dutchPay();
+            }else{
+                progressDialog.dismiss();
+                showToast("비번이 ㅌㄹ려유");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     private void dutchPay() {
         String urlSendMoney = "http://" + loginMember.getIp() + "/daily/transact";
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlSendMoney);
         networkTask.setTAG("dutchPay");
 
@@ -118,10 +147,20 @@ public class NewQRDutchActivity extends AppCompatActivity {
         params.put("DID",dailyGroup.getDID()+"");
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dutchPayProcess(networkTask.getResponse());
+            }
+        }, 1500);
     }
 
     private void dutchPayProcess(String response) {
+
         try {
+            progressDialog.dismiss();
             JSONObject jsonObject = new JSONObject(response);
             String success=jsonObject.getString("success");
             if(success.equals("true")){
@@ -138,64 +177,50 @@ public class NewQRDutchActivity extends AppCompatActivity {
         }
     }
 
-    private void checkAccountPWProcess(String response){
-        try {
-            JSONObject jsonObject=new JSONObject(response);
-            boolean success=jsonObject.getBoolean("success");
-            if(success){
-                dutchPay();
-            }else{
-                showToast("비번이 ㅌㄹ려유");
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
     private void showToast(String data) {
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
 
-    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
-        protected String url, TAG;
-
-        void setURL(String url) {
-            this.url = url;
-        }
-
-        void setTAG(String TAG) {
-            this.TAG = TAG;
-        }
-
-        @Override
-        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
-
-            // Http 요청 준비 작업
-            HttpClient.Builder http = new HttpClient.Builder("POST", url);
-
-            // Parameter 를 전송한다.
-            http.addAllParameters(maps[0]);
-
-            //Http 요청 전송
-            HttpClient post = http.create();
-            post.request();
-            // 응답 상태코드 가져오기
-            int statusCode = post.getHttpStatusCode();
-            // 응답 본문 가져오기
-
-            return post.getBody();
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-            Log.d(TAG, response);
-            if (TAG.equals("dutchPay")) {
-                dutchPayProcess(response);
-            }else if(TAG.equals("checkAccountPW")){
-                checkAccountPWProcess(response);
-            }
-
-        }
-    }
+//    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+//        protected String url, TAG;
+//
+//        void setURL(String url) {
+//            this.url = url;
+//        }
+//
+//        void setTAG(String TAG) {
+//            this.TAG = TAG;
+//        }
+//
+//        @Override
+//        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+//
+//            // Http 요청 준비 작업
+//            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+//
+//            // Parameter 를 전송한다.
+//            http.addAllParameters(maps[0]);
+//
+//            //Http 요청 전송
+//            HttpClient post = http.create();
+//            post.request();
+//            // 응답 상태코드 가져오기
+//            int statusCode = post.getHttpStatusCode();
+//            // 응답 본문 가져오기
+//
+//            return post.getBody();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String response) {
+//            Log.d(TAG, response);
+//            if (TAG.equals("dutchPay")) {
+//                dutchPayProcess(response);
+//            }else if(TAG.equals("checkAccountPW")){
+//                checkAccountPWProcess(response);
+//            }
+//
+//        }
+//    }
 
 }

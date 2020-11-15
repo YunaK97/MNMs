@@ -1,6 +1,5 @@
-package kr.hongik.mnms.daily.ui.home;
+package kr.hongik.mnms.daily.ui.dutch;
 
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 
 import kr.hongik.mnms.R;
-import kr.hongik.mnms.mainscreen.GroupAdapter;
-import kr.hongik.mnms.mainscreen.OnGroupItemLongClickListener;
+import kr.hongik.mnms.daily.ui.home.OnDailyMemLongClickListener;
 
 public class RecSendListAdapter extends RecyclerView.Adapter<RecSendListAdapter.ViewHolder> {
     private ArrayList<RecSend> items=new ArrayList<>();

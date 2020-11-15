@@ -22,7 +22,7 @@
             android:layout_weight="1"
             android:layout_width="match_parent"
             style="@style/CustomTextView"
-            android:text="ex)audi"
+            android:text=""
             />
     </LinearLayout>
 
@@ -43,7 +43,7 @@
             android:id="@+id/tvNewFeeFee"
             android:layout_width="match_parent"
             style="@style/CustomTextView"
-            android:text="ex)50000"
+            android:text=""
             />
     </LinearLayout>
 
@@ -64,6 +64,7 @@
             android:inputType="numberPassword"
             android:layout_width="match_parent"
             style="@style/CustomTextView"
+            android:maxLength="4"
             />
     </LinearLayout>
 

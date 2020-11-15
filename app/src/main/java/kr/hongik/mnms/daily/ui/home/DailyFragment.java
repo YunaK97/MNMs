@@ -2,6 +2,7 @@ package kr.hongik.mnms.daily.ui.home;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
+import kr.hongik.mnms.NetworkTask;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.Transaction;
 import kr.hongik.mnms.TransactionAdapter;

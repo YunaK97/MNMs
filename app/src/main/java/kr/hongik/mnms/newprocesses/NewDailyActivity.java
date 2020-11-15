@@ -1,8 +1,11 @@
 package kr.hongik.mnms.newprocesses;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +26,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.MemberAdapter;
+import kr.hongik.mnms.NetworkTask;
+import kr.hongik.mnms.ProgressDialog;
 import kr.hongik.mnms.R;
 
 public class NewDailyActivity extends AppCompatActivity {
@@ -34,6 +39,7 @@ public class NewDailyActivity extends AppCompatActivity {
     private ArrayList<Member> arrayList;
     private RecyclerView rvDailySelectedFriend;
     private Button btnNewDaily;
+    private ProgressDialog progressDialog;
 
     //variable
     private ArrayList<Member> selectedMember;
@@ -46,13 +52,20 @@ public class NewDailyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_daily);
 
+        progressDialog=new ProgressDialog(this);
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         Intent intent = getIntent();
         loginMember = (Member) intent.getSerializableExtra("loginMember");
 
         //친구 가져와서 출력
+        progressDialog.show();
+
         showFriend();
         //기존 그룹 이름 가져오기
         groupNameList();
+
+        progressDialog.dismiss();
 
         //membership 생성 버튼 클릭
 
@@ -92,6 +105,7 @@ public class NewDailyActivity extends AppCompatActivity {
                 //그룹이름전송, 가입하는 멤버들전송
                 //그룹생성 성공여부를 받아야함
 
+                progressDialog.show();
                 btnNewDaily.setClickable(false);
 
                 String urlNewDaily = "http://" + loginMember.getIp() + "/daily/new";
@@ -155,6 +169,7 @@ public class NewDailyActivity extends AppCompatActivity {
     }
 
     private void newDailyProcess(String response) {
+        progressDialog.dismiss();
         try {
             JSONObject jsonObject = new JSONObject(response);
             boolean success = jsonObject.getBoolean(TAG_SUCCESS);

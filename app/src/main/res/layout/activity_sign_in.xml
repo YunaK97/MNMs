@@ -1,260 +1,281 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <TextView
         android:id="@+id/tvSignIn"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/text_signin"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
         android:layout_margin="10sp"
+        android:text="@string/text_signin"
         android:textColor="@android:color/holo_red_dark"
         android:textSize="30sp" />
 
-    <LinearLayout
-        android:layout_below="@+id/tvSignIn"
-        android:id="@+id/LLSignInName"
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="3sp"
-        android:orientation="horizontal">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tvSignIn">
 
-        <EditText
-            android:id="@+id/etName"
-            style="@style/CustomTextView"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="@drawable/sidecustom_round"
-            android:ems="10"
-            android:hint="@string/hint_name"
-            android:inputType="text" />
-
-        <Button
-            android:id="@+id/btnIdentify"
-            style="@style/CustomButton"
-            android:text="@string/btn_identify" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_below="@+id/LLSignInName"
-        android:id="@+id/LLSignInId"
-        android:layout_margin="3sp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/etID"
-            style="@style/CustomTextView"
-            android:background="@drawable/sidecustom_round"
-            android:layout_weight="1"
-            android:hint="@string/hint_id"
-            android:inputType="text" />
-
-        <Button
-            android:id="@+id/btnIdOverlap"
-            style="@style/CustomButton"
-            android:text="@string/btn_overlap" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_below="@+id/LLSignInId"
-        android:id="@+id/LLSignInPw"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="3sp"
-        android:orientation="vertical">
-        <EditText
-            android:id="@+id/etPW"
-            style="@style/CustomTextView"
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:background="@drawable/sidecustom_round"
-            android:hint="@string/hint_pw"
-            android:inputType="textPassword" />
-        <EditText
-            android:id="@+id/etCheckPW"
-            style="@style/CustomTextView"
-            android:layout_width="match_parent"
-            android:background="@drawable/sidecustom_round"
-            android:hint="@string/hint_Checkpw"
-            android:inputType="textPassword" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/LLSignInPhone"
-        android:gravity="center"
-        android:layout_below="@id/LLSignInPw"
-        >
-        <TextView
-            style="@style/CustomTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:text="핸드폰 번호" />
-
-        <TextView
-            style="@style/CustomTextView"
-            android:id="@+id/tvSignInPhone1"
-            android:layout_width="match_parent"
-            android:text="010"
-            android:textAlignment="center"
-            android:layout_weight="1"
-            android:gravity="center_horizontal" />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="-"
-            android:textSize="30sp"
-            android:layout_marginLeft="3sp"
-            android:layout_marginRight="3sp"
-            />
-        <EditText
-            style="@style/CustomTextView"
-            android:id="@+id/tvSignInPhone2"
-            android:layout_weight="1"
-            android:inputType="number"
-            android:layout_width="match_parent"
-            android:background="@drawable/sidecustom_round"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="-"
-            android:layout_marginLeft="3sp"
-            android:layout_marginRight="3sp"
-            android:textSize="30sp"
-            />
-        <EditText
-            style="@style/CustomTextView"
-            android:id="@+id/tvSignInPhone3"
-            android:layout_weight="1"
-            android:inputType="number"
-            android:layout_width="match_parent"
-            android:background="@drawable/sidecustom_round"
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_margin="3sp"
-        android:layout_below="@+id/LLSignInPhone"
-        android:id="@+id/LLSignInEmail"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/etEmail"
-            style="@style/CustomTextView"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/sidecustom_round"
-            android:ems="10"
-            android:hint="@string/hint_email"
-            android:inputType="text" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="\@"
-            android:textColor="@color/colorBlack"
-            android:textSize="25sp" />
-
-        <Spinner
-            android:background="@drawable/sidecustom_round"
-            android:id="@+id/spinnerEmailType"
-            android:layout_width="match_parent"
-            android:layout_height="25sp"
-            android:layout_margin="2sp"
-            android:layout_gravity="center"
-            android:layout_weight="1"
-            android:dropDownWidth="250dp" />
-
-        <Button
-            android:id="@+id/btnEmailOverlap"
-            style="@style/CustomButton"
-            android:text="email인증" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_alignParentRight="true"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:id="@+id/LLSignInEmailCheck"
-        android:layout_below="@+id/LLSignInEmail"
-        android:visibility="invisible"
-        >
-        <EditText
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="인증번호 입력"
-            android:layout_below="@id/LLSignInEmail"
-            android:id="@+id/etCheckEmail"
-            android:layout_marginRight="10sp"
-            android:inputType="number"
-            />
-        <Button
-            android:id="@+id/btnEmailAuth"
-            style="@style/CustomButton"
-            android:text="인증번호 확인" />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_below="@id/LLSignInEmailCheck"
-        android:id="@+id/LLSignInAccount"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
-        <Spinner
-            android:background="@drawable/sidecustom_round"
-            android:id="@+id/spinnerBankType"
-            android:layout_width="200sp"
             android:layout_height="match_parent"
-            android:layout_margin="10sp"
-            android:layout_weight="1"
-            android:layout_gravity="center"
-            android:dropDownWidth="150dp" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tvAccountNum"
-            style="@style/CustomTextView"
-            android:layout_width="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            />
-    </LinearLayout>
 
-    <EditText
-        android:id="@+id/tvAccountPW"
-        android:layout_below="@+id/LLSignInAccount"
-        style="@style/CustomTextView"
-        android:background="@drawable/sidecustom_round"
-        android:layout_toLeftOf="@id/tvAccountPWCheck"
-        android:hint="@string/hint_bankpw"
-        android:inputType="numberPassword" />
-    <EditText
-        android:id="@+id/tvAccountPWCheck"
-        android:layout_below="@+id/LLSignInAccount"
-        style="@style/CustomTextView"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/sidecustom_round"
+            <LinearLayout
+                android:id="@+id/LLSignInName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3sp"
+                android:orientation="horizontal">
 
-        android:hint="계좌비밀번호 확인"
-        android:inputType="numberPassword" />
+                <EditText
+                    android:id="@+id/etName"
+                    style="@style/CustomTextView"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/sidecustom_round"
+                    android:ems="10"
+                    android:hint="@string/hint_name"
+                    android:inputType="text" />
+
+                <Button
+                    android:id="@+id/btnIdentify"
+                    style="@style/CustomButton"
+                    android:text="@string/btn_identify" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LLSignInId"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/LLSignInName"
+                android:layout_margin="3sp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/etID"
+                    style="@style/CustomTextView"
+                    android:layout_weight="1"
+                    android:background="@drawable/sidecustom_round"
+                    android:hint="@string/hint_id"
+                    android:maxLength="20"
+                    android:inputType="text" />
+
+                <Button
+                    android:id="@+id/btnIdOverlap"
+                    style="@style/CustomButton"
+                    android:text="@string/btn_overlap" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LLSignInPw"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/LLSignInId"
+                android:layout_margin="3sp"
+                android:orientation="vertical">
+
+                <EditText
+                    android:id="@+id/etPW"
+                    style="@style/CustomTextView"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/sidecustom_round"
+                    android:hint="@string/hint_pw"
+                    android:inputType="textPassword"
+                    android:maxLength="20" />
+
+                <EditText
+                    android:id="@+id/etCheckPW"
+                    style="@style/CustomTextView"
+                    android:layout_width="match_parent"
+                    android:background="@drawable/sidecustom_round"
+                    android:hint="@string/hint_Checkpw"
+                    android:inputType="textPassword"
+                    android:maxLength="20" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LLSignInPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/LLSignInPw"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/CustomTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="핸드폰 번호"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/tvSignInPhone1"
+                    style="@style/CustomTextView"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:text="010"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3sp"
+                    android:layout_marginRight="3sp"
+                    android:text="-"
+                    android:textSize="30sp" />
+
+                <EditText
+                    android:id="@+id/tvSignInPhone2"
+                    style="@style/CustomTextView"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/sidecustom_round"
+                    android:inputType="number"
+                    android:maxLength="4" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="3sp"
+                    android:layout_marginRight="3sp"
+                    android:text="-"
+                    android:textSize="30sp" />
+
+                <EditText
+                    android:id="@+id/tvSignInPhone3"
+                    style="@style/CustomTextView"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/sidecustom_round"
+                    android:inputType="number"
+                    android:maxLength="4" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LLSignInEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/LLSignInPhone"
+                android:layout_margin="3sp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/etEmail"
+                    style="@style/CustomTextView"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/sidecustom_round"
+                    android:ems="10"
+                    android:hint="@string/hint_email"
+                    android:inputType="text" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="\@"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="25sp" />
+
+                <Spinner
+                    android:id="@+id/spinnerEmailType"
+                    android:layout_width="match_parent"
+                    android:layout_height="25sp"
+                    android:layout_gravity="center"
+                    android:layout_margin="2sp"
+                    android:layout_weight="1"
+                    android:background="@drawable/sidecustom_round"
+                    android:dropDownWidth="250dp" />
+
+                <Button
+                    android:id="@+id/btnEmailOverlap"
+                    style="@style/CustomButton"
+                    android:text="email인증" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LLSignInEmailCheck"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/LLSignInEmail"
+                android:layout_alignParentRight="true"
+                android:orientation="horizontal"
+                android:visibility="invisible">
+
+                <EditText
+                    android:id="@+id/etCheckEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/LLSignInEmail"
+                    android:layout_marginRight="10sp"
+                    android:layout_weight="1"
+                    android:hint="인증번호 입력"
+                    android:inputType="number" />
+
+                <Button
+                    android:id="@+id/btnEmailAuth"
+                    style="@style/CustomButton"
+                    android:text="인증번호 확인" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/LLSignInAccount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/LLSignInEmailCheck"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/spinnerBankType"
+                    android:layout_width="200sp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:layout_margin="10sp"
+                    android:layout_weight="1"
+                    android:background="@drawable/sidecustom_round"
+                    android:dropDownWidth="150dp" />
+
+                <TextView
+                    android:id="@+id/tvAccountNum"
+                    style="@style/CustomTextView"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/tvAccountPW"
+                style="@style/CustomTextView"
+                android:layout_below="@+id/LLSignInAccount"
+                android:layout_toLeftOf="@id/tvAccountPWCheck"
+                android:background="@drawable/sidecustom_round"
+                android:hint="@string/hint_bankpw"
+                android:inputType="numberPassword"
+                android:maxLength="4" />
+
+            <EditText
+                android:id="@+id/tvAccountPWCheck"
+                style="@style/CustomTextView"
+                android:layout_below="@+id/LLSignInAccount"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/sidecustom_round"
+                android:hint="계좌비밀번호 확인"
+                android:inputType="numberPassword"
+                android:maxLength="4" />
+
+        </RelativeLayout>
+    </ScrollView>
 
     <Button
-        style="@style/CustomButton"
-        android:text="회원가입"
         android:id="@+id/btnSignIn"
-        android:layout_alignParentBottom="true"
+        style="@style/CustomButton"
         android:layout_alignParentRight="true"
-        />
-
+        android:layout_alignParentBottom="true"
+        android:text="회원가입" />
 </RelativeLayout>

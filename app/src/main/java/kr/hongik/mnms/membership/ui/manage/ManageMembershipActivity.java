@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,6 +33,7 @@ import java.util.Map;
 
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
+import kr.hongik.mnms.NetworkTask;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.membership.CustomDialogDuration;
 import kr.hongik.mnms.membership.MembershipActivity;
@@ -247,7 +249,7 @@ public class ManageMembershipActivity extends AppCompatActivity {
     private void completeFee() {
         String urlCompleteFee = "http://" + loginMember.getIp() + "/membership/unpay";
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("completeFee");
         networkTask.setURL(urlCompleteFee);
 
@@ -258,6 +260,26 @@ public class ManageMembershipActivity extends AppCompatActivity {
         params.put("Duration", membershipGroup.getPayDuration());
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                completeFeeProcess(networkTask.getResponse());
+            }
+        }, 1500);
+    }
+
+    private void completeFeeProcess(String response){
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            boolean success = jsonObject.getBoolean("success");
+            if (success) {
+                finish();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void findStartDay() {
@@ -320,7 +342,7 @@ public class ManageMembershipActivity extends AppCompatActivity {
 
         String payType = ((TextView) findViewById(R.id.tvNewMembershipPaytype)).getText().toString();
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("changeDate");
         networkTask.setURL(urlChangeDate);
 
@@ -338,12 +360,32 @@ public class ManageMembershipActivity extends AppCompatActivity {
         }
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                changeDateProcess(networkTask.getResponse());
+            }
+        }, 1500);
+    }
+
+    private void changeDateProcess(String response){
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            boolean success = jsonObject.getBoolean("success");
+            if (success) {
+                changeUpdatePay();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void changeUpdatePay() {
         String urlChangeUpdatePay = "http://" + loginMember.getIp() + "/membership/updatepay";
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("changeUpdatePay");
         networkTask.setURL(urlChangeUpdatePay);
 
@@ -355,12 +397,32 @@ public class ManageMembershipActivity extends AppCompatActivity {
         params.put("MID", membershipGroup.getMID() + "");
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                changeUpdatePayProcess(networkTask.getResponse());
+            }
+        }, 1500);
+    }
+
+    private void changeUpdatePayProcess(String response){
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            boolean success = jsonObject.getBoolean("success");
+            if (success) {
+                changeMembershipName();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void changeMembershipName() {
         String urlChangeMembershipName = "http://" + loginMember.getIp() + "/membership/updatename";
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("changeMembershipName");
         networkTask.setURL(urlChangeMembershipName);
 
@@ -372,12 +434,32 @@ public class ManageMembershipActivity extends AppCompatActivity {
         params.put("GID", membershipGroup.getGID() + "");
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                changeMembershipNameProcess(networkTask.getResponse());
+            }
+        }, 1500);
+    }
+
+    private void changeMembershipNameProcess(String response){
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            boolean success = jsonObject.getBoolean("success");
+            if (success) {
+                changeNotSubmit();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void changeNotSubmit() {
         String urlChangeNotSubmit = "http://" + loginMember.getIp() + "/membership/updateNotSubmit";
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("changeNotSubmit");
         networkTask.setURL(urlChangeNotSubmit);
         etNewMembershipNotsubmit = findViewById(R.id.etNewMembershipNotsubmit);
@@ -389,6 +471,27 @@ public class ManageMembershipActivity extends AppCompatActivity {
 
         networkTask.execute(params);
 
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                changeNotSubmitProcess(networkTask.getResponse());
+            }
+        }, 1500);
+    }
+
+    private void changeNotSubmitProcess(String response){
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            boolean success = jsonObject.getBoolean("success");
+            if (success) {
+                Intent intent = new Intent(ManageMembershipActivity.this, MembershipActivity.class);
+                setResult(159, intent);
+                finish();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -397,92 +500,93 @@ public class ManageMembershipActivity extends AppCompatActivity {
     }
 
 
-    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
-        protected String url, TAG;
+//    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+//        protected String url, TAG;
+//
+//        void setURL(String url) {
+//            this.url = url;
+//        }
+//
+//        void setTAG(String TAG) {
+//            this.TAG = TAG;
+//        }
+//
+//        @Override
+//        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+//
+//            // Http 요청 준비 작업
+//            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+//
+//            // Parameter 를 전송한다.
+//            http.addAllParameters(maps[0]);
+//
+//            //Http 요청 전송
+//            HttpClient post = http.create();
+//            post.request();
+//            // 응답 상태코드 가져오기
+//            int statusCode = post.getHttpStatusCode();
+//            // 응답 본문 가져오기
+//
+//            return post.getBody();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String response) {
+//            Log.d(TAG, response);
+//            if (TAG.equals("completeFee")) {
+//                try {
+//                    JSONObject jsonObject = new JSONObject(response);
+//                    boolean success = jsonObject.getBoolean("success");
+//                    if (success) {
+//                        finish();
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            } else if (TAG.equals("changeDate")) {
+//                try {
+//                    JSONObject jsonObject = new JSONObject(response);
+//                    boolean success = jsonObject.getBoolean("success");
+//                    if (success) {
+//                        changeUpdatePay();
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            } else if (TAG.equals("changeUpdatePay")) {
+//                try {
+//                    JSONObject jsonObject = new JSONObject(response);
+//                    boolean success = jsonObject.getBoolean("success");
+//                    if (success) {
+//                        changeMembershipName();
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            } else if (TAG.equals("changeMembershipName")) {
+//                try {
+//                    JSONObject jsonObject = new JSONObject(response);
+//                    boolean success = jsonObject.getBoolean("success");
+//                    if (success) {
+//                        changeNotSubmit();
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            } else if (TAG.equals("changeNotSubmit")) {
+//                try {
+//                    JSONObject jsonObject = new JSONObject(response);
+//                    boolean success = jsonObject.getBoolean("success");
+//                    if (success) {
+//                        Intent intent = new Intent(ManageMembershipActivity.this, MembershipActivity.class);
+//                        setResult(159, intent);
+//                        finish();
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    }
 
-        void setURL(String url) {
-            this.url = url;
-        }
-
-        void setTAG(String TAG) {
-            this.TAG = TAG;
-        }
-
-        @Override
-        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
-
-            // Http 요청 준비 작업
-            HttpClient.Builder http = new HttpClient.Builder("POST", url);
-
-            // Parameter 를 전송한다.
-            http.addAllParameters(maps[0]);
-
-            //Http 요청 전송
-            HttpClient post = http.create();
-            post.request();
-            // 응답 상태코드 가져오기
-            int statusCode = post.getHttpStatusCode();
-            // 응답 본문 가져오기
-
-            return post.getBody();
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-            Log.d(TAG, response);
-            if (TAG.equals("completeFee")) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    boolean success = jsonObject.getBoolean("success");
-                    if (success) {
-                        finish();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else if (TAG.equals("changeDate")) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    boolean success = jsonObject.getBoolean("success");
-                    if (success) {
-                        changeUpdatePay();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else if (TAG.equals("changeUpdatePay")) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    boolean success = jsonObject.getBoolean("success");
-                    if (success) {
-                        changeMembershipName();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else if (TAG.equals("changeMembershipName")) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    boolean success = jsonObject.getBoolean("success");
-                    if (success) {
-                        changeNotSubmit();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else if (TAG.equals("changeNotSubmit")) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    boolean success = jsonObject.getBoolean("success");
-                    if (success) {
-                        Intent intent = new Intent(ManageMembershipActivity.this, MembershipActivity.class);
-                        setResult(159, intent);
-                        finish();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
 }

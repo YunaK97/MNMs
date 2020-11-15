@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="톡방이름"
+            style="@style/CustomTextView"
             android:textSize="20sp" />
         <EditText
             android:id="@+id/etMembershipName"
@@ -26,6 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="ex) 아우디"
+            style="@style/CustomTextView"
             android:inputType="text"
             android:textSize="20sp" />
     </LinearLayout>
@@ -41,6 +43,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            style="@style/CustomTextView"
             android:text="회비(단위:만원)"
             android:textSize="20sp" />
 
@@ -49,6 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            style="@style/CustomTextView"
             android:hint="ex)5"
             android:inputType="number"
             android:textSize="20sp" />
@@ -67,12 +71,14 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="미납횟수(단위:회)"
+            style="@style/CustomTextView"
             android:textSize="20sp" />
 
         <EditText
             android:id="@+id/etMembershipNotsubmit"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/CustomTextView"
             android:layout_weight="1"
             android:hint="1~365"
             android:inputType="number"
@@ -89,6 +95,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            style="@style/CustomTextView"
             android:text="계좌번호"
             android:textSize="20sp" />
 
@@ -97,6 +104,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            style="@style/CustomTextView"
             android:hint="ex) 1234-12-1234"
             android:textSize="20sp" />
     </LinearLayout>
@@ -111,6 +119,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/CustomTextView"
             android:layout_weight="1"
             android:text="계좌비밀번호"
             android:textSize="20sp" />
@@ -119,6 +128,7 @@
             android:id="@+id/etNewMembershipPW"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            style="@style/CustomTextView"
             android:layout_weight="1"
             android:hint="ex) 1234"
             android:inputType="numberPassword"

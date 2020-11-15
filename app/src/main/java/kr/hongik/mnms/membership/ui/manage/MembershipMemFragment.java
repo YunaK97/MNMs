@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -27,6 +28,7 @@ import java.util.Map;
 
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
+import kr.hongik.mnms.NetworkTask;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.mainscreen.ui.friend.FriendListAdapter;
 import kr.hongik.mnms.membership.MembershipGroup;
@@ -144,9 +146,6 @@ public class MembershipMemFragment extends Fragment {
                                 alertDialog2.dismiss();
                             }
                         });
-
-
-
                         builder2.show();
 
                     }
@@ -157,7 +156,7 @@ public class MembershipMemFragment extends Fragment {
     private void submitLateFee() {
         String urlFeeLateMember = "http://" + loginMember.getIp() + "/membership/notSubmit";
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("submitLateFee");
         networkTask.setURL(urlFeeLateMember);
 
@@ -167,6 +166,14 @@ public class MembershipMemFragment extends Fragment {
         params.put("GID", membershipGroup.getGID() + "");
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                submitLateFeeProcess(networkTask.getResponse());
+            }
+        }, 1500);
     }
 
     private void submitLateFeeProcess(String response) {
@@ -221,16 +228,37 @@ public class MembershipMemFragment extends Fragment {
         //삭제 성공 여부를 받아야함
         String urlDeleteMember = "http://" + loginMember.getIp() + "/membership/deleteMember";
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlDeleteMember);
         networkTask.setTAG("delMem");
 
         Map<String, String> params = new HashMap<>();
         params.put("memID", delMemberId);
         params.put("GID", membershipGroup.getGID() + "");
-        params.put("MID", membershipGroup.getMID() + "");
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                delMemProcess(networkTask.getResponse());
+            }
+        }, 1500);
+    }
+
+    private void delMemProcess(String response){
+        try {
+            JSONObject jsonObject=new JSONObject(response);
+            boolean success=jsonObject.getBoolean("success");
+            if(success){
+                showToast("멤버 삭제");
+            }else {
+                showToast("멤버 삭제 실패");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void showToast(String data) {
@@ -238,47 +266,47 @@ public class MembershipMemFragment extends Fragment {
     }
 
 
-    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
-        protected String url;
-        protected String TAG;
-
-        void setURL(String url) {
-            this.url = url;
-        }
-
-        void setTAG(String TAG) {
-            this.TAG = TAG;
-        }
-
-        @Override
-        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
-
-            // Http 요청 준비 작업
-            HttpClient.Builder http = new HttpClient.Builder("POST", url);
-
-            // Parameter 를 전송한다.
-            http.addAllParameters(maps[0]);
-
-            //Http 요청 전송
-            HttpClient post = http.create();
-            post.request();
-            // 응답 상태코드 가져오기
-            int statusCode = post.getHttpStatusCode();
-            // 응답 본문 가져오기
-
-            return post.getBody();
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-            Log.d(TAG, response);
-            if (TAG.equals("delMem")) {
-
-            } else if (TAG.equals("submitLateFee")) {
-                submitLateFeeProcess(response);
-            }
-        }
-    }
+//    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+//        protected String url;
+//        protected String TAG;
+//
+//        void setURL(String url) {
+//            this.url = url;
+//        }
+//
+//        void setTAG(String TAG) {
+//            this.TAG = TAG;
+//        }
+//
+//        @Override
+//        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+//
+//            // Http 요청 준비 작업
+//            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+//
+//            // Parameter 를 전송한다.
+//            http.addAllParameters(maps[0]);
+//
+//            //Http 요청 전송
+//            HttpClient post = http.create();
+//            post.request();
+//            // 응답 상태코드 가져오기
+//            int statusCode = post.getHttpStatusCode();
+//            // 응답 본문 가져오기
+//
+//            return post.getBody();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String response) {
+//            Log.d(TAG, response);
+//            if (TAG.equals("delMem")) {
+//
+//            } else if (TAG.equals("submitLateFee")) {
+//                submitLateFeeProcess(response);
+//            }
+//        }
+//    }
 
     public class MembershipMember extends Member {
         private int notSubmit;

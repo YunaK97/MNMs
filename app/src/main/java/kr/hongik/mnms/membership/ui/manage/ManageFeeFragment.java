@@ -2,6 +2,7 @@ package kr.hongik.mnms.membership.ui.manage;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
+import kr.hongik.mnms.NetworkTask;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.mainscreen.ui.friend.FriendListAdapter;
 import kr.hongik.mnms.membership.MembershipGroup;
@@ -63,7 +65,7 @@ public class ManageFeeFragment extends Fragment {
     private void setInformation(MembershipGroup membershipGroup) {
         String urlSetInfo = "http://" + loginMember.getIp() + "/membership/notSubmit";
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("setInfo");
         networkTask.setURL(urlSetInfo);
 
@@ -73,6 +75,14 @@ public class ManageFeeFragment extends Fragment {
         params.put("GID", membershipGroup.getGID() + "");
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setInformationProcess(networkTask.getResponse());
+            }
+        }, 1500);
     }
 
     public void setInformationProcess(String response) {
@@ -108,42 +118,42 @@ public class ManageFeeFragment extends Fragment {
         }
     }
 
-    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
-        protected String url, TAG;
-
-        void setURL(String url) {
-            this.url = url;
-        }
-
-        void setTAG(String TAG) {
-            this.TAG = TAG;
-        }
-
-        @Override
-        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
-
-            // Http 요청 준비 작업
-            HttpClient.Builder http = new HttpClient.Builder("POST", url);
-
-            // Parameter 를 전송한다.
-            http.addAllParameters(maps[0]);
-
-            //Http 요청 전송
-            HttpClient post = http.create();
-            post.request();
-            // 응답 상태코드 가져오기
-            int statusCode = post.getHttpStatusCode();
-            // 응답 본문 가져오기
-
-            return post.getBody();
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-            Log.d(TAG, response);
-            if (TAG.equals("setInfo")) {
-                setInformationProcess(response);
-            }
-        }
-    }
+//    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+//        protected String url, TAG;
+//
+//        void setURL(String url) {
+//            this.url = url;
+//        }
+//
+//        void setTAG(String TAG) {
+//            this.TAG = TAG;
+//        }
+//
+//        @Override
+//        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+//
+//            // Http 요청 준비 작업
+//            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+//
+//            // Parameter 를 전송한다.
+//            http.addAllParameters(maps[0]);
+//
+//            //Http 요청 전송
+//            HttpClient post = http.create();
+//            post.request();
+//            // 응답 상태코드 가져오기
+//            int statusCode = post.getHttpStatusCode();
+//            // 응답 본문 가져오기
+//
+//            return post.getBody();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String response) {
+//            Log.d(TAG, response);
+//            if (TAG.equals("setInfo")) {
+//                setInformationProcess(response);
+//            }
+//        }
+//    }
 }

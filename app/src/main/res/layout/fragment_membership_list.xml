@@ -8,34 +8,35 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/rvMainMembershipList"
+        android:layout_alignParentLeft="true"
         android:layout_gravity="left"
         android:text="\u003c송금내역"
-        android:textSize="20sp"
-        android:layout_alignParentLeft="true"
-        />
+        android:textSize="20sp" />
 
     <TextView
+        android:id="@+id/tvMembershipListMembership"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Membership"
         android:layout_centerHorizontal="true"
-        android:id="@+id/tvMembershipListMembership"
+        android:layout_weight="1"
+        android:text="회비모임"
         android:textColor="@android:color/holo_red_dark"
         android:textSize="30sp" />
 
     <TextView
-        android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/rvMainMembershipList"
+        android:layout_alignParentRight="true"
         android:layout_gravity="left"
-        android:text="daily\u003e"
+        android:text="더치페이\u003e"
         android:textSize="20sp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMainMembershipList"
-        android:layout_below="@+id/tvMembershipListMembership"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tvMembershipListMembership" />
 
 </RelativeLayout>

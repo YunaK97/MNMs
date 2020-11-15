@@ -3,6 +3,7 @@ package kr.hongik.mnms.daily.ui.home;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -24,6 +25,7 @@ import java.util.Map;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.MemberAdapter;
+import kr.hongik.mnms.NetworkTask;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.daily.DailyActivity;
 import kr.hongik.mnms.daily.DailyGroup;
@@ -79,7 +81,7 @@ public class NewDailyMemActivity extends AppCompatActivity {
             }
         }
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlAddDailyMem);
         networkTask.setTAG("addDailyMem");
 
@@ -90,12 +92,38 @@ public class NewDailyMemActivity extends AppCompatActivity {
             params.put("memID"+i, selectedFriend.get(i).getMemID());
         }
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                addDailyMemProcess(networkTask.getResponse());
+            }
+        }, 1500);
+    }
+
+    private void addDailyMemProcess(String response){
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            boolean success = jsonObject.getBoolean(TAG_SUCCESS);
+            if (success) {
+                showToast("멤버 추가 완료");
+                Intent intent = new Intent(NewDailyMemActivity.this, DailyActivity.class);
+                setResult(DailyActivity.TAG_NEW_MEM, intent);
+                finish();
+            } else {
+                showToast("멤버 추가 실패ㅠ");
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showFriend() {
         String urlShowFriend = "http://" + loginMember.getIp() + "/member/showFriend";
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlShowFriend);
         networkTask.setTAG("showFriend");
 
@@ -103,6 +131,14 @@ public class NewDailyMemActivity extends AppCompatActivity {
         params.put("memID", loginMember.getMemID());
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showFriendProcess(networkTask.getResponse());
+            }
+        }, 1500);
     }
 
     private void showFriendProcess(String response) {
@@ -156,59 +192,59 @@ public class NewDailyMemActivity extends AppCompatActivity {
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
 
-    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
-        protected String url;
-        String TAG;
-
-        void setURL(String url) {
-            this.url = url;
-        }
-
-        void setTAG(String TAG) {
-            this.TAG = TAG;
-        }
-
-        @Override
-        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
-
-            // Http 요청 준비 작업
-            HttpClient.Builder http = new HttpClient.Builder("POST", url);
-
-            // Parameter 를 전송한다.
-            http.addAllParameters(maps[0]);
-
-            //Http 요청 전송
-            HttpClient post = http.create();
-            post.request();
-            // 응답 상태코드 가져오기
-            int statusCode = post.getHttpStatusCode();
-            // 응답 본문 가져오기
-
-            return post.getBody();
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-            Log.d(TAG, response);
-            if (TAG.equals("addDailyMem")) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    boolean success = jsonObject.getBoolean(TAG_SUCCESS);
-                    if (success) {
-                        showToast("멤버 추가 완료");
-                        Intent intent = new Intent(NewDailyMemActivity.this, DailyActivity.class);
-                        setResult(DailyActivity.TAG_NEW_MEM, intent);
-                        finish();
-                    } else {
-                        showToast("멤버 추가 실패ㅠ");
-                    }
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } else if (TAG.equals("showFriend")) {
-                showFriendProcess(response);
-            }
-        }
-    }
+//    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+//        protected String url;
+//        String TAG;
+//
+//        void setURL(String url) {
+//            this.url = url;
+//        }
+//
+//        void setTAG(String TAG) {
+//            this.TAG = TAG;
+//        }
+//
+//        @Override
+//        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+//
+//            // Http 요청 준비 작업
+//            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+//
+//            // Parameter 를 전송한다.
+//            http.addAllParameters(maps[0]);
+//
+//            //Http 요청 전송
+//            HttpClient post = http.create();
+//            post.request();
+//            // 응답 상태코드 가져오기
+//            int statusCode = post.getHttpStatusCode();
+//            // 응답 본문 가져오기
+//
+//            return post.getBody();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String response) {
+//            Log.d(TAG, response);
+//            if (TAG.equals("addDailyMem")) {
+//                try {
+//                    JSONObject jsonObject = new JSONObject(response);
+//                    boolean success = jsonObject.getBoolean(TAG_SUCCESS);
+//                    if (success) {
+//                        showToast("멤버 추가 완료");
+//                        Intent intent = new Intent(NewDailyMemActivity.this, DailyActivity.class);
+//                        setResult(DailyActivity.TAG_NEW_MEM, intent);
+//                        finish();
+//                    } else {
+//                        showToast("멤버 추가 실패ㅠ");
+//                    }
+//
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            } else if (TAG.equals("showFriend")) {
+//                showFriendProcess(response);
+//            }
+//        }
+//    }
 }

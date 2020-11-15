@@ -1,8 +1,12 @@
 package kr.hongik.mnms.newprocesses;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.http.HttpResponseCache;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +32,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.MemberAdapter;
+import kr.hongik.mnms.NetworkTask;
+import kr.hongik.mnms.ProgressDialog;
 import kr.hongik.mnms.R;
 
 public class NewMembershipActivity extends AppCompatActivity {
@@ -37,6 +44,7 @@ public class NewMembershipActivity extends AppCompatActivity {
     private MemberAdapter memberAdapter;
     private TextView tvNewMembershipAccountNum;
     private Button btnNewMembership;
+    private ProgressDialog progressDialog;
 
     //variables
     private String TAG_SUCCESS = "success";
@@ -49,16 +57,20 @@ public class NewMembershipActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_membership);
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        progressDialog.show();
         Intent intent = getIntent();
         loginMember = (Member) intent.getSerializableExtra("loginMember");
 
         tvNewMembershipAccountNum = findViewById(R.id.tvNewMembershipAccountNum);
 
-        Random random=new Random();
+        Random random = new Random();
         random.setSeed(System.currentTimeMillis());
-        int div1 = random.nextInt(100)+100;
-        int div2 = random.nextInt(100)+1000;
-        int div3 = random.nextInt(100)+1000;
+        int div1 = random.nextInt(100) + 100;
+        int div2 = random.nextInt(100) + 1000;
+        int div3 = random.nextInt(100) + 1000;
         membershipAccountNum = (int) (Math.random() * div1) + "-" + (int) (Math.random() * div2) + "-" + (int) (Math.random() * div3);
         tvNewMembershipAccountNum.setText(membershipAccountNum);
 
@@ -66,6 +78,8 @@ public class NewMembershipActivity extends AppCompatActivity {
         showFriend();
 
         groupNameList();
+
+        progressDialog.dismiss();
 
         //membership 생성 버튼 클릭
         btnNewMembership = findViewById(R.id.btnNewMembership);
@@ -84,18 +98,16 @@ public class NewMembershipActivity extends AppCompatActivity {
         etMembershipNotsubmit = ((TextView) findViewById(R.id.etMembershipNotsubmit)).getText().toString();
         etNewMembershipPW = ((TextView) findViewById(R.id.etNewMembershipPW)).getText().toString();
 
-        if (TextUtils.isEmpty(etMembershipMoney) || TextUtils.isEmpty(etMembershipName)|| TextUtils.isEmpty(etMembershipNotsubmit)) {
+        if (TextUtils.isEmpty(etMembershipMoney) || TextUtils.isEmpty(etMembershipName) || TextUtils.isEmpty(etMembershipNotsubmit)) {
             showToast("이러시면 안됨니다 고갱님 정보를 쓰세욥");
         } else {
             if (etNewMembershipPW.length() != 4) {
                 showToast("비밀번호는 4자리 입니다.");
-            } else if(Integer.parseInt(etMembershipNotsubmit)<1 || Integer.parseInt(etMembershipNotsubmit)>365) {
+            } else if (Integer.parseInt(etMembershipNotsubmit) < 1 || Integer.parseInt(etMembershipNotsubmit) > 365) {
                 showToast("미납횟수는 1~365입니다.");
-            }else if(Integer.parseInt(etMembershipMoney)<1 || Integer.parseInt(etMembershipMoney)>2100000000){
+            } else if (Integer.parseInt(etMembershipMoney) < 1 || Integer.parseInt(etMembershipMoney) > 2100000000) {
                 showToast("불가능한 회비입니다.");
-            }
-            else
-             {
+            } else {
                 boolean overlap = true;
                 for (String s : groupName) {
                     if (s.equals(etMembershipName)) {
@@ -106,6 +118,7 @@ public class NewMembershipActivity extends AppCompatActivity {
                 if (!overlap) {
                     showToast("이미 존재하는 그룹이름입니다.");
                 } else if (overlap) {
+                    progressDialog.show();
                     for (int i = 0; i < memberAdapter.getItemCount(); i++) {
                         if (memberAdapter.getItem(i).isChecked()) {
                             Member member = new Member();
@@ -134,7 +147,7 @@ public class NewMembershipActivity extends AppCompatActivity {
                     params.put("membershipNotSubmit", etMembershipNotsubmit);
                     params.put("accountNum", membershipAccountNum);
                     params.put("memberSize", selectedMember.size() + "");
-                    params.put("passWD",etNewMembershipPW);
+                    params.put("passWD", etNewMembershipPW);
                     for (int i = 0; i < selectedMember.size(); i++) {
                         params.put("memID" + i, selectedMember.get(i).getMemID());
                     }
@@ -210,7 +223,7 @@ public class NewMembershipActivity extends AppCompatActivity {
         try {
             JSONObject jsonObject = new JSONObject(response);
             int membershipGroupSize = Integer.parseInt(jsonObject.getString("membershipGroupSize"));
-            if (membershipGroupSize==0){
+            if (membershipGroupSize == 0) {
                 return;
             }
             for (int i = 0; i < membershipGroupSize; i++) {
@@ -220,7 +233,6 @@ public class NewMembershipActivity extends AppCompatActivity {
 
         } catch (JSONException e) {
             e.printStackTrace();
-            System.out.println("오류 : " + e.toString());
         }
     }
 
@@ -263,6 +275,8 @@ public class NewMembershipActivity extends AppCompatActivity {
         protected void onPostExecute(String response) {
             Log.d(TAG, response);
             if (TAG.equals("newMembership")) {
+                progressDialog.dismiss();
+
                 try {
                     JSONObject jsonObject = new JSONObject(response);
                     boolean success = jsonObject.getBoolean(TAG_SUCCESS);

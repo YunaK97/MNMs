@@ -1,4 +1,4 @@
-package kr.hongik.mnms.daily.ui.home;
+package kr.hongik.mnms.daily.ui.dutch;
 
 import android.graphics.Color;
 import android.view.LayoutInflater;

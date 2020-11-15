@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".daily.ui.home.DailySendActivity">
+    tools:context=".daily.ui.dutch.DailySendActivity">
 
     <RadioGroup
         android:background="@android:color/darker_gray"
@@ -46,7 +46,7 @@
         android:id="@+id/tvTotalMoney"
         android:layout_toLeftOf="@+id/btnQRMake"
         android:textAlignment="textEnd"
-        android:text="1000000000"
+        android:text="0"
         android:gravity="end" />
 
     <Spinner

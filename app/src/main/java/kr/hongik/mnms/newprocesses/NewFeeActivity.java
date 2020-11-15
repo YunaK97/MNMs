@@ -6,28 +6,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.zxing.integration.android.IntentIntegrator;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
+import kr.hongik.mnms.NetworkTask;
 import kr.hongik.mnms.R;
-import kr.hongik.mnms.mainscreen.MainMenuActivity;
-import kr.hongik.mnms.membership.MembershipActivity;
 import kr.hongik.mnms.membership.MembershipGroup;
 
 public class NewFeeActivity extends AppCompatActivity {
@@ -54,6 +50,7 @@ public class NewFeeActivity extends AppCompatActivity {
         loginMemberaccount = (Account) intent.getSerializableExtra("loginMemberAccount");
         membershipGroup = (MembershipGroup) intent.getSerializableExtra("membershipGroup");
 
+        setTitle(membershipGroup.getGroupName()+" 회비 납부");
         if (membershipGroup.getPresident() == null) {
             showToast("멤버십 그룹가져오리다");
             getMembershipGroupInfo();
@@ -66,7 +63,7 @@ public class NewFeeActivity extends AppCompatActivity {
     private void getMembershipGroupInfo() {
         String urlMembershipGroup = "http://" + loginMember.getIp() + "/membership/info";
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlMembershipGroup);
         networkTask.setTAG("membershipGroup");
 
@@ -74,6 +71,14 @@ public class NewFeeActivity extends AppCompatActivity {
         params.put("GID", membershipGroup.getGID() + "");
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                membershipGroupProcess(networkTask.getResponse());
+            }
+        }, 1500);
     }
 
     @Override
@@ -113,7 +118,7 @@ public class NewFeeActivity extends AppCompatActivity {
     private void checkAccountPW(int accountPW) {
         String urlCheckPW = "http://" + loginMember.getIp() + "/membership/checkPW";
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("checkAccountPW");
         networkTask.setURL(urlCheckPW);
 
@@ -122,12 +127,34 @@ public class NewFeeActivity extends AppCompatActivity {
         params.put("accountNum", loginMemberaccount.getAccountNum());
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                checkAccountPWProcess(networkTask.getResponse());
+            }
+        }, 1500);
+    }
+
+    private void checkAccountPWProcess(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            boolean success = jsonObject.getBoolean("success");
+            if (success) {
+                submitFee();
+            } else {
+                showToast("비번이 ㅌㄹ려유");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void submitFee() {
         String urlSubmitFee = "http://" + loginMember.getIp() + "/membership/pay";
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("submitFee");
         networkTask.setURL(urlSubmitFee);
 
@@ -141,6 +168,29 @@ public class NewFeeActivity extends AppCompatActivity {
         params.put("memName", loginMember.getMemName());
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                submitFeeProcess(networkTask.getResponse());
+            }
+        }, 1500);
+    }
+
+    private void submitFeeProcess(String response){
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            boolean success = jsonObject.getBoolean("success");
+            if (success) {
+                showToast("성공적으로 냄");
+                finish();
+            } else {
+                showToast("잉 이미 낸거 아니오?");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void membershipGroupProcess(String response) {
@@ -165,66 +215,67 @@ public class NewFeeActivity extends AppCompatActivity {
         }
     }
 
-    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
-        protected String url, TAG;
+//    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+//        protected String url, TAG;
+//
+//        void setURL(String url) {
+//            this.url = url;
+//        }
+//
+//        void setTAG(String TAG) {
+//            this.TAG = TAG;
+//        }
+//
+//        @Override
+//        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+//
+//            // Http 요청 준비 작업
+//            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+//
+//            // Parameter 를 전송한다.
+//            http.addAllParameters(maps[0]);
+//
+//            //Http 요청 전송
+//            HttpClient post = http.create();
+//            post.request();
+//            // 응답 상태코드 가져오기
+//            int statusCode = post.getHttpStatusCode();
+//            // 응답 본문 가져오기
+//
+//            return post.getBody();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String response) {
+//            if (TAG.equals("checkAccountPW")) {
+//                try {
+//                    JSONObject jsonObject = new JSONObject(response);
+//                    boolean success = jsonObject.getBoolean("success");
+//                    if (success) {
+//                        submitFee();
+//                    } else {
+//                        showToast("계좌비밀번호 오류");
+//                    }
+//                } catch (Exception e) {
+//
+//                }
+//            } else if (TAG.equals("submitFee")) {
+//                try {
+//                    JSONObject jsonObject = new JSONObject(response);
+//                    boolean success = jsonObject.getBoolean("success");
+//                    if (success) {
+//                        showToast("성공적으로 냄");
+//                        finish();
+//                    } else {
+//                        showToast("잉 이미 낸거 아니오?");
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            } else if (TAG.equals("membershipGroup")) {
+//                membershipGroupProcess(response);
+//            }
+//        }
+//    }
 
-        void setURL(String url) {
-            this.url = url;
-        }
-
-        void setTAG(String TAG) {
-            this.TAG = TAG;
-        }
-
-        @Override
-        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
-
-            // Http 요청 준비 작업
-            HttpClient.Builder http = new HttpClient.Builder("POST", url);
-
-            // Parameter 를 전송한다.
-            http.addAllParameters(maps[0]);
-
-            //Http 요청 전송
-            HttpClient post = http.create();
-            post.request();
-            // 응답 상태코드 가져오기
-            int statusCode = post.getHttpStatusCode();
-            // 응답 본문 가져오기
-
-            return post.getBody();
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-            if (TAG.equals("checkAccountPW")) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    boolean success = jsonObject.getBoolean("success");
-                    if (success) {
-                        submitFee();
-                    } else {
-                        showToast("계좌비밀번호 오류");
-                    }
-                } catch (Exception e) {
-
-                }
-            } else if (TAG.equals("submitFee")) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-                    boolean success = jsonObject.getBoolean("success");
-                    if (success) {
-                        showToast("성공적으로 냄");
-                        finish();
-                    } else {
-                        showToast("잉 이미 낸거 아니오?");
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } else if (TAG.equals("membershipGroup")) {
-                membershipGroupProcess(response);
-            }
-        }
-    }
 }

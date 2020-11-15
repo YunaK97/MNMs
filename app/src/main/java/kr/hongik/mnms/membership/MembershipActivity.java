@@ -3,8 +3,10 @@ package kr.hongik.mnms.membership;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -32,6 +34,8 @@ import androidx.viewpager.widget.ViewPager;
 import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
+import kr.hongik.mnms.NetworkTask;
+import kr.hongik.mnms.ProgressDialog;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.newprocesses.NewFeeActivity;
 import kr.hongik.mnms.membership.ui.home.NewMembershipMemActivity;
@@ -50,6 +54,7 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
     private FloatingActionButton fabMembershipMain, fabMembershipMember, fabMembershipTrans, fabMembershipManage;
     private Animation fab_open, fab_close;
     private boolean isFabOpen = false;
+    private ProgressDialog progressDialog;
 
     //variables
     public static int TAG_TRANS = 111, TAG_MEM = 123, TAG_MANAGE = 159;
@@ -59,6 +64,9 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_membership);
+
+        progressDialog=new ProgressDialog(this);
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         fab_open = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_open);
         fab_close = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.fab_close);

@@ -9,28 +9,57 @@
 
     <TextView
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="left"
-        android:text="\u003cdaily"
-        android:textSize="20sp"
+        android:layout_height="30sp"
+        android:layout_above="@+id/LLFriend"
         android:layout_alignParentLeft="true"
-        />
+        android:layout_gravity="left"
+        android:text="\u003c더치페이"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/tvFriendListFriend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="friend"
         android:layout_centerHorizontal="true"
+        android:layout_weight="1"
+        android:text="친구"
         android:textColor="@android:color/holo_red_dark"
         android:textSize="30sp" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_below="@+id/tvFriendListFriend"
-        android:id="@+id/rvMainFriendList"
-        android:layout_marginTop="10sp"
+    <LinearLayout
+        android:id="@+id/LLFriend"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvFriendListFriend"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/sidecustom"
+            android:gravity="center_horizontal"
+            android:text="이름"
+            android:textAlignment="center"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/sidecustom"
+            android:gravity="center_horizontal"
+            android:text="ID"
+            android:textAlignment="center"
+            android:textColor="@android:color/holo_red_dark"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvMainFriendList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/LLFriend" />
 
 </RelativeLayout>

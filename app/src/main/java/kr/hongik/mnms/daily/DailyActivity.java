@@ -33,7 +33,7 @@ import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.R;
-import kr.hongik.mnms.daily.ui.home.DailySendActivity;
+import kr.hongik.mnms.daily.ui.dutch.DailySendActivity;
 import kr.hongik.mnms.newprocesses.NewTransactionActivity;
 
 public class DailyActivity extends AppCompatActivity implements View.OnClickListener {

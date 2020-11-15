@@ -6,11 +6,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
+import kr.hongik.mnms.NetworkTask;
+import kr.hongik.mnms.ProgressDialog;
 import kr.hongik.mnms.R;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,16 +29,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SendMoneyActivity extends AppCompatActivity {
-/*
-* 1. 친구 정보 가져옴
-* 2. 친구 정보 출력
-* 3. 송금 버튼 클릭시
-*   4. 비밀번호, 송금 금액 확인
-*   5. 비밀번호 일치여부 확인
-* 6. 돈 송금
-* */
+    /*
+     * 1. 친구 정보 가져옴
+     * 2. 친구 정보 출력
+     * 3. 송금 버튼 클릭시
+     *   4. 비밀번호, 송금 금액 확인
+     *   5. 비밀번호 일치여부 확인
+     * 6. 돈 송금
+     * */
     private Member loginMember, friendMember;
     private Account loginMemberAccount;
+    private ProgressDialog progressDialog;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -45,16 +51,17 @@ public class SendMoneyActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.new_send) {
-            String etSendMoney,etSendPW;
-            etSendMoney=((EditText)findViewById(R.id.etSendMoney)).getText().toString();
-            etSendPW=((EditText)findViewById(R.id.etSendPW)).getText().toString();
+            String etSendMoney, etSendPW;
+            etSendMoney = ((EditText) findViewById(R.id.etSendMoney)).getText().toString();
+            etSendPW = ((EditText) findViewById(R.id.etSendPW)).getText().toString();
 
-            if(etSendMoney.length()<=0){
+            if (etSendMoney.length() <= 0) {
                 showToast("얼마 송금?");
-            }else {
+            } else {
                 if (etSendPW.length() != 4) {
                     showToast("비밀번호는 4자리입니다");
                 } else {
+                    progressDialog.show();
                     checkAccountPW(etSendPW);
                 }
             }
@@ -66,6 +73,9 @@ public class SendMoneyActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_money);
+
+        progressDialog=new ProgressDialog(this);
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         Intent intent = getIntent();
 
@@ -87,11 +97,19 @@ public class SendMoneyActivity extends AppCompatActivity {
 
         params.put("memID", friendMember.getMemID());
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("getfriendAccount");
         networkTask.setURL(urlGetfriendAccount);
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getfriendAccountProcess(networkTask.getResponse());
+            }
+        }, 1500);
 
     }
 
@@ -102,11 +120,19 @@ public class SendMoneyActivity extends AppCompatActivity {
         params.put("accountPassword", accountPW);
         params.put("accountNum", loginMemberAccount.getAccountNum());
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("checkAccountPW");
         networkTask.setURL(urlCheckPW);
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                checkAccountPWProcess(networkTask.getResponse());
+            }
+        }, 1500);
     }
 
     private void checkAccountPWProcess(String response) {
@@ -123,34 +149,55 @@ public class SendMoneyActivity extends AppCompatActivity {
         }
     }
 
-    private void sendmoneyToFriend(){
+    private void sendmoneyToFriend() {
         String urlSendmoneyTofriend = "http://" + loginMember.getIp() + "/member/pay";
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlSendmoneyTofriend);
         networkTask.setTAG("sendmoneyTofriend");
 
         Map<String, String> params = new HashMap<>();
 
         String etSendMoney;
-        etSendMoney=((EditText)findViewById(R.id.etSendMoney)).getText().toString();
-        String history1=((EditText)findViewById(R.id.etSendHistory1)).getText().toString();
-        String history2=((EditText)findViewById(R.id.etSendHistory2)).getText().toString();
-        if(history1.length()<=0){
-            history1=friendMember.getMemName();
+        etSendMoney = ((EditText) findViewById(R.id.etSendMoney)).getText().toString();
+        String history1 = ((EditText) findViewById(R.id.etSendHistory1)).getText().toString();
+        String history2 = ((EditText) findViewById(R.id.etSendHistory2)).getText().toString();
+        if (history1.length() <= 0) {
+            history1 = friendMember.getMemName();
         }
 
-        if(history2.length()<=0){
-            history2=loginMember.getMemName();
+        if (history2.length() <= 0) {
+            history2 = loginMember.getMemName();
         }
 
         params.put("money", etSendMoney);
         params.put("friendAccount", friendMember.getAccountNum());
         params.put("accountNum", loginMember.getAccountNum());
-        params.put("history1",history1);
-        params.put("history2",history2);
+        params.put("history1", history1);
+        params.put("history2", history2);
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.dismiss();
+                String response=networkTask.getResponse();
+                try {
+                    JSONObject jsonObject=new JSONObject(response);
+                    boolean success=jsonObject.getBoolean("success");
+                    if(success){
+                        showToast("송금 성공!");
+                        finish();
+                    }else{
+                        showToast("앗 실수! 에러났당");
+                    }
+                }catch (Exception e){
+
+                }
+            }
+        }, 1500);
     }
 
     private void getfriendAccountProcess(String response) {
@@ -173,7 +220,7 @@ public class SendMoneyActivity extends AppCompatActivity {
     private void showInfo() {
         TextView tvSendName, tvSendAccount;
         tvSendName = findViewById(R.id.tvSendName);
-        tvSendAccount=findViewById(R.id.tvSendAccount);
+        tvSendAccount = findViewById(R.id.tvSendAccount);
 
         tvSendName.setText(friendMember.getMemName());
         tvSendAccount.setText(friendMember.getAccountNum());
@@ -184,57 +231,57 @@ public class SendMoneyActivity extends AppCompatActivity {
     }
 
 
-    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
-        protected String url, TAG;
-
-        void setURL(String url) {
-            this.url = url;
-        }
-
-        void setTAG(String TAG) {
-            this.TAG = TAG;
-        }
-
-        @Override
-        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
-
-            // Http 요청 준비 작업
-            HttpClient.Builder http = new HttpClient.Builder("POST", url);
-
-            // Parameter 를 전송한다.
-            http.addAllParameters(maps[0]);
-
-            //Http 요청 전송
-            HttpClient post = http.create();
-            post.request();
-            // 응답 상태코드 가져오기
-            int statusCode = post.getHttpStatusCode();
-            // 응답 본문 가져오기
-
-            return post.getBody();
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-            Log.d(TAG, response);
-            if (TAG.equals("checkAccountPW")) {
-                checkAccountPWProcess(response);
-            } else if (TAG.equals("getfriendAccount")) {
-                getfriendAccountProcess(response);
-            }else if(TAG.equals("sendmoneyTofriend")){
-                try {
-                    JSONObject jsonObject=new JSONObject(response);
-                    boolean success=jsonObject.getBoolean("success");
-                    if(success){
-                        showToast("송금 성공!");
-                        finish();
-                    }else{
-                        showToast("앗 실수! 에러났당");
-                    }
-                }catch (Exception e){
-
-                }
-            }
-        }
-    }
+//    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+//        protected String url, TAG;
+//
+//        void setURL(String url) {
+//            this.url = url;
+//        }
+//
+//        void setTAG(String TAG) {
+//            this.TAG = TAG;
+//        }
+//
+//        @Override
+//        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+//
+//            // Http 요청 준비 작업
+//            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+//
+//            // Parameter 를 전송한다.
+//            http.addAllParameters(maps[0]);
+//
+//            //Http 요청 전송
+//            HttpClient post = http.create();
+//            post.request();
+//            // 응답 상태코드 가져오기
+//            int statusCode = post.getHttpStatusCode();
+//            // 응답 본문 가져오기
+//
+//            return post.getBody();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String response) {
+//            Log.d(TAG, response);
+//            if (TAG.equals("checkAccountPW")) {
+//                checkAccountPWProcess(response);
+//            } else if (TAG.equals("getfriendAccount")) {
+//                getfriendAccountProcess(response);
+//            }else if(TAG.equals("sendmoneyTofriend")){
+//                try {
+//                    JSONObject jsonObject=new JSONObject(response);
+//                    boolean success=jsonObject.getBoolean("success");
+//                    if(success){
+//                        showToast("송금 성공!");
+//                        finish();
+//                    }else{
+//                        showToast("앗 실수! 에러났당");
+//                    }
+//                }catch (Exception e){
+//
+//                }
+//            }
+//        }
+//    }
 }

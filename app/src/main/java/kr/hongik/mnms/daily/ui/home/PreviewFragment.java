@@ -1,13 +1,14 @@
 package kr.hongik.mnms.daily.ui.home;
 
-import android.os.AsyncTask;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,11 +23,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kr.hongik.mnms.Account;
-import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
+import kr.hongik.mnms.NetworkTask;
+import kr.hongik.mnms.ProgressDialog;
 import kr.hongik.mnms.R;
-import kr.hongik.mnms.TransactionAdapter;
 import kr.hongik.mnms.daily.DailyGroup;
+import kr.hongik.mnms.daily.ui.dutch.DutchListAdapter;
+import kr.hongik.mnms.daily.ui.dutch.DutchMember;
 
 
 public class PreviewFragment extends Fragment {
@@ -40,6 +43,7 @@ public class PreviewFragment extends Fragment {
 
     private ViewGroup rootView;
     private RecyclerView rvPreviewMembers;
+    private ProgressDialog progressDialog;
 
     public PreviewFragment() {
     }
@@ -64,6 +68,9 @@ public class PreviewFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = (ViewGroup) inflater.inflate(R.layout.fragment_preview, container, false);
 
+        progressDialog=new ProgressDialog(rootView.getContext());
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         Bundle bundle = getArguments();
         if (bundle != null) {
             dailyGroup = (DailyGroup) bundle.getSerializable("dailyGroup");
@@ -79,9 +86,10 @@ public class PreviewFragment extends Fragment {
     }
 
     private void setPreview(){
+        progressDialog.show();
         String urlSetPreview = "http://" + loginMember.getIp() + "/daily/result";
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlSetPreview);
         networkTask.setTAG("setPreview");
 
@@ -89,6 +97,14 @@ public class PreviewFragment extends Fragment {
         params.put("DID", dailyGroup.getDID() + "");
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setPreviewProcess(networkTask.getResponse());
+            }
+        }, 1500);
     }
 
     private void setPreviewProcess(String response){
@@ -161,46 +177,47 @@ public class PreviewFragment extends Fragment {
         }
 
         rvPreviewMembers.setAdapter(dutchListAdapter);
+        progressDialog.dismiss();
     }
 
-    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
-        protected String url, TAG;
-
-        void setURL(String url) {
-            this.url = url;
-        }
-
-        void setTAG(String TAG) {
-            this.TAG = TAG;
-        }
-
-        @Override
-        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
-
-            // Http 요청 준비 작업
-            HttpClient.Builder http = new HttpClient.Builder("POST", url);
-
-            // Parameter 를 전송한다.
-            http.addAllParameters(maps[0]);
-
-            //Http 요청 전송
-            HttpClient post = http.create();
-            post.request();
-            // 응답 상태코드 가져오기
-            int statusCode = post.getHttpStatusCode();
-            // 응답 본문 가져오기
-
-            return post.getBody();
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-            Log.d(TAG, response);
-            if (TAG.equals("setPreview")) {
-                setPreviewProcess(response);
-            }
-
-        }
-    }
+//    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+//        protected String url, TAG;
+//
+//        void setURL(String url) {
+//            this.url = url;
+//        }
+//
+//        void setTAG(String TAG) {
+//            this.TAG = TAG;
+//        }
+//
+//        @Override
+//        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+//
+//            // Http 요청 준비 작업
+//            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+//
+//            // Parameter 를 전송한다.
+//            http.addAllParameters(maps[0]);
+//
+//            //Http 요청 전송
+//            HttpClient post = http.create();
+//            post.request();
+//            // 응답 상태코드 가져오기
+//            int statusCode = post.getHttpStatusCode();
+//            // 응답 본문 가져오기
+//
+//            return post.getBody();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String response) {
+//            Log.d(TAG, response);
+//            if (TAG.equals("setPreview")) {
+//                setPreviewProcess(response);
+//            }
+//
+//        }
+//    }
 
 }

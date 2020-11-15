@@ -1,10 +1,12 @@
-package kr.hongik.mnms.daily.ui.home;
+package kr.hongik.mnms.daily.ui.dutch;
 
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -36,10 +38,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import kr.hongik.mnms.Account;
-import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
+import kr.hongik.mnms.NetworkTask;
+import kr.hongik.mnms.ProgressDialog;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.daily.DailyGroup;
+import kr.hongik.mnms.daily.ui.home.OnDailyMemLongClickListener;
 import kr.hongik.mnms.newprocesses.NewDutchActivity;
 import kr.hongik.mnms.newprocesses.NewQRDutchActivity;
 
@@ -65,6 +69,7 @@ public class DailySendActivity extends AppCompatActivity {
 
     private Spinner spinnerDutchType;
     private ArrayAdapter dutchTypeAdapter;
+    private ProgressDialog progressDialog;
 
     //variables
     private String qrMessage;
@@ -78,6 +83,9 @@ public class DailySendActivity extends AppCompatActivity {
         setContentView(R.layout.activity_daily_send);
 
         tvTotalMoney = findViewById(R.id.tvTotalMoney);
+
+        progressDialog=new ProgressDialog(this);
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         //종류 선택
         spinnerDutchType = findViewById(R.id.spinnerDutchType);
@@ -166,9 +174,10 @@ public class DailySendActivity extends AppCompatActivity {
     }
 
     private void calculateTotal() {
+        progressDialog.show();
         String urlCalculateTotal = "http://" + loginMember.getIp() + "/daily/result";
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlCalculateTotal);
         networkTask.setTAG("calculateTotal");
 
@@ -176,6 +185,14 @@ public class DailySendActivity extends AppCompatActivity {
         params.put("DID", dailyGroup.getDID() + "");
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                calculateTotalProcess(networkTask.getResponse());
+            }
+        }, 1500);
     }
 
     private void floatDialog(IntentResult result) {
@@ -298,7 +315,6 @@ public class DailySendActivity extends AppCompatActivity {
         RVdutchMember.setAdapter(dutchListAdapter);
 
         calculateEachMember();
-
     }
 
     private void calculateEachMember() {
@@ -373,6 +389,8 @@ public class DailySendActivity extends AppCompatActivity {
 
         RVeachMemMoney.setAdapter(recSendListAdapter);
 
+        progressDialog.dismiss();
+
         recSendListAdapter.setOnItemLongClickListener(new OnDailyMemLongClickListener() {
             @Override
             public void onItemLongClick(RecSendListAdapter.ViewHolder holder, View view, final int position) {
@@ -445,46 +463,44 @@ public class DailySendActivity extends AppCompatActivity {
 
     }
 
-    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
-        protected String url, TAG;
+//    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+//        protected String url, TAG;
+//
+//        void setURL(String url) {
+//            this.url = url;
+//        }
+//
+//        void setTAG(String TAG) {
+//            this.TAG = TAG;
+//        }
+//
+//        @Override
+//        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+//
+//            // Http 요청 준비 작업
+//            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+//
+//            // Parameter 를 전송한다.
+//            http.addAllParameters(maps[0]);
+//
+//            //Http 요청 전송
+//            HttpClient post = http.create();
+//            post.request();
+//            // 응답 상태코드 가져오기
+//            int statusCode = post.getHttpStatusCode();
+//            // 응답 본문 가져오기
+//
+//            return post.getBody();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String response) {
+//            Log.d(TAG, response);
+//            if (TAG.equals("calculateTotal")) {
+//                calculateTotalProcess(response);
+//            }
+//        }
+//    }
 
-        void setURL(String url) {
-            this.url = url;
-        }
-
-        void setTAG(String TAG) {
-            this.TAG = TAG;
-        }
-
-        @Override
-        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
-
-            // Http 요청 준비 작업
-            HttpClient.Builder http = new HttpClient.Builder("POST", url);
-
-            // Parameter 를 전송한다.
-            http.addAllParameters(maps[0]);
-
-            //Http 요청 전송
-            HttpClient post = http.create();
-            post.request();
-            // 응답 상태코드 가져오기
-            int statusCode = post.getHttpStatusCode();
-            // 응답 본문 가져오기
-
-            return post.getBody();
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-            Log.d(TAG, response);
-            if (TAG.equals("calculateTotal")) {
-                calculateTotalProcess(response);
-            } else if (TAG.equals("intoDB")) {
-                Log.d(TAG + "intoDB", response);
-            }
-
-        }
-    }
 }
 

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,7 @@ import kr.hongik.mnms.Account;
 import kr.hongik.mnms.Group;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
+import kr.hongik.mnms.NetworkTask;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.mainscreen.GroupAdapter;
 import kr.hongik.mnms.mainscreen.MainMenuActivity;
@@ -86,7 +88,7 @@ public class MembershipList extends Fragment {
         //가입한 멤버십들의 GID,groupName들을 받아옴
         String urlMemberGroupInfo = "http://" + loginMember.getIp() + "/member/membershipGroupList";
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlMemberGroupInfo);
         networkTask.setTAG("memberGroupInfo");
 
@@ -94,6 +96,14 @@ public class MembershipList extends Fragment {
         params.put("memID", loginMember.getMemID());
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                memberGroupInfoProcess(networkTask.getResponse());
+            }
+        }, 1500);
     }
 
     private void intoMembership(int position) {
@@ -113,7 +123,7 @@ public class MembershipList extends Fragment {
         //memID,GID를 전송하면
         //멤버십을 나간후 성공여부를 받음
         String urlOutMGroup = "http://" + loginMember.getIp() + "/membership/deleteMembershipgroup";
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlOutMGroup);
         networkTask.setTAG("membershipOutGroup");
 
@@ -122,6 +132,14 @@ public class MembershipList extends Fragment {
         params.put("GID", outGroupNum.getGID()+"");
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                membershipOutGroupProcess(networkTask.getResponse());
+            }
+        }, 1500);
     }
 
     private void selectOutGroup(int position) {
@@ -152,7 +170,7 @@ public class MembershipList extends Fragment {
         //해당 GID의 president가 memID라면 false를 받아야함
         String urlCheckPresident="http://"+loginMember.getIp()+"/membership/checkPresident";
 
-        NetworkTask networkTask=new NetworkTask();
+        final NetworkTask networkTask=new NetworkTask();
         networkTask.setTAG("checkPresident");
         networkTask.setURL(urlCheckPresident);
 
@@ -161,6 +179,28 @@ public class MembershipList extends Fragment {
         params.put("GID",group.getGID()+"");
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                checkPresidentProcess(networkTask.getResponse());
+            }
+        }, 1500);
+    }
+
+    private void checkPresidentProcess(String response){
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            boolean success = jsonObject.getBoolean("success");
+            if (!success) {
+                showToast("회장은 나갈 수 없습니다.");
+            } else {
+                outGroup();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showToast(String data) {
@@ -227,56 +267,56 @@ public class MembershipList extends Fragment {
     }
 
 
-    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
-        protected String url;
-        String TAG;
-
-        void setURL(String url) {
-            this.url = url;
-        }
-
-        void setTAG(String TAG) {
-            this.TAG = TAG;
-        }
-
-        @Override
-        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
-
-            // Http 요청 준비 작업
-            HttpClient.Builder http = new HttpClient.Builder("POST", url);
-
-            // Parameter 를 전송한다.
-            http.addAllParameters(maps[0]);
-
-            //Http 요청 전송
-            HttpClient post = http.create();
-            post.request();
-            // 응답 상태코드 가져오기
-            int statusCode = post.getHttpStatusCode();
-            // 응답 본문 가져오기
-
-            return post.getBody();
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-            if (TAG.equals("memberGroupInfo")) {
-                memberGroupInfoProcess(response);
-            } else if (TAG.equals("membershipOutGroup")) {
-                membershipOutGroupProcess(response);
-            }else if(TAG.equals("checkPresident")){
-                try {
-                    JSONObject jsonObject=new JSONObject(response);
-                    boolean success=jsonObject.getBoolean("success");
-                    if(!success){
-                        showToast("회장은 나갈 수 없습니다.");
-                    }else{
-                        outGroup();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
+//    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+//        protected String url;
+//        String TAG;
+//
+//        void setURL(String url) {
+//            this.url = url;
+//        }
+//
+//        void setTAG(String TAG) {
+//            this.TAG = TAG;
+//        }
+//
+//        @Override
+//        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+//
+//            // Http 요청 준비 작업
+//            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+//
+//            // Parameter 를 전송한다.
+//            http.addAllParameters(maps[0]);
+//
+//            //Http 요청 전송
+//            HttpClient post = http.create();
+//            post.request();
+//            // 응답 상태코드 가져오기
+//            int statusCode = post.getHttpStatusCode();
+//            // 응답 본문 가져오기
+//
+//            return post.getBody();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String response) {
+//            if (TAG.equals("memberGroupInfo")) {
+//                memberGroupInfoProcess(response);
+//            } else if (TAG.equals("membershipOutGroup")) {
+//                membershipOutGroupProcess(response);
+//            }else if(TAG.equals("checkPresident")){
+//                try {
+//                    JSONObject jsonObject=new JSONObject(response);
+//                    boolean success=jsonObject.getBoolean("success");
+//                    if(!success){
+//                        showToast("회장은 나갈 수 없습니다.");
+//                    }else{
+//                        outGroup();
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    }
 }

@@ -4,30 +4,30 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:background="@drawable/sidecustom"
         android:id="@+id/tvFriendName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textSize="20sp"
+        android:background="@drawable/sidecustom"
         android:padding="5dp"
-        android:text="친구이름" />
+        android:text="친구이름"
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/tvFriendId"
-        android:background="@drawable/sidecustom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:textSize="20sp"
+        android:background="@drawable/sidecustom"
         android:padding="5dp"
-        android:text="친구ID" />
+        android:text="친구ID"
+        android:textSize="20sp" />
+
     <CheckBox
         android:id="@+id/cbFriendCheck"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:checked="false"
         android:background="@drawable/sidecustom"
         android:buttonTint="@android:color/holo_red_light"
-        />
+        android:checked="false" />
 </LinearLayout>

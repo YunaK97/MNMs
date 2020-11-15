@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:layout_margin="5dp"
     tools:context=".newprocesses.SendMoneyActivity">
 
     <LinearLayout
@@ -25,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             style="@style/CustomTextView"
-            android:text="ex)홍길동"
+            android:text=""
             android:id="@+id/tvSendName"
             />
     </LinearLayout>

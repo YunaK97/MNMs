@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -35,6 +36,7 @@ import java.util.Random;
 import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
+import kr.hongik.mnms.NetworkTask;
 import kr.hongik.mnms.R;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
@@ -161,14 +163,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 checkOverlap("email");
                 break;
             case R.id.btnEmailAuth:
-                String etCheckEmail=((EditText)findViewById(R.id.etCheckEmail)).getText().toString();
-                showToast(emailAuthNumber+" : "+etCheckEmail);
+                String etCheckEmail = ((EditText) findViewById(R.id.etCheckEmail)).getText().toString();
+                showToast(emailAuthNumber + " : " + etCheckEmail);
 
-                if(etCheckEmail.equals(emailAuthNumber)){
+                if (etCheckEmail.equals(emailAuthNumber)) {
                     showToast("인증 완료");
                     btnEmailAuth.setClickable(false);
                     btnEmailOverlap.setClickable(false);
-                }else{
+                } else {
                     showToast("인증번호가 일치하지 않습니다");
                 }
 
@@ -203,28 +205,43 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         //중복체크하는 부분임
         //id 중복체크 : 작성한 id전송 - 테이블에 이미 있는 id일 경우 false를 받음
         //email 중복체크 : 작성한 email전송 - 테이블에 이미 있는 email일 경우 false를 받음
+        final NetworkTask networkTask = new NetworkTask();
+        Map<String, String> params = new HashMap<String, String>();
         if (TAG_TYPE.equals("id")) {
             String urlIdOverlap = "http://" + curIp + "/member/checkID";
 
-            NetworkTask networkTask = new NetworkTask();
+
             networkTask.setURL(urlIdOverlap);
             networkTask.setTAG("idOverlap");
 
-            Map<String, String> params = new HashMap<String, String>();
             params.put("memID", checkID);
 
             networkTask.execute(params);
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    idOverlapProcess(networkTask.getResponse());
+                }
+            }, 1500);
         } else if (TAG_TYPE.equals("email")) {
             String urlEmailOverlap = "http://" + curIp + "/member/checkEmail";
 
-            NetworkTask networkTask = new NetworkTask();
             networkTask.setURL(urlEmailOverlap);
             networkTask.setTAG("emailOverlap");
 
-            Map<String, String> params = new HashMap<String, String>();
             params.put("memEmail", checkEmail);
 
             networkTask.execute(params);
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    emailOverlapProcess(networkTask.getResponse());
+                }
+            }, 1500);
         }
     }
 
@@ -283,7 +300,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             showToast("올바르지 않은 번호입니다.");
             return false;
         }
-        phoneNumber ="010" + phone2 + phone3;
+        phoneNumber = "010" + phone2 + phone3;
         signInMember.setPhoneNumber(phoneNumber);
 
         return true;
@@ -336,7 +353,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         //결과로 성공/실패 여부 전송받아야함
         String urlRegister = "http://" + curIp + "/member/join";
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlRegister);
         networkTask.setTAG("registerBegin");
 
@@ -354,6 +371,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         params.put("accountPassword", signInMemberAccount.getAccountPassword());
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                registerBeginProcess(networkTask.getResponse());
+            }
+        }, 1500);
     }
 
     private void showToast(String data) {
@@ -391,7 +416,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
                 String urlEmailAuth = "http://" + curIp + "/member/mail";
 
-                NetworkTask networkTask = new NetworkTask();
+                final NetworkTask networkTask = new NetworkTask();
                 networkTask.setURL(urlEmailAuth);
                 networkTask.setTAG("emailAuth");
 
@@ -399,6 +424,14 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 params.put("memEmail", checkEmail);
 
                 networkTask.execute(params);
+
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        emailAuthProcess(networkTask.getResponse());
+                    }
+                }, 1500);
 
             } else {
                 showToast("사용 불가능한 이메일.");
@@ -409,10 +442,13 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    private void emailAuthProcess(String response) throws JSONException {
-        JSONObject jsonObject = new JSONObject(response);
-        emailAuthNumber = jsonObject.getString("number");
-
+    private void emailAuthProcess(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            emailAuthNumber = jsonObject.getString("number");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void registerBeginProcess(String response) {
@@ -437,55 +473,56 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
-        private String url;
-        private String TAG;
+//    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+//        private String url;
+//        private String TAG;
+//
+//        void setURL(String url) {
+//            this.url = url;
+//        }
+//
+//        void setTAG(String TAG) {
+//            this.TAG = TAG;
+//        }
+//
+//        @Override
+//        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+//
+//            // Http 요청 준비 작업
+//            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+//
+//            // Parameter 를 전송한다.
+//            http.addAllParameters(maps[0]);
+//
+//            //Http 요청 전송
+//            HttpClient post = http.create();
+//            post.request();
+//            // 응답 상태코드 가져오기
+//            int statusCode = post.getHttpStatusCode();
+//            // 응답 본문 가져오기
+//
+//            return post.getBody();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String response) {
+//            Log.d(TAG, response);
+//
+//            if (TAG.equals("idOverlap")) {
+//                idOverlapProcess(response);
+//            } else if (TAG.equals("emailOverlap")) {
+//                emailOverlapProcess(response);
+//            } else if (TAG.equals("registerBegin")) {
+//                registerBeginProcess(response);
+//            } else if (TAG.equals("emailAuth")) {
+//                try {
+//                    emailAuthProcess(response);
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//
+//    }
 
-        void setURL(String url) {
-            this.url = url;
-        }
-
-        void setTAG(String TAG) {
-            this.TAG = TAG;
-        }
-
-        @Override
-        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
-
-            // Http 요청 준비 작업
-            HttpClient.Builder http = new HttpClient.Builder("POST", url);
-
-            // Parameter 를 전송한다.
-            http.addAllParameters(maps[0]);
-
-            //Http 요청 전송
-            HttpClient post = http.create();
-            post.request();
-            // 응답 상태코드 가져오기
-            int statusCode = post.getHttpStatusCode();
-            // 응답 본문 가져오기
-
-            return post.getBody();
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-            Log.d(TAG, response);
-
-            if (TAG.equals("idOverlap")) {
-                idOverlapProcess(response);
-            } else if (TAG.equals("emailOverlap")) {
-                emailOverlapProcess(response);
-            } else if (TAG.equals("registerBegin")) {
-                registerBeginProcess(response);
-            } else if (TAG.equals("emailAuth")) {
-                try {
-                    emailAuthProcess(response);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-
-    }
 }

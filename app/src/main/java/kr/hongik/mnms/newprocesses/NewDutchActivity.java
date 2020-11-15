@@ -3,6 +3,7 @@ package kr.hongik.mnms.newprocesses;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +22,7 @@ import java.util.Map;
 import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
+import kr.hongik.mnms.NetworkTask;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.daily.DailyGroup;
 import kr.hongik.mnms.firstscreen.MainActivity;
@@ -74,7 +76,7 @@ public class NewDutchActivity extends AppCompatActivity {
     private void getFriendInfo(){
     String urlFriendInfo = "http://" + loginMember.getIp() + "/membership/notQR";
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         Map<String, String> params = new HashMap<>();
         params.put("memID", friendMember.getMemID());
 
@@ -82,6 +84,14 @@ public class NewDutchActivity extends AppCompatActivity {
         networkTask.setTAG("friendInfo");
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getFriendInfoProcess(networkTask.getResponse());
+            }
+        }, 1500);
     }
 
     private void setInfo(){
@@ -105,17 +115,25 @@ public class NewDutchActivity extends AppCompatActivity {
         params.put("accountPassword", accountPW);
         params.put("accountNum", loginMemberAccount.getAccountNum());
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("checkAccountPW");
         networkTask.setURL(urlCheckPW);
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                checkAccountPWProcess(networkTask.getResponse());
+            }
+        }, 1500);
     }
 
     private void dutchPay() {
         String urlSendMoney = "http://" + loginMember.getIp() + "/daily/transact";
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlSendMoney);
         networkTask.setTAG("dutchPay");
 
@@ -131,6 +149,14 @@ public class NewDutchActivity extends AppCompatActivity {
         params.put("DID",dailyGroup.getDID()+"");
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dutchPayProcess(networkTask.getResponse());
+            }
+        }, 1500);
     }
 
     private void dutchPayProcess(String response) {
@@ -183,47 +209,48 @@ public class NewDutchActivity extends AppCompatActivity {
         Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
 
-    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
-        protected String url, TAG;
+//    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+//        protected String url, TAG;
+//
+//        void setURL(String url) {
+//            this.url = url;
+//        }
+//
+//        void setTAG(String TAG) {
+//            this.TAG = TAG;
+//        }
+//
+//        @Override
+//        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+//
+//            // Http 요청 준비 작업
+//            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+//
+//            // Parameter 를 전송한다.
+//            http.addAllParameters(maps[0]);
+//
+//            //Http 요청 전송
+//            HttpClient post = http.create();
+//            post.request();
+//            // 응답 상태코드 가져오기
+//            int statusCode = post.getHttpStatusCode();
+//            // 응답 본문 가져오기
+//
+//            return post.getBody();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String response) {
+//            Log.d(TAG, response);
+//            if (TAG.equals("dutchPay")) {
+//                dutchPayProcess(response);
+//            }else if(TAG.equals("checkAccountPW")){
+//                checkAccountPWProcess(response);
+//            }else if(TAG.equals("friendInfo")){
+//                getFriendInfoProcess(response);
+//            }
+//
+//        }
+//    }
 
-        void setURL(String url) {
-            this.url = url;
-        }
-
-        void setTAG(String TAG) {
-            this.TAG = TAG;
-        }
-
-        @Override
-        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
-
-            // Http 요청 준비 작업
-            HttpClient.Builder http = new HttpClient.Builder("POST", url);
-
-            // Parameter 를 전송한다.
-            http.addAllParameters(maps[0]);
-
-            //Http 요청 전송
-            HttpClient post = http.create();
-            post.request();
-            // 응답 상태코드 가져오기
-            int statusCode = post.getHttpStatusCode();
-            // 응답 본문 가져오기
-
-            return post.getBody();
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-            Log.d(TAG, response);
-            if (TAG.equals("dutchPay")) {
-                dutchPayProcess(response);
-            }else if(TAG.equals("checkAccountPW")){
-                checkAccountPWProcess(response);
-            }else if(TAG.equals("friendInfo")){
-                getFriendInfoProcess(response);
-            }
-
-        }
-    }
 }

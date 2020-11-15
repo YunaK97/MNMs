@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
+import kr.hongik.mnms.NetworkTask;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.mainscreen.MainMenuActivity;
 import kr.hongik.mnms.newprocesses.SendMoneyActivity;
@@ -82,7 +84,7 @@ public class FriendList extends Fragment {
     public void showFriend() {
         String urlShowFriend = "http://" + loginMember.getIp() + "/member/showFriend";
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlShowFriend);
         networkTask.setTAG("showFriend");
 
@@ -90,6 +92,14 @@ public class FriendList extends Fragment {
         params.put("memID", loginMember.getMemID());
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showFriendProcess(networkTask.getResponse());
+            }
+        }, 1500);
     }
 
     private void selectFriend(final int position) {
@@ -101,7 +111,9 @@ public class FriendList extends Fragment {
         builder.setNeutralButton("삭제", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                showToast("삭제");
+                //그냥 아무때나 삭제가능
+                //겹치는 데일리가 없을때만 삭제가능
+                showToast("삭제 어떻게 구현?");
                 //deleteFriend(delMember.getMemID());
             }
         });
@@ -132,7 +144,7 @@ public class FriendList extends Fragment {
     private void deleteFriend(final String delMemberId) {
         String urlDeleteFriend = "http://" + loginMember.getIp() + "/member/deleteFriend";
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlDeleteFriend);
         networkTask.setTAG("deleteFriend");
 
@@ -141,6 +153,14 @@ public class FriendList extends Fragment {
         params.put("memID", loginMember.getMemID());
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                deleteFriendProcess(networkTask.getResponse());
+            }
+        }, 1500);
     }
 
     private void showToast(String data) {
@@ -197,45 +217,46 @@ public class FriendList extends Fragment {
         }
     }
 
-    public class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
-        protected String url;
-        String TAG;
+//    public class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+//        protected String url;
+//        String TAG;
+//
+//        void setURL(String url) {
+//            this.url = url;
+//        }
+//
+//        void setTAG(String TAG) {
+//            this.TAG = TAG;
+//        }
+//
+//        @Override
+//        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+//
+//            // Http 요청 준비 작업
+//            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+//
+//            // Parameter 를 전송한다.
+//            http.addAllParameters(maps[0]);
+//
+//            //Http 요청 전송
+//            HttpClient post = http.create();
+//            post.request();
+//            // 응답 상태코드 가져오기
+//            int statusCode = post.getHttpStatusCode();
+//            // 응답 본문 가져오기
+//
+//            return post.getBody();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String response) {
+//            Log.d(TAG, response);
+//            if (TAG.equals("showFriend")) {
+//                showFriendProcess(response);
+//            } else if (TAG.equals("deleteFriend")) {
+//                deleteFriendProcess(response);
+//            }
+//        }
+//    }
 
-        void setURL(String url) {
-            this.url = url;
-        }
-
-        void setTAG(String TAG) {
-            this.TAG = TAG;
-        }
-
-        @Override
-        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
-
-            // Http 요청 준비 작업
-            HttpClient.Builder http = new HttpClient.Builder("POST", url);
-
-            // Parameter 를 전송한다.
-            http.addAllParameters(maps[0]);
-
-            //Http 요청 전송
-            HttpClient post = http.create();
-            post.request();
-            // 응답 상태코드 가져오기
-            int statusCode = post.getHttpStatusCode();
-            // 응답 본문 가져오기
-
-            return post.getBody();
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-            Log.d(TAG, response);
-            if (TAG.equals("showFriend")) {
-                showFriendProcess(response);
-            } else if (TAG.equals("deleteFriend")) {
-                deleteFriendProcess(response);
-            }
-        }
-    }
 }

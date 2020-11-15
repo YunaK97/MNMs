@@ -1,4 +1,4 @@
-package kr.hongik.mnms.daily.ui.home;
+package kr.hongik.mnms.daily.ui.dutch;
 
 public class RecSend {
     private String dutchSendID,dutchReceiveID;

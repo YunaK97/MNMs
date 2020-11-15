@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
-            android:text="이름 : ex) 김나현"
+            android:text="이름 : "
             android:textColor="@android:color/holo_red_dark"
             android:textSize="20sp" />
 
@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:text="계좌번호 : ex)123-12-4567"
+            android:text="계좌번호 : "
             android:textColor="@android:color/holo_red_dark"
             android:textSize="20sp" />
     </LinearLayout>

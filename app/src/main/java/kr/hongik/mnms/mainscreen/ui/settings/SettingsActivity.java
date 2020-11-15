@@ -2,8 +2,11 @@ package kr.hongik.mnms.mainscreen.ui.settings;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -25,6 +28,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
+import kr.hongik.mnms.NetworkTask;
+import kr.hongik.mnms.ProgressDialog;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.firstscreen.MainActivity;
 
@@ -39,6 +44,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private RelativeLayout RLSettingsInfo;
     private LinearLayout LLSettingsFirst;
     private Button btnMemberOut, btnNewPW, btnSettingsPW;
+    private ProgressDialog progressDialog;
 
     //variables
     private boolean validPW = false;
@@ -47,6 +53,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        progressDialog=new ProgressDialog(this);
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         Intent intent = getIntent();
         loginMember = (Member) intent.getSerializableExtra("loginMember");
         loginMemberAccount = (Account) intent.getSerializableExtra("loginMemberAccount");
@@ -74,11 +84,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void pwCheck(String pw) {
+        progressDialog.show();
         String urlPWCheck = "http://" + loginMember.getIp() + "/member/checkPW";
 
         if (8 <= pw.length() && pw.length() <= 20) {
             //pw확인하기 - 네트워크
-            NetworkTask networkTask = new NetworkTask();
+            final NetworkTask networkTask = new NetworkTask();
             networkTask.setURL(urlPWCheck);
             networkTask.setTAG("pwCheck");
 
@@ -87,13 +98,40 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             params.put("memPW", pw);
 
             networkTask.execute(params);
+
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    pwCheckProcess(networkTask.getResponse());
+                }
+            }, 1500);
         }
     }
 
+    private void pwCheckProcess(String response){
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+
+            boolean success = jsonObject.getBoolean("success");
+            if (success) {
+                LLSettingsFirst.setVisibility(View.GONE);
+                RLSettingsInfo.setVisibility(View.VISIBLE);
+
+            } else {//비밀번호 확인 실패한 경우
+                showToast("비밀번호가 틀렸습니다.");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        progressDialog.dismiss();
+    }
+
     private void pwChange(String pw) {
+        progressDialog.show();
         String urlPWchange = "http://" + loginMember.getIp() + "/member/changePW";
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlPWchange);
         networkTask.setTAG("pwChange");
 
@@ -102,6 +140,28 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         params.put("memPW", pw);
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                pwChangeProcess(networkTask.getResponse());
+            }
+        }, 1500);
+    }
+
+    private void pwChangeProcess(String response){
+        progressDialog.dismiss();
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+
+            boolean success = jsonObject.getBoolean("success");
+            if (success) {
+                finish();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showToast(String data) {
@@ -172,7 +232,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     //멤버의 계좌정보도 그렇게하기!
                     //삭제가 가능하면 ㄱㄱ 안되면 위와같은 순서로 멤버접근을 비활성화시키기기
                     String urlMemberOut = "" + loginMember.getIp() + "";
-                    NetworkTask networkTask = new NetworkTask();
+                    final NetworkTask networkTask = new NetworkTask();
                     networkTask.setTAG("memberOUT");
                     networkTask.setURL(urlMemberOut);
 
@@ -181,6 +241,14 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
 
                     networkTask.execute(params);
+
+                    Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            memberOUTProcess(networkTask.getResponse());
+                        }
+                    }, 1500);
                 } else {
                     showToast("비밀번호가 틀렸습니다.");
                 }
@@ -190,79 +258,95 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         });
     }
 
-    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
-        protected String url, TAG;
+    private void memberOUTProcess(String response){
+        try {
+            JSONObject jsonObject = new JSONObject(response);
 
-        void setURL(String url) {
-            this.url = url;
-        }
-
-        void setTAG(String TAG) {
-            this.TAG = TAG;
-        }
-
-        @Override
-        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
-
-            // Http 요청 준비 작업
-            HttpClient.Builder http = new HttpClient.Builder("POST", url);
-
-            // Parameter 를 전송한다.
-            http.addAllParameters(maps[0]);
-
-            //Http 요청 전송
-            HttpClient post = http.create();
-            post.request();
-            // 응답 상태코드 가져오기
-            int statusCode = post.getHttpStatusCode();
-            // 응답 본문 가져오기
-
-            return post.getBody();
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-            Log.d(TAG, response);
-            if (TAG.equals("pwCheck")) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-
-                    boolean success = jsonObject.getBoolean("success");
-                    if (success) {
-                        LLSettingsFirst.setVisibility(View.GONE);
-                        RLSettingsInfo.setVisibility(View.VISIBLE);
-
-                    } else {//비밀번호 확인 실패한 경우
-                        showToast("비밀번호가 틀렸습니다.");
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } else if (TAG.equals("pwChange")) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-
-                    boolean success = jsonObject.getBoolean("success");
-                    if (success) {
-                        finish();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } else if (TAG.equals("memberOUT")) {
-                try {
-                    JSONObject jsonObject = new JSONObject(response);
-
-                    boolean success = jsonObject.getBoolean("success");
-                    if (success) {
-                        Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
-                        setResult(MainActivity.TAG_MEMBEROUT, intent);
-                        finish();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            boolean success = jsonObject.getBoolean("success");
+            if (success) {
+                Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+                setResult(MainActivity.TAG_MEMBEROUT, intent);
+                finish();
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
+
+//    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+//        protected String url, TAG;
+//
+//        void setURL(String url) {
+//            this.url = url;
+//        }
+//
+//        void setTAG(String TAG) {
+//            this.TAG = TAG;
+//        }
+//
+//        @Override
+//        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+//
+//            // Http 요청 준비 작업
+//            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+//
+//            // Parameter 를 전송한다.
+//            http.addAllParameters(maps[0]);
+//
+//            //Http 요청 전송
+//            HttpClient post = http.create();
+//            post.request();
+//            // 응답 상태코드 가져오기
+//            int statusCode = post.getHttpStatusCode();
+//            // 응답 본문 가져오기
+//
+//            return post.getBody();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String response) {
+//            Log.d(TAG, response);
+//            if (TAG.equals("pwCheck")) {
+//                try {
+//                    JSONObject jsonObject = new JSONObject(response);
+//
+//                    boolean success = jsonObject.getBoolean("success");
+//                    if (success) {
+//                        LLSettingsFirst.setVisibility(View.GONE);
+//                        RLSettingsInfo.setVisibility(View.VISIBLE);
+//
+//                    } else {//비밀번호 확인 실패한 경우
+//                        showToast("비밀번호가 틀렸습니다.");
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            } else if (TAG.equals("pwChange")) {
+//                try {
+//                    JSONObject jsonObject = new JSONObject(response);
+//
+//                    boolean success = jsonObject.getBoolean("success");
+//                    if (success) {
+//                        finish();
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            } else if (TAG.equals("memberOUT")) {
+//                try {
+//                    JSONObject jsonObject = new JSONObject(response);
+//
+//                    boolean success = jsonObject.getBoolean("success");
+//                    if (success) {
+//                        Intent intent = new Intent(SettingsActivity.this, MainActivity.class);
+//                        setResult(MainActivity.TAG_MEMBEROUT, intent);
+//                        finish();
+//                    }
+//                } catch (JSONException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    }
+
 }

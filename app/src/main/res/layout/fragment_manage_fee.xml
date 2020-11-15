@@ -3,64 +3,64 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="kr.hongik.mnms.membership.ui.manage.ManageFeeFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context="kr.hongik.mnms.membership.ui.manage.ManageFeeFragment">
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
         <TextView
-            android:layout_width="wrap_content"
             style="@style/CustomTextView"
-            android:layout_height="wrap_content"
-            android:text="월 회비"
-            />
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            style="@style/CustomTextView"
-            android:text="00원"
+            android:text="월 회비" />
+
+        <TextView
             android:id="@+id/tvMonthlyMembership"
-            />
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <TextView
+            style="@style/CustomTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="미납가능 횟수"
-            style="@style/CustomTextView"
-            />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="00번"
-            style="@style/CustomTextView"
-            android:id="@+id/tvNotsubmitCnt"
-            />
+            android:text="00원" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
+
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             style="@style/CustomTextView"
-            android:text="내 미납회수"
-            />
-        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="미납가능 횟수" />
+
+        <TextView
+            android:id="@+id/tvNotsubmitCnt"
+            style="@style/CustomTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00번" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            style="@style/CustomTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="내 미납횟수" />
+
+        <TextView
             android:id="@+id/tvMyNotSubmit"
-            android:text="00번"
             style="@style/CustomTextView"
-            />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00번" />
     </LinearLayout>
 
 </LinearLayout>

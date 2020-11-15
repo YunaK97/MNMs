@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ import kr.hongik.mnms.Account;
 import kr.hongik.mnms.Group;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
+import kr.hongik.mnms.NetworkTask;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.daily.DailyActivity;
 import kr.hongik.mnms.daily.DailyGroup;
@@ -85,7 +87,7 @@ public class DailyList extends Fragment {
     public void groupView() {
         String urlDailyGroupInfo = "http://" + loginMember.getIp() + "/member/dailyGroupList";
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setURL(urlDailyGroupInfo);
         networkTask.setTAG("dailyGroupInfo");
 
@@ -93,6 +95,14 @@ public class DailyList extends Fragment {
         params.put("memID", loginMember.getMemID());
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dailyGroupInfoProcess(networkTask.getResponse());
+            }
+        }, 1500);
     }
 
     private void intoDaily(int position) {
@@ -107,7 +117,7 @@ public class DailyList extends Fragment {
 
     private void dailyOutGroup(Group group){
         String urlDailyOutGroup = "http://" + loginMember.getIp() + "/daily/deleteDailygroup";
-        NetworkTask networkTask=new NetworkTask();
+        final NetworkTask networkTask=new NetworkTask();
         networkTask.setTAG("dailyOutGroup");
         networkTask.setURL(urlDailyOutGroup);
 
@@ -116,6 +126,14 @@ public class DailyList extends Fragment {
         params.put("GID",group.getGID()+"");
 
         networkTask.execute(params);
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                dailyOutGroupProcess(networkTask.getResponse());
+            }
+        }, 1500);
     }
 
     private void dailyGroupInfoProcess(String response){
@@ -201,45 +219,46 @@ public class DailyList extends Fragment {
         Toast.makeText(context, data, Toast.LENGTH_LONG).show();
     }
 
-    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
-        protected String url;
-        String TAG;
+//    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
+//        protected String url;
+//        String TAG;
+//
+//        void setURL(String url) {
+//            this.url = url;
+//        }
+//
+//        void setTAG(String TAG) {
+//            this.TAG = TAG;
+//        }
+//
+//        @Override
+//        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+//
+//            // Http 요청 준비 작업
+//            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+//
+//            // Parameter 를 전송한다.
+//            http.addAllParameters(maps[0]);
+//
+//            //Http 요청 전송
+//            HttpClient post = http.create();
+//            post.request();
+//            // 응답 상태코드 가져오기
+//            int statusCode = post.getHttpStatusCode();
+//            // 응답 본문 가져오기
+//
+//            return post.getBody();
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String response) {
+//            Log.d(TAG,response);
+//            if (TAG.equals("dailyGroupInfo")) {
+//                dailyGroupInfoProcess(response);
+//            } else if (TAG.equals("dailyOutGroup")) {
+//                dailyOutGroupProcess(response);
+//            }
+//        }
+//    }
 
-        void setURL(String url) {
-            this.url = url;
-        }
-
-        void setTAG(String TAG) {
-            this.TAG = TAG;
-        }
-
-        @Override
-        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
-
-            // Http 요청 준비 작업
-            HttpClient.Builder http = new HttpClient.Builder("POST", url);
-
-            // Parameter 를 전송한다.
-            http.addAllParameters(maps[0]);
-
-            //Http 요청 전송
-            HttpClient post = http.create();
-            post.request();
-            // 응답 상태코드 가져오기
-            int statusCode = post.getHttpStatusCode();
-            // 응답 본문 가져오기
-
-            return post.getBody();
-        }
-
-        @Override
-        protected void onPostExecute(String response) {
-            Log.d(TAG,response);
-            if (TAG.equals("dailyGroupInfo")) {
-                dailyGroupInfoProcess(response);
-            } else if (TAG.equals("dailyOutGroup")) {
-                dailyOutGroupProcess(response);
-            }
-        }
-    }
 }

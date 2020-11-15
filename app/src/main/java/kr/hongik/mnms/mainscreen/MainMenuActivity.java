@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -43,6 +44,8 @@ import org.json.JSONObject;
 import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
+import kr.hongik.mnms.NetworkTask;
+import kr.hongik.mnms.ProgressDialog;
 import kr.hongik.mnms.R;
 import kr.hongik.mnms.firstscreen.MainActivity;
 import kr.hongik.mnms.mainscreen.ui.daily.DailyList;
@@ -67,11 +70,11 @@ public class MainMenuActivity extends AppCompatActivity {
     private ImageButton btnTransaction, btnMembership, btnDaily, btnFriendList;
     private ViewPager vpMainList;
     public MyPagerAdapter adapter;
-    //private SwipeRefreshLayout mainSwipeLayout=null;
     private TransactionList transactionList;
     private FriendList friendList;
     private DailyList dailyList;
     private MembershipList membershipList;
+    private ProgressDialog progressDialog;
 
 
     //variables
@@ -85,7 +88,9 @@ public class MainMenuActivity extends AppCompatActivity {
 
         //id찾기
 
-        //mainSwipeLayout= findViewById(R.id.mainSwipeLayout);
+        progressDialog=new ProgressDialog(this);
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         vpMainList = findViewById(R.id.vpMainList);
         tvName = findViewById(R.id.tvName);
         tvAccountNum = findViewById(R.id.tvAccountNum);
@@ -311,9 +316,11 @@ public class MainMenuActivity extends AppCompatActivity {
     }
 
     private void checkMembershipSubmit() {
+        progressDialog.show();
+
         String urlCheckSubmit = "http://" + loginMember.getIp() + "/membership/check";
 
-        NetworkTask networkTask = new NetworkTask();
+        final NetworkTask networkTask = new NetworkTask();
         networkTask.setTAG("checkSubmit");
         networkTask.setURL(urlCheckSubmit);
 
@@ -321,6 +328,17 @@ public class MainMenuActivity extends AppCompatActivity {
         params.put("memID", loginMember.getMemID());
 
         networkTask.execute(params);
+
+
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                progressDialog.dismiss();
+                checkMembershipSubmitProcess(networkTask.getResponse());
+            }
+        }, 1500);
+
     }
 
     public void showNoti(int GID, String groupName) {
@@ -422,7 +440,9 @@ public class MainMenuActivity extends AppCompatActivity {
 
 
     public void refresh() {
-        adapter.notifyDataSetChanged();
+//        progressDialog.show();
+//        adapter.notifyDataSetChanged();
+//        progressDialog.dismiss();
     }
 
 
@@ -501,44 +521,4 @@ public class MainMenuActivity extends AppCompatActivity {
         }
     }
 
-    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
-        protected String url;
-        String TAG;
-
-        void setURL(String url) {
-            this.url = url;
-        }
-
-        void setTAG(String TAG) {
-            this.TAG = TAG;
-        }
-
-        @Override
-        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
-
-            // Http 요청 준비 작업
-            HttpClient.Builder http = new HttpClient.Builder("POST", url);
-
-            // Parameter 를 전송한다.
-            http.addAllParameters(maps[0]);
-
-            //Http 요청 전송
-            HttpClient post = http.create();
-            post.request();
-            // 응답 상태코드 가져오기
-            int statusCode = post.getHttpStatusCode();
-            // 응답 본문 가져오기
-
-            return post.getBody();
-        }
-
-        @RequiresApi(api = Build.VERSION_CODES.M)
-        @Override
-        protected void onPostExecute(String response) {
-            Log.d(TAG, response);
-            if (TAG.equals("checkSubmit")) {
-                checkMembershipSubmitProcess(response);
-            }
-        }
-    }
 }
