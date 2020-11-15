@@ -225,10 +225,6 @@ public class MainMenuActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int curId = item.getItemId();
-        if(curId == R.id.renew){
-            showToast("새로고침되면 좋겟ㄷ");
-            refresh();
-        }
         if (curId == R.id.new_process) {
             newProcess();
         } else if (curId == R.id.settings) {

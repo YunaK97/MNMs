@@ -2,13 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/renew"
-        android:title="0"
-        app:showAsAction="always"
-        />
     <item android:id="@+id/new_process"
         android:title="+"
-        app:showAsAction="never"/>
+        app:showAsAction="always"/>
     <item android:id="@+id/settings"
         android:title="환경설정"
         app:showAsAction="never"
