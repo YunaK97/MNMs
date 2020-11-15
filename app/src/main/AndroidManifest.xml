@@ -22,8 +22,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".newprocesses.SendMoneyActivity"></activity>
-
+        <activity android:name=".firstscreen.IdentifyActivity"></activity>
+        <activity android:name=".newprocesses.SendMoneyActivity" />
         <activity android:name=".newprocesses.NewDutchActivity" />
         <activity android:name=".newprocesses.NewQRDutchActivity" />
         <activity android:name=".newprocesses.NewFeeActivity" />

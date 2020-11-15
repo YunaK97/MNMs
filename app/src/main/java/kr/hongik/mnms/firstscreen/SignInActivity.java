@@ -1,23 +1,26 @@
 package kr.hongik.mnms.firstscreen;
 
 import android.Manifest;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
-import android.provider.MediaStore;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +32,7 @@ import androidx.core.app.ActivityCompat;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -37,6 +41,7 @@ import kr.hongik.mnms.Account;
 import kr.hongik.mnms.HttpClient;
 import kr.hongik.mnms.Member;
 import kr.hongik.mnms.NetworkTask;
+import kr.hongik.mnms.ProgressDialog;
 import kr.hongik.mnms.R;
 
 public class SignInActivity extends AppCompatActivity implements View.OnClickListener {
@@ -46,7 +51,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     //layouts
     private ArrayAdapter bankTypeAdapter, emailTypeAdapter;
     private Spinner spinnerEmailType, spinnerBankType;
-    private Button cameraBtn, btnSignIn, btnEmailAuth, btnEmailOverlap;
+    private Button btnIdentify, btnSignIn, btnEmailAuth, btnEmailOverlap;
+    private ProgressDialog progressDialog;
+
 
     //urls
     private String curIp = "211.186.21.254:8090";
@@ -61,12 +68,17 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private String checkID, checkEmail, authEmail;
     private String emailAuthNumber;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
 
         setAccountNum();
+
+        progressDialog=new ProgressDialog(this);
+        progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         //회원가입 버튼
         btnSignIn = findViewById(R.id.btnSignIn);
@@ -99,27 +111,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         btnEmailAuth.setOnClickListener(this);
 
         //민증확인
-        cameraBtn = findViewById(R.id.btnIdentify);
-        cameraBtn.setOnClickListener(this);
-        // 6.0 마쉬멜로우 이상일 경우에는 권한 체크 후 권한 요청
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
-                //Log.d(TAG, "권한 설정 완료");
-            } else {
-                //Log.d(TAG, "권한 설정 요청");
-                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
-            }
-        }
-    }
+        btnIdentify = findViewById(R.id.btnIdentify);
+        btnIdentify.setOnClickListener(this);
 
-    //권한 요청
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        //Log.d(TAG, "onRequestPermissionsResult");
-        if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-            //Log.d(TAG, "Permission: " + permissions[0] + "was " + grantResults[0]);
-        }
     }
 
     @Override
@@ -176,14 +170,22 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
                 break;
             case R.id.btnIdentify:
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(cameraIntent, TAKE_PICTURE);
-                String tmpssn = "970822-10041004";
-                showToast("민증확인! (구현중)");
-                ssnValid = true;
-                signInMember.setMemSsn(tmpssn);
-                break;
+                showToast("임시로 970822-10041004 가 주번임");
+                signInMember.setMemSsn("970822-10041004");
+//                Intent intent=new Intent(SignInActivity.this,IdentifyActivity.class);
+//
+//                startActivityForResult(intent,TAKE_PICTURE);
+        }
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode!=0) {
+            if (requestCode == TAKE_PICTURE) {
+
+            }
         }
     }
 
@@ -351,6 +353,9 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         //회원가입을 위함
         //가입하기 위해 작성한 member의 전체 정보,account의 전체정보 전달
         //결과로 성공/실패 여부 전송받아야함
+
+        progressDialog.show();
+
         String urlRegister = "http://" + curIp + "/member/join";
 
         final NetworkTask networkTask = new NetworkTask();
@@ -416,7 +421,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
                 String urlEmailAuth = "http://" + curIp + "/member/mail";
 
-                final NetworkTask networkTask = new NetworkTask();
+                NetworkTask2 networkTask = new NetworkTask2();
                 networkTask.setURL(urlEmailAuth);
                 networkTask.setTAG("emailAuth");
 
@@ -424,14 +429,6 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 params.put("memEmail", checkEmail);
 
                 networkTask.execute(params);
-
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        emailAuthProcess(networkTask.getResponse());
-                    }
-                }, 1500);
 
             } else {
                 showToast("사용 불가능한 이메일.");
@@ -452,6 +449,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void registerBeginProcess(String response) {
+        progressDialog.dismiss();
         try {
             JSONObject jsonObject = new JSONObject(response);
 
@@ -473,56 +471,43 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
         }
     }
 
-//    private class NetworkTask extends AsyncTask<Map<String, String>, Integer, String> {
-//        private String url;
-//        private String TAG;
-//
-//        void setURL(String url) {
-//            this.url = url;
-//        }
-//
-//        void setTAG(String TAG) {
-//            this.TAG = TAG;
-//        }
-//
-//        @Override
-//        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
-//
-//            // Http 요청 준비 작업
-//            HttpClient.Builder http = new HttpClient.Builder("POST", url);
-//
-//            // Parameter 를 전송한다.
-//            http.addAllParameters(maps[0]);
-//
-//            //Http 요청 전송
-//            HttpClient post = http.create();
-//            post.request();
-//            // 응답 상태코드 가져오기
-//            int statusCode = post.getHttpStatusCode();
-//            // 응답 본문 가져오기
-//
-//            return post.getBody();
-//        }
-//
-//        @Override
-//        protected void onPostExecute(String response) {
-//            Log.d(TAG, response);
-//
-//            if (TAG.equals("idOverlap")) {
-//                idOverlapProcess(response);
-//            } else if (TAG.equals("emailOverlap")) {
-//                emailOverlapProcess(response);
-//            } else if (TAG.equals("registerBegin")) {
-//                registerBeginProcess(response);
-//            } else if (TAG.equals("emailAuth")) {
-//                try {
-//                    emailAuthProcess(response);
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//
-//    }
+    private class NetworkTask2 extends AsyncTask<Map<String, String>, Integer, String> {
+        protected String url, TAG;
+
+        void setURL(String url) {
+            this.url = url;
+        }
+
+        void setTAG(String TAG) {
+            this.TAG = TAG;
+        }
+
+        @Override
+        protected String doInBackground(Map<String, String>... maps) { // 내가 전송하고 싶은 파라미터
+
+            // Http 요청 준비 작업
+            HttpClient.Builder http = new HttpClient.Builder("POST", url);
+
+            // Parameter 를 전송한다.
+            http.addAllParameters(maps[0]);
+
+            //Http 요청 전송
+            HttpClient post = http.create();
+            post.request();
+            // 응답 상태코드 가져오기
+            int statusCode = post.getHttpStatusCode();
+            // 응답 본문 가져오기
+
+            return post.getBody();
+        }
+
+        @Override
+        protected void onPostExecute(String response) {
+            Log.d(TAG, response);
+            if(TAG.equals("emailAuth")){
+                emailAuthProcess(response);
+            }
+        }
+    }
 
 }
