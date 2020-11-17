@@ -10,22 +10,28 @@
     <string name="app_setting">환경설정</string>
 
     <string name="text_signin">회원가입</string>
-
+    <string name="memberOUT">회원탈퇴</string>
     <string name="btn_overlap">ID중복확인</string>
     <string name="btn_identify">민증확인</string>
     <string name="btn_signin">회원가입</string>
     <string name="btn_login">로그인</string>
     <string name="btn_email">email확인</string>
 
-    <string name="hint_name">이름 입력</string>
-    <string name="hint_id">ID 입력</string>
-    <string name="hint_pw">PW 입력</string>
-    <string name="hint_Checkpw">PW 확인</string>
+    <string name="inputName">이름 입력</string>
+    <string name="inputID">ID 입력</string>
+    <string name="inputPW">PW 입력</string>
+    <string name="inputPWCheck">PW 확인</string>
     <string name="hint_email">EMAIL 입력</string>
     <string name="hint_accnum">계좌번호 입력</string>
     <string name="hint_acc">잔고 입력</string>
     <string name="hint_bankpw">계좌비밀번호 입력</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="groupName">톡방이름</string>
+    <string name="groupNameEx">ex) 아우디</string>
+    <string name="membershipMoney">회비(단위:만원)</string>
+    <string name="membershipMoneyEx">ex)5</string>
+    <string name="notSubmitCnt">미납가능횟수(/회)</string>
+    <string name="notSubmitCntEx">1~365</string>
+
 
 </resources>

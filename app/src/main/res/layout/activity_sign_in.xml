@@ -39,7 +39,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/sidecustom_round"
                     android:ems="10"
-                    android:hint="@string/hint_name"
+                    android:hint="@string/inputName"
                     android:inputType="text" />
 
                 <Button
@@ -61,9 +61,9 @@
                     style="@style/CustomTextView"
                     android:layout_weight="1"
                     android:background="@drawable/sidecustom_round"
-                    android:hint="@string/hint_id"
-                    android:maxLength="20"
-                    android:inputType="text" />
+                    android:hint="@string/inputID"
+                    android:inputType="text"
+                    android:maxLength="20" />
 
                 <Button
                     android:id="@+id/btnIdOverlap"
@@ -84,7 +84,7 @@
                     style="@style/CustomTextView"
                     android:layout_width="match_parent"
                     android:background="@drawable/sidecustom_round"
-                    android:hint="@string/hint_pw"
+                    android:hint="@string/inputPW"
                     android:inputType="textPassword"
                     android:maxLength="20" />
 
@@ -93,7 +93,7 @@
                     style="@style/CustomTextView"
                     android:layout_width="match_parent"
                     android:background="@drawable/sidecustom_round"
-                    android:hint="@string/hint_Checkpw"
+                    android:hint="@string/inputPWCheck"
                     android:inputType="textPassword"
                     android:maxLength="20" />
             </LinearLayout>
@@ -270,10 +270,10 @@
                 android:maxLength="4" />
 
             <Button
-                android:layout_below="@+id/tvAccountPWCheck"
-                android:layout_alignParentRight="true"
                 android:id="@+id/btnSignIn"
                 style="@style/CustomButton"
+                android:layout_below="@+id/tvAccountPWCheck"
+                android:layout_alignParentRight="true"
                 android:text="회원가입" />
         </RelativeLayout>
     </ScrollView>

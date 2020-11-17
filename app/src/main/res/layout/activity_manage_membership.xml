@@ -21,7 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="톡방이름"
+            android:text="@string/groupName"
             android:textSize="20sp" />
 
         <EditText
@@ -30,7 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="ex) 아우디"
+            android:hint="@string/groupNameEx"
             android:inputType="text"
             android:textSize="20sp" />
 
@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="회비(단위:만원)"
+            android:text="@string/membershipMoney"
             android:textSize="20sp" />
 
         <EditText
@@ -60,7 +60,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="ex)5"
+            android:hint="@string/membershipMoneyEx"
             android:inputType="number"
             android:textSize="20sp" />
 
@@ -80,7 +80,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="미납가능횟수(/회)"
+            android:text="@string/notSubmitCnt"
             android:textSize="20sp" />
 
         <EditText
@@ -89,7 +89,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="ex) 3"
+            android:hint="@string/notSubmitCntEx"
             android:inputType="number"
             android:textSize="20sp" />
 

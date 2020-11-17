@@ -6,10 +6,66 @@
     tools:context=".firstscreen.IdentifyActivity">
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/ivIdentifyPhoto"
         android:layout_width="match_parent"
-        android:layout_height="300sp"
-        android:layout_centerInParent="true"
-        android:visibility="invisible" />
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/tvIdentifySSN"
+        style="@style/CustomTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/LLIdentifySSN"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvIdentifySSN"
+        android:layout_marginLeft="5dp"
+        android:layout_marginRight="5dp"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/etIdentifySSN"
+            style="@style/CustomTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:maxLength="6"
+            android:inputType="number" />
+
+        <TextView
+            style="@style/CustomTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="-" />
+
+        <EditText
+            android:id="@+id/etIdentifySSN2"
+            style="@style/CustomTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="  "
+            android:maxLength="1"
+            android:inputType="number" />
+
+        <TextView
+            style="@style/CustomTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="******" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnIdentifyConfirm"
+        style="@style/CustomButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/LLIdentifySSN"
+        android:text="확인"
+        android:visibility="gone" />
 
 </RelativeLayout>

@@ -34,7 +34,7 @@
             style="@style/CustomTextView"
             android:background="@drawable/sidecustom_round"
             android:ems="10"
-            android:hint="@string/hint_id"
+            android:hint="@string/inputID"
             android:inputType="text"
             android:textColorHint="@android:color/holo_red_light" />
 
@@ -43,7 +43,7 @@
             style="@style/CustomTextView"
             android:background="@drawable/sidecustom_round"
             android:ems="10"
-            android:hint="@string/hint_pw"
+            android:hint="@string/inputPW"
             android:inputType="textPassword"
             android:textColorHint="@android:color/holo_red_light"
             />

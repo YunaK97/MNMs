@@ -1,6 +1,7 @@
 package kr.hongik.mnms.firstscreen;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -170,11 +171,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
                 break;
             case R.id.btnIdentify:
-                showToast("임시로 970822-10041004 가 주번임");
-                signInMember.setMemSsn("970822-10041004");
-//                Intent intent=new Intent(SignInActivity.this,IdentifyActivity.class);
-//
-//                startActivityForResult(intent,TAKE_PICTURE);
+//                showToast("임시로 970822-10041004 가 주번임");
+//                signInMember.setMemSsn("970822-10041004");
+                ssnValid=false;
+                Intent intent=new Intent(SignInActivity.this,IdentifyActivity.class);
+                startActivityForResult(intent,TAKE_PICTURE);
         }
     }
 
@@ -182,9 +183,11 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode!=0) {
+        if(resultCode== Activity.RESULT_OK) {
             if (requestCode == TAKE_PICTURE) {
-
+                signInMember.setMemSsn(data.getStringExtra("userSSN"));
+                showToast("주민번호 등록 완료!");
+                ssnValid=true;
             }
         }
     }
