@@ -251,8 +251,8 @@ public class IdentifyActivity extends AppCompatActivity {
             progressDialog.dismiss();
             IdentifytextView.setVisibility(View.VISIBLE);
             imageView.setVisibility(View.GONE);
-            //LLIdentifySSN.setVisibility(View.VISIBLE);
-            //btnIdentifyConfirm.setVisibility(View.VISIBLE);
+            LLIdentifySSN.setVisibility(View.VISIBLE);
+            btnIdentifyConfirm.setVisibility(View.VISIBLE);
 
         } catch (Exception e) {
 
