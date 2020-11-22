@@ -135,6 +135,7 @@ public class DailySendActivity extends AppCompatActivity {
                         jsonObject.put("myID", loginMember.getMemID());
                         jsonObject.put("myAccount", loginMember.getAccountNum());
                         jsonObject.put("myName", loginMember.getMemName());
+                        showToast("내이룸! : "+loginMember.getMemName());
                         //내가 받을 돈
 
                         BitMatrix bitMatrix = multiFormatWriter.encode(jsonObject.toString(), BarcodeFormat.QR_CODE, 200, 200);
@@ -151,6 +152,10 @@ public class DailySendActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void showToast(String data) {
+        Toast.makeText(this, data, Toast.LENGTH_LONG).show();
     }
 
     //Getting the scan results
