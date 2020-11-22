@@ -82,7 +82,7 @@ public class NewDailyActivity extends AppCompatActivity {
         selectedMember = new ArrayList<>();
         etDailyName = ((TextView) findViewById(R.id.etDailyName)).getText().toString();
         if (TextUtils.isEmpty(etDailyName)) {
-            showToast("이러시면 안됨니다 고갱님 정보를 쓰세욥");
+            showToast("빈칸이 있습니다.");
         } else {
             boolean overlap = true;
             for (String s : groupName) {
@@ -176,7 +176,7 @@ public class NewDailyActivity extends AppCompatActivity {
             if (success) {
                 finish();
             } else {
-                showToast("daily생성 실패!");
+                showToast("더치페이 생성 실패!");
                 btnNewDaily.setClickable(true);
             }
         } catch (JSONException e) {

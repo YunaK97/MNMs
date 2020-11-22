@@ -145,7 +145,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
             case R.id.btnEmailOverlap:
                 String emailID = ((TextView) findViewById(R.id.etEmail)).getText().toString();
                 if (TextUtils.isEmpty(emailID)) {
-                    showToast("빈칸 노노");
+                    showToast("빈칸이 있습니다");
                     return;
                 }
                 emailForm = spinnerEmailType.getSelectedItem().toString();
@@ -167,6 +167,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                     emailValid=true;
                 } else {
                     showToast("인증번호가 일치하지 않습니다");
+                    emailValid=false;
                 }
 
                 break;
@@ -251,7 +252,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
     private void beforeSignInCheck() {
         //빈칸 체크
         if (!getUserInfo() || !getAccountInfo()) {
-            showToast("빈칸 ㄴㄴ해");
+            showToast("빈칸이 있습니다.");
         } else {
             if (emailValid && idValid && ssnValid && pwValid) {
                 registerBegin();

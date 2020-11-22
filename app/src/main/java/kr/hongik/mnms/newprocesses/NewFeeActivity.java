@@ -52,10 +52,10 @@ public class NewFeeActivity extends AppCompatActivity {
 
         setTitle(membershipGroup.getGroupName()+" 회비 납부");
         if (membershipGroup.getPresident() == null) {
-            showToast("멤버십 그룹가져오리다");
+            //showToast("멤버십 그룹가져오리다");
             getMembershipGroupInfo();
         } else {
-            showToast("바로 송금정보 띄우리다");
+            //showToast("바로 송금정보 띄우리다");
             showInfo();
         }
     }
@@ -144,7 +144,7 @@ public class NewFeeActivity extends AppCompatActivity {
             if (success) {
                 submitFee();
             } else {
-                showToast("비번이 ㅌㄹ려유");
+                //showToast("비번이 ㅌㄹ려유");
             }
         } catch (Exception e) {
             e.printStackTrace();

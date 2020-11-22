@@ -112,7 +112,7 @@ public class NewDailyMemActivity extends AppCompatActivity {
                 setResult(DailyActivity.TAG_NEW_MEM, intent);
                 finish();
             } else {
-                showToast("멤버 추가 실패ㅠ");
+                showToast("멤버 추가 실패");
             }
 
         } catch (JSONException e) {

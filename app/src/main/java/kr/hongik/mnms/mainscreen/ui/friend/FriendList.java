@@ -113,7 +113,7 @@ public class FriendList extends Fragment {
             public void onClick(DialogInterface dialogInterface, int i) {
                 //그냥 아무때나 삭제가능
                 //겹치는 데일리가 없을때만 삭제가능
-                showToast("삭제 어떻게 구현?");
+                //showToast("삭제 어떻게 구현?");
                 //deleteFriend(delMember.getMemID());
             }
         });

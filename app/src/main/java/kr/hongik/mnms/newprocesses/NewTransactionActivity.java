@@ -170,7 +170,7 @@ public class NewTransactionActivity extends AppCompatActivity {
             if (success) {
                 newTransaction();
             } else {
-                showToast("비번이 ㅌㄹ려유");
+                showToast("비번이 틀립니다");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -187,7 +187,7 @@ public class NewTransactionActivity extends AppCompatActivity {
         newTransaction.setTransactMoney(etPlusMoney);
 
         if (etPlusMoney == 0 || etPlusHistory.isEmpty()) {
-            showToast("빈칸 노노");
+            showToast("빈칸이 있습니다");
         } else {
             if (mainActivity.equals("daily")) {
                 newTransaction.setAccountNum(loginMember.getAccountNum());
@@ -213,7 +213,6 @@ public class NewTransactionActivity extends AppCompatActivity {
         Map<String, String> params = new HashMap<>();
         params.put("accountNum", newTransaction.getAccountNum());
         params.put("DID", newTransaction.getDID() + "");
-        showToast(newTransaction.getTransactHistroy());
 
         try {
             String strEndcode = URLEncoder.encode(newTransaction.getTransactHistroy(), "UTF-8");

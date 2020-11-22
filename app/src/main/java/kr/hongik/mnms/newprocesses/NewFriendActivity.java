@@ -159,7 +159,7 @@ public class NewFriendActivity extends AppCompatActivity {
                     showToast("친구추가 신청 완료");
                     finish();
                 } else {
-                    showToast("친구 추가 실패ㅠ");
+                    showToast("친구 추가 실패");
                 }
             }
         } catch (JSONException e) {

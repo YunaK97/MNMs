@@ -92,8 +92,10 @@ public class DailyActivity extends AppCompatActivity implements View.OnClickList
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (data == null) return;
         if (requestCode == TAG_NEW_MEM) {
-            if(resultCode==TAG_SUCCESS)
-                showToast("멤버 추가 완료 - 멤버십 업데이트 필요");
+            if(resultCode==TAG_SUCCESS) {
+                showToast("멤버 추가 완료");
+                getDailyGroupInfo();
+            }
         } else if (requestCode == TAG_NEW_TRANS) {
             if(resultCode==TAG_SUCCESS){
             }

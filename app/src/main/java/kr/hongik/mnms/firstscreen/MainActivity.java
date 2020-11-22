@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 loginID = ((TextView) findViewById(R.id.etID)).getText().toString();
                 loginPW = ((TextView) findViewById(R.id.etPW)).getText().toString();
                 if (TextUtils.isEmpty(loginID) || TextUtils.isEmpty(loginPW)) {
-                    showToast("빈칸 노노!");
+                    showToast("빈칸 안됩니다!");
                 } else if (loginID.length() < 4 || loginID.length() > 20 || loginPW.length()<8|| loginPW.length()>20) {
                     showToast("올바르지 않은 ID이거나 PW입니다.");
                 } else {

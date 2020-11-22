@@ -56,7 +56,7 @@ public class SendMoneyActivity extends AppCompatActivity {
             etSendPW = ((EditText) findViewById(R.id.etSendPW)).getText().toString();
 
             if (etSendMoney.length() <= 0) {
-                showToast("얼마 송금?");
+                showToast("얼마 송금하시겟습니까?");
             } else {
                 if (etSendPW.length() != 4) {
                     showToast("비밀번호는 4자리입니다");
@@ -142,7 +142,7 @@ public class SendMoneyActivity extends AppCompatActivity {
             if (success) {
                 sendmoneyToFriend();
             } else {
-                showToast("비번이 ㅌㄹ려유");
+                showToast("비번이 틀립니다");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -191,7 +191,7 @@ public class SendMoneyActivity extends AppCompatActivity {
                         showToast("송금 성공!");
                         finish();
                     }else{
-                        showToast("앗 실수! 에러났당");
+                        showToast("송금 실패");
                     }
                 }catch (Exception e){
 
@@ -210,7 +210,7 @@ public class SendMoneyActivity extends AppCompatActivity {
 
                 showInfo();
             } else {
-                showToast("앗 실패,,다시 시도!");
+                showToast("앗 실패,,다시 시도해주세요!");
             }
         } catch (Exception e) {
             e.printStackTrace();

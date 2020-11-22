@@ -346,10 +346,8 @@ public class ManageMembershipActivity extends AppCompatActivity {
         } else if (tvNewMembershipPaytype.equals("매년")) {
             String month = tvNewMembershipPaytypeNum.substring(0, 2);
             String day = tvNewMembershipPaytypeNum.substring(3);
-            showToast(month+" : " + day);
             calendar.set(Calendar.MONTH, Integer.parseInt(month)-1);
             calendar.set(Calendar.DATE, Integer.parseInt(day));
-            showToast(todayFormat.format(calendar.getTime())+"");
         } else {
             showToast(tvNewMembershipPaytype);
         }

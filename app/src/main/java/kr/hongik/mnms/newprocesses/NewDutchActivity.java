@@ -167,7 +167,7 @@ public class NewDutchActivity extends AppCompatActivity {
                 showToast("송금 성공");
                 finish();
             } else if (success.equals("false")) {
-                showToast("이미 보냈읍니다.");
+                showToast("이미 보냈습니다.");
                 finish();
             }else if(success.equals("notfriend")){
                 showToast("친구가 아니라 불가합니다.");
@@ -184,7 +184,7 @@ public class NewDutchActivity extends AppCompatActivity {
             if(success){
                 dutchPay();
             }else{
-                showToast("비번이 ㅌㄹ려유");
+                showToast("비번이 틀립니다.");
             }
         }catch (Exception e){
             e.printStackTrace();

@@ -99,7 +99,7 @@ public class NewMembershipActivity extends AppCompatActivity {
         etNewMembershipPW = ((TextView) findViewById(R.id.etNewMembershipPW)).getText().toString();
 
         if (TextUtils.isEmpty(etMembershipMoney) || TextUtils.isEmpty(etMembershipName) || TextUtils.isEmpty(etMembershipNotsubmit)) {
-            showToast("이러시면 안됨니다 고갱님 정보를 쓰세욥");
+            showToast("빈칸이 있습니다.");
         } else {
             if (etNewMembershipPW.length() != 4) {
                 showToast("비밀번호는 4자리 입니다.");
@@ -284,7 +284,7 @@ public class NewMembershipActivity extends AppCompatActivity {
                         showToast("payday는 1일, payduration은 한달 입니다.");
                         finish();
                     } else {
-                        showToast("membership 실패!");
+                        showToast("회비그룹 생성 실패!");
                         btnNewMembership.setClickable(true);
                     }
                 } catch (JSONException e) {

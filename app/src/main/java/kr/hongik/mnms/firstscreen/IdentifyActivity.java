@@ -209,7 +209,6 @@ public class IdentifyActivity extends AppCompatActivity {
         @Override
         public String doInBackground(String... strings) {
 
-            Log.d("테스트", strings[0] + " : " + strings[1]);
             return OCRProcess.main(strings[0]);
         }
 

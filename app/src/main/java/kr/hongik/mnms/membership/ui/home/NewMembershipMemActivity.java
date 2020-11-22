@@ -186,7 +186,7 @@ public class NewMembershipMemActivity extends AppCompatActivity {
                 setResult(MembershipActivity.TAG_MEM, intent);
                 finish();
             } else {
-                showToast("멤버 추가 실패ㅠ");
+                showToast("멤버 추가 실패");
             }
 
         } catch (JSONException e) {
