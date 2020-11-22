@@ -108,13 +108,13 @@ public class DailyFragment extends Fragment {
         @Override
         public void onCheckedChanged(RadioGroup radioGroup, @IdRes int i) {
             //단위 가져오기 - spinner
-            if (i == R.id.rbtUP) {
-
-            } else if (i == R.id.rbtRound) {
-
-            } else if (i == R.id.rbtDown) {
-
-            }
+//            if (i == R.id.rbtUP) {
+//
+//            } else if (i == R.id.rbtRound) {
+//
+//            } else if (i == R.id.rbtDown) {
+//
+//            }
         }
 
     };

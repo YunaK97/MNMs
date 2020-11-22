@@ -88,11 +88,11 @@ public class DailySendActivity extends AppCompatActivity {
         progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         //종류 선택
-        spinnerDutchType = findViewById(R.id.spinnerDutchType);
+        //spinnerDutchType = findViewById(R.id.spinnerDutchType);
         dutchTypeAdapter = ArrayAdapter.createFromResource(this, R.array.dutch_money, R.layout.support_simple_spinner_dropdown_item);
         dutchTypeAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        spinnerDutchType.setAdapter(dutchTypeAdapter);
-        spinnerDutchType.setSelection(0);
+        //spinnerDutchType.setAdapter(dutchTypeAdapter);
+        //spinnerDutchType.setSelection(0);
 
         Intent intent = getIntent();
         if (intent != null) {

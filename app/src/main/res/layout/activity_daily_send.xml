@@ -5,37 +5,47 @@
     android:layout_height="match_parent"
     tools:context=".daily.ui.dutch.DailySendActivity">
 
-    <RadioGroup
-        android:background="@android:color/darker_gray"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/rgDutch"
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+<!--    <RadioGroup-->
+<!--        android:background="@android:color/darker_gray"-->
+<!--        android:layout_alignParentTop="true"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:id="@+id/rgDutch"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content">-->
 
-        <RadioButton
-            android:id="@+id/rbtUP"
-            android:text="올림"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+<!--        <RadioButton-->
+<!--            android:id="@+id/rbtUP"-->
+<!--            android:text="올림"-->
+<!--            android:textSize="15sp"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content" />-->
 
-        <RadioButton
-            android:id="@+id/rbtRound"
-            android:text="반올림"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+<!--        <RadioButton-->
+<!--            android:id="@+id/rbtRound"-->
+<!--            android:text="반올림"-->
+<!--            android:textSize="15sp"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content" />-->
 
-        <RadioButton
-            android:focusedByDefault="true"
-            android:id="@+id/rbtDown"
-            android:text="내림"
-            android:textSize="15sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-    </RadioGroup>
+<!--        <RadioButton-->
+<!--            android:focusedByDefault="true"-->
+<!--            android:id="@+id/rbtDown"-->
+<!--            android:text="내림"-->
+<!--            android:textSize="15sp"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content" />-->
+<!--    </RadioGroup>-->
+
+<!--    <Spinner-->
+<!--        android:background="@color/colorTitle"-->
+<!--        android:layout_toRightOf="@id/rgDutch"-->
+<!--        android:id="@+id/spinnerDutchType"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="25sp"-->
+<!--        android:layout_margin="2sp"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:dropDownWidth="wrap_content" />-->
 
     <TextView
         style="@style/CustomTextView"
@@ -49,19 +59,8 @@
         android:text="0"
         android:gravity="end" />
 
-    <Spinner
-        android:background="@color/colorTitle"
-        android:layout_toRightOf="@id/rgDutch"
-        android:id="@+id/spinnerDutchType"
-        android:layout_width="wrap_content"
-        android:layout_height="25sp"
-        android:layout_margin="2sp"
-        android:layout_gravity="center"
-        android:dropDownWidth="wrap_content" />
-
     <LinearLayout
         android:orientation="vertical"
-        android:layout_below="@+id/rgDutch"
         android:layout_width="match_parent"
         android:layout_above="@+id/btnQRMake"
         android:layout_height="match_parent">
