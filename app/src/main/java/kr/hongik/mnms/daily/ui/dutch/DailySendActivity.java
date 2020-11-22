@@ -163,7 +163,7 @@ public class DailySendActivity extends AppCompatActivity {
                 Toast.makeText(DailySendActivity.this, "취소!", Toast.LENGTH_SHORT).show();
             } else {
                 //qrcode 결과가 있으면
-                Toast.makeText(DailySendActivity.this, "스캔완료!" + result.getContents(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(DailySendActivity.this, "스캔완료!" + result.getContents(), Toast.LENGTH_SHORT).show();
 
                 floatDialog(result);
 
