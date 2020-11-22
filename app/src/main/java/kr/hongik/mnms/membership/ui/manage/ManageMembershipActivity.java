@@ -247,8 +247,8 @@ public class ManageMembershipActivity extends AppCompatActivity {
 
         String curDay=todayFormat.format(curDate.getTime())+"";
         String payDay=membershipGroup.getPayDay();
-        Log.d("오늘",todayFormat.format(curDate.getTime())+"");
-        Log.d("페이데이",membershipGroup.getPayDay());
+        //Log.d("오늘",todayFormat.format(curDate.getTime())+"");
+        //("페이데이",membershipGroup.getPayDay());
 
         int compare=curDay.compareTo(payDay);
         if (compare >= 0) {

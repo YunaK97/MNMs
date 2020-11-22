@@ -169,7 +169,7 @@ public class IdentifyActivity extends AppCompatActivity {
             }
 
             IdentifyActivity.PapagoNmtTask nmtTask = new PapagoNmtTask();
-            Log.d("테스트", "과연");
+            //Log.d("테스트", "과연");
             nmtTask.execute("https://firebasestorage.googleapis.com/v0/b/webtoonstorage.appspot.com/o/KakaoTalk_20201115_161148954.jpg?alt=media&token=09bd1369-7bd3-48cc-9748-74daeada416f", "test2");
         }
     }

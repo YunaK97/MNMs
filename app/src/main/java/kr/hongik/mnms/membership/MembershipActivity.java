@@ -359,7 +359,7 @@ public class MembershipActivity extends AppCompatActivity implements View.OnClic
 
         @Override
         protected void onPostExecute(String response) {
-            Log.d(TAG, response);
+            //Log.d(TAG, response);
             if (TAG.equals("membershipGroup")) {
                 membershipGroupProcess(response);
             } else if (TAG.equals("showMembershipMem")) {

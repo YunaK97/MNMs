@@ -54,7 +54,7 @@ public class NetworkTask extends AsyncTask<Map<String, String>, Integer, String>
 
     @Override
     protected void onPostExecute(String response) {
-        Log.d(TAG+"~~~~~~~~~~~~~~~~", response);
+        //Log.d(TAG+"~~~~~~~~~~~~~~~~", response);
         this.response=response;
     }
 }

@@ -505,7 +505,7 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
 
         @Override
         protected void onPostExecute(String response) {
-            Log.d(TAG, response);
+            //Log.d(TAG, response);
             if(TAG.equals("emailAuth")){
                 emailAuthProcess(response);
             }

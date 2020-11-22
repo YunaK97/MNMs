@@ -454,7 +454,7 @@ public class DailySendActivity extends AppCompatActivity {
         params.put("friendSize", cntArray.size() + "");
         for (int i = 0; i < memberArrayList.size(); i++) {
             String id = memberArrayList.get(i).getMemID();
-            Log.d("확인", id + " : " + cntArray.get(id));
+            //Log.d("확인", id + " : " + cntArray.get(id));
             params.put("count" + i, cntArray.get(id) + "");
             params.put("memID" + i, id);
         }

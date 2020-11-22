@@ -273,7 +273,7 @@ public class NewMembershipActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String response) {
-            Log.d(TAG, response);
+            //Log.d(TAG, response);
             if (TAG.equals("newMembership")) {
                 progressDialog.dismiss();
 

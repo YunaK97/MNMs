@@ -200,7 +200,7 @@ public class DailyFragment extends Fragment {
 
         @Override
         protected void onPostExecute(String response) {
-            Log.d(TAG, response);
+            //Log.d(TAG, response);
             if(TAG.equals("dailyTransaction")){
                 setTransactionProcess(response);
             }
