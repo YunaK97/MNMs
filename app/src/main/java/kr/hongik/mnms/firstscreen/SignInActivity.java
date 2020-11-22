@@ -159,20 +159,18 @@ public class SignInActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.btnEmailAuth:
                 String etCheckEmail = ((EditText) findViewById(R.id.etCheckEmail)).getText().toString();
-                showToast(emailAuthNumber + " : " + etCheckEmail);
 
                 if (etCheckEmail.equals(emailAuthNumber)) {
                     showToast("인증 완료");
                     btnEmailAuth.setClickable(false);
                     btnEmailOverlap.setClickable(false);
+                    emailValid=true;
                 } else {
                     showToast("인증번호가 일치하지 않습니다");
                 }
 
                 break;
             case R.id.btnIdentify:
-//                showToast("임시로 970822-10041004 가 주번임");
-//                signInMember.setMemSsn("970822-10041004");
                 ssnValid=false;
                 Intent intent=new Intent(SignInActivity.this,IdentifyActivity.class);
                 startActivityForResult(intent,TAKE_PICTURE);

@@ -171,6 +171,7 @@ public class NewFriendActivity extends AppCompatActivity {
         //내가 받은 친구요청리스트들을 출력
         //memID를 전송
         //friend테이블에서 request 상태인것들을 모두 출력
+        progressDialog.show();
         String urlRequestedFriend = "http://" + loginMember.getIp() + "/member/requestedFriend";
 
         //나에게 들어온 요청 출력
@@ -216,10 +217,12 @@ public class NewFriendActivity extends AppCompatActivity {
 
             rvRequestFriend.setAdapter(memberAdapter);
 
+            progressDialog.dismiss();
             LLRequestFriend.setVisibility(View.VISIBLE);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
     }
 
 

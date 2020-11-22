@@ -325,7 +325,6 @@ public class MainMenuActivity extends AppCompatActivity {
 
         networkTask.execute(params);
 
-
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
